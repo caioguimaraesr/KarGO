@@ -7,13 +7,7 @@
 ## 💡 A Solução
 > "Nossa solução é uma plataforma digital de fretes que ajuda PMEs de transporte e motoristas autônomos a fazerem uma conexão mais simplificada e fácil, encontrar cargas, otimizar rotas e gerenciar suas operações de forma simples e eficiente."
 
-## 👥 Equipe KarGO
-| Integrante | E-mail |
-| :--- | :--- |
-| **Caio Guimarães Rocha** | [cgr@cesar.school](mailto:cgr@cesar.school) |
-| **Gabriel Abreu de Sousa Barbosa** | [gasb2@cesar.school](mailto:gasb2@cesar.school) |
-| **João Pedro Aguiar Morais** | [jpam@cesar.school](mailto:jpam@cesar.school) |
-| **Rafael Lyra Costa** | [rlc3@cesar.school](mailto:rlc3@cesar.school) |
+---
 
 ## 📄 Documentações e Entregas
 
@@ -34,6 +28,15 @@
     <img src="https://img.shields.io/badge/Google_Drive-F4B400?style=for-the-badge&logo=google-drive&logoColor=white" alt="Drive"/>
   </a>
 </div>
+
+## 👥 Equipe KarGO
+| Integrante | E-mail |
+| :--- | :--- |
+| **Caio Guimarães Rocha** | [cgr@cesar.school](mailto:cgr@cesar.school) |
+| **Gabriel Abreu de Sousa Barbosa** | [gasb2@cesar.school](mailto:gasb2@cesar.school) |
+| **João Pedro Aguiar Morais** | [jpam@cesar.school](mailto:jpam@cesar.school) |
+| **Rafael Lyra Costa** | [rlc3@cesar.school](mailto:rlc3@cesar.school) |
+
 
 ---
 
