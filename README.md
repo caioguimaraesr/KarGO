@@ -5,7 +5,7 @@
 <br>
 
 ## 💡 A Solução
-> "Nossa solução é uma plataforma digital de fretes que ajuda PMEs de transporte e motoristas autônomos a fazerem uma conexão mais simplificada e fácil, encontrar cargas, otimizar rotas e gerenciar suas operações de forma simples e eficiente."
+> "Nossa solução é uma plataform digital de fretes que ajuda PMEs de transporte e motoristas autônomos a fazerem uma conexão mais simplificada e fácil, encontrar cargas, otimizar rotas e gerenciar suas operações de forma simples e eficiente."
 
 ---
 
