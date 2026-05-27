@@ -1,0 +1,1089 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="KarGO — Painel de Gestão de Fretes e Viagens do Motorista Freelancer">
+    <title>KarGO — Minhas Viagens</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        /* === DESIGN SYSTEM TOKENS === */
+        :root {
+            --bg-dark-deep: #080c14;
+            --bg-dark-card: #121824;
+            --bg-dark-sidebar: #0b0f19;
+            --bg-dark-topbar: rgba(11, 15, 25, 0.85);
+            
+            --text-primary: #ffffff;
+            --text-secondary: #94a3b8;
+            --text-muted: #64748b;
+            
+            --accent-blue: #0088ff;
+            --accent-blue-glow: rgba(0, 136, 255, 0.35);
+            --accent-orange: #ff9f0a;
+            --accent-orange-glow: rgba(255, 159, 10, 0.3);
+            --accent-red: #ff3b30;
+            --accent-green: #34c759;
+            --accent-green-glow: rgba(52, 199, 89, 0.25);
+            
+            --border-translucent: rgba(255, 255, 255, 0.05);
+            
+            --font-primary: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        /* Reset & Base */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background-color: var(--bg-dark-deep);
+            font-family: var(--font-primary);
+            color: var(--text-primary);
+            min-height: 100vh;
+            overflow-x: hidden;
+            display: flex;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* Layout Container */
+        .layout-container {
+            display: flex;
+            width: 100%;
+            min-height: 100vh;
+        }
+
+        /* Conteúdo Principal à Direita */
+        .main-content {
+            margin-left: 260px;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            padding: 32px;
+            transition: var(--transition-smooth);
+        }
+
+        /* Topbar Header */
+        .topbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 32px;
+        }
+
+        .topbar-logo-mobile {
+            display: none;
+        }
+
+        .page-title h1 {
+            font-size: 28px;
+            font-weight: 800;
+            letter-spacing: -0.8px;
+        }
+
+        .page-title p {
+            font-size: 14px;
+            color: var(--text-secondary);
+            margin-top: 4px;
+        }
+
+        .topbar-actions {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .user-profile {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            background: var(--bg-dark-card);
+            border: 1px solid var(--border-translucent);
+            padding: 6px 16px 6px 8px;
+            border-radius: 30px;
+            cursor: pointer;
+        }
+
+        .user-avatar {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 1.5px solid var(--accent-blue);
+        }
+
+        .user-name {
+            font-size: 13px;
+            font-weight: 700;
+            color: #fff;
+        }
+
+        .user-role {
+            font-size: 10px;
+            color: var(--accent-green);
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            text-transform: uppercase;
+        }
+
+        /* Controle de Abas Amplas (Tabs) */
+        .tabs-wrapper {
+            margin-bottom: 24px;
+            border-bottom: 1px solid var(--border-translucent);
+            display: flex;
+            gap: 24px;
+        }
+
+        .tab-button-desktop {
+            background: none;
+            border: none;
+            color: var(--text-secondary);
+            font-size: 15px;
+            font-weight: 600;
+            padding: 12px 4px;
+            cursor: pointer;
+            position: relative;
+            transition: var(--transition-smooth);
+        }
+
+        .tab-button-desktop:hover {
+            color: #fff;
+        }
+
+        .tab-button-desktop.active {
+            color: var(--accent-blue);
+        }
+
+        .tab-button-desktop.active::after {
+            content: '';
+            position: absolute;
+            bottom: -1px;
+            left: 0;
+            right: 0;
+            height: 2.5px;
+            background-color: var(--accent-blue);
+            box-shadow: 0 0 10px var(--accent-blue-glow);
+            border-radius: 2px;
+        }
+
+        /* Grid Operacional de Viagens */
+        .trips-grid-desktop {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 24px;
+        }
+
+        .trip-card-desktop {
+            background-color: var(--bg-dark-card);
+            border: 1px solid var(--border-translucent);
+            border-radius: 20px;
+            padding: 24px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            gap: 24px;
+            transition: var(--transition-smooth);
+        }
+
+        .trip-card-desktop:hover {
+            border-color: rgba(255, 255, 255, 0.08);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
+        }
+
+        .trip-card-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .trip-badge-desktop {
+            font-size: 10px;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 0.8px;
+            color: var(--text-muted);
+            background-color: rgba(255, 255, 255, 0.03);
+            border: 1px solid var(--border-translucent);
+            padding: 4px 10px;
+            border-radius: 6px;
+        }
+
+        .status-pill-desktop {
+            font-size: 12px;
+            font-weight: 700;
+            padding: 6px 14px;
+            border-radius: 20px;
+        }
+
+        .status-pill-desktop.in-transit {
+            background-color: rgba(0, 136, 255, 0.12);
+            color: var(--accent-blue);
+            box-shadow: 0 0 10px rgba(0, 136, 255, 0.05);
+        }
+
+        .status-pill-desktop.pending {
+            background-color: rgba(255, 159, 10, 0.12);
+            color: var(--accent-orange);
+            box-shadow: 0 0 10px rgba(255, 159, 10, 0.05);
+        }
+
+        .status-pill-desktop.completed {
+            background-color: rgba(52, 199, 89, 0.12);
+            color: var(--accent-green);
+            box-shadow: 0 0 10px rgba(52, 199, 89, 0.05);
+        }
+
+        .trip-body-desktop h3 {
+            font-size: 20px;
+            font-weight: 800;
+            letter-spacing: -0.4px;
+            margin-bottom: 8px;
+        }
+
+        .trip-meta-desktop {
+            display: flex;
+            gap: 24px;
+            font-size: 13px;
+            color: var(--text-secondary);
+        }
+
+        .trip-meta-desktop strong {
+            color: #fff;
+        }
+
+        /* Stepper Horizontal de Rota */
+        .route-stepper-desktop {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: relative;
+            margin: 20px 0;
+            padding: 0 10px;
+        }
+
+        .stepper-line-bg {
+            position: absolute;
+            top: 14px;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background-color: var(--border-translucent);
+            z-index: 1;
+        }
+
+        .stepper-line-fill {
+            position: absolute;
+            top: 14px;
+            left: 0;
+            width: 50%;
+            height: 3px;
+            background-color: var(--accent-blue);
+            box-shadow: 0 0 10px var(--accent-blue-glow);
+            z-index: 2;
+        }
+
+        .step-node-desktop {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+            z-index: 3;
+            width: 25%;
+        }
+
+        .step-dot-desktop {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            background-color: var(--bg-dark-card);
+            border: 3px solid var(--text-muted);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            font-weight: 800;
+            color: var(--text-muted);
+            transition: var(--transition-smooth);
+        }
+
+        .step-node-desktop.completed .step-dot-desktop {
+            border-color: var(--accent-blue);
+            background-color: var(--accent-blue);
+            color: #fff;
+            box-shadow: 0 0 12px var(--accent-blue-glow);
+        }
+
+        .step-node-desktop.active .step-dot-desktop {
+            border-color: var(--accent-blue);
+            background-color: var(--bg-dark-card);
+            color: var(--accent-blue);
+            box-shadow: 0 0 12px var(--accent-blue-glow);
+        }
+
+        .step-label-desktop {
+            font-size: 11px;
+            font-weight: 700;
+            color: var(--text-muted);
+            text-align: center;
+        }
+
+        .step-node-desktop.completed .step-label-desktop,
+        .step-node-desktop.active .step-label-desktop {
+            color: #fff;
+        }
+
+        /* Barra de Progresso Operacional */
+        .progress-box-desktop {
+            margin-top: 10px;
+        }
+
+        .progress-meta-row {
+            display: flex;
+            justify-content: space-between;
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--text-secondary);
+            margin-bottom: 8px;
+        }
+
+        .progress-track-desktop {
+            height: 8px;
+            background-color: var(--border-translucent);
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .progress-bar-fill-45 {
+            width: 45%;
+            height: 100%;
+            background: linear-gradient(to right, var(--accent-blue) 0%, #339cff 100%);
+            box-shadow: 0 0 10px var(--accent-blue-glow);
+            border-radius: 4px;
+        }
+
+        .btn-action-trip-desktop {
+            width: 100%;
+            background-color: var(--accent-blue);
+            color: #fff;
+            border: none;
+            padding: 14px;
+            border-radius: 12px;
+            font-size: 14px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: var(--transition-smooth);
+            box-shadow: 0 4px 15px rgba(0, 136, 255, 0.3);
+        }
+
+        .btn-action-trip-desktop:hover {
+            background-color: #339cff;
+            box-shadow: 0 6px 20px rgba(0, 136, 255, 0.45);
+        }
+
+        /* Lista de Propostas Enviadas (Aguardando) */
+        .proposals-list-wrapper {
+            background-color: rgba(255, 255, 255, 0.01);
+            border: 1px solid var(--border-translucent);
+            border-radius: 16px;
+            padding: 20px;
+        }
+
+        .proposals-title {
+            font-size: 14px;
+            font-weight: 800;
+            color: var(--text-secondary);
+            margin-bottom: 16px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .proposal-item-card {
+            background-color: rgba(255, 255, 255, 0.02);
+            border: 1px solid var(--border-translucent);
+            border-radius: 14px;
+            padding: 16px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+            transition: var(--transition-smooth);
+        }
+
+        .proposal-item-card:last-child {
+            margin-bottom: 0;
+        }
+
+        .proposal-item-card:hover {
+            border-color: rgba(255, 159, 10, 0.2);
+            background-color: rgba(255, 255, 255, 0.03);
+        }
+
+        .proposal-item-left {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .proposal-company-circle {
+            width: 44px;
+            height: 44px;
+            border-radius: 12px;
+            background-color: #1c2638;
+            border: 1px solid var(--border-translucent);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 15px;
+            font-weight: 800;
+            color: var(--accent-orange);
+        }
+
+        .proposal-details h5 {
+            font-size: 14px;
+            font-weight: 700;
+            color: #fff;
+        }
+
+        .proposal-details p {
+            font-size: 11px;
+            color: var(--text-muted);
+            margin-top: 4px;
+        }
+
+        .proposal-item-right {
+            text-align: right;
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .proposal-bid-val {
+            font-size: 16px;
+            font-weight: 900;
+            color: var(--accent-green);
+        }
+
+        .proposal-status-msg {
+            font-size: 11px;
+            color: var(--text-secondary);
+        }
+
+        /* Seção Avaliação interativa de frete concluído */
+        .rating-wrapper-desktop {
+            background-color: rgba(255, 255, 255, 0.01);
+            border: 1px solid var(--border-translucent);
+            border-radius: 16px;
+            padding: 20px;
+            margin-top: 8px;
+        }
+
+        .rating-stars-desktop {
+            display: flex;
+            gap: 12px;
+            margin: 14px 0;
+        }
+
+        .star-desktop {
+            font-size: 32px;
+            color: var(--text-muted);
+            cursor: pointer;
+            transition: var(--transition-smooth);
+        }
+
+        .star-desktop:hover, .star-desktop.selected {
+            color: var(--accent-orange);
+            text-shadow: 0 0 15px var(--accent-orange-glow);
+        }
+
+        .comment-field-desktop {
+            width: 100%;
+            background-color: rgba(0, 0, 0, 0.2);
+            border: 1px solid var(--border-translucent);
+            border-radius: 12px;
+            padding: 14px;
+            color: #fff;
+            font-family: inherit;
+            font-size: 13px;
+            resize: none;
+            height: 72px;
+            outline: none;
+            margin-bottom: 16px;
+            transition: var(--transition-smooth);
+        }
+
+        .comment-field-desktop:focus {
+            border-color: rgba(0, 136, 255, 0.4);
+        }
+
+        .btn-submit-review-desktop {
+            background: none;
+            border: 1px solid var(--border-translucent);
+            color: var(--accent-blue);
+            width: 100%;
+            padding: 12px;
+            border-radius: 10px;
+            font-size: 13px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: var(--transition-smooth);
+        }
+
+        .btn-submit-review-desktop:hover {
+            background-color: var(--accent-blue);
+            color: #fff;
+            box-shadow: 0 4px 15px rgba(0, 136, 255, 0.2);
+        }
+
+        /* Toast Sucesso */
+        .toast-desktop {
+            position: fixed;
+            top: 32px;
+            right: 32px;
+            background: linear-gradient(135deg, #132f22 0%, #0c2419 100%);
+            border: 1px solid rgba(52, 199, 89, 0.3);
+            border-radius: 16px;
+            padding: 16px 24px;
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5);
+            transform: translateX(150%);
+            opacity: 0;
+            transition: var(--transition-smooth);
+            z-index: 2000;
+        }
+
+        .toast-desktop.show {
+            transform: translateX(0);
+            opacity: 1;
+        }
+
+        /* === PREMIUM BOTTOM NAVIGATION BAR (MOBILE) === */
+        .mp-bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 72px;
+            background-color: rgba(11, 15, 25, 0.95);
+            backdrop-filter: blur(20px);
+            border-top: 1px solid var(--border-translucent);
+            display: none;
+            grid-template-columns: repeat(5, 1fr);
+            padding-bottom: 8px;
+            z-index: 1000;
+        }
+
+        .mp-bottom-nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-muted);
+            text-decoration: none;
+            font-size: 10px;
+            font-weight: 600;
+            transition: var(--transition-smooth);
+            gap: 4px;
+            cursor: pointer;
+        }
+
+        .mp-bottom-nav-item svg {
+            width: 20px;
+            height: 20px;
+            stroke-width: 2.2;
+            transition: var(--transition-smooth);
+        }
+
+        .mp-bottom-nav-item:hover, .mp-bottom-nav-item.active {
+            color: var(--accent-blue);
+        }
+
+        .mp-bottom-nav-item.active svg {
+            filter: drop-shadow(0 0 6px var(--accent-blue-glow));
+        }
+
+        /* ================= RESPONSIVIDADE (MOBILE & DISPOSITIVOS MENORES) ================= */
+        @media (max-width: 991px) {
+            .mp-sidebar {
+                display: none !important;
+            }
+
+            .main-content {
+                margin-left: 0 !important;
+                padding: 16px 16px 88px 16px !important;
+            }
+
+            .topbar {
+                background-color: var(--bg-dark-sidebar);
+                border-bottom: 1px solid var(--border-translucent);
+                margin: -16px -16px 24px -16px;
+                padding: 16px;
+                height: 72px;
+                position: sticky;
+                top: 0;
+                z-index: 200;
+                backdrop-filter: blur(10px);
+                background: var(--bg-dark-topbar);
+            }
+
+            .topbar-logo-mobile {
+                display: block;
+            }
+
+            .topbar-logo-mobile .logo-img-mobile {
+                height: 32px;
+                width: auto;
+                filter: drop-shadow(0 2px 8px rgba(0, 136, 255, 0.2));
+            }
+
+            .page-title {
+                display: none;
+            }
+
+            .mp-bottom-nav {
+                display: grid !important;
+            }
+
+            .tabs-wrapper {
+                gap: 12px !important;
+                overflow-x: auto;
+                scrollbar-width: none;
+            }
+
+            .tabs-wrapper::-webkit-scrollbar {
+                display: none;
+            }
+
+            .tab-button-desktop {
+                font-size: 13px !important;
+                white-space: nowrap;
+            }
+
+            .trip-card-desktop {
+                padding: 16px !important;
+                gap: 16px !important;
+            }
+
+            .trip-body-desktop h3 {
+                font-size: 16px !important;
+            }
+
+            .trip-meta-desktop {
+                flex-direction: column !important;
+                gap: 6px !important;
+            }
+
+            .route-stepper-desktop {
+                padding: 0 !important;
+            }
+
+            .step-dot-desktop {
+                width: 24px !important;
+                height: 24px !important;
+                font-size: 10px !important;
+            }
+
+            .step-label-desktop {
+                font-size: 9px !important;
+            }
+
+            .proposal-item-card {
+                flex-direction: column !important;
+                align-items: flex-start !important;
+                gap: 12px !important;
+            }
+
+            .proposal-item-right {
+                text-align: left !important;
+                width: 100%;
+                border-top: 1px solid var(--border-translucent);
+                padding-top: 10px;
+            }
+        }
+    </style>
+    <link rel="stylesheet" href="css/marketplace.css">
+</head>
+<body>
+
+    <div class="layout-container">
+        
+        <!-- SIDEBAR LATERAL (NAVEGAÇÃO DESKTOP) -->
+                        <aside class="mp-sidebar">
+            <div class="mp-sidebar-logo">
+                <a href="index.html">
+                    <img src="assets/images/LOGO.png" alt="KarGO" class="logo-img">
+                </a>
+            </div>
+            
+            <nav class="mp-sidebar-menu">
+                <div class="mp-sidebar-links">
+                    <a href="dashboard.html" class="mp-menu-item ">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="9"/><rect x="14" y="3" width="7" height="5"/><rect x="14" y="12" width="7" height="9"/><rect x="3" y="16" width="7" height="5"/></svg>
+                        Dashboard
+                    </a>
+                    <a href="marketplace.html" class="mp-menu-item ">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+                        Buscar Cargas
+                    </a>
+                    <a href="minhas-viagens.html" class="mp-menu-item active">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="3" width="15" height="13" rx="2" ry="2"/><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>
+                        Minhas Viagens
+                    </a>
+                    <a href="pagamentos.html" class="mp-menu-item ">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><line x1="12" y1="4" x2="12" y2="20"/><line x1="2" y1="12" x2="22" y2="12"/></svg>
+                        Pagamentos
+                    </a>
+                    <a href="chat.html" class="mp-menu-item ">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+                        Chat / Mensagens
+                        <span class="chat-badge-dot"></span>
+                    </a>
+                    <a href="veiculos.html" class="mp-menu-item ">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 17h2c.6 0 1-.4 1-1v-3c0-.9-.7-1.7-1.5-1.9C18.7 10.6 16 10 16 10s-1.3-1.4-2.2-2.3c-.5-.4-1.1-.7-1.8-.7H5c-.6 0-1 .4-1 1v7c0 .6.4 1 1 1h2"/><circle cx="7" cy="17" r="2"/><path d="M9 17h6"/><circle cx="17" cy="17" r="2"/></svg>
+                        Meus Veículos
+                    </a>
+                    <a href="perfil.html" class="mp-menu-item ">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+                        Meu Perfil
+                    </a>
+                </div>
+                
+                <div class="mp-sidebar-bottom">
+                    <a href="configuracoes.html" class="mp-menu-item ">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+                        Configurações
+                    </a>
+                </div>
+            </nav>
+        </aside>
+
+        <!-- CONTEÚDO PRINCIPAL -->
+        <main class="main-content">
+            
+            <!-- HEADER TOPBAR -->
+            <header class="topbar">
+                <!-- Logo Mobile -->
+                <div class="topbar-logo-mobile">
+                    <a href="index.html">
+                        <img src="assets/images/LOGO.png" alt="KarGO" class="logo-img-mobile">
+                    </a>
+                </div>
+
+                <div class="page-title">
+                    <h1>Gerenciamento de Viagens</h1>
+                    <p>Monitore suas rotas em tempo real, propostas enviadas e faça avaliações.</p>
+                </div>
+                
+                <div class="topbar-actions">
+                    <div class="user-profile">
+                        <img src="assets/images/motorista.png" alt="Avatar João Transportes" class="user-avatar">
+                        <div class="user-info">
+                            <span class="user-name">João Transportes</span>
+                            <span class="user-role">
+                                <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>
+                                Motorista Verificado
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </header>
+
+            <!-- TABS DE FILTRO -->
+            <nav class="tabs-wrapper">
+                <button class="tab-button-desktop active" onclick="filterTripsDesktop('andamento')">Em Trânsito</button>
+                <button class="tab-button-desktop" onclick="filterTripsDesktop('pendente')">Propostas Enviadas</button>
+                <button class="tab-button-desktop" onclick="filterTripsDesktop('concluido')">Concluídas</button>
+                <button class="tab-button-desktop" onclick="filterTripsDesktop('todas')">Todas as Viagens</button>
+            </nav>
+
+            <!-- GRID FLEXÍVEL DE CARD DE VIAGENS -->
+            <section class="trips-grid-desktop" id="trips-grid">
+                
+                <!-- CARD 1: EM TRÂNSITO (ATIVO) -->
+                <article class="trip-card-desktop" data-status="andamento">
+                    <div>
+                        <div class="trip-card-top">
+                            <span class="trip-badge-desktop">Frete Operacional</span>
+                            <span class="status-pill-desktop in-transit">Carga Em Rota</span>
+                        </div>
+                        
+                        <div class="trip-body-desktop">
+                            <h3>Soja a Granel (37 toneladas)</h3>
+                            <div class="trip-meta-desktop">
+                                <span>Contratante: <strong>AgroFrete S/A</strong></span>
+                                <span>Faturamento: <strong>R$ 12.000</strong></span>
+                            </div>
+                        </div>
+
+                        <!-- Stepper de Rota Horizontal -->
+                        <div class="route-stepper-desktop">
+                            <div class="stepper-line-bg"></div>
+                            <div class="stepper-line-fill"></div>
+                            
+                            <div class="step-node-desktop completed">
+                                <div class="step-dot-desktop">✓</div>
+                                <span class="step-label-desktop">Coleta (Rondonópolis)</span>
+                            </div>
+                            <div class="step-node-desktop active">
+                                <div class="step-dot-desktop">2</div>
+                                <span class="step-label-desktop">Em Rota (Pedágio 3)</span>
+                            </div>
+                            <div class="step-node-desktop">
+                                <div class="step-dot-desktop">3</div>
+                                <span class="step-label-desktop">Entrega (Porto Santos)</span>
+                            </div>
+                        </div>
+
+                        <!-- Barra de Progresso em 45% -->
+                        <div class="progress-box-desktop">
+                            <div class="progress-meta-row">
+                                <span>Progresso da Rota</span>
+                                <span>45% Executado</span>
+                            </div>
+                            <div class="progress-track-desktop">
+                                <div class="progress-bar-fill-45"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <button class="btn-action-trip-desktop" onclick="triggerStatusUpdate()">
+                        Atualizar Status da Carga
+                    </button>
+                </article>
+
+                <!-- CARD 2: PROPOSTAS ENVIADAS (AGUARDANDO CONFIRMAÇÃO DO EMBARCADOR) -->
+                <article class="trip-card-desktop" data-status="pendente" style="display: none;">
+                    <div>
+                        <div class="trip-card-top">
+                            <span class="trip-badge-desktop">Minhas Ofertas</span>
+                            <span class="status-pill-desktop pending">Aguardando Embarcador</span>
+                        </div>
+                        
+                        <div class="trip-body-desktop" style="margin-bottom: 16px;">
+                            <h3>Propostas de Frete em Análise</h3>
+                            <p style="font-size: 13px; color: var(--text-secondary); margin-top: 4px;">
+                                Acompanhe o status e as respostas das suas propostas para fretes freelancer.
+                            </p>
+                        </div>
+
+                        <div class="proposals-list-wrapper">
+                            <div class="proposals-title">Ofertas Recentes</div>
+                            
+                            <!-- Proposta 1 -->
+                            <div class="proposal-item-card">
+                                <div class="proposal-item-left">
+                                    <div class="proposal-company-circle">ME</div>
+                                    <div class="proposal-details">
+                                        <h5>Fertilizantes NPK (Santos, SP → Uberlândia, MG)</h5>
+                                        <p>Embarcador: Minas Express • Veículo: Sider (KRG-2E26)</p>
+                                    </div>
+                                </div>
+                                <div class="proposal-item-right">
+                                    <span class="proposal-bid-val">R$ 7.500,00</span>
+                                    <span class="proposal-status-msg" style="color: var(--accent-orange);">● Sob Análise Logística</span>
+                                </div>
+                            </div>
+
+                            <!-- Proposta 2 -->
+                            <div class="proposal-item-card">
+                                <div class="proposal-item-left">
+                                    <div class="proposal-company-circle" style="color: var(--accent-blue); border-color: rgba(0, 136, 255, 0.15);">AF</div>
+                                    <div class="proposal-details">
+                                        <h5>Milho a Granel (Sorriso, MT → Miritituba, PA)</h5>
+                                        <p>Embarcador: AgroFrete S/A • Veículo: Graneleiro (KRG-2E26)</p>
+                                    </div>
+                                </div>
+                                <div class="proposal-item-right">
+                                    <span class="proposal-bid-val">R$ 9.800,00</span>
+                                    <span class="proposal-status-msg" style="color: var(--accent-orange);">● Revisando Documentação</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </article>
+
+                <!-- CARD 3: CONCLUÍDOS -->
+                <article class="trip-card-desktop" data-status="concluido" style="display: none;">
+                    <div>
+                        <div class="trip-card-top">
+                            <span class="trip-badge-desktop">Histórico de Cargas</span>
+                            <span class="status-pill-desktop completed">Viagem Concluída</span>
+                        </div>
+                        
+                        <div class="trip-body-desktop">
+                            <h3>Milho Lucas do Rio Verde → Porto Paranaguá</h3>
+                            <div class="trip-meta-desktop">
+                                <span>Distância: <strong>1.850 km</strong></span>
+                                <span>Frete Recebido: <strong>R$ 15.500</strong></span>
+                            </div>
+                        </div>
+
+                        <!-- Avaliação por 5 estrelas do Contratante -->
+                        <div class="rating-wrapper-desktop" id="desktop-review-panel">
+                            <p style="font-size: 13px; font-weight: 700; color: var(--text-secondary);">Avalie o Suporte do Contratante:</p>
+                            
+                            <div class="rating-stars-desktop">
+                                <span class="star-desktop" onclick="rateStarsDesktop(1)">★</span>
+                                <span class="star-desktop" onclick="rateStarsDesktop(2)">★</span>
+                                <span class="star-desktop" onclick="rateStarsDesktop(3)">★</span>
+                                <span class="star-desktop" onclick="rateStarsDesktop(4)">★</span>
+                                <span class="star-desktop" onclick="rateStarsDesktop(5)">★</span>
+                            </div>
+
+                            <textarea class="comment-field-desktop" placeholder="Escreva aqui a sua opinião sobre o carregamento e pagamento..." id="review-comment-desktop"></textarea>
+                            <button class="btn-submit-review-desktop" onclick="submitReviewDesktop()">Enviar Avaliação</button>
+                        </div>
+                    </div>
+                </article>
+
+            </section>
+
+        </main>
+    </div>
+
+    <!-- Bottom Navigation Bar responsiva (Mobile) -->
+    <nav class="mp-bottom-nav">
+        <a href="dashboard.html" class="mp-bottom-nav-item">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="9"/><rect x="14" y="3" width="7" height="5"/><rect x="14" y="12" width="7" height="9"/><rect x="3" y="16" width="7" height="5"/></svg>
+            <span>Dashboard</span>
+        </a>
+        <a href="marketplace.html" class="mp-bottom-nav-item">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+            <span>Buscar</span>
+        </a>
+        <a href="minhas-viagens.html" class="mp-bottom-nav-item active">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="3" width="15" height="13" rx="2" ry="2"/><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>
+            <span>Viagens</span>
+        </a>
+        <a href="chat.html" class="mp-bottom-nav-item">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+            <span>Chat</span>
+            <span class="chat-badge-dot"></span>
+        </a>
+        <a href="#" class="mp-bottom-nav-item">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+            <span>Ajustes</span>
+        </a>
+    </nav>
+
+    <!-- Toast Sucesso -->
+    <div class="toast-desktop" id="desktop-toast">
+        <div style="width: 24px; height: 24px; background-color: var(--accent-green); color: #fff; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold;">✓</div>
+        <div>
+            <h5 style="font-weight: 700; font-size: 14px; margin-bottom: 2px;" id="toast-title-desktop">Operação Concluída!</h5>
+            <p style="font-size: 11px; color: var(--text-secondary);" id="toast-desc-desktop">Ação gravada com absoluto sucesso.</p>
+        </div>
+    </div>
+
+    <!-- JS de Controle de Abas e Interações -->
+    <script>
+        // Filtro de Abas
+        function filterTripsDesktop(status) {
+            const buttons = document.querySelectorAll('.tab-button-desktop');
+            buttons.forEach(btn => btn.classList.remove('active'));
+            event.currentTarget.classList.add('active');
+
+            const cards = document.querySelectorAll('.trip-card-desktop');
+            cards.forEach(card => {
+                const cardStatus = card.getAttribute('data-status');
+                if (status === 'todas' || cardStatus === status) {
+                    card.style.display = 'flex';
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+        }
+
+        // Mostrar Toast
+        function showToastDesktop(title, desc) {
+            const toast = document.getElementById('desktop-toast');
+            document.getElementById('toast-title-desktop').textContent = title;
+            document.getElementById('toast-desc-desktop').textContent = desc;
+
+            toast.classList.add('show');
+            setTimeout(() => {
+                toast.classList.remove('show');
+            }, 3500);
+        }
+
+        // Atualizar Status
+        function triggerStatusUpdate() {
+            const btn = document.querySelector('.btn-action-trip-desktop');
+            btn.disabled = true;
+            btn.textContent = 'Atualizando status no sistema...';
+
+            setTimeout(() => {
+                btn.disabled = false;
+                btn.textContent = 'Status da Carga Atualizado!';
+                showToastDesktop('Status Sincronizado!', 'A AgroFrete S/A foi notificada de que você está em rota.');
+            }, 1000);
+        }
+
+        // Avaliação de Estrelas
+        let selectedStars = 0;
+        function rateStarsDesktop(stars) {
+            selectedStars = stars;
+            const starsContainer = document.querySelector('.rating-stars-desktop');
+            const starEls = starsContainer.querySelectorAll('.star-desktop');
+            
+            starEls.forEach((star, idx) => {
+                if (idx < stars) {
+                    star.classList.add('selected');
+                } else {
+                    star.classList.remove('selected');
+                }
+            });
+        }
+
+        // Enviar Avaliação
+        function submitReviewDesktop() {
+            if (selectedStars === 0) {
+                alert('Selecione uma nota de 1 a 5 estrelas para avaliar o contratante.');
+                return;
+            }
+
+            const comment = document.getElementById('review-comment-desktop').value.trim();
+            const panel = document.getElementById('desktop-review-panel');
+
+            panel.innerHTML = `
+                <div style="text-align: center; padding: 20px; color: var(--accent-green); font-weight: 700; font-size: 14px;">
+                    ✓ Obrigado! Sua avaliação de ${selectedStars} estrelas sobre a TransLogística foi gravada no sistema.
+                </div>
+            `;
+            showToastDesktop('Avaliação Recebida!', 'Seu feedback ajuda a manter a confiabilidade de contratantes.');
+        }
+    <!-- Bottom Navigation Bar responsiva -->
+    <nav class="mp-bottom-nav">
+        <a href="dashboard.html" class="mp-bottom-nav-item">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="9"/><rect x="14" y="3" width="7" height="5"/><rect x="14" y="12" height="7" height="9"/><rect x="3" y="16" width="7" height="5"/></svg>
+            <span>Dashboard</span>
+        </a>
+        <a href="marketplace.html" class="mp-bottom-nav-item">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+            <span>Buscar</span>
+        </a>
+        <a href="minhas-viagens.html" class="mp-bottom-nav-item active">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="3" width="15" height="13" rx="2" ry="2"/><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>
+            <span>Viagens</span>
+        </a>
+        <a href="chat.html" class="mp-bottom-nav-item">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+            <span>Chat</span>
+            <span class="chat-badge-dot"></span>
+        </a>
+        <a href="perfil.html" class="mp-bottom-nav-item">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+            <span>Perfil</span>
+        </a>
+    </nav>
+</body>
+</html>

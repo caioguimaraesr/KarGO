@@ -1,0 +1,837 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="KarGO — Painel Financeiro e Pagamentos via Pix">
+    <title>KarGO — Pagamentos</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/marketplace.css?v=1.3">
+    <link rel="stylesheet" href="css/pagamentos.css">
+    <!-- Tailwind CSS CDN para consistência de estilos auxiliares -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            corePlugins: {
+                preflight: false,
+            }
+        }
+    </script>
+</head>
+<body class="mp-body">
+
+    <div class="mp-layout-container">
+        
+        <!-- ============ SIDEBAR LATERAL (NAVEGAÇÃO DESKTOP) ============ -->
+                        <aside class="mp-sidebar">
+            <div class="mp-sidebar-logo">
+                <a href="index.html">
+                    <img src="assets/images/LOGO.png" alt="KarGO" class="logo-img">
+                </a>
+            </div>
+            
+            <nav class="mp-sidebar-menu">
+                <div class="mp-sidebar-links">
+                    <a href="dashboard.html" class="mp-menu-item ">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="9"/><rect x="14" y="3" width="7" height="5"/><rect x="14" y="12" width="7" height="9"/><rect x="3" y="16" width="7" height="5"/></svg>
+                        Dashboard
+                    </a>
+                    <a href="marketplace.html" class="mp-menu-item ">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+                        Buscar Cargas
+                    </a>
+                    <a href="minhas-viagens.html" class="mp-menu-item ">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="3" width="15" height="13" rx="2" ry="2"/><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>
+                        Minhas Viagens
+                    </a>
+                    <a href="pagamentos.html" class="mp-menu-item active">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><line x1="12" y1="4" x2="12" y2="20"/><line x1="2" y1="12" x2="22" y2="12"/></svg>
+                        Pagamentos
+                    </a>
+                    <a href="chat.html" class="mp-menu-item ">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+                        Chat / Mensagens
+                        <span class="chat-badge-dot"></span>
+                    </a>
+                    <a href="veiculos.html" class="mp-menu-item ">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 17h2c.6 0 1-.4 1-1v-3c0-.9-.7-1.7-1.5-1.9C18.7 10.6 16 10 16 10s-1.3-1.4-2.2-2.3c-.5-.4-1.1-.7-1.8-.7H5c-.6 0-1 .4-1 1v7c0 .6.4 1 1 1h2"/><circle cx="7" cy="17" r="2"/><path d="M9 17h6"/><circle cx="17" cy="17" r="2"/></svg>
+                        Meus Veículos
+                    </a>
+                    <a href="perfil.html" class="mp-menu-item ">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+                        Meu Perfil
+                    </a>
+                </div>
+                
+                <div class="mp-sidebar-bottom">
+                    <a href="configuracoes.html" class="mp-menu-item ">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+                        Configurações
+                    </a>
+                </div>
+            </nav>
+        </aside>
+
+        <!-- ============ CONTEÚDO PRINCIPAL (DIREITA) ============ -->
+        <div class="mp-main-content">
+            
+            <!-- TOPBAR HEADER -->
+            <header class="mp-topbar">
+                <div class="mp-topbar-logo-mobile">
+                    <a href="index.html">
+                        <img src="assets/images/LOGO.png" alt="KarGO" class="logo-img-mobile">
+                    </a>
+                </div>
+                <h1 class="mp-page-title">Gestão Financeira</h1>
+                
+                <div class="mp-topbar-actions">
+                    <!-- Sino de Notificações -->
+                    <button class="mp-notification-btn" aria-label="Notificações">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+                        <span class="notification-badge"></span>
+                    </button>
+                    
+                    <!-- Perfil do Usuário -->
+                    <div class="mp-user-profile" onclick="window.location.href='perfil.html'">
+                        <div class="user-info">
+                            <span class="user-name">João Transportes</span>
+                            <span class="user-role">
+                                <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>
+                                Motorista Verificado
+                            </span>
+                        </div>
+                        <div class="user-avatar">
+                            <img src="assets/images/motorista.png" alt="Avatar João Transportes">
+                        </div>
+                    </div>
+                </div>
+            </header>
+
+            <div class="mp-content-wrapper">
+                
+                <!-- ============ CARDS DE SALDO FINANCEIRO ============ -->
+                <section class="finance-stats-grid">
+                    <div class="finance-card available">
+                        <div class="finance-card-info">
+                            <h3>Saldo Disponível</h3>
+                            <div class="amount" id="available-balance-txt">R$ 13.175,00</div>
+                            <span class="text-xs text-emerald-400 font-semibold block mt-2">Pronto para resgate instantâneo</span>
+                        </div>
+                        <div class="finance-card-icon">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><line x1="12" y1="4" x2="12" y2="20"/><line x1="2" y1="12" x2="22" y2="12"/></svg>
+                        </div>
+                    </div>
+                    
+                    <div class="finance-card pending">
+                        <div class="finance-card-info">
+                            <h3>Saldo a Liberar</h3>
+                            <div class="amount">R$ 10.200,00</div>
+                            <span class="text-xs text-sky-400 font-semibold block mt-2">Garantia Pix retida (Em rota ativa)</span>
+                        </div>
+                        <div class="finance-card-icon">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                        </div>
+                    </div>
+
+                    <div class="finance-card withdrawn">
+                        <div class="finance-card-info">
+                            <h3>Total Resgatado</h3>
+                            <div class="amount" id="withdrawn-balance-txt">R$ 24.650,00</div>
+                            <span class="text-xs text-amber-400 font-semibold block mt-2">Enviado para sua conta bancária</span>
+                        </div>
+                        <div class="finance-card-icon">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- ============ GRID PRINCIPAL FINANCEIRO ============ -->
+                <div class="finance-grid">
+                    
+                    <!-- COLUNA ESQUERDA: FORMULÁRIO DE SAQUE PIX -->
+                    <section class="resgate-card">
+                        <h2>
+                            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+                            Resgate via PIX
+                        </h2>
+                        
+                        <form id="pix-withdrawal-form" onsubmit="event.preventDefault(); handlePixWithdrawal();">
+                            <div class="pix-input-group">
+                                <div class="pix-field">
+                                    <label class="pix-label" for="pix-type">Tipo de Chave Pix</label>
+                                    <div class="pix-select-wrapper">
+                                        <select id="pix-type" class="pix-select" required>
+                                            <option value="cnpj">CNPJ (João Transportes LTDA)</option>
+                                            <option value="celular">Celular</option>
+                                            <option value="email">E-mail</option>
+                                            <option value="cpf">CPF</option>
+                                            <option value="aleatoria">Chave Aleatória</option>
+                                        </select>
+                                        <svg class="select-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+                                    </div>
+                                </div>
+                                
+                                <div class="pix-field">
+                                    <label class="pix-label" for="pix-key">Chave PIX destino</label>
+                                    <input type="text" id="pix-key" class="pix-input" placeholder="12.345.678/0001-90" value="45.987.126/0001-09" required>
+                                </div>
+
+                                <div class="pix-field">
+                                    <label class="pix-label" for="pix-amount">Valor para Resgate</label>
+                                    <div class="pix-input-wrapper pix-input-amount-wrapper">
+                                        <span class="pix-amount-prefix">R$</span>
+                                        <input type="text" id="pix-amount" class="pix-input pix-amount-input" placeholder="0,00" required>
+                                        <button type="button" class="pix-amount-max-btn" onclick="fillMaxAmount()">Sacar Tudo</button>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="resgate-disclaimer">
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
+                                <span>O dinheiro será creditado na sua conta vinculada em até 2 minutos via Pix Escrow KarGO.</span>
+                            </div>
+                            
+                            <button type="submit" class="btn-resgate-submit" id="btn-submit-resgate">
+                                Solicitar Resgate Instantâneo
+                            </button>
+                        </form>
+                    </section>
+
+                    <!-- COLUNA DIREITA: HISTÓRICO DE LANÇAMENTOS -->
+                    <section class="historico-card">
+                        <div class="historico-header">
+                            <h2>Meu Extrato</h2>
+                            <div class="text-xs text-slate-400 font-semibold">Regra de Intermediação: 15% retidos pela plataforma</div>
+                        </div>
+
+                        <div class="table-responsive">
+                            <table class="finance-table">
+                                <thead>
+                                    <tr>
+                                        <th>Viagem / Contratante</th>
+                                        <th>Data</th>
+                                        <th>Status</th>
+                                        <th>Valor Bruto</th>
+                                        <th>Taxa KarGO (15%)</th>
+                                        <th>Valor Líquido</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="finance-table-body">
+                                    <tr>
+                                        <td class="td-route">
+                                            <span class="route-desc">Milho a Granel (TransLogística)</span>
+                                            <span class="route-meta">Goiânia, GO → Uberlândia, MG</span>
+                                        </td>
+                                        <td>22 Mai 2026</td>
+                                        <td><span class="status-badge disponivel">Disponível</span></td>
+                                        <td class="td-value val-bruto">R$ 15.500,00</td>
+                                        <td class="td-value val-taxa">- R$ 2.325,00</td>
+                                        <td class="td-value val-liquido">R$ 13.175,00</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="td-route">
+                                            <span class="route-desc">Soja em Sacos (AgroFrete S/A)</span>
+                                            <span class="route-meta">Santos, SP → Rio Verde, GO</span>
+                                        </td>
+                                        <td>Em trânsito</td>
+                                        <td><span class="status-badge em-transito">Em trânsito</span></td>
+                                        <td class="td-value val-bruto">R$ 12.000,00</td>
+                                        <td class="td-value val-taxa">- R$ 1.800,00</td>
+                                        <td class="td-value val-liquido">R$ 10.200,00</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="td-route">
+                                            <span class="route-desc">Adubo Ensacado (TransLogística)</span>
+                                            <span class="route-meta">Paranaguá, PR → Uberaba, MG</span>
+                                        </td>
+                                        <td>14 Mai 2026</td>
+                                        <td><span class="status-badge resgatado">Resgatado</span></td>
+                                        <td class="td-value val-bruto">R$ 18.000,00</td>
+                                        <td class="td-value val-taxa">- R$ 2.700,00</td>
+                                        <td class="td-value val-liquido">R$ 15.300,00</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="td-route">
+                                            <span class="route-desc">Fertilizante Químico (Minas Express)</span>
+                                            <span class="route-meta">Santos, SP → Uberlândia, MG</span>
+                                        </td>
+                                        <td>05 Mai 2026</td>
+                                        <td><span class="status-badge resgatado">Resgatado</span></td>
+                                        <td class="td-value val-bruto">R$ 11.000,00</td>
+                                        <td class="td-value val-taxa">- R$ 1.650,00</td>
+                                        <td class="td-value val-liquido">R$ 9.350,00</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="mt-5 flex justify-center">
+                            <button type="button" class="btn-resgate-submit w-auto px-6 py-2.5 text-xs bg-slate-800 hover:bg-slate-700 border border-white/5" style="box-shadow:none; background:rgba(255,255,255,0.03);" onclick="openFullStatementModal()">
+                                Ver completo
+                            </button>
+                        </div>
+                    </section>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ============ CONTÊINER DE TOASTS REATIVOS ============ -->
+    <div class="kargo-toast-container" id="toast-container"></div>
+
+    <!-- Bottom Navigation Bar responsiva (Mobile) -->
+    <nav class="mp-bottom-nav">
+        <a href="dashboard.html" class="mp-bottom-nav-item">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="9"/><rect x="14" y="3" width="7" height="5"/><rect x="14" y="12" width="7" height="9"/><rect x="3" y="16" width="7" height="5"/></svg>
+            <span>Dashboard</span>
+        </a>
+        <a href="marketplace.html" class="mp-bottom-nav-item">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+            <span>Buscar</span>
+        </a>
+        <a href="minhas-viagens.html" class="mp-bottom-nav-item">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="3" width="15" height="13" rx="2" ry="2"/><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>
+            <span>Viagens</span>
+        </a>
+        <a href="chat.html" class="mp-bottom-nav-item">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+            <span>Chat</span>
+            <span class="chat-badge-dot"></span>
+        </a>
+        <a href="perfil.html" class="mp-bottom-nav-item">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+            <span>Perfil</span>
+        </a>
+    </nav>
+
+    <!-- ============ MODAL PREMIUM DE EXTRATO COMPLETO ============ -->
+    <div class="kargo-modal-backdrop" id="extrato-modal-backdrop" style="position: fixed; top: 0; left: 0; right: 0; bottom: 0; background-color: rgba(3, 7, 12, 0.85); backdrop-filter: blur(8px); display: flex; align-items: center; justify-content: center; z-index: 3000; opacity: 0; pointer-events: none; transition: all 0.3s ease;">
+        <div class="kargo-modal-wrapper" style="width: 95%; max-width: 950px; max-height: 90vh; display: flex; flex-direction: column; background: linear-gradient(135deg, rgba(18, 24, 36, 0.95) 0%, rgba(11, 15, 25, 0.98) 100%); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 24px; overflow: hidden; box-shadow: 0 20px 50px rgba(0,0,0,0.6);">
+            <header class="kargo-modal-header" style="padding: 20px 24px; border-bottom: 1px solid rgba(255, 255, 255, 0.05); display: flex; justify-content: space-between; align-items: center;">
+                <h3 class="kargo-modal-title" style="margin: 0; font-size: 18px; font-weight: 800; color: #fff;">Extrato Financeiro Completo</h3>
+                <button class="kargo-modal-close-btn" onclick="closeFullStatementModal()" aria-label="Fechar" style="background: none; border: none; color: var(--text-muted); cursor: pointer; display: flex; align-items: center; justify-content: center;">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+                </button>
+            </header>
+            
+            <div class="kargo-modal-body" style="padding: 24px; overflow-y: auto; flex: 1; display: flex; flex-direction: column; gap: 20px;">
+                <!-- Barra de Filtros Temporal do Extrato -->
+                <div class="bg-slate-900/40 border border-white/5 rounded-xl p-4 flex flex-col lg:flex-row gap-4 items-end justify-between" style="background: rgba(15, 23, 42, 0.3); border: 1px solid rgba(255,255,255,0.05); border-radius: 16px;">
+                    <div class="flex flex-wrap gap-4 items-end flex-1 w-full">
+                        <!-- Tipo de período -->
+                        <div style="display: flex; flex-direction: column; gap: 6px;">
+                            <label style="font-size: 11px; font-weight: 700; color: #94a3b8; text-transform: uppercase; letter-spacing: 0.5px;">Visualização</label>
+                            <div style="position: relative;">
+                                <select id="extrato-filter-type" class="pix-select" style="padding: 8px 32px 8px 12px; font-size: 12px; width: 140px; background: rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.08); border-radius: 8px; color: #fff; appearance: none; cursor: pointer;" onchange="toggleExtratoFilterInputs(this.value)">
+                                    <option value="semanal" selected>Semanal</option>
+                                    <option value="mensal">Mensal</option>
+                                    <option value="personalizado">Personalizado</option>
+                                </select>
+                                <svg style="position: absolute; right: 10px; top: 50%; transform: translateY(-50%); color: #64748b; pointer-events: none;" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+                            </div>
+                        </div>
+
+                        <!-- Seletor de Semanas -->
+                        <div id="extrato-semana-block" style="display: flex; flex-direction: column; gap: 6px;">
+                            <label style="font-size: 11px; font-weight: 700; color: #94a3b8; text-transform: uppercase; letter-spacing: 0.5px;">Semana</label>
+                            <div style="position: relative;">
+                                <select id="extrato-filter-semana" class="pix-select" style="padding: 8px 32px 8px 12px; font-size: 12px; width: 220px; background: rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.08); border-radius: 8px; color: #fff; appearance: none; cursor: pointer;">
+                                    <option value="atual" selected>Semana Atual (18 - 24 Mai)</option>
+                                    <option value="anterior">Semana Anterior (11 - 17 Mai)</option>
+                                    <option value="duas-atras">Duas Semanas Atrás (04 - 10 Mai)</option>
+                                </select>
+                                <svg style="position: absolute; right: 10px; top: 50%; transform: translateY(-50%); color: #64748b; pointer-events: none;" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+                            </div>
+                        </div>
+
+                        <!-- Seletor de Mês e Ano (Oculto por padrão) -->
+                        <div id="extrato-mes-block" style="display: none; flex-direction: row; gap: 10px;">
+                            <div style="display: flex; flex-direction: column; gap: 6px;">
+                                <label style="font-size: 11px; font-weight: 700; color: #94a3b8; text-transform: uppercase; letter-spacing: 0.5px;">Mês</label>
+                                <div style="position: relative;">
+                                    <select id="extrato-filter-mes" class="pix-select" style="padding: 8px 32px 8px 12px; font-size: 12px; width: 120px; background: rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.08); border-radius: 8px; color: #fff; appearance: none; cursor: pointer;">
+                                        <option value="05" selected>Maio</option>
+                                        <option value="04">Abril</option>
+                                        <option value="03">Março</option>
+                                        <option value="02">Fevereiro</option>
+                                        <option value="01">Janeiro</option>
+                                    </select>
+                                    <svg style="position: absolute; right: 10px; top: 50%; transform: translateY(-50%); color: #64748b; pointer-events: none;" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+                                </div>
+                            </div>
+                            <div style="display: flex; flex-direction: column; gap: 6px;">
+                                <label style="font-size: 11px; font-weight: 700; color: #94a3b8; text-transform: uppercase; letter-spacing: 0.5px;">Ano</label>
+                                <div style="position: relative;">
+                                    <select id="extrato-filter-ano" class="pix-select" style="padding: 8px 32px 8px 12px; font-size: 12px; width: 90px; background: rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.08); border-radius: 8px; color: #fff; appearance: none; cursor: pointer;">
+                                        <option value="2026" selected>2026</option>
+                                        <option value="2025">2025</option>
+                                    </select>
+                                    <svg style="position: absolute; right: 10px; top: 50%; transform: translateY(-50%); color: #64748b; pointer-events: none;" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Data Inicial e Final (Oculto por padrão) -->
+                        <div id="extrato-personalizado-block" style="display: none; flex-direction: row; gap: 10px;">
+                            <div style="display: flex; flex-direction: column; gap: 6px;">
+                                <label style="font-size: 11px; font-weight: 700; color: #94a3b8; text-transform: uppercase; letter-spacing: 0.5px;">De</label>
+                                <input type="date" id="extrato-filter-de" class="pix-input" style="padding: 7px 12px; font-size: 12px; width: 140px; background: rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.08); color: #fff; border-radius: 8px;">
+                            </div>
+                            <div style="display: flex; flex-direction: column; gap: 6px;">
+                                <label style="font-size: 11px; font-weight: 700; color: #94a3b8; text-transform: uppercase; letter-spacing: 0.5px;">Até</label>
+                                <input type="date" id="extrato-filter-ate" class="pix-input" style="padding: 7px 12px; font-size: 12px; width: 140px; background: rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.08); color: #fff; border-radius: 8px;">
+                            </div>
+                        </div>
+
+                        <button type="button" class="btn-resgate-submit w-auto px-5 py-2 text-xs" style="box-shadow: none; height: 34px; border-radius: 8px;" onclick="applyExtratoFilters()">
+                            Aplicar Filtros
+                        </button>
+                    </div>
+
+                    <div class="flex gap-2 w-full lg:w-auto justify-end">
+                        <button type="button" class="btn-resgate-submit w-auto px-4 py-2 text-xs bg-slate-800 hover:bg-slate-700 border border-white/5" style="box-shadow: none; background: rgba(255,255,255,0.03); height: 34px; border-radius: 8px;" id="btn-export-extrato" onclick="exportStatement('pdf')">
+                            Exportar PDF
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Tabela de Lançamentos do Modal -->
+                <div class="table-responsive" style="max-height: 400px; overflow-y: auto; border: 1px solid rgba(255,255,255,0.05); border-radius: 12px;">
+                    <table class="finance-table" style="width: 100%; border-collapse: collapse;">
+                        <thead>
+                            <tr>
+                                <th>Viagem / Contratante</th>
+                                <th>Data</th>
+                                <th>Status</th>
+                                <th>Valor Bruto</th>
+                                <th>Taxa KarGO (15%)</th>
+                                <th>Valor Líquido</th>
+                            </tr>
+                        </thead>
+                        <tbody id="modal-extrato-table-body">
+                            <!-- Inserido dinamicamente via JS -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            
+            <footer class="kargo-modal-footer" style="padding: 16px 24px; border-top: 1px solid rgba(255,255,255,0.05); display: flex; justify-content: flex-end; background: rgba(0, 0, 0, 0.15);">
+                <button class="modal-btn-cancel" onclick="closeFullStatementModal()" style="margin:0; padding: 10px 20px; font-size: 13px; font-weight: 700; border-radius: 10px;">Fechar Extrato</button>
+            </footer>
+        </div>
+    </div>
+
+    <!-- ============ LÓGICA JAVASCRIPT FINANCEIRA ============ -->
+    <script>
+        let availableBalance = 13175.00;
+        let withdrawnBalance = 24650.00;
+
+        // Array de dados históricos para o Extrato Completo
+        const transacoesHistoricas = [
+            {
+                contratante: "Milho a Granel (TransLogística)",
+                origemDestino: "Goiânia, GO → Uberlândia, MG",
+                data: new Date(2026, 4, 22), // 22 Mai 2026
+                dataStr: "22 Mai 2026",
+                status: "disponivel",
+                bruto: 15500.00,
+                taxa: 2325.00,
+                liquido: 13175.00
+            },
+            {
+                contratante: "Soja em Sacos (AgroFrete S/A)",
+                origemDestino: "Santos, SP → Rio Verde, GO",
+                data: new Date(2026, 4, 18), // 18 Mai 2026
+                dataStr: "Em trânsito",
+                status: "em-transito",
+                bruto: 12000.00,
+                taxa: 1800.00,
+                liquido: 10200.00
+            },
+            {
+                contratante: "Adubo Ensacado (TransLogística)",
+                origemDestino: "Paranaguá, PR → Uberaba, MG",
+                data: new Date(2026, 4, 14), // 14 Mai 2026
+                dataStr: "14 Mai 2026",
+                status: "resgatado",
+                bruto: 18000.00,
+                taxa: 2700.00,
+                liquido: 15300.00
+            },
+            {
+                contratante: "Fertilizante Químico (Minas Express)",
+                origemDestino: "Santos, SP → Uberlândia, MG",
+                data: new Date(2026, 4, 5), // 05 Mai 2026
+                dataStr: "05 Mai 2026",
+                status: "resgatado",
+                bruto: 11000.00,
+                taxa: 1650.00,
+                liquido: 9350.00
+            },
+            {
+                contratante: "Sacarias de Trigo (Minas Express)",
+                origemDestino: "Santos, SP → Pouso Alegre, MG",
+                data: new Date(2026, 3, 28), // 28 Abr 2026
+                dataStr: "28 Abr 2026",
+                status: "resgatado",
+                bruto: 9500.00,
+                taxa: 1425.00,
+                liquido: 8075.00
+            },
+            {
+                contratante: "Farelo de Soja (AgroFrete S/A)",
+                origemDestino: "Rio Verde, GO → Santos, SP",
+                data: new Date(2026, 3, 15), // 15 Abr 2026
+                dataStr: "15 Abr 2026",
+                status: "resgatado",
+                bruto: 14000.00,
+                taxa: 2100.00,
+                liquido: 11900.00
+            },
+            {
+                contratante: "Sementes de Milho (AgroFrete S/A)",
+                origemDestino: "Goiânia, GO → Uberlândia, MG",
+                data: new Date(2026, 2, 20), // 20 Mar 2026
+                dataStr: "20 Mar 2026",
+                status: "resgatado",
+                bruto: 16000.00,
+                taxa: 2400.00,
+                liquido: 13600.00
+            },
+            {
+                contratante: "Fertilizante NPK (TransLogística)",
+                origemDestino: "Paranaguá, PR → Rondonópolis, MT",
+                data: new Date(2026, 2, 5), // 05 Mar 2026
+                dataStr: "05 Mar 2026",
+                status: "resgatado",
+                bruto: 22000.00,
+                taxa: 3300.00,
+                liquido: 18700.00
+            },
+            {
+                contratante: "Carga de Soja (AgroFrete S/A)",
+                origemDestino: "Primavera do Leste, MT → Santos, SP",
+                data: new Date(2026, 1, 18), // 18 Fev 2026
+                dataStr: "18 Fev 2026",
+                status: "resgatado",
+                bruto: 25000.00,
+                taxa: 3750.00,
+                liquido: 21250.00
+            }
+        ];
+
+        // Controle do Modal de Extrato
+        function openFullStatementModal() {
+            const modal = document.getElementById('extrato-modal-backdrop');
+            if (modal) {
+                modal.style.opacity = '1';
+                modal.style.pointerEvents = 'all';
+                // Reseta visualização padrão para semanal
+                document.getElementById('extrato-filter-type').value = 'semanal';
+                toggleExtratoFilterInputs('semanal');
+                renderExtratoTable(transacoesHistoricas);
+            }
+        }
+
+        function closeFullStatementModal() {
+            const modal = document.getElementById('extrato-modal-backdrop');
+            if (modal) {
+                modal.style.opacity = '0';
+                modal.style.pointerEvents = 'none';
+            }
+        }
+
+        // Alternar inputs de data conforme tipo de filtro
+        function toggleExtratoFilterInputs(value) {
+            const semanalBlock = document.getElementById('extrato-semana-block');
+            const mesBlock = document.getElementById('extrato-mes-block');
+            const personalizadoBlock = document.getElementById('extrato-personalizado-block');
+
+            semanalBlock.style.display = value === 'semanal' ? 'flex' : 'none';
+            mesBlock.style.display = value === 'mensal' ? 'flex' : 'none';
+            personalizadoBlock.style.display = value === 'personalizado' ? 'flex' : 'none';
+        }
+
+        // Renderizar linhas da tabela de extrato
+        function renderExtratoTable(lista) {
+            const tbody = document.getElementById('modal-extrato-table-body');
+            tbody.innerHTML = '';
+
+            if (lista.length === 0) {
+                tbody.innerHTML = `
+                    <tr>
+                        <td colspan="6" style="text-align: center; color: var(--text-muted); padding: 30px;">
+                            Nenhum lançamento encontrado para o período selecionado.
+                        </td>
+                    </tr>
+                `;
+                return;
+            }
+
+            lista.forEach(t => {
+                const tr = document.createElement('tr');
+                let badgeClass = 'disponivel';
+                let badgeText = 'Disponível';
+
+                if (t.status === 'em-transito') {
+                    badgeClass = 'em-transito';
+                    badgeText = 'Em trânsito';
+                } else if (t.status === 'resgatado') {
+                    badgeClass = 'resgatado';
+                    badgeText = 'Resgatado';
+                }
+
+                tr.innerHTML = `
+                    <td class="td-route">
+                        <span class="route-desc">${t.contratante}</span>
+                        <span class="route-meta">${t.origemDestino}</span>
+                    </td>
+                    <td>${t.dataStr}</td>
+                    <td><span class="status-badge ${badgeClass}">${badgeText}</span></td>
+                    <td class="td-value val-bruto">${formatBRL(t.bruto)}</td>
+                    <td class="td-value val-taxa">${t.taxa > 0 ? '- ' + formatBRL(t.taxa) : 'R$ 0,00'}</td>
+                    <td class="td-value val-liquido" style="${t.status === 'resgatado' ? 'color:#ff9f0a' : ''}">${formatBRL(t.liquido)}</td>
+                `;
+                tbody.appendChild(tr);
+            });
+        }
+
+        // Filtrar transações históricas
+        function applyExtratoFilters() {
+            const filterType = document.getElementById('extrato-filter-type').value;
+            let resultados = [];
+
+            if (filterType === 'semanal') {
+                const semanaVal = document.getElementById('extrato-filter-semana').value;
+                if (semanaVal === 'atual') {
+                    // Cargas da semana de 18 a 24 Mai 2026
+                    resultados = transacoesHistoricas.filter(t => {
+                        if (t.contratante.includes("Resgate Pix") && t.data && t.data >= new Date(2026, 4, 18)) return true;
+                        if (t.dataStr === "Em trânsito") return true;
+                        return t.data && t.data >= new Date(2026, 4, 18) && t.data <= new Date(2026, 4, 24);
+                    });
+                } else if (semanaVal === 'anterior') {
+                    // Cargas da semana anterior de 11 a 17 Mai 2026
+                    resultados = transacoesHistoricas.filter(t => {
+                        return t.data && t.data >= new Date(2026, 4, 11) && t.data <= new Date(2026, 4, 17);
+                    });
+                } else {
+                    // Duas semanas atrás 04 a 10 Mai 2026
+                    resultados = transacoesHistoricas.filter(t => {
+                        return t.data && t.data >= new Date(2026, 4, 4) && t.data <= new Date(2026, 4, 10);
+                    });
+                }
+            } else if (filterType === 'mensal') {
+                const mesVal = parseInt(document.getElementById('extrato-filter-mes').value);
+                const anoVal = parseInt(document.getElementById('extrato-filter-ano').value);
+
+                resultados = transacoesHistoricas.filter(t => {
+                    if (t.dataStr === "Em trânsito" && mesVal === 5 && anoVal === 2026) return true;
+                    return t.data && t.data.getMonth() === (mesVal - 1) && t.data.getFullYear() === anoVal;
+                });
+            } else if (filterType === 'personalizado') {
+                const deVal = document.getElementById('extrato-filter-de').value;
+                const ateVal = document.getElementById('extrato-filter-ate').value;
+
+                if (!deVal || !ateVal) {
+                    showToast('Filtro Incompleto', 'Por favor, selecione as datas inicial e final para filtrar.', 'info');
+                    return;
+                }
+
+                const dataDe = new Date(deVal + 'T00:00:00');
+                const dataAte = new Date(ateVal + 'T23:59:59');
+
+                resultados = transacoesHistoricas.filter(t => {
+                    if (t.dataStr === "Em trânsito") {
+                        const sojaData = new Date(2026, 4, 18);
+                        return sojaData >= dataDe && sojaData <= dataAte;
+                    }
+                    return t.data && t.data >= dataDe && t.data <= dataAte;
+                });
+            }
+
+            renderExtratoTable(resultados);
+        }
+
+        // Exportar extrato
+        function exportStatement(type) {
+            const btn = document.getElementById('btn-export-extrato');
+            const originalText = btn.innerHTML;
+
+            btn.disabled = true;
+            btn.innerHTML = '<div class="spinner" style="width:14px; height:14px; border-width:2px;"></div> Exportando...';
+
+            setTimeout(() => {
+                btn.disabled = false;
+                btn.innerHTML = originalText;
+
+                showToast('Arquivo Exportado!', `O extrato financeiro foi gerado e salvo em seu dispositivo com sucesso.`);
+            }, 1200);
+        }
+
+        // Formatação de Dinheiro em BRL
+        function formatBRL(value) {
+            return value.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+        }
+
+        // Preenche valor máximo do saque
+        function fillMaxAmount() {
+            const input = document.getElementById('pix-amount');
+            input.value = availableBalance.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+        }
+
+        // Formata input de valor conforme digita
+        document.getElementById('pix-amount').addEventListener('input', function(e) {
+            let value = e.target.value.replace(/\D/g, '');
+            if (value === '') {
+                e.target.value = '';
+                return;
+            }
+            value = (parseFloat(value) / 100).toFixed(2);
+            e.target.value = parseFloat(value).toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+        });
+
+        // Evento de alteração no select do tipo de Pix
+        document.getElementById('pix-type').addEventListener('change', function(e) {
+            const pixKeyInput = document.getElementById('pix-key');
+            if (e.target.value === 'cnpj') {
+                pixKeyInput.value = '45.987.126/0001-09';
+                pixKeyInput.placeholder = '00.000.000/0001-00';
+            } else if (e.target.value === 'celular') {
+                pixKeyInput.value = '(81) 98877-6655';
+                pixKeyInput.placeholder = '(00) 90000-0000';
+            } else if (e.target.value === 'email') {
+                pixKeyInput.value = 'financeiro@joaotransportes.com.br';
+                pixKeyInput.placeholder = 'seu-email@dominio.com';
+            } else if (e.target.value === 'cpf') {
+                pixKeyInput.value = '123.456.789-00';
+                pixKeyInput.placeholder = '000.000.000-00';
+            } else {
+                pixKeyInput.value = 'd89c56f2-1a4b-4c28-98e3-b3cde458f310';
+                pixKeyInput.placeholder = 'Chave aleatória UUID';
+            }
+        });
+
+        // Mostra Toast de Sucesso/Info
+        function showToast(title, desc, type = 'success') {
+            const container = document.getElementById('toast-container');
+            
+            const toast = document.createElement('div');
+            toast.className = `kargo-toast ${type}`;
+            
+            const iconSvg = type === 'success' 
+                ? '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>'
+                : '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>';
+
+            toast.innerHTML = `
+                <div class="toast-icon ${type}">
+                    ${iconSvg}
+                </div>
+                <div class="toast-content">
+                    <div class="toast-title">${title}</div>
+                    <div class="toast-desc">${desc}</div>
+                </div>
+                <div class="toast-progress-bar"></div>
+            `;
+            
+            container.appendChild(toast);
+            
+            // Trigger reflow
+            toast.offsetHeight;
+            toast.classList.add('show');
+            
+            // Animação da barra
+            const progress = toast.querySelector('.toast-progress-bar');
+            progress.style.animation = 'progress-deplete 4s linear forwards';
+            
+            setTimeout(() => {
+                toast.classList.remove('show');
+                setTimeout(() => {
+                    toast.remove();
+                }, 400);
+            }, 4000);
+        }
+
+        // Submissão do Saque via Pix
+        function handlePixWithdrawal() {
+            const amountInput = document.getElementById('pix-amount');
+            const btnSubmit = document.getElementById('btn-submit-resgate');
+            const rawAmount = parseFloat(amountInput.value.replace(/\./g, '').replace(',', '.'));
+
+            if (isNaN(rawAmount) || rawAmount <= 0) {
+                showToast('Erro de Validação', 'Por favor, insira um valor válido para resgate.', 'info');
+                return;
+            }
+
+            if (rawAmount > availableBalance) {
+                showToast('Saldo Insuficiente', 'O valor solicitado é maior do que o seu saldo disponível.', 'info');
+                return;
+            }
+
+            // Inicia simulação de loading
+            btnSubmit.disabled = true;
+            const originalText = btnSubmit.innerHTML;
+            btnSubmit.innerHTML = '<div class="spinner"></div> Processando resgate...';
+
+            setTimeout(() => {
+                // Atualiza Balanços
+                availableBalance -= rawAmount;
+                withdrawnBalance += rawAmount;
+
+                document.getElementById('available-balance-txt').textContent = formatBRL(availableBalance);
+                document.getElementById('withdrawn-balance-txt').textContent = formatBRL(withdrawnBalance);
+
+                // Insere no Histórico de Lançamentos
+                const tableBody = document.getElementById('finance-table-body');
+                const newRow = document.createElement('tr');
+                
+                const dataAtual = new Date();
+                const dia = String(dataAtual.getDate()).padStart(2, '0');
+                const meses = ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez'];
+                const mes = meses[dataAtual.getMonth()];
+                const ano = dataAtual.getFullYear();
+
+                // Insere também no início do array de transações históricas
+                transacoesHistoricas.unshift({
+                    contratante: "Resgate Pix Instantâneo",
+                    origemDestino: `Destino: Chave ${document.getElementById('pix-type').selectedOptions[0].text.split(' ')[0]}`,
+                    data: dataAtual,
+                    dataStr: `${dia} ${mes} ${ano}`,
+                    status: "resgatado",
+                    bruto: rawAmount,
+                    taxa: 0.00,
+                    liquido: rawAmount
+                });
+
+                newRow.innerHTML = `
+                    <td class="td-route">
+                        <span class="route-desc">Resgate Pix Instantâneo</span>
+                        <span class="route-meta">Destino: Chave ${document.getElementById('pix-type').selectedOptions[0].text.split(' ')[0]}</span>
+                    </td>
+                    <td>${dia} ${mes} ${ano}</td>
+                    <td><span class="status-badge resgatado">Resgatado</span></td>
+                    <td class="td-value val-bruto">${formatBRL(rawAmount)}</td>
+                    <td class="td-value val-taxa">R$ 0,00</td>
+                    <td class="td-value val-liquido text-amber-500" style="color:#ff9f0a">${formatBRL(rawAmount)}</td>
+                `;
+                
+                // Insere no topo
+                tableBody.insertBefore(newRow, tableBody.firstChild);
+
+                // Restaura botão e formulário
+                btnSubmit.disabled = false;
+                btnSubmit.innerHTML = originalText;
+                amountInput.value = '';
+
+                // Dispara Toast
+                showToast(
+                    'Resgate Pix Concluído!', 
+                    `O valor de ${formatBRL(rawAmount)} foi transferido com sucesso para a conta de destino.`
+                );
+
+            }, 1500);
+        }
+    </script>
+</body>
+</html>

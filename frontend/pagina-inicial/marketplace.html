@@ -1,0 +1,726 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="KarGO - Encontre cargas disponíveis no marketplace de fretes inteligente.">
+    <title>KarGO — Marketplace de Cargas</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/marketplace.css?v=1.3">
+    <!-- Tailwind CSS CDN com configuracoes controladas -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            corePlugins: {
+                preflight: false,
+            }
+        }
+    </script>
+</head>
+<body class="mp-body">
+
+    <div class="mp-layout-container">
+        
+        <!-- ============ SIDEBAR LATERAL (NAVEGAÇÃO DESKTOP) ============ -->
+                        <aside class="mp-sidebar">
+            <div class="mp-sidebar-logo">
+                <a href="index.html">
+                    <img src="assets/images/LOGO.png" alt="KarGO" class="logo-img">
+                </a>
+            </div>
+            
+            <nav class="mp-sidebar-menu">
+                <div class="mp-sidebar-links">
+                    <a href="dashboard.html" class="mp-menu-item ">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="9"/><rect x="14" y="3" width="7" height="5"/><rect x="14" y="12" width="7" height="9"/><rect x="3" y="16" width="7" height="5"/></svg>
+                        Dashboard
+                    </a>
+                    <a href="marketplace.html" class="mp-menu-item active">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+                        Buscar Cargas
+                    </a>
+                    <a href="minhas-viagens.html" class="mp-menu-item ">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="3" width="15" height="13" rx="2" ry="2"/><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>
+                        Minhas Viagens
+                    </a>
+                    <a href="pagamentos.html" class="mp-menu-item ">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><line x1="12" y1="4" x2="12" y2="20"/><line x1="2" y1="12" x2="22" y2="12"/></svg>
+                        Pagamentos
+                    </a>
+                    <a href="chat.html" class="mp-menu-item ">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+                        Chat / Mensagens
+                        <span class="chat-badge-dot"></span>
+                    </a>
+                    <a href="veiculos.html" class="mp-menu-item ">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 17h2c.6 0 1-.4 1-1v-3c0-.9-.7-1.7-1.5-1.9C18.7 10.6 16 10 16 10s-1.3-1.4-2.2-2.3c-.5-.4-1.1-.7-1.8-.7H5c-.6 0-1 .4-1 1v7c0 .6.4 1 1 1h2"/><circle cx="7" cy="17" r="2"/><path d="M9 17h6"/><circle cx="17" cy="17" r="2"/></svg>
+                        Meus Veículos
+                    </a>
+                    <a href="perfil.html" class="mp-menu-item ">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+                        Meu Perfil
+                    </a>
+                </div>
+                
+                <div class="mp-sidebar-bottom">
+                    <a href="configuracoes.html" class="mp-menu-item ">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+                        Configurações
+                    </a>
+                </div>
+            </nav>
+        </aside>
+
+        <!-- ============ CONTEÚDO PRINCIPAL (DIREITA) ============ -->
+        <div class="mp-main-content">
+            
+            <!-- TOPBAR HEADER -->
+            <header class="mp-topbar">
+                <div class="mp-topbar-logo-mobile">
+                    <a href="index.html">
+                        <img src="assets/images/LOGO.png" alt="KarGO" class="logo-img-mobile">
+                    </a>
+                </div>
+                <h1 class="mp-page-title">Marketplace de Cargas</h1>
+                
+                <div class="mp-topbar-actions">
+                    <!-- Sino de Notificações -->
+                    <button class="mp-notification-btn" aria-label="Notificações">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+                        <span class="notification-badge"></span>
+                    </button>
+                    
+                    <!-- Perfil do Usuário -->
+                    <div class="mp-user-profile">
+                        <div class="user-info">
+                            <span class="user-name">João Transportes</span>
+                            <span class="user-role">
+                                <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>
+                                Motorista Verificado
+                            </span>
+                        </div>
+                        <div class="user-avatar">
+                            <img src="assets/images/motorista.png" alt="Avatar João Transportes">
+                        </div>
+                    </div>
+                </div>
+            </header>
+
+            <div class="mp-content-wrapper">
+                
+
+                <!-- ============ FILTRO RÁPIDO SUPERIOR ============ -->
+                <section class="mp-quick-filter-card">
+                    <div class="mp-quick-filter-grid">
+                        <div class="filter-field">
+                            <label class="field-label">Origem</label>
+                            <div class="field-input-wrapper">
+                                <svg class="field-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+                                <input type="text" placeholder="Cidade ou UF" value="São Paulo, SP" id="quick-origin">
+                            </div>
+                        </div>
+                        
+                        <div class="filter-field">
+                            <label class="field-label">Destino</label>
+                            <div class="field-input-wrapper">
+                                <svg class="field-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+                                <input type="text" placeholder="Cidade ou UF" id="quick-destination">
+                            </div>
+                        </div>
+                        
+                        <div class="filter-field">
+                            <label class="field-label">Caminhão</label>
+                            <div class="field-input-wrapper">
+                                <svg class="field-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="3" width="15" height="13" rx="2" ry="2"/><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>
+                                <select id="quick-truck">
+                                    <option value="todos">Todos os tipos</option>
+                                    <option value="bau">Baú Fechado</option>
+                                    <option value="sider">Sider</option>
+                                    <option value="graneleiro">Graneleiro</option>
+                                    <option value="refrigerado">Refrigerado</option>
+                                </select>
+                            </div>
+                        </div>
+                        
+                        <div class="filter-field">
+                            <label class="field-label">Data de Saída</label>
+                            <div class="field-input-wrapper">
+                                <svg class="field-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+                                <input type="text" placeholder="mm/dd/yyyy" onfocus="(this.type='date')" id="quick-date">
+                            </div>
+                        </div>
+                        
+                        <button class="mp-search-btn-primary" id="btn-search-trigger">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+                            Pesquisar
+                        </button>
+                    </div>
+                </section>
+
+                <!-- ============ LAYOUT PRINCIPAL EM 2 COLUNAS ============ -->
+                <div class="mp-main-grid">
+                    
+                    <!-- COLUNA ESQUERDA: FILTROS AVANÇADOS & MINI-MAPA -->
+                    <aside class="mp-filters-sidebar">
+                        <!-- Botão de Fechar Drawer (Mobile apenas) -->
+                        <button class="close-filters-drawer-btn" id="btn-close-filters-drawer" aria-label="Fechar Filtros">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+                        </button>
+                        
+                        <!-- Filtros Avançados -->
+                        <div class="filters-card">
+                            <div class="filters-card-header">
+                                <h3>Filtros Avançados</h3>
+                                <button class="clear-filters-btn" id="btn-clear-filters">Limpar</button>
+                            </div>
+                            
+                            <!-- Tipo de Carga -->
+                            <div class="filter-section">
+                                <h4 class="section-title">Tipo de Carga</h4>
+                                <div class="checkbox-group-chips">
+                                    <label class="checkbox-chip">
+                                        <input type="checkbox" name="carga-tipo" value="alimenticia">
+                                        <span>Alimentícia</span>
+                                    </label>
+                                    <label class="checkbox-chip">
+                                        <input type="checkbox" name="carga-tipo" value="construcao" checked>
+                                        <span>Construção</span>
+                                    </label>
+                                    <label class="checkbox-chip">
+                                        <input type="checkbox" name="carga-tipo" value="quimica">
+                                        <span>Química</span>
+                                    </label>
+                                    <label class="checkbox-chip">
+                                        <input type="checkbox" name="carga-tipo" value="eletronicos">
+                                        <span>Eletrônicos</span>
+                                    </label>
+                                    <label class="checkbox-chip">
+                                        <input type="checkbox" name="carga-tipo" value="geral">
+                                        <span>Geral</span>
+                                    </label>
+                                </div>
+                            </div>
+                            
+                            <!-- Peso Slider -->
+                            <div class="filter-section">
+                                <div class="section-title-row">
+                                    <h4 class="section-title">Peso (Ton)</h4>
+                                </div>
+                                <div class="slider-container">
+                                    <input type="range" class="filter-range-slider" min="1" max="50" value="14" id="weight-slider">
+                                    <div class="slider-labels">
+                                        <span>1T</span>
+                                        <span class="active-val" id="weight-slider-val">14T</span>
+                                        <span>50T</span>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Valor do Frete -->
+                            <div class="filter-section">
+                                <h4 class="section-title">Valor do Frete</h4>
+                                <div class="price-inputs-row">
+                                    <div class="price-input-wrapper">
+                                        <span class="currency-prefix">R$</span>
+                                        <input type="number" placeholder="Mín" id="price-min">
+                                    </div>
+                                    <div class="price-input-wrapper">
+                                        <span class="currency-prefix">R$</span>
+                                        <input type="number" placeholder="Máx" id="price-max">
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Distância do Raio -->
+                            <div class="filter-section">
+                                <h4 class="section-title">Raio de Busca (Origem)</h4>
+                                <div class="checkbox-group-chips">
+                                    <label class="checkbox-chip">
+                                        <input type="radio" name="radius-val" value="50">
+                                        <span>50 km</span>
+                                    </label>
+                                    <label class="checkbox-chip">
+                                        <input type="radio" name="radius-val" value="100" checked>
+                                        <span>100 km</span>
+                                    </label>
+                                    <label class="checkbox-chip">
+                                        <input type="radio" name="radius-val" value="250">
+                                        <span>250 km</span>
+                                    </label>
+                                    <label class="checkbox-chip">
+                                        <input type="radio" name="radius-val" value="todo-brasil">
+                                        <span>Todo Brasil</span>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Card do Mini Mapa -->
+                        <div class="mini-map-card">
+                            <div class="map-container">
+                                <img src="assets/images/mapa_mini.png" alt="Mapa de cargas disponíveis" class="map-image-mock">
+                                <div class="map-overlay-content">
+                                    <a href="#" class="map-full-btn">
+                                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+                                        Ver no Mapa Completo
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </aside>
+                    
+                    <!-- Overlay de Filtros (Mobile apenas) -->
+                    <div class="mp-filters-overlay" id="mp-filters-overlay"></div>
+
+                    <!-- COLUNA DIREITA: LISTAGEM DE CARGAS -->
+                    <main class="mp-cards-list-section">
+                        
+                        <!-- Barra de resultados e ordenação -->
+                        <div class="results-header-bar">
+                            <h2 class="results-title"><strong id="results-count">47</strong> cargas encontradas</h2>
+                            
+                            <div class="results-view-options">
+                                <!-- Lista/Mapa Toggle -->
+                                <div class="view-toggle-buttons">
+                                    <button class="view-btn active" id="view-list-btn">
+                                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg>
+                                        Lista
+                                    </button>
+                                    <button class="view-btn" id="view-map-btn">
+                                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="1 6 1 22 8 18 16 22 23 18 23 2 16 6 8 2 1 6"/><line x1="8" y1="2" x2="8" y2="18"/><line x1="16" y1="6" x2="16" y2="22"/></svg>
+                                        Mapa
+                                    </button>
+                                </div>
+                                
+                                <!-- Ordenação -->
+                                <div class="results-sort">
+                                    <span class="sort-label">Ordenar por:</span>
+                                    <select class="sort-select" id="results-sort-select">
+                                        <option value="recentes">Mais recentes</option>
+                                        <option value="preco-desc">Maior valor</option>
+                                        <option value="distancia-asc">Menor distância</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Carga Cards Container -->
+                        <div class="mp-cards-container" id="cards-container">
+                            
+                            <!-- CARD 1: RECOMENDADO -->
+                            <article class="cargo-card featured">
+                                <div class="card-header-row">
+                                    <span class="card-tag recommended">
+                                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+                                        RECOMENDADO
+                                    </span>
+                                    <span class="card-publish-time">Publicada há 5 min</span>
+                                </div>
+                                
+                                <div class="card-main-grid">
+                                    <!-- Rota Horizontal ("Bateu o olho, viu!") -->
+                                    <div class="card-route-horizontal">
+                                        <div class="route-origin">
+                                            <span class="route-label">ORIGEM</span>
+                                            <h4 class="route-city">São Paulo, SP</h4>
+                                            <span class="route-time">Saída: Amanhã, 08h</span>
+                                        </div>
+                                        <div class="route-connector-container">
+                                            <span class="route-distance">420 km</span>
+                                            <div class="route-line-connector">
+                                                <svg class="route-truck-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                                                    <rect x="1" y="3" width="15" height="13" rx="2" ry="2"/>
+                                                    <polygon points="16 8 20 8 23 11 23 16 16 16 16 8"/>
+                                                    <circle cx="5.5" cy="18.5" r="2.5"/>
+                                                    <circle cx="18.5" cy="18.5" r="2.5"/>
+                                                </svg>
+                                            </div>
+                                        </div>
+                                        <div class="route-destination">
+                                            <span class="route-label">DESTINO</span>
+                                            <h4 class="route-city">Curitiba, PR</h4>
+                                            <span class="route-time">Entrega: 24/05, 17h</span>
+                                        </div>
+                                    </div>
+                                    
+                                    <!-- Especificações no Centro -->
+                                    <div class="card-specs-grid">
+                                        <div class="spec-tile">
+                                            <span class="spec-label">PESO</span>
+                                            <span class="spec-value">14 Ton</span>
+                                        </div>
+                                        <div class="spec-tile">
+                                            <span class="spec-label">CAMINHÃO</span>
+                                            <span class="spec-value">Sider / Baú</span>
+                                        </div>
+                                        <div class="spec-tile">
+                                            <span class="spec-label">PRODUTO</span>
+                                            <span class="spec-value">Eletrônicos</span>
+                                        </div>
+                                        <div class="spec-tile">
+                                            <span class="spec-label">PAGAMENTO</span>
+                                            <span class="spec-value text-highlight">Na Entrega</span>
+                                        </div>
+                                    </div>
+                                    
+                                    <!-- Finanças e Ações na Direita -->
+                                    <div class="card-action-column">
+                                        <div class="price-box">
+                                            <span class="price-label">FRETE MÉDIO SUGERIDO</span>
+                                            <h3 class="price-value">R$ 4.250,00</h3>
+                                        </div>
+                                        <div class="actions-group">
+                                            <a href="detalhe-carga.html" class="card-btn-outline">Ver Detalhes</a>
+                                            <button class="card-btn-primary js-propose-btn" data-suggested="4.250,00" data-origin="São Paulo, SP" data-destination="Curitiba, PR">Enviar Proposta</button>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Seção do Contratante (Rodapé do Card) -->
+                                <div class="card-contractor-section">
+                                    <div class="contractor-info">
+                                        <img src="assets/images/embarcador_translog.png" alt="Avatar TransLog Nordeste" class="contractor-avatar">
+                                        <div class="contractor-details">
+                                            <div class="contractor-name-row">
+                                                <span class="contractor-name">TransLog Nordeste</span>
+                                                <span class="verified-icon" title="Embarcador Verificado">
+                                                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" class="verified-badge"><polyline points="20 6 9 17 4 12"/></svg>
+                                                </span>
+                                            </div>
+                                            <div class="contractor-rating-row">
+                                                <span class="rating-star">
+                                                    <svg width="10" height="10" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+                                                </span>
+                                                <span class="rating-value">4.8</span>
+                                                <span class="rating-count">• 320 fretes • Membro desde 2023</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <a href="detalhe-carga.html" class="contractor-more-link">Ver Perfil</a>
+                                </div>
+                            </article>
+
+                            <!-- CARD 2: URGENTE -->
+                            <article class="cargo-card urgent">
+                                <div class="card-header-row">
+                                    <span class="card-tag alert">
+                                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+                                        URGENTE
+                                    </span>
+                                    <span class="card-publish-time">Publicada há 12 min</span>
+                                </div>
+                                
+                                <div class="card-main-grid">
+                                    <!-- Rota Horizontal ("Bateu o olho, viu!") -->
+                                    <div class="card-route-horizontal">
+                                        <div class="route-origin">
+                                            <span class="route-label">ORIGEM</span>
+                                            <h4 class="route-city">Guarulhos, SP</h4>
+                                            <span class="route-time">Saída: IMEDIATA</span>
+                                        </div>
+                                        <div class="route-connector-container">
+                                            <span class="route-distance">590 km</span>
+                                            <div class="route-line-connector">
+                                                <svg class="route-truck-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                                                    <rect x="1" y="3" width="15" height="13" rx="2" ry="2"/>
+                                                    <polygon points="16 8 20 8 23 11 23 16 16 16 16 8"/>
+                                                    <circle cx="5.5" cy="18.5" r="2.5"/>
+                                                    <circle cx="18.5" cy="18.5" r="2.5"/>
+                                                </svg>
+                                            </div>
+                                        </div>
+                                        <div class="route-destination">
+                                            <span class="route-label">DESTINO</span>
+                                            <h4 class="route-city">Belo Horizonte, MG</h4>
+                                            <span class="route-time">Prazo: 23/05, 12h</span>
+                                        </div>
+                                    </div>
+                                    
+                                    <!-- Especificações no Centro -->
+                                    <div class="card-specs-grid">
+                                        <div class="spec-tile">
+                                            <span class="spec-label">PESO</span>
+                                            <span class="spec-value">8 Ton</span>
+                                        </div>
+                                        <div class="spec-tile">
+                                            <span class="spec-label">CAMINHÃO</span>
+                                            <span class="spec-value">Truck / Sider</span>
+                                        </div>
+                                        <div class="spec-tile">
+                                            <span class="spec-label">PRODUTO</span>
+                                            <span class="spec-value">Peças Auto</span>
+                                        </div>
+                                        <div class="spec-tile">
+                                            <span class="spec-label">PAGAMENTO</span>
+                                            <span class="spec-value">Na Entrega</span>
+                                        </div>
+                                    </div>
+                                    
+                                    <!-- Finanças e Ações na Direita -->
+                                    <div class="card-action-column">
+                                        <div class="price-box">
+                                            <span class="price-label">FRETE MÉDIO SUGERIDO</span>
+                                            <h3 class="price-value">R$ 2.900,00</h3>
+                                        </div>
+                                        <div class="actions-group">
+                                            <a href="detalhe-carga.html" class="card-btn-outline">Ver Detalhes</a>
+                                            <button class="card-btn-primary bg-danger js-propose-btn" data-suggested="2.900,00" data-origin="Guarulhos, SP" data-destination="Belo Horizonte, MG">Enviar Proposta</button>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Seção do Contratante (Rodapé do Card) -->
+                                <div class="card-contractor-section">
+                                    <div class="contractor-info">
+                                        <img src="assets/images/embarcador_minas.png" alt="Avatar Minas Express" class="contractor-avatar">
+                                        <div class="contractor-details">
+                                            <div class="contractor-name-row">
+                                                <span class="contractor-name">Minas Express Ltda</span>
+                                                <span class="verified-icon" title="Embarcador Verificado">
+                                                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" class="verified-badge"><polyline points="20 6 9 17 4 12"/></svg>
+                                                </span>
+                                            </div>
+                                            <div class="contractor-rating-row">
+                                                <span class="rating-star">
+                                                    <svg width="10" height="10" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+                                                </span>
+                                                <span class="rating-value">4.9</span>
+                                                <span class="rating-count">• 450 fretes • Membro desde 2021</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <a href="detalhe-carga.html" class="contractor-more-link">Ver Perfil</a>
+                                </div>
+                            </article>
+
+                            <!-- CARD 3: ROTA DE RETORNO -->
+                            <article class="cargo-card return">
+                                <div class="card-header-row">
+                                    <span class="card-tag info">
+                                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2a10 10 0 1 0 10 10A10 10 0 0 0 12 2zm1 14H11v-4h2zm0-6H11V8h2z"/></svg>
+                                        ROTA DE RETORNO
+                                    </span>
+                                    <span class="card-publish-time">Publicada há 25 min</span>
+                                </div>
+                                
+                                <div class="card-main-grid">
+                                    <!-- Rota Horizontal ("Bateu o olho, viu!") -->
+                                    <div class="card-route-horizontal">
+                                        <div class="route-origin">
+                                            <span class="route-label">ORIGEM</span>
+                                            <h4 class="route-city">Fortaleza, CE</h4>
+                                            <span class="route-time">Saída: 24/05, 07h</span>
+                                        </div>
+                                        <div class="route-connector-container">
+                                            <span class="route-distance">800 km</span>
+                                            <div class="route-line-connector">
+                                                <svg class="route-truck-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                                                    <rect x="1" y="3" width="15" height="13" rx="2" ry="2"/>
+                                                    <polygon points="16 8 20 8 23 11 23 16 16 16 16 8"/>
+                                                    <circle cx="5.5" cy="18.5" r="2.5"/>
+                                                    <circle cx="18.5" cy="18.5" r="2.5"/>
+                                                </svg>
+                                            </div>
+                                        </div>
+                                        <div class="route-destination">
+                                            <span class="route-label">DESTINO</span>
+                                            <h4 class="route-city">Recife, PE</h4>
+                                            <span class="route-time">Prazo: 25/05, 14h</span>
+                                        </div>
+                                    </div>
+                                    
+                                    <!-- Especificações no Centro -->
+                                    <div class="card-specs-grid">
+                                        <div class="spec-tile">
+                                            <span class="spec-label">PESO</span>
+                                            <span class="spec-value">5 Ton</span>
+                                        </div>
+                                        <div class="spec-tile">
+                                            <span class="spec-label">CAMINHÃO</span>
+                                            <span class="spec-value">Graneleiro</span>
+                                        </div>
+                                        <div class="spec-tile">
+                                            <span class="spec-label">PRODUTO</span>
+                                            <span class="spec-value">Móveis</span>
+                                        </div>
+                                        <div class="spec-tile">
+                                            <span class="spec-label">PAGAMENTO</span>
+                                            <span class="spec-value">Na Entrega</span>
+                                        </div>
+                                    </div>
+                                    
+                                    <!-- Finanças e Ações na Direita -->
+                                    <div class="card-action-column">
+                                        <div class="price-box">
+                                            <span class="price-label">FRETE MÉDIO SUGERIDO</span>
+                                            <h3 class="price-value">R$ 4.200,00</h3>
+                                        </div>
+                                        <div class="actions-group">
+                                            <a href="detalhe-carga.html" class="card-btn-outline">Ver Detalhes</a>
+                                            <button class="card-btn-primary bg-info js-propose-btn" data-suggested="4.200,00" data-origin="Fortaleza, CE" data-destination="Recife, PE">Enviar Proposta</button>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Seção do Contratante (Rodapé do Card) -->
+                                <div class="card-contractor-section">
+                                    <div class="contractor-info">
+                                        <img src="assets/images/embarcador_agrofrete.png" alt="Avatar AgroFrete Sul" class="contractor-avatar">
+                                        <div class="contractor-details">
+                                            <div class="contractor-name-row">
+                                                <span class="contractor-name">AgroFrete Sul</span>
+                                                <span class="verified-icon" title="Embarcador Verificado">
+                                                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" class="verified-badge"><polyline points="20 6 9 17 4 12"/></svg>
+                                                </span>
+                                            </div>
+                                            <div class="contractor-rating-row">
+                                                <span class="rating-star">
+                                                    <svg width="10" height="10" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+                                                </span>
+                                                <span class="rating-value">4.7</span>
+                                                <span class="rating-count">• 180 fretes • Membro desde 2022</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <a href="detalhe-carga.html" class="contractor-more-link">Ver Perfil</a>
+                                </div>
+                            </article>
+
+                        </div>
+                    </main>
+
+                </div><!-- /mp-main-grid -->
+                
+            </div><!-- /mp-content-wrapper -->
+            
+        </div><!-- /mp-main-content -->
+        
+    </div><!-- /mp-layout-container -->
+
+    <!-- ============ MODAL PREMIUM DE ENVIO DE PROPOSTA ============ -->
+    <div class="kargo-modal-backdrop" id="proposal-modal-backdrop">
+        <div class="kargo-modal-wrapper">
+            <header class="kargo-modal-header">
+                <h3 class="kargo-modal-title">Enviar Proposta de Frete</h3>
+                <button class="kargo-modal-close-btn" id="btn-close-modal" aria-label="Fechar">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+                </button>
+            </header>
+            
+            <div class="kargo-modal-body">
+                <!-- Card de Perfil do Motorista Logado -->
+                <div class="driver-premium-card">
+                    <div class="driver-header-info">
+                        <div class="driver-profile-mini">
+                            <img src="assets/images/motorista.png" alt="João Transportes" class="driver-mini-avatar">
+                            <div>
+                                <h4 class="driver-mini-name">João Transportes</h4>
+                                <span class="driver-mini-rating">
+                                    <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor" style="vertical-align: middle;"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+                                    4.9 (152 avaliações)
+                                </span>
+                            </div>
+                        </div>
+                        <span class="driver-badge-verified">
+                            <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>
+                            Verificado
+                        </span>
+                    </div>
+                    
+                    <div class="proposal-vehicle-select-container" style="margin-top: 15px; margin-bottom: 12px;">
+                        <label for="driver-vehicle-select" style="font-size: 11px; font-weight: 700; color: var(--text-muted); text-transform: uppercase; display: block; margin-bottom: 6px; letter-spacing: 0.5px;">Selecionar Veículo para o Frete</label>
+                        <div style="position: relative; width: 100%;">
+                            <select id="driver-vehicle-select" class="pix-select" style="width: 100%; padding: 10px 14px; background: rgba(0, 0, 0, 0.35); border: 1px solid rgba(255, 255, 255, 0.08); color: #fff; border-radius: 10px; font-size: 13px; font-weight: 600; appearance: none; cursor: pointer; transition: border-color 0.2s;" onchange="updateModalVehicleSpecs(this.value)">
+                                <option value="scania">Scania R450 6x2 - Sider (Placa KRG-2E26)</option>
+                                <option value="volvo">Volvo FH 540 - Carreta Sider (Placa KRG-3A88)</option>
+                            </select>
+                            <svg style="position: absolute; right: 14px; top: 50%; transform: translateY(-50%); color: var(--text-muted); pointer-events: none;" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+                        </div>
+                    </div>
+                    
+                    <div class="vehicle-mini-specs">
+                        <div class="mini-spec-item">
+                            <span class="mini-spec-label">Veículo</span>
+                            <span class="mini-spec-val" id="modal-spec-type">Sider / Baú</span>
+                        </div>
+                        <div class="mini-spec-item">
+                            <span class="mini-spec-label">Capacidade</span>
+                            <span class="mini-spec-val" id="modal-spec-capacity">14 Ton</span>
+                        </div>
+                        <div class="mini-spec-item">
+                            <span class="mini-spec-label">Placa</span>
+                            <span class="mini-spec-val" id="modal-spec-plate">KRG-2E26</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="proposal-form-section">
+                    <!-- Detalhes do Frete Médio Rápido -->
+                    <div class="suggested-freight-alert">
+                        <span class="suggested-freight-label">Frete Médio Sugerido para Rota</span>
+                        <span class="suggested-freight-value" id="modal-suggested-value">R$ 4.250,00</span>
+                    </div>
+                    
+                    <!-- Input de proposta de valor do motorista -->
+                    <div class="proposal-input-block">
+                        <label class="proposal-input-label" for="driver-bid-input">Sua Oferta de Frete</label>
+                        <div class="proposal-input-wrapper">
+                            <span class="proposal-input-prefix">R$</span>
+                            <input type="text" class="proposal-input-field" id="driver-bid-input" value="4.250,00">
+                        </div>
+                    </div>
+                    
+                    <!-- Aviso de custos sob responsabilidade do motorista e forma de pagamento -->
+                    <div class="costs-disclaimer-card">
+                        <svg class="costs-disclaimer-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+                        <div class="costs-disclaimer-text">
+                            Aviso: Custos com <strong>pedágio, combustível e alimentação</strong> são de inteira responsabilidade do motorista autônomo. O pagamento do saldo será realizado <strong>Na Entrega</strong> por padrão da plataforma.
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <footer class="kargo-modal-footer">
+                <button class="modal-btn-cancel" id="btn-cancel-modal">Cancelar</button>
+                <button class="modal-btn-submit" id="btn-submit-proposal">Enviar Oferta de Frete</button>
+            </footer>
+        </div>
+    </div>
+
+    <!-- ============ ELEMENTOS MOBILE EXCLUSIVOS ============ -->
+    <!-- Botão Flutuante de Filtro Mobile -->
+    <button class="mp-mobile-filter-floating-btn" id="btn-mobile-filter-open" aria-label="Filtrar Cargas">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"/></svg>
+        Filtrar
+    </button>
+
+    <!-- Bottom Navigation Bar responsiva -->
+    <nav class="mp-bottom-nav">
+        <a href="dashboard.html" class="mp-bottom-nav-item">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="9"/><rect x="14" y="3" width="7" height="5"/><rect x="14" y="12" width="7" height="9"/><rect x="3" y="16" width="7" height="5"/></svg>
+            <span>Dashboard</span>
+        </a>
+        <a href="marketplace.html" class="mp-bottom-nav-item active">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+            <span>Buscar</span>
+        </a>
+        <a href="minhas-viagens.html" class="mp-bottom-nav-item">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="3" width="15" height="13" rx="2" ry="2"/><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>
+            <span>Viagens</span>
+        </a>
+        <a href="chat.html" class="mp-bottom-nav-item">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+            <span>Chat</span>
+            <span class="chat-badge-dot"></span>
+        </a>
+        <a href="perfil.html" class="mp-bottom-nav-item">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+            <span>Perfil</span>
+        </a>
+    </nav>
+
+    <script src="js/marketplace.js"></script>
+</body>
+</html>

@@ -1,0 +1,1027 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="KarGO — Central de Mensagens e Negociações Responsiva">
+    <title>KarGO — Chat / Mensagens</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        /* === DESIGN SYSTEM TOKENS === */
+        :root {
+            --bg-dark-deep: #080c14;
+            --bg-dark-card: #121824;
+            --bg-dark-sidebar: #0b0f19;
+            --bg-dark-topbar: rgba(11, 15, 25, 0.85);
+            
+            --text-primary: #ffffff;
+            --text-secondary: #94a3b8;
+            --text-muted: #64748b;
+            
+            --accent-blue: #0088ff;
+            --accent-blue-glow: rgba(0, 136, 255, 0.35);
+            --accent-orange: #ff9f0a;
+            --accent-orange-glow: rgba(255, 159, 10, 0.3);
+            --accent-red: #ff3b30;
+            --accent-green: #34c759;
+            
+            --border-translucent: rgba(255, 255, 255, 0.05);
+            
+            --font-primary: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        /* Reset & Base */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background-color: var(--bg-dark-deep);
+            font-family: var(--font-primary);
+            color: var(--text-primary);
+            min-height: 100vh;
+            overflow: hidden;
+            display: flex;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* Layout Container principal */
+        .layout-container {
+            display: flex;
+            width: 100vw;
+            height: 100vh;
+        }
+
+        /* COLUNA 2: Lista de Conversas / Contatos (320px) */
+        .contacts-column {
+            width: 320px;
+            margin-left: 260px;
+            background-color: #0c111a;
+            border-right: 1px solid var(--border-translucent);
+            display: flex;
+            flex-direction: column;
+            flex-shrink: 0;
+            transition: var(--transition-smooth);
+        }
+
+        .contacts-header {
+            padding: 24px 20px;
+            border-bottom: 1px solid var(--border-translucent);
+        }
+
+        .contacts-header h2 {
+            font-size: 20px;
+            font-weight: 800;
+            letter-spacing: -0.5px;
+            margin-bottom: 16px;
+        }
+
+        .search-wrapper {
+            position: relative;
+        }
+
+        .search-input-desktop {
+            width: 100%;
+            background-color: var(--bg-dark-card);
+            border: 1px solid var(--border-translucent);
+            border-radius: 10px;
+            padding: 10px 14px 10px 36px;
+            color: #fff;
+            font-size: 13px;
+            outline: none;
+            transition: var(--transition-smooth);
+        }
+
+        .search-input-desktop:focus {
+            border-color: rgba(0, 136, 255, 0.35);
+        }
+
+        .search-icon-desktop {
+            position: absolute;
+            left: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 12px;
+            color: var(--text-muted);
+        }
+
+        .contacts-list-scroll {
+            flex: 1;
+            overflow-y: auto;
+            padding: 16px 12px;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            scrollbar-width: thin;
+        }
+
+        .contact-card-desktop {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px;
+            border-radius: 14px;
+            border: 1px solid transparent;
+            cursor: pointer;
+            transition: var(--transition-smooth);
+        }
+
+        .contact-card-desktop:hover {
+            background-color: rgba(255, 255, 255, 0.02);
+            border-color: var(--border-translucent);
+        }
+
+        .contact-card-desktop.active {
+            background-color: var(--bg-dark-card);
+            border-color: rgba(0, 136, 255, 0.2);
+            box-shadow: 0 4px 15px rgba(0, 136, 255, 0.03);
+        }
+
+        .avatar-circle-desktop {
+            width: 42px;
+            height: 42px;
+            border-radius: 50%;
+            background-color: #1a2233;
+            color: var(--accent-blue);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 800;
+            font-size: 14px;
+            border: 1.5px solid var(--accent-blue);
+            position: relative;
+            flex-shrink: 0;
+        }
+
+        .online-status-dot {
+            position: absolute;
+            bottom: 0;
+            right: 0;
+            width: 10px;
+            height: 10px;
+            background-color: var(--accent-green);
+            border: 2px solid #0c111a;
+            border-radius: 50%;
+        }
+
+        .contact-main-info {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .contact-meta-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 4px;
+        }
+
+        .contact-name-desktop {
+            font-size: 14px;
+            font-weight: 700;
+            color: #fff;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .contact-time-desktop {
+            font-size: 10px;
+            color: var(--text-muted);
+            font-weight: 500;
+        }
+
+        .contact-preview-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .contact-preview-msg {
+            font-size: 12px;
+            color: var(--text-secondary);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            max-width: 85%;
+        }
+
+        .chat-unread-badge-circle {
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            background-color: var(--accent-red);
+            color: #fff;
+            font-size: 9px;
+            font-weight: 800;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 0 8px var(--accent-red-glow);
+        }
+
+        /* COLUNA 3: ÁREA DE CHAT ATIVA FLEXÍVEL */
+        .chat-area-column {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            background-color: var(--bg-dark-deep);
+            transition: var(--transition-smooth);
+        }
+
+        /* HEADER DO CHAT ATIVO */
+        .chat-area-header {
+            height: 80px;
+            padding: 0 24px;
+            border-bottom: 1px solid var(--border-translucent);
+            background-color: var(--bg-dark-sidebar);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            backdrop-filter: blur(10px);
+            background: var(--bg-dark-topbar);
+        }
+
+        .btn-back-chat {
+            background: none;
+            border: none;
+            color: var(--text-secondary);
+            font-size: 20px;
+            cursor: pointer;
+            margin-right: 12px;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            padding: 8px;
+            border-radius: 50%;
+            transition: var(--transition-smooth);
+        }
+
+        .btn-back-chat:hover {
+            background-color: rgba(255, 255, 255, 0.05);
+            color: #fff;
+        }
+
+        .header-profile-box {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .active-company-name {
+            font-size: 16px;
+            font-weight: 800;
+            letter-spacing: -0.3px;
+        }
+
+        .active-company-status {
+            font-size: 11px;
+            color: var(--text-muted);
+            margin-top: 2px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .desktop-freight-tag {
+            font-size: 12px;
+            color: var(--text-secondary);
+            background-color: rgba(255, 255, 255, 0.02);
+            border: 1px solid var(--border-translucent);
+            padding: 6px 12px;
+            border-radius: 8px;
+        }
+
+        .desktop-freight-tag strong {
+            color: var(--accent-blue);
+        }
+
+        /* SCROLLER DE BALÕES DE MENSAGENS */
+        .chat-scroller-desktop {
+            flex: 1;
+            overflow-y: auto;
+            padding: 24px;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+            scrollbar-width: thin;
+        }
+
+        .bubble-row-desktop {
+            display: flex;
+            width: 100%;
+        }
+
+        .bubble-row-desktop.received { justify-content: flex-start; }
+        .bubble-row-desktop.sent { justify-content: flex-end; }
+
+        .bubble-desktop {
+            max-width: 65%;
+            padding: 12px 16px;
+            border-radius: 16px;
+            font-size: 13.5px;
+            line-height: 1.45;
+            position: relative;
+        }
+
+        .bubble-desktop.received {
+            background-color: var(--bg-dark-card);
+            border: 1px solid var(--border-translucent);
+            color: #fff;
+            border-top-left-radius: 4px;
+        }
+
+        .bubble-desktop.sent {
+            background: linear-gradient(135deg, var(--accent-blue) 0%, #0073e6 100%);
+            color: #fff;
+            border-top-right-radius: 4px;
+            box-shadow: 0 4px 15px rgba(0, 136, 255, 0.15);
+        }
+
+        .bubble-time-desktop {
+            display: block;
+            font-size: 9px;
+            margin-top: 6px;
+            text-align: right;
+            opacity: 0.65;
+            font-weight: 500;
+        }
+
+        /* GPS Integrado no Chat (SVG) */
+        .map-mock-container {
+            background-color: var(--bg-dark-card);
+            border: 1px solid var(--border-translucent);
+            border-radius: 16px;
+            padding: 16px;
+            max-width: 65%;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-bottom: 4px;
+        }
+
+        .map-mock-svg {
+            width: 100%;
+            background-color: #0c111a;
+            border-radius: 10px;
+            border: 1px solid var(--border-translucent);
+        }
+
+        .map-pin-badge {
+            font-size: 11px;
+            font-weight: 700;
+            color: var(--accent-green);
+            background-color: rgba(52, 199, 89, 0.1);
+            border: 1px solid rgba(52, 199, 89, 0.2);
+            padding: 6px 12px;
+            border-radius: 8px;
+            text-align: center;
+        }
+
+        /* CHIPS DE RESPOSTAS RÁPIDAS */
+        .quick-actions-bar {
+            padding: 12px 24px;
+            display: flex;
+            gap: 8px;
+            overflow-x: auto;
+            scrollbar-width: none;
+            background-color: #0c111a;
+            border-top: 1px solid var(--border-translucent);
+        }
+
+        .quick-actions-bar::-webkit-scrollbar {
+            display: none;
+        }
+
+        .quick-chip-desktop {
+            background-color: var(--bg-dark-card);
+            border: 1px solid var(--border-translucent);
+            color: var(--text-secondary);
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            white-space: nowrap;
+            transition: var(--transition-smooth);
+        }
+
+        .quick-chip-desktop:hover {
+            border-color: var(--accent-blue);
+            color: #fff;
+        }
+
+        /* INPUT BAR INFERIOR */
+        .input-bar-desktop {
+            padding: 16px 24px;
+            background-color: var(--bg-dark-sidebar);
+            border-top: 1px solid var(--border-translucent);
+            display: flex;
+            gap: 12px;
+            align-items: center;
+        }
+
+        .input-field-desktop {
+            flex: 1;
+            background-color: rgba(0, 0, 0, 0.2);
+            border: 1px solid var(--border-translucent);
+            border-radius: 12px;
+            padding: 12px 18px;
+            color: #fff;
+            font-family: inherit;
+            font-size: 13.5px;
+            outline: none;
+            transition: var(--transition-smooth);
+        }
+
+        .input-field-desktop:focus {
+            border-color: rgba(0, 136, 255, 0.4);
+        }
+
+        .btn-send-desktop {
+            width: 44px;
+            height: 44px;
+            background-color: var(--accent-blue);
+            border: none;
+            color: #fff;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: var(--transition-smooth);
+            box-shadow: 0 4px 12px rgba(0, 136, 255, 0.3);
+            flex-shrink: 0;
+        }
+
+        .btn-send-desktop:hover {
+            background-color: #339cff;
+        }
+
+        /* === PREMIUM BOTTOM NAVIGATION BAR (MOBILE) === */
+        .mp-bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 72px;
+            background-color: rgba(11, 15, 25, 0.95);
+            backdrop-filter: blur(20px);
+            border-top: 1px solid var(--border-translucent);
+            display: none;
+            grid-template-columns: repeat(5, 1fr);
+            padding-bottom: 8px;
+            z-index: 1000;
+        }
+
+        .mp-bottom-nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-muted);
+            text-decoration: none;
+            font-size: 10px;
+            font-weight: 600;
+            transition: var(--transition-smooth);
+            gap: 4px;
+            cursor: pointer;
+        }
+
+        .mp-bottom-nav-item svg {
+            width: 20px;
+            height: 20px;
+            stroke-width: 2.2;
+            transition: var(--transition-smooth);
+        }
+
+        .mp-bottom-nav-item:hover, .mp-bottom-nav-item.active {
+            color: var(--accent-blue);
+        }
+
+        .mp-bottom-nav-item.active svg {
+            filter: drop-shadow(0 0 6px var(--accent-blue-glow));
+        }
+
+        /* ================= RESPONSIVIDADE (MOBILE & DISPOSITIVOS MENORES) ================= */
+        @media (max-width: 991px) {
+            .mp-sidebar {
+                display: none !important;
+            }
+
+            .layout-container {
+                height: calc(100vh - 72px) !important; /* Descontando bottom-nav */
+            }
+
+            .contacts-column {
+                width: 100% !important;
+                flex: 1 !important;
+                margin-left: 0 !important;
+            }
+
+            .chat-area-column {
+                width: 100% !important;
+                flex: 1 !important;
+            }
+
+            /* Lógica de ocultação dual-view no mobile */
+            .mobile-hidden {
+                display: none !important;
+            }
+
+            .btn-back-chat {
+                display: flex !important;
+            }
+
+            .mp-bottom-nav {
+                display: grid !important;
+            }
+
+            .desktop-freight-tag {
+                display: none !important; /* Ocultar no cabeçalho mobile para ganhar espaço */
+            }
+
+            .chat-area-header {
+                height: 72px !important;
+            }
+
+            .bubble-desktop {
+                max-width: 80% !important;
+            }
+
+            .map-mock-container {
+                max-width: 80% !important;
+            }
+
+            .quick-actions-bar {
+                padding: 10px 16px !important;
+            }
+
+            .input-bar-desktop {
+                padding: 12px 16px !important;
+            }
+        }
+    </style>
+    <link rel="stylesheet" href="css/marketplace.css">
+</head>
+<body>
+
+    <div class="layout-container">
+        
+        <!-- COLUNA 1: SIDEBAR LATERAL (NAVEGAÇÃO DESKTOP) -->
+                        <aside class="mp-sidebar">
+            <div class="mp-sidebar-logo">
+                <a href="index.html">
+                    <img src="assets/images/LOGO.png" alt="KarGO" class="logo-img">
+                </a>
+            </div>
+            
+            <nav class="mp-sidebar-menu">
+                <div class="mp-sidebar-links">
+                    <a href="dashboard.html" class="mp-menu-item ">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="9"/><rect x="14" y="3" width="7" height="5"/><rect x="14" y="12" width="7" height="9"/><rect x="3" y="16" width="7" height="5"/></svg>
+                        Dashboard
+                    </a>
+                    <a href="marketplace.html" class="mp-menu-item ">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+                        Buscar Cargas
+                    </a>
+                    <a href="minhas-viagens.html" class="mp-menu-item ">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="3" width="15" height="13" rx="2" ry="2"/><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>
+                        Minhas Viagens
+                    </a>
+                    <a href="pagamentos.html" class="mp-menu-item ">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><line x1="12" y1="4" x2="12" y2="20"/><line x1="2" y1="12" x2="22" y2="12"/></svg>
+                        Pagamentos
+                    </a>
+                    <a href="chat.html" class="mp-menu-item active">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+                        Chat / Mensagens
+                        <span class="chat-badge-dot"></span>
+                    </a>
+                    <a href="veiculos.html" class="mp-menu-item ">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 17h2c.6 0 1-.4 1-1v-3c0-.9-.7-1.7-1.5-1.9C18.7 10.6 16 10 16 10s-1.3-1.4-2.2-2.3c-.5-.4-1.1-.7-1.8-.7H5c-.6 0-1 .4-1 1v7c0 .6.4 1 1 1h2"/><circle cx="7" cy="17" r="2"/><path d="M9 17h6"/><circle cx="17" cy="17" r="2"/></svg>
+                        Meus Veículos
+                    </a>
+                    <a href="perfil.html" class="mp-menu-item ">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+                        Meu Perfil
+                    </a>
+                </div>
+                
+                <div class="mp-sidebar-bottom">
+                    <a href="configuracoes.html" class="mp-menu-item ">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+                        Configurações
+                    </a>
+                </div>
+            </nav>
+        </aside>
+
+        <!-- COLUNA 2: LISTA DE CONVERSAS (320px) -->
+        <section class="contacts-column" id="contacts-list-container">
+            <div class="contacts-header">
+                <h2>Mensagens</h2>
+                <div class="search-wrapper">
+                    <span class="search-icon-desktop" style="display: flex; align-items: center; justify-content: center;">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="color: var(--text-muted);"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+                    </span>
+                    <input type="text" class="search-input-desktop" placeholder="Pesquisar transportadoras..." id="chat-search-desktop" oninput="filterContactsDesktop()">
+                </div>
+            </div>
+
+            <!-- Listagem -->
+            <div class="contacts-list-scroll">
+                
+                <!-- AgroFrete S/A -->
+                <div class="contact-card-desktop active" id="card-af" onclick="switchActiveChat('AgroFrete S/A', 'AF', 'Soja - Rondonópolis → Santos', 'online')">
+                    <div class="avatar-circle-desktop">
+                        AF
+                        <span class="online-status-dot"></span>
+                    </div>
+                    <div class="contact-main-info">
+                        <div class="contact-meta-row">
+                            <span class="contact-name-desktop">AgroFrete S/A</span>
+                            <span class="contact-time-desktop">19:30</span>
+                        </div>
+                        <div class="contact-preview-row">
+                            <span class="contact-preview-msg" id="preview-af" style="font-weight: 700; color: #fff;">O carregamento de soja já foi liberado?</span>
+                            <span class="chat-unread-badge-circle" id="badge-af">1</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Minas Express -->
+                <div class="contact-card-desktop" id="card-me" onclick="switchActiveChat('Minas Express', 'ME', 'Carga Geral - Uberlândia → BH', 'online')">
+                    <div class="avatar-circle-desktop" style="color: var(--accent-orange); border-color: var(--accent-orange);">
+                        ME
+                        <span class="online-status-dot"></span>
+                    </div>
+                    <div class="contact-main-info">
+                        <div class="contact-meta-row">
+                            <span class="contact-name-desktop">Minas Express</span>
+                            <span class="contact-time-desktop">14:15</span>
+                        </div>
+                        <div class="contact-preview-row">
+                            <span class="contact-preview-msg">Documento fiscal enviado por e-mail.</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- TransLogística Brasil -->
+                <div class="contact-card-desktop" id="card-tl" onclick="switchActiveChat('TransLogística Brasil', 'TL', 'Milho - Lucas do Rio Verde → Paranaguá', 'offline')">
+                    <div class="avatar-circle-desktop" style="color: var(--accent-green); border-color: var(--accent-green);">
+                        TL
+                    </div>
+                    <div class="contact-main-info">
+                        <div class="contact-meta-row">
+                            <span class="contact-name-desktop">TransLogística Brasil</span>
+                            <span class="contact-time-desktop">Ontem</span>
+                        </div>
+                        <div class="contact-preview-row">
+                            <span class="contact-preview-msg">Avaliação da viagem concluída! Obrigado.</span>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- COLUNA 3: JANELA DE CHAT ATIVA FLEXÍVEL -->
+        <section class="chat-area-column mobile-hidden" id="chat-window-container">
+            
+            <!-- HEADER DO CHAT ATIVO -->
+            <header class="chat-area-header">
+                <div class="header-profile-box">
+                    <!-- Botão Voltar (Aparece apenas no mobile) -->
+                    <button class="btn-back-chat" onclick="goBackToContactsList()">←</button>
+                    
+                    <div class="avatar-circle-desktop" id="active-chat-avatar" style="width: 44px; height: 44px; font-size:14px;">AF</div>
+                    <div>
+                        <h3 class="active-company-name" id="active-chat-name">AgroFrete S/A</h3>
+                        <p class="active-company-status" id="active-chat-status">
+                            <span style="width:8px; height:8px; border-radius:50%; background-color:var(--accent-green); display:inline-block;"></span>
+                            Online
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Tag de Rota ativa -->
+                <div class="desktop-freight-tag">
+                    <span>Rota Vinculada:</span>
+                    <strong id="active-chat-freight">Soja - Rondonópolis → Santos</strong>
+                </div>
+            </header>
+
+            <!-- SCROLLER DE BALÕES DE MENSAGENS -->
+            <div class="chat-scroller-desktop" id="messages-scroller-desktop">
+                
+                <!-- Mensagem 1 -->
+                <div class="bubble-row-desktop received">
+                    <div class="bubble-desktop received">
+                        Olá João! Tudo bem? Vi que você aceitou a viagem de soja de Rondonópolis para o Porto de Santos.
+                        <span class="bubble-time-desktop">19:28</span>
+                    </div>
+                </div>
+
+                <!-- Mensagem 2 -->
+                <div class="bubble-row-desktop received">
+                    <div class="bubble-desktop received">
+                        O carregamento de soja já foi liberado no pátio da fazenda?
+                        <span class="bubble-time-desktop">19:30</span>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- CHIPS DE RESPOSTAS RÁPIDAS -->
+            <div class="quick-actions-bar">
+                <button class="quick-chip-desktop" onclick="sendQuickReplyDesktop('Já estou a caminho da coleta!')">A caminho</button>
+                <button class="quick-chip-desktop" onclick="sendQuickReplyDesktop('Carregamento concluído com sucesso.')">Carregamento concluído</button>
+                <button class="quick-chip-desktop" onclick="sendQuickReplyDesktop('Enviei os comprovantes e documentos fiscais.')">Documentos anexados</button>
+                <button class="quick-chip-desktop" onclick="sendQuickReplyDesktop('Atrasei um pouco devido ao trânsito na BR.')">Atraso na rodovia</button>
+            </div>
+
+            <!-- INPUT BAR INFERIOR -->
+            <div class="input-bar-desktop">
+                <input type="text" class="input-field-desktop" placeholder="Digite uma mensagem ou utilize uma resposta rápida..." id="chat-input-desktop" onkeydown="handleInputKeyDesktop(event)">
+                <button class="btn-send-desktop" onclick="sendMessageDesktop()">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+                </button>
+            </div>
+
+        </section>
+
+    </div>
+
+    <!-- Bottom Navigation Bar responsiva (Mobile) -->
+    <nav class="mp-bottom-nav">
+        <a href="dashboard.html" class="mp-bottom-nav-item">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="9"/><rect x="14" y="3" width="7" height="5"/><rect x="14" y="12" width="7" height="9"/><rect x="3" y="16" width="7" height="5"/></svg>
+            <span>Dashboard</span>
+        </a>
+        <a href="marketplace.html" class="mp-bottom-nav-item">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+            <span>Buscar</span>
+        </a>
+        <a href="minhas-viagens.html" class="mp-bottom-nav-item">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="3" width="15" height="13" rx="2" ry="2"/><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>
+            <span>Viagens</span>
+        </a>
+        <a href="chat.html" class="mp-bottom-nav-item active">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+            <span>Chat</span>
+            <span class="chat-badge-dot"></span>
+        </a>
+        <a href="perfil.html" class="mp-bottom-nav-item">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+            <span>Perfil</span>
+        </a>
+    </nav>
+
+    <!-- JS de Controle Dinâmico -->
+    <script>
+        // Mensagens mockadas por contato para simular troca real de chat
+        const chatsMockData = {
+            'AF': {
+                name: 'AgroFrete S/A',
+                avatar: 'AF',
+                freight: 'Soja - Rondonópolis → Santos',
+                status: 'online',
+                messages: [
+                    { type: 'received', text: 'Olá João! Tudo bem? Vi que você aceitou a viagem de soja de Rondonópolis para o Porto de Santos.', time: '19:28' },
+                    { type: 'received', text: 'O carregamento de soja já foi liberado no pátio da fazenda?', time: '19:30' }
+                ]
+            },
+            'ME': {
+                name: 'Minas Express',
+                avatar: 'ME',
+                freight: 'Carga Geral - Uberlândia → BH',
+                status: 'online',
+                messages: [
+                    { type: 'received', text: 'Bom dia João, tudo certo? Confirmamos o recebimento dos seus dados cadastrais.', time: '14:02' },
+                    { type: 'sent', text: 'Excelente! Consegue me mandar a ordem de coleta para liberar a entrada?', time: '14:10' },
+                    { type: 'received', text: 'Documento fiscal enviado por e-mail.', time: '14:15' }
+                ]
+            },
+            'TL': {
+                name: 'TransLogística Brasil',
+                avatar: 'TL',
+                freight: 'Milho - Lucas do Rio Verde → Paranaguá',
+                status: 'offline',
+                messages: [
+                    { type: 'received', text: 'Parabéns pela excelente entrega no Porto de Paranaguá, João! Tudo nos conformes.', time: 'Ontem' },
+                    { type: 'sent', text: 'Muito obrigado! Espero que possamos fechar mais fretes em breve.', time: 'Ontem' },
+                    { type: 'received', text: 'Avaliação da viagem concluída! Obrigado.', time: 'Ontem' }
+                ]
+            }
+        };
+
+        let currentActiveContact = 'AF';
+
+        // Lógica de Responsividade (Voltar e Alternar Colunas no Mobile)
+        function switchActiveChat(company, avatar, freight, status) {
+            currentActiveContact = avatar;
+
+            // Remover classe active de todos
+            document.querySelectorAll('.contact-card-desktop').forEach(card => card.classList.remove('active'));
+            
+            // Adicionar active na correspondente
+            if (avatar === 'AF') {
+                document.getElementById('card-af').classList.add('active');
+                document.getElementById('badge-af').style.display = 'none'; // ocultar não lido
+                document.getElementById('preview-af').style.fontWeight = 'normal';
+            } else if (avatar === 'ME') {
+                document.getElementById('card-me').classList.add('active');
+            } else if (avatar === 'TL') {
+                document.getElementById('card-tl').classList.add('active');
+            }
+
+            // Atualizar Janela de Chat Ativo
+            document.getElementById('active-chat-name').textContent = company;
+            document.getElementById('active-chat-avatar').textContent = avatar;
+            document.getElementById('active-chat-freight').textContent = freight;
+            
+            const statusEl = document.getElementById('active-chat-status');
+            if (status === 'online') {
+                statusEl.innerHTML = `<span style="width:8px; height:8px; border-radius:50%; background-color:var(--accent-green); display:inline-block;"></span> Online`;
+            } else {
+                statusEl.innerHTML = `<span style="width:8px; height:8px; border-radius:50%; background-color:var(--text-muted); display:inline-block;"></span> Offline`;
+            }
+
+            // Reset do avatar cor
+            const avatarEl = document.getElementById('active-chat-avatar');
+            if (avatar === 'ME') {
+                avatarEl.style.color = 'var(--accent-orange)';
+                avatarEl.style.borderColor = 'var(--accent-orange)';
+            } else if (avatar === 'TL') {
+                avatarEl.style.color = 'var(--accent-green)';
+                avatarEl.style.borderColor = 'var(--accent-green)';
+            } else {
+                avatarEl.style.color = 'var(--accent-blue)';
+                avatarEl.style.borderColor = 'var(--accent-blue)';
+            }
+
+            // Renderizar Mensagens
+            renderActiveMessages();
+
+            // Mobile Lógica: Alternar tela exibida
+            if (window.innerWidth <= 991) {
+                document.getElementById('contacts-list-container').classList.add('mobile-hidden');
+                document.getElementById('chat-window-container').classList.remove('mobile-hidden');
+            }
+        }
+
+        // Voltar para lista de contatos no mobile
+        function goBackToContactsList() {
+            document.getElementById('chat-window-container').classList.add('mobile-hidden');
+            document.getElementById('contacts-list-container').classList.remove('mobile-hidden');
+        }
+
+        // Renderizar Mensagens
+        function renderActiveMessages() {
+            const container = document.getElementById('messages-scroller-desktop');
+            container.innerHTML = '';
+
+            const activeChat = chatsMockData[currentActiveContact];
+            if (!activeChat) return;
+
+            activeChat.messages.forEach(msg => {
+                const bubbleRow = document.createElement('div');
+                bubbleRow.className = `bubble-row-desktop ${msg.type}`;
+                
+                const bubble = document.createElement('div');
+                bubble.className = `bubble-desktop ${msg.type}`;
+                bubble.innerHTML = `${msg.text}<span class="bubble-time-desktop">${msg.time}</span>`;
+                
+                bubbleRow.appendChild(bubble);
+                container.appendChild(bubbleRow);
+            });
+
+            // Auto Scroll
+            container.scrollTop = container.scrollHeight;
+        }
+
+        // Enviar mensagem ativa
+        function sendMessageDesktop() {
+            const input = document.getElementById('chat-input-desktop');
+            const text = input.value.trim();
+            if (!text) return;
+
+            const now = new Date();
+            const timeStr = `${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}`;
+
+            // Adicionar no mock data local
+            chatsMockData[currentActiveContact].messages.push({
+                type: 'sent',
+                text: text,
+                time: timeStr
+            });
+
+            // Re-render
+            renderActiveMessages();
+            input.value = '';
+
+            // Resposta automática simulada após 1.2 segundos
+            simulateResponseDesktop(text);
+        }
+
+        function handleInputKeyDesktop(e) {
+            if (e.key === 'Enter') {
+                sendMessageDesktop();
+            }
+        }
+
+        // Resposta Inteligente Logística
+        function simulateResponseDesktop(inputText) {
+            setTimeout(() => {
+                const now = new Date();
+                const timeStr = `${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}`;
+                
+                let responseText = 'Entendido, anotado! Viagem em andamento seguro.';
+                
+                if (inputText.includes('caminho')) {
+                    responseText = 'Excelente, João! Status de rastreio atualizado para: Em Trânsito. Siga com segurança!';
+                } else if (inputText.includes('concluído') || inputText.includes('Carregamento')) {
+                    responseText = 'Muito bom! Por favor, anexe o canhoto do CTE / NFe quando finalizar a descarga.';
+                } else if (inputText.includes('documentos') || inputText.includes('Documentos')) {
+                    responseText = 'Documentos fiscais e de seguro recebidos. Rota validada com sucesso.';
+                }
+
+                chatsMockData[currentActiveContact].messages.push({
+                    type: 'received',
+                    text: responseText,
+                    time: timeStr
+                });
+
+                // Re-render
+                renderActiveMessages();
+
+                // Mock de GPS do SVG se for a caminho
+                if (inputText.includes('caminho')) {
+                    setTimeout(() => {
+                        const container = document.getElementById('messages-scroller-desktop');
+                        const mapContainer = document.createElement('div');
+                        mapContainer.className = 'map-mock-container';
+                        mapContainer.innerHTML = `
+                            <svg class="map-mock-svg" viewBox="0 0 300 110">
+                                <path d="M 10 50 Q 150 10 290 80" fill="none" stroke="#2c3e50" stroke-width="4"/>
+                                <path d="M 10 50 Q 150 10 290 80" fill="none" stroke="var(--accent-blue)" stroke-width="2" stroke-dasharray="6,6"/>
+                                <circle cx="40" cy="40" r="6" fill="var(--accent-blue)"/>
+                                <circle cx="250" cy="70" r="6" fill="var(--accent-orange)"/>
+                                <text x="35" y="25" fill="#fff" font-size="8" font-weight="bold">Rondonópolis</text>
+                                <text x="235" y="90" fill="#fff" font-size="8" font-weight="bold">Santos</text>
+                                <rect x="130" y="24" width="16" height="8" rx="2" fill="var(--accent-green)"/>
+                                <circle cx="134" cy="34" r="2" fill="#fff"/>
+                                <circle cx="142" cy="34" r="2" fill="#fff"/>
+                            </svg>
+                            <div class="map-pin-badge">GPS Ativo: BR-163 (KM 240)</div>
+                        `;
+                        container.appendChild(mapContainer);
+                        container.scrollTop = container.scrollHeight;
+                    }, 200);
+                }
+
+            }, 1200);
+        }
+
+        // Chip de resposta rápida
+        function sendQuickReplyDesktop(replyText) {
+            const now = new Date();
+            const timeStr = `${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}`;
+
+            chatsMockData[currentActiveContact].messages.push({
+                type: 'sent',
+                text: replyText,
+                time: timeStr
+            });
+
+            renderActiveMessages();
+            simulateResponseDesktop(replyText);
+        }
+
+        // Filtro de Busca de contatos
+        function filterContactsDesktop() {
+            const query = document.getElementById('chat-search-desktop').value.toLowerCase();
+            const contactCards = document.querySelectorAll('.contact-card-desktop');
+
+            contactCards.forEach(card => {
+                const name = card.querySelector('.contact-name-desktop').textContent.toLowerCase();
+                if (name.includes(query)) {
+                    card.style.display = 'flex';
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+        }
+
+        // Inicializar mensagens
+        renderActiveMessages();
+    </script>
+</body>
+</html>

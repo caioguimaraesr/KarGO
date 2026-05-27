@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="KarGO - Acesse sua conta ou crie uma nova para conectar cargas e motoristas.">
+    <title>KarGO — Entrar ou Criar Conta</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/auth.css">
+</head>
+<body class="auth-page">
+
+    <!-- TOPO MINIMALISTA COM BOTÃO VOLTAR -->
+    <div class="auth-top-bar">
+        <a href="index.html" class="auth-back-home">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+            Voltar para home
+        </a>
+    </div>
+
+    <!-- CONTAINER PRINCIPAL CENTRALIZADO -->
+    <div class="auth-container">
+        <!-- LOGO CENTRALIZADA -->
+        <div class="auth-logo-centered">
+            <img src="assets/images/LOGO.png" alt="KarGO" class="logo-img">
+        </div>
+
+        <!-- SUBTÍTULO DINÂMICO -->
+        <p class="auth-subtitle-text" id="auth-subtitle">Bem-vindo de volta</p>
+
+        <!-- TABS -->
+        <div class="auth-tabs">
+            <button class="auth-tab active" data-tab="tab-login">Entrar</button>
+            <button class="auth-tab" data-tab="tab-signup">Criar Conta</button>
+        </div>
+
+    <!-- CARD GLASSMORPHISM -->
+    <div class="auth-card">
+
+        <!-- ============================== -->
+        <!-- TAB: ENTRAR                    -->
+        <!-- ============================== -->
+        <div class="tab-content active" id="tab-login">
+            <form id="login-form">
+                <!-- Email / Telefone -->
+                <div class="form-group">
+                    <label class="form-label" for="login-email">Email ou Telefone</label>
+                    <div class="input-wrapper">
+                        <input type="email" id="login-email" class="form-input" placeholder="seu@email.com" required aria-label="Email ou Telefone">
+                        <span class="input-icon">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
+                        </span>
+                    </div>
+                </div>
+
+                <!-- Senha -->
+                <div class="form-group">
+                    <label class="form-label" for="login-password">Senha</label>
+                    <div class="input-wrapper">
+                        <input type="password" id="login-password" class="form-input" placeholder="Sua senha" required aria-label="Senha">
+                        <span class="input-icon">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+                        </span>
+                        <button type="button" class="password-toggle" aria-label="Mostrar senha">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Lembrar-me / Esqueci -->
+                <div class="auth-options">
+                    <label class="remember-me">
+                        <input type="checkbox"> Lembrar-me
+                    </label>
+                    <a href="#" class="forgot-link">Esqueci minha senha →</a>
+                </div>
+
+                <!-- Botão Entrar -->
+                <button type="submit" class="auth-btn-primary">Entrar</button>
+
+                <!-- Divisor -->
+                <div class="auth-divider"><span>ou</span></div>
+
+                <!-- Google -->
+                <button type="button" class="auth-btn-social">
+                    <svg class="google-icon" viewBox="0 0 24 24">
+                        <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92a5.06 5.06 0 0 1-2.2 3.32v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.1z" fill="#4285F4"/>
+                        <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/>
+                        <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05"/>
+                        <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/>
+                    </svg>
+                    Continuar com Google
+                </button>
+
+                <!-- Footer -->
+                <div class="auth-footer">
+                    Não tem conta? <a href="#" onclick="document.querySelector('[data-tab=tab-signup]').click(); return false;">Criar conta</a>
+                </div>
+            </form>
+        </div>
+
+        <!-- ============================== -->
+        <!-- TAB: CRIAR CONTA               -->
+        <!-- ============================== -->
+        <div class="tab-content" id="tab-signup">
+
+            <!-- PASSO 1: TIPO DE PERFIL -->
+            <div class="step-content signup-step active" id="signup-step-1">
+                <div class="signup-step-header" style="margin-bottom: 20px;">
+                    <span class="step-badge">Passo 1 de 2</span>
+                    <h2 class="step-title" style="margin-top: 8px; margin-bottom: 6px;">Quem é você?</h2>
+                    <p class="step-subtitle" style="margin-bottom: 0;">Escolha seu perfil para personalizar a experiência</p>
+                </div>
+
+                <div class="profile-cards">
+                    <!-- Motorista -->
+                    <div class="profile-card" data-profile="motorista">
+                        <div class="profile-card-icon">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                                <rect x="1" y="3" width="15" height="13" rx="2" ry="2"/>
+                                <polygon points="16 8 20 8 23 11 23 16 16 16 16 8"/>
+                                <circle cx="5.5" cy="18.5" r="2.5"/>
+                                <circle cx="18.5" cy="18.5" r="2.5"/>
+                            </svg>
+                        </div>
+                        <div class="profile-card-info">
+                            <h4>Motorista Autônomo</h4>
+                            <p>Busco cargas e gerencio meus fretes</p>
+                        </div>
+                        <div class="profile-card-check">
+                            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>
+                        </div>
+                    </div>
+
+                    <!-- PME -->
+                    <div class="profile-card" data-profile="pme">
+                        <div class="profile-card-icon">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                                <rect x="4" y="2" width="16" height="20" rx="2" ry="2"/>
+                                <line x1="9" y1="22" x2="9" y2="16"/>
+                                <line x1="15" y1="22" x2="15" y2="16"/>
+                                <line x1="9" y1="16" x2="15" y2="16"/>
+                                <path d="M8 6h.01"/><path d="M16 6h.01"/><path d="M8 10h.01"/><path d="M16 10h.01"/><path d="M12 6h.01"/><path d="M12 10h.01"/><path d="M12 14h.01"/>
+                            </svg>
+                        </div>
+                        <div class="profile-card-info">
+                            <h4>PME de Transporte</h4>
+                            <p>Tenho frota e equipe de motoristas</p>
+                        </div>
+                        <div class="profile-card-check">
+                            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>
+                        </div>
+                    </div>
+
+                    <!-- Embarcador -->
+                    <div class="profile-card" data-profile="embarcador">
+                        <div class="profile-card-icon">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                                <line x1="16.5" y1="9.4" x2="7.5" y2="4.21"/>
+                                <polygon points="12 22.08 12 12 3 6.92 3 17 12 22.08"/>
+                                <polygon points="12 12 21 6.92 21 17 12 22.08"/>
+                                <polygon points="12 2 21 6.92 12 12 3 6.92 12 2"/>
+                                <line x1="12" y1="22.08" x2="12" y2="12"/>
+                                <line x1="12" y1="12" x2="21" y2="6.92"/>
+                                <line x1="12" y1="12" x2="3" y2="6.92"/>
+                            </svg>
+                        </div>
+                        <div class="profile-card-info">
+                            <h4>Embarcador</h4>
+                            <p>Preciso contratar fretes para minhas cargas</p>
+                        </div>
+                        <div class="profile-card-check">
+                            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>
+                        </div>
+                    </div>
+                </div>
+
+                <button class="auth-btn-primary" id="signup-next-btn" disabled>
+                    Próximo
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+                </button>
+
+                <div class="auth-footer">
+                    Já tem conta? <a href="#" onclick="document.querySelector('[data-tab=tab-login]').click(); return false;">Entrar</a>
+                </div>
+            </div>
+
+            <!-- PASSO 2: DADOS PESSOAIS -->
+            <div class="step-content signup-step" id="signup-step-2">
+                <div class="signup-step-header" style="margin-bottom: 20px;">
+                    <div style="display:flex;align-items:center;gap:12px;margin-bottom:8px;">
+                        <button type="button" class="auth-back-btn" id="signup-back-btn" style="position:static;padding:0;background:none;border:none;color:#94A3B8;cursor:pointer;display:flex;align-items:center;" aria-label="Voltar">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+                        </button>
+                        <span class="step-badge">Passo 2 de 2</span>
+                    </div>
+                    <h3 class="step-badge-title" style="font-size: 16px; font-weight: 700; color: #fff; margin: 0;">Dados Pessoais</h3>
+                </div>
+
+                <form id="signup-form">
+                    <div class="form-group">
+                        <label class="form-label" for="signup-name">Nome Completo / Razão Social</label>
+                        <input type="text" id="signup-name" class="form-input" placeholder="Seu nome completo" required aria-label="Nome Completo">
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label" for="signup-cpf">CPF ou CNPJ</label>
+                        <input type="text" id="signup-cpf" class="form-input" placeholder="000.000.000-00" data-mask="cpf-cnpj" required aria-label="CPF ou CNPJ" inputmode="numeric">
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label" for="signup-email">Email</label>
+                        <div class="input-wrapper">
+                            <input type="email" id="signup-email" class="form-input" placeholder="seu@email.com" required aria-label="Email">
+                            <span class="input-icon">
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
+                            </span>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label" for="signup-phone">Telefone</label>
+                        <input type="tel" id="signup-phone" class="form-input" placeholder="(81) 99999-9999" data-mask="phone" required aria-label="Telefone" inputmode="numeric">
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label" for="signup-password">Senha</label>
+                        <div class="input-wrapper">
+                            <input type="password" id="signup-password" class="form-input" placeholder="Crie uma senha forte" required aria-label="Senha">
+                            <span class="input-icon">
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+                            </span>
+                            <button type="button" class="password-toggle" aria-label="Mostrar senha">
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+                            </button>
+                        </div>
+                        <div class="password-strength">
+                            <div class="strength-bar"></div>
+                            <div class="strength-bar"></div>
+                            <div class="strength-bar"></div>
+                            <div class="strength-bar"></div>
+                            <div class="strength-bar"></div>
+                        </div>
+                        <span class="strength-text"></span>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label" for="signup-confirm-password">Confirmar Senha</label>
+                        <div class="input-wrapper">
+                            <input type="password" id="signup-confirm-password" class="form-input" placeholder="Confirme a senha" required aria-label="Confirmar Senha">
+                            <span class="input-icon">
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+                            </span>
+                        </div>
+                    </div>
+
+                    <label class="terms-checkbox">
+                        <input type="checkbox" required>
+                        <span>Li e aceito os <a href="#">Termos de Uso</a> e <a href="#">Política de Privacidade</a></span>
+                    </label>
+
+                    <button type="submit" class="auth-btn-primary">Criar Conta</button>
+
+                    <div class="auth-footer">
+                        Já tem conta? <a href="#" onclick="document.querySelector('[data-tab=tab-login]').click(); return false;">Entrar</a>
+                    </div>
+                </form>
+            </div>
+
+        </div><!-- /tab-signup -->
+
+    </div><!-- /auth-card -->
+    </div><!-- /auth-container -->
+
+    <script src="js/auth.js"></script>
+</body>
+</html>

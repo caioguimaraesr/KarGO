@@ -1,0 +1,616 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="KarGO - Veja os detalhes completos da carga e candidate-se para este frete.">
+    <title>KarGO — Detalhes da Carga</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <!-- Reutiliza a base de layout da sidebar/topbar do marketplace -->
+    <link rel="stylesheet" href="css/marketplace.css?v=1.3">
+    <link rel="stylesheet" href="css/detalhe-carga.css?v=1.7">
+</head>
+<body class="mp-body dc-body">
+
+    <div class="mp-layout-container">
+        
+        <!-- ============ SIDEBAR LATERAL (NAVEGAÇÃO DESKTOP) ============ -->
+                        <aside class="mp-sidebar">
+            <div class="mp-sidebar-logo">
+                <a href="index.html">
+                    <img src="assets/images/LOGO.png" alt="KarGO" class="logo-img">
+                </a>
+            </div>
+            
+            <nav class="mp-sidebar-menu">
+                <div class="mp-sidebar-links">
+                    <a href="dashboard.html" class="mp-menu-item ">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="9"/><rect x="14" y="3" width="7" height="5"/><rect x="14" y="12" width="7" height="9"/><rect x="3" y="16" width="7" height="5"/></svg>
+                        Dashboard
+                    </a>
+                    <a href="marketplace.html" class="mp-menu-item active">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+                        Buscar Cargas
+                    </a>
+                    <a href="minhas-viagens.html" class="mp-menu-item ">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="3" width="15" height="13" rx="2" ry="2"/><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>
+                        Minhas Viagens
+                    </a>
+                    <a href="pagamentos.html" class="mp-menu-item ">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><line x1="12" y1="4" x2="12" y2="20"/><line x1="2" y1="12" x2="22" y2="12"/></svg>
+                        Pagamentos
+                    </a>
+                    <a href="chat.html" class="mp-menu-item ">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+                        Chat / Mensagens
+                        <span class="chat-badge-dot"></span>
+                    </a>
+                    <a href="veiculos.html" class="mp-menu-item ">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 17h2c.6 0 1-.4 1-1v-3c0-.9-.7-1.7-1.5-1.9C18.7 10.6 16 10 16 10s-1.3-1.4-2.2-2.3c-.5-.4-1.1-.7-1.8-.7H5c-.6 0-1 .4-1 1v7c0 .6.4 1 1 1h2"/><circle cx="7" cy="17" r="2"/><path d="M9 17h6"/><circle cx="17" cy="17" r="2"/></svg>
+                        Meus Veículos
+                    </a>
+                    <a href="perfil.html" class="mp-menu-item ">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+                        Meu Perfil
+                    </a>
+                </div>
+                
+                <div class="mp-sidebar-bottom">
+                    <a href="configuracoes.html" class="mp-menu-item ">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+                        Configurações
+                    </a>
+                </div>
+            </nav>
+        </aside>
+
+        <!-- ============ CONTEÚDO PRINCIPAL (DIREITA) ============ -->
+        <div class="mp-main-content">
+            
+            <!-- TOPBAR HEADER -->
+            <header class="mp-topbar">
+                <div class="mp-topbar-logo-mobile">
+                    <a href="index.html">
+                        <img src="assets/images/LOGO.png" alt="KarGO" class="logo-img-mobile">
+                    </a>
+                </div>
+                <h1 class="mp-page-title">Detalhes da Carga</h1>
+                
+                <div class="mp-topbar-actions">
+                    <!-- Sino de Notificações -->
+                    <button class="mp-notification-btn" aria-label="Notificações">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+                        <span class="notification-badge"></span>
+                    </button>
+                    
+                    <!-- Perfil do Usuário -->
+                    <div class="mp-user-profile">
+                        <div class="user-info">
+                            <span class="user-name">João Transportes</span>
+                            <span class="user-role">
+                                <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>
+                                Motorista Verificado
+                            </span>
+                        </div>
+                        <div class="user-avatar">
+                            <img src="assets/images/motorista.png" alt="Avatar João Transportes">
+                        </div>
+                    </div>
+                </div>
+            </header>
+
+            <!-- CONTAINER DETALHE CARGA -->
+            <div class="mp-content-wrapper dc-content-wrapper">
+                
+                <!-- Link de Voltar -->
+                <div class="dc-back-navigation">
+                    <a href="marketplace.html" class="dc-back-link">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>
+                        Voltar para a lista de cargas
+                    </a>
+                </div>
+
+                <!-- CORTESIA DA CARGA HEADER -->
+                <div class="dc-load-header-card no-hover">
+                    <div class="dc-load-title-row">
+                        <div class="dc-load-route-title">
+                            <span class="route-city-text">Recife, PE</span>
+                            <span class="route-arrow-neon">➔</span>
+                            <span class="route-city-text">Fortaleza, CE</span>
+                        </div>
+                        <div class="dc-load-badges">
+                            <span class="dc-badge badge-blue">Carga Seca</span>
+                            <span class="dc-badge badge-green">
+                                <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>
+                                Verificada
+                            </span>
+                            <span class="dc-badge badge-orange">Urgente</span>
+                        </div>
+                    </div>
+                    <div class="dc-load-sub-row">
+                        <span>ID da Carga: <strong>CRG-849372-PE</strong></span>
+                        <span class="divider-dot"></span>
+                        <span>Publicado há 5 min</span>
+                        <span class="divider-dot"></span>
+                        <span>Visualizações: 184</span>
+                    </div>
+                </div>
+
+                <!-- LAYOUT EM DUAS COLUNAS -->
+                <div class="dc-grid-layout">
+                    
+                    <!-- COLUNA ESQUERDA: DETALHES GERAIS -->
+                    <section class="dc-column-left">
+                        
+                        <!-- ROTA TIMELINE CARD -->
+                        <div class="dc-card">
+                            <div class="dc-card-header">
+                                <h3 class="dc-card-subtitle">ROTA E CRONOGRAMA</h3>
+                                <span class="dc-status-badge">
+                                    <span class="dc-status-dot"></span>
+                                    Disponível
+                                </span>
+                            </div>
+                            
+                            <!-- ROTA HORIZONTAL PREMIUM -->
+                            <div class="card-route-horizontal">
+                                <div class="route-origin">
+                                    <span class="route-label">COLETA (ORIGEM)</span>
+                                    <h4 class="route-city">Recife, PE</h4>
+                                    <span class="route-time">Saída: Amanhã às 08h00</span>
+                                </div>
+                                <div class="route-connector-container">
+                                    <span class="route-distance">750 km</span>
+                                    <div class="route-line-connector">
+                                        <svg class="route-truck-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                                            <rect x="1" y="3" width="15" height="13" rx="2" ry="2"/>
+                                            <polygon points="16 8 20 8 23 11 23 16 16 16 16 8"/>
+                                            <circle cx="5.5" cy="18.5" r="2.5"/>
+                                            <circle cx="18.5" cy="18.5" r="2.5"/>
+                                        </svg>
+                                    </div>
+                                </div>
+                                <div class="route-destination">
+                                    <span class="route-label">ENTREGA (DESTINO)</span>
+                                    <h4 class="route-city">Fortaleza, CE</h4>
+                                    <span class="route-time">Prazo: 09/05 até 18h00</span>
+                                </div>
+                            </div>
+
+                            <!-- Endereços de Coleta e Entrega em Duas Colunas -->
+                            <div class="dc-route-addresses-horizontal">
+                                <div class="route-address-col">
+                                    <span class="address-label">Endereço de Coleta:</span>
+                                    <p class="address-text">Av. Boa Viagem, 1234 — Boa Viagem</p>
+                                </div>
+                                <div class="route-address-col">
+                                    <span class="address-label">Endereço de Entrega:</span>
+                                    <p class="address-text">Av. Beira Mar, 5678 — Meireles</p>
+                                </div>
+                            </div>
+                            
+                            <div class="dc-route-footer">
+                                <div class="route-metric">
+                                    <span class="metric-label">DISTÂNCIA TOTAL</span>
+                                    <span class="metric-value">750 km</span>
+                                </div>
+                                <div class="route-metric">
+                                    <span class="metric-label">TIPO DE VIAGEM</span>
+                                    <span class="metric-value">Viagem Direta</span>
+                                </div>
+                            </div>
+
+                            <!-- SEÇÃO DE ESPECIFICAÇÕES DA CARGA (Unificada dentro do card) -->
+                            <div class="dc-card-section-divider"></div>
+                            
+                            <div class="dc-card-section-title">
+                                <h3 class="dc-card-subtitle">ESPECIFICAÇÕES DA CARGA</h3>
+                            </div>
+                            
+                            <div class="dc-specs-grid-large">
+                                <div class="spec-card-item">
+                                    <div class="item-icon-wrapper">
+                                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><polyline points="3.27 6.96 12 12.01 20.73 6.96"/><line x1="12" y1="22.08" x2="12" y2="12"/></svg>
+                                    </div>
+                                    <div class="item-text">
+                                        <span class="item-label">TIPO DE CARGA</span>
+                                        <span class="item-value">Eletrônicos (Carga Seca)</span>
+                                    </div>
+                                </div>
+                                
+                                <div class="spec-card-item">
+                                    <div class="item-icon-wrapper">
+                                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/><line x1="7" y1="7" x2="7.01" y2="7"/></svg>
+                                    </div>
+                                    <div class="item-text">
+                                        <span class="item-label">PESO LÍQUIDO</span>
+                                        <span class="item-value">5.000 kg (5 Ton)</span>
+                                    </div>
+                                </div>
+                                
+                                <div class="spec-card-item">
+                                    <div class="item-icon-wrapper">
+                                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><line x1="9" y1="3" x2="9" y2="21"/><line x1="15" y1="3" x2="15" y2="21"/><line x1="3" y1="9" x2="21" y2="9"/><line x1="3" y1="15" x2="21" y2="15"/></svg>
+                                    </div>
+                                    <div class="item-text">
+                                        <span class="item-label">VOLUME ESTIMADO</span>
+                                        <span class="item-value">18 m³</span>
+                                    </div>
+                                </div>
+                                
+                                <div class="spec-card-item">
+                                    <div class="item-icon-wrapper">
+                                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="3" width="15" height="13" rx="2" ry="2"/><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>
+                                    </div>
+                                    <div class="item-text">
+                                        <span class="item-label">CARROCERIA REQUERIDA</span>
+                                        <span class="item-value">Baú Fechado / Sider</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- COMPOSIÇÃO DOS VALORES -->
+                        <div class="dc-card">
+                            <div class="dc-card-header">
+                                <h3 class="dc-card-subtitle">ORIENTAÇÃO DE CUSTOS & MARGEM</h3>
+                            </div>
+                            
+                            <table class="dc-finance-table-desktop">
+                                <thead>
+                                    <tr>
+                                        <th>Custos Estimados de Viagem</th>
+                                        <th>Orientação Operacional (Referência)</th>
+                                        <th class="text-right">Despesas Estimadas</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td class="font-bold">Combustível Estimado</td>
+                                        <td>Gasto médio de óleo diesel calculado para a rota (750 km)</td>
+                                        <td class="text-right font-numeric" style="color: #EF4444; font-weight: 600;">- R$ 490,00</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="font-bold">Pedágio Estimado</td>
+                                        <td>Despesa aproximada de praças de pedágio no trajeto</td>
+                                        <td class="text-right font-numeric" style="color: #EF4444; font-weight: 600;">- R$ 120,00</td>
+                                    </tr>
+                                    <tr class="total-row">
+                                        <td colspan="2">FRETE MÉDIO SUGERIDO PELA PLATAFORMA (BRUTO)</td>
+                                        <td class="text-right font-numeric text-primary-color font-heavy">R$ 4.500,00</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+
+                            <!-- Cartões Financeiros responsivos para Mobile -->
+                            <div class="dc-finance-cards-mobile">
+                                <div class="dc-finance-card-item">
+                                    <div class="card-item-title-row">
+                                        <span class="card-item-title">Combustível Estimado</span>
+                                        <span class="card-item-value text-red font-numeric">- R$ 490,00</span>
+                                    </div>
+                                    <p class="card-item-desc">Gasto médio de óleo diesel calculado para a rota (750 km)</p>
+                                </div>
+                                
+                                <div class="dc-finance-card-item">
+                                    <div class="card-item-title-row">
+                                        <span class="card-item-title">Pedágio Estimado</span>
+                                        <span class="card-item-value text-red font-numeric">- R$ 120,00</span>
+                                    </div>
+                                    <p class="card-item-desc">Despesa aproximada de praças de pedágio no trajeto</p>
+                                </div>
+                                
+                                <div class="dc-finance-card-item total-card">
+                                    <div class="card-item-title-row">
+                                        <span class="card-item-title">Frete Sugerido (Bruto)</span>
+                                        <span class="card-item-value text-primary font-heavy font-numeric">R$ 4.500,00</span>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="dc-finance-notice">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
+                                <span><strong>Atenção Motorista:</strong> Conforme regras do marketplace, os custos operacionais (combustível e pedágio) correm por sua conta. Envie sua proposta com o valor de frete desejado.</span>
+                            </div>
+                        </div>
+
+                        <!-- PROTEÇÕES E CONTRATO -->
+                        <div class="dc-card highlight-blue">
+                            <div class="dc-card-header no-border">
+                                <h3 class="dc-card-subtitle text-primary-color">PROTEÇÃO E CONTRATO SEGURO KARGO</h3>
+                            </div>
+                            <div class="guarantees-grid">
+                                <div class="guarantee-grid-item">
+                                    <div class="g-icon-box">
+                                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+                                    </div>
+                                    <div class="g-text">
+                                        <h4 class="g-title">Contrato Digital Automático</h4>
+                                        <p class="g-description">Documentação oficial gerada pelo sistema ao aceitar a carga, com validade jurídica.</p>
+                                    </div>
+                                </div>
+                                <div class="guarantee-grid-item">
+                                    <div class="g-icon-box">
+                                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="4" width="20" height="16" rx="2"/><line x1="12" y1="4" x2="12" y2="20"/><line x1="2" y1="12" x2="22" y2="12"/></svg>
+                                    </div>
+                                    <div class="g-text">
+                                        <h4 class="g-title">Pagamento Garantido (Escrow)</h4>
+                                        <p class="g-description">O dinheiro do frete é depositado pelo embarcador na KarGO antes da saída e liberado Na Entrega.</p>
+                                    </div>
+                                </div>
+                                <div class="guarantee-grid-item">
+                                    <div class="g-icon-box">
+                                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M23 4v6h-6M1 20v-6h6"/><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/></svg>
+                                    </div>
+                                    <div class="g-text">
+                                        <h4 class="g-title">Proteção contra Cancelamentos</h4>
+                                        <p class="g-description">Em caso de cancelamento injustificado após aprovação, o motorista recebe 15% de taxa de estorno.</p>
+                                    </div>
+                                </div>
+                                <div class="guarantee-grid-item">
+                                    <div class="g-icon-box">
+                                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+                                    </div>
+                                    <div class="g-text">
+                                        <h4 class="g-title">Documentação CT-e / MDF-e</h4>
+                                        <p class="g-description">A plataforma gera os documentos fiscais em minutos, sem complicação ou filas burocráticas.</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- EXIGÊNCIAS DE DOCUMENTAÇÃO -->
+                        <div class="dc-card">
+                            <div class="dc-card-header">
+                                <h3 class="dc-card-subtitle">REQUISITOS E DOCUMENTOS</h3>
+                            </div>
+                            <ul class="dc-document-list-desktop">
+                                <li>
+                                    <svg class="check-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>
+                                    <span>Nota Fiscal eletrônica (NF-e) fornecida na coleta</span>
+                                </li>
+                                <li>
+                                    <svg class="check-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>
+                                    <span>RNTRC ativo e regularizado junto à ANTT</span>
+                                </li>
+                                <li>
+                                    <svg class="check-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>
+                                    <span>Seguro RCTR-C obrigatoriamente ativo (Embarcador TransLog cobrirá)</span>
+                                </li>
+                                <li>
+                                    <svg class="check-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>
+                                    <span>CNH categoria C, D ou E em situação regular</span>
+                                </li>
+                            </ul>
+                        </div>
+                    </section>
+
+                    <!-- COLUNA DIREITA: BLOCO DE AÇÃO E EMBARCADOR -->
+                    <aside class="dc-column-right">
+                        
+                        <!-- CARD DE VALOR E CANDIDATURA -->
+                        <div class="dc-sticky-action-card">
+                            <div class="price-header">
+                                <span class="price-lbl">FRETE MÉDIO SUGERIDO</span>
+                                <h2 class="price-val-large">R$ 4.500,00</h2>
+                                <span class="price-tag-badge">Na Entrega</span>
+                            </div>
+                            
+                            <div class="quick-specs-small">
+                                <div class="small-spec">
+                                    <span class="small-label">DISTÂNCIA</span>
+                                    <span class="small-value">750 km</span>
+                                </div>
+                                <div class="small-spec">
+                                    <span class="small-label">PESO</span>
+                                    <span class="small-value">5 Ton</span>
+                                </div>
+                                <div class="small-spec font-colored">
+                                    <span class="small-label">PAGAMENTO PADRÃO</span>
+                                    <span class="small-value">Na Entrega</span>
+                                </div>
+                            </div>
+                            
+                            <div class="action-buttons-group">
+                                <button class="btn-dc-primary js-propose-btn" id="btn-apply-trigger" data-suggested="4.500,00" data-origin="Recife, PE" data-destination="Fortaleza, CE">
+                                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+                                    Enviar Minha Proposta
+                                </button>
+                                <button class="btn-dc-secondary" id="btn-chat-trigger">
+                                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+                                    Falar com Embarcador
+                                </button>
+                            </div>
+                            
+                            <div class="favorite-share-row">
+                                <button class="btn-fav-share" id="btn-fav-toggle">
+                                    <svg class="heart-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+                                    <span id="fav-text">Salvar Carga</span>
+                                </button>
+                                <button class="btn-fav-share" id="btn-share-trigger">
+                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"/><polyline points="16 6 12 2 8 6"/><line x1="12" y1="2" x2="12" y2="15"/></svg>
+                                    Compartilhar
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- CARD DO EMBARCADOR -->
+                        <div class="dc-card">
+                            <div class="dc-card-header">
+                                <h3 class="dc-card-subtitle">EMBARCADOR</h3>
+                            </div>
+                            
+                            <div class="shipper-profile-row">
+                                <div class="shipper-avatar-box">
+                                    <img src="assets/images/embarcador.png" alt="Logo TransLog Nordeste">
+                                    <div class="shipper-verif-badge">
+                                        <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.5"><polyline points="20 6 9 17 4 12"/></svg>
+                                    </div>
+                                </div>
+                                
+                                <div class="shipper-name-info">
+                                    <div class="shipper-name-container">
+                                        <h4 class="shipper-comp-name">TransLog Nordeste</h4>
+                                        <a href="#" class="shipper-small-profile-link">Ver Perfil</a>
+                                    </div>
+                                    <span class="shipper-verif-text">Empresa Homologada</span>
+                                </div>
+                            </div>
+                            
+                            <div class="shipper-stats-row">
+                                <div class="stat-small">
+                                    <span class="stat-val">⭐ 4.8</span>
+                                    <span class="stat-lbl">Classificação</span>
+                                </div>
+                                <div class="stat-small">
+                                    <span class="stat-val">320</span>
+                                    <span class="stat-lbl">Fretes Efetuados</span>
+                                </div>
+                                <div class="stat-small">
+                                    <span class="stat-val">2 anos</span>
+                                    <span class="stat-lbl">Na Plataforma</span>
+                                </div>
+                            </div>
+                            
+
+                        </div>
+                    </aside>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ============ MODAL DE PROPOSTA DE FRETE (ESTILO FREELANCER) ============ -->
+    <div class="kargo-modal-backdrop" id="proposal-modal-backdrop">
+        <div class="kargo-modal-wrapper">
+            <div class="kargo-modal-header">
+                <h3 class="kargo-modal-title">Enviar Proposta de Frete</h3>
+                <button class="kargo-modal-close-btn" id="js-close-modal" aria-label="Fechar modal">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+                </button>
+            </div>
+            <div class="kargo-modal-body">
+                <!-- Informações Premium do Motorista e Veículo -->
+                <div class="driver-premium-card">
+                    <div class="driver-header-info">
+                        <div class="driver-profile-mini">
+                            <img src="assets/images/motorista.png" alt="Avatar João Transportes" class="driver-mini-avatar">
+                            <div>
+                                <h4 class="driver-mini-name">João Transportes</h4>
+                                <span class="driver-mini-rating">⭐ 4.9 <span style="color: #64748B; font-weight: 500;">(142 avaliações)</span></span>
+                            </div>
+                        </div>
+                        <span class="driver-badge-verified">
+                            <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.5"><polyline points="20 6 9 17 4 12"/></svg>
+                            Verificado
+                        </span>
+                    </div>
+                    <div class="proposal-vehicle-select-container" style="margin-top: 15px; margin-bottom: 12px;">
+                        <label for="driver-vehicle-select" style="font-size: 11px; font-weight: 700; color: var(--text-muted); text-transform: uppercase; display: block; margin-bottom: 6px; letter-spacing: 0.5px;">Selecionar Veículo para o Frete</label>
+                        <div style="position: relative; width: 100%;">
+                            <select id="driver-vehicle-select" class="pix-select" style="width: 100%; padding: 10px 14px; background: rgba(0, 0, 0, 0.35); border: 1px solid rgba(255, 255, 255, 0.08); color: #fff; border-radius: 10px; font-size: 13px; font-weight: 600; appearance: none; cursor: pointer; transition: border-color 0.2s;" onchange="updateModalVehicleSpecs(this.value)">
+                                <option value="scania">Scania R450 6x2 - Sider (Placa KRG-2E26)</option>
+                                <option value="volvo">Volvo FH 540 - Carreta Sider (Placa KRG-3A88)</option>
+                            </select>
+                            <svg style="position: absolute; right: 14px; top: 50%; transform: translateY(-50%); color: var(--text-muted); pointer-events: none;" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+                        </div>
+                    </div>
+
+                    <div class="vehicle-mini-specs">
+                        <div class="mini-spec-item">
+                            <span class="mini-spec-label">Veículo</span>
+                            <span class="mini-spec-val" id="modal-spec-type">Sider / Baú</span>
+                        </div>
+                        <div class="mini-spec-item">
+                            <span class="mini-spec-label">Capacidade</span>
+                            <span class="mini-spec-val" id="modal-spec-capacity">14 Ton</span>
+                        </div>
+                        <div class="mini-spec-item">
+                            <span class="mini-spec-label">Placa</span>
+                            <span class="mini-spec-val" id="modal-spec-plate">KRG-2E26</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="proposal-form-section">
+                    <div class="suggested-freight-alert">
+                        <span class="suggested-freight-label">Frete Médio Sugerido</span>
+                        <span class="suggested-freight-value" id="js-modal-suggested-val">R$ 4.500,00</span>
+                    </div>
+
+                    <div class="proposal-input-block">
+                        <label class="proposal-input-label" for="driver-bid-input">Sua Proposta de Frete</label>
+                        <div class="proposal-input-wrapper">
+                            <span class="proposal-input-prefix">R$</span>
+                            <input type="text" class="proposal-input-field" id="driver-bid-input" placeholder="0,00" value="4.500,00">
+                        </div>
+                    </div>
+
+                    <div class="costs-disclaimer-card">
+                        <div class="costs-disclaimer-icon">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
+                        </div>
+                        <div class="costs-disclaimer-text">
+                            Os custos com <strong>combustível e pedágio</strong> são de responsabilidade do motorista. O método padrão de recebimento será <strong>Na Entrega</strong>, a menos que adiantamentos sejam acertados diretamente.
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="kargo-modal-footer">
+                <button class="modal-btn-cancel" id="js-cancel-modal">Voltar</button>
+                <button class="modal-btn-submit" id="js-submit-proposal">Enviar Oferta de Frete</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ============ TELA DE SUCESSO ============ -->
+    <div class="dc-success-container" id="success-overlay">
+        <div class="success-card">
+            <div class="success-icon-box">
+                <svg width="42" height="42" viewBox="0 0 24 24" fill="none" stroke="#10B981" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>
+            </div>
+            <h2 class="success-title">Proposta Enviada!</h2>
+            <p class="success-text">Sua oferta financeira foi enviada com sucesso. O embarcador <strong>TransLog Nordeste</strong> analisará sua proposta de <strong id="js-success-proposed-val">R$ 4.500,00</strong>, sua classificação de motorista verificado e os detalhes do seu veículo em minutos.</p>
+            
+            <div class="success-info-mini">
+                <span>Número da Proposta: <strong>PROP-849372-PE</strong></span>
+            </div>
+            
+            <a href="marketplace.html" class="success-action-btn">
+                Voltar ao Marketplace de Cargas
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 5"/></svg>
+            </a>
+        </div>
+    </div>
+
+    <!-- ============ ELEMENTOS MOBILE EXCLUSIVOS ============ -->
+    <!-- Bottom Navigation Bar responsiva -->
+    <nav class="mp-bottom-nav">
+        <a href="dashboard.html" class="mp-bottom-nav-item">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="9"/><rect x="14" y="3" width="7" height="5"/><rect x="14" y="12" height="7" height="9"/><rect x="3" y="16" width="7" height="5"/></svg>
+            <span>Dashboard</span>
+        </a>
+        <a href="marketplace.html" class="mp-bottom-nav-item active">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+            <span>Buscar</span>
+        </a>
+        <a href="minhas-viagens.html" class="mp-bottom-nav-item">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="3" width="15" height="13" rx="2" ry="2"/><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>
+            <span>Viagens</span>
+        </a>
+        <a href="chat.html" class="mp-bottom-nav-item">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+            <span>Chat</span>
+            <span class="chat-badge-dot"></span>
+        </a>
+        <a href="perfil.html" class="mp-bottom-nav-item">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+            <span>Perfil</span>
+        </a>
+    </nav>
+
+    <script src="js/detalhe-carga.js"></script>
+</body>
+</html>

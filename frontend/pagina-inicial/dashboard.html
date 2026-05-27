@@ -1,0 +1,1773 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="KarGO — Painel Operacional Corporativo / Motorista Freelancer">
+    <title>KarGO — Dashboard</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        /* === DESIGN SYSTEM TOKENS === */
+        :root {
+            --bg-dark-deep: #080c14;
+            --bg-dark-card: #121824;
+            --bg-dark-sidebar: #0b0f19;
+            --bg-dark-topbar: rgba(11, 15, 25, 0.85);
+            
+            --text-primary: #ffffff;
+            --text-secondary: #94a3b8;
+            --text-muted: #64748b;
+            
+            --accent-blue: #0088ff;
+            --accent-blue-glow: rgba(0, 136, 255, 0.35);
+            --accent-orange: #ff9f0a;
+            --accent-orange-glow: rgba(255, 159, 10, 0.3);
+            --accent-red: #ff3b30;
+            --accent-red-glow: rgba(255, 59, 48, 0.3);
+            --accent-green: #34c759;
+            --accent-green-glow: rgba(52, 199, 89, 0.25);
+            
+            --border-translucent: rgba(255, 255, 255, 0.05);
+            --border-glow-blue: rgba(0, 136, 255, 0.15);
+            
+            --font-primary: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        /* Reset & Base */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background-color: var(--bg-dark-deep);
+            font-family: var(--font-primary);
+            color: var(--text-primary);
+            min-height: 100vh;
+            overflow-x: hidden;
+            display: flex;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* Layout Grid Principal */
+        .layout-container {
+            display: flex;
+            width: 100%;
+            min-height: 100vh;
+        }
+
+        /* Conteúdo Principal à Direita */
+        .main-content {
+            margin-left: 260px;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            padding: 32px;
+            transition: var(--transition-smooth);
+        }
+
+        /* Topbar Header */
+        .topbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 32px;
+            background-color: transparent;
+        }
+
+        .topbar-logo-mobile {
+            display: none;
+        }
+
+        .page-title h1 {
+            font-size: 28px;
+            font-weight: 800;
+            letter-spacing: -0.8px;
+        }
+
+        .page-title p {
+            font-size: 14px;
+            color: var(--text-secondary);
+            margin-top: 4px;
+        }
+
+        .topbar-actions {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .notification-btn {
+            background: var(--bg-dark-card);
+            border: 1px solid var(--border-translucent);
+            color: var(--text-secondary);
+            width: 44px;
+            height: 44px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            position: relative;
+            transition: var(--transition-smooth);
+        }
+
+        .notification-btn:hover {
+            color: #fff;
+            border-color: rgba(255, 255, 255, 0.1);
+            transform: translateY(-2px);
+        }
+
+        .notification-badge {
+            position: absolute;
+            top: 12px;
+            right: 12px;
+            width: 8px;
+            height: 8px;
+            background-color: var(--accent-red);
+            border-radius: 50%;
+        }
+
+        .user-profile {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            background: var(--bg-dark-card);
+            border: 1px solid var(--border-translucent);
+            padding: 6px 16px 6px 8px;
+            border-radius: 30px;
+            cursor: pointer;
+            transition: var(--transition-smooth);
+        }
+
+        .user-profile:hover {
+            border-color: rgba(0, 136, 255, 0.25);
+            box-shadow: 0 0 15px rgba(0, 136, 255, 0.05);
+        }
+
+        .user-avatar {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 1.5px solid var(--accent-blue);
+        }
+
+        .user-info {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .user-name {
+            font-size: 13px;
+            font-weight: 700;
+            color: #fff;
+        }
+
+        .user-role {
+            font-size: 10px;
+            color: var(--accent-green);
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            text-transform: uppercase;
+        }
+
+        /* Grid Operacional de Cards */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+            margin-bottom: 32px;
+        }
+
+        .stat-card {
+            background: linear-gradient(135deg, var(--bg-dark-card) 0%, rgba(18, 24, 36, 0.5) 100%);
+            border: 1px solid var(--border-translucent);
+            border-radius: 20px;
+            padding: 24px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: var(--transition-smooth);
+        }
+
+        .stat-card:hover {
+            transform: translateY(-4px);
+            border-color: rgba(255, 255, 255, 0.08);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        .stat-card-left h3 {
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .stat-card-left .value {
+            font-size: 28px;
+            font-weight: 800;
+            color: #fff;
+            margin-top: 8px;
+            letter-spacing: -0.5px;
+        }
+
+        .stat-card-left .trend {
+            font-size: 11px;
+            margin-top: 6px;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .trend.up { color: var(--accent-green); }
+        .trend.down { color: var(--accent-red); }
+
+        .stat-card-right {
+            width: 48px;
+            height: 48px;
+            background-color: rgba(255, 255, 255, 0.02);
+            border: 1px solid var(--border-translucent);
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+        }
+
+        /* Layout em Duas Colunas do Dashboard */
+        .dashboard-grid-two-columns {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 32px;
+        }
+
+        /* Coluna da Esquerda (Fretes) */
+        .feed-section-title {
+            font-size: 18px;
+            font-weight: 800;
+            margin-bottom: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .feed-section-title a {
+            font-size: 13px;
+            color: var(--accent-blue);
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        .recommended-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 20px;
+        }
+
+        .load-card-desktop {
+            background-color: var(--bg-dark-card);
+            border: 1px solid var(--border-translucent);
+            border-radius: 20px;
+            padding: 24px;
+            transition: var(--transition-smooth);
+        }
+
+        .load-card-desktop:hover {
+            border-color: rgba(0, 136, 255, 0.2);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(0, 136, 255, 0.05);
+        }
+
+        .card-header-desktop {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .company-profile {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .company-logo-desktop {
+            width: 40px;
+            height: 40px;
+            border-radius: 10px;
+            background-color: #1a2233;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 800;
+            color: var(--accent-blue);
+            font-size: 16px;
+        }
+
+        .company-info-desktop h4 {
+            font-size: 15px;
+            font-weight: 700;
+        }
+
+        .company-info-desktop p {
+            font-size: 11px;
+            color: var(--text-muted);
+        }
+
+        .price-desktop {
+            font-size: 20px;
+            font-weight: 900;
+            color: var(--accent-green);
+        }
+
+        .route-visual-desktop {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            margin-bottom: 24px;
+            background-color: rgba(255, 255, 255, 0.01);
+            padding: 16px;
+            border-radius: 12px;
+            border: 1px solid var(--border-translucent);
+        }
+
+        .route-step {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .route-step-label {
+            font-size: 11px;
+            color: var(--text-muted);
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+
+        .route-step-val {
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        .route-arrow {
+            color: var(--text-muted);
+            font-size: 18px;
+        }
+
+        .card-footer-desktop {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .specs-row {
+            display: flex;
+            gap: 16px;
+        }
+
+        .spec-item {
+            font-size: 13px;
+            color: var(--text-secondary);
+            background-color: rgba(255, 255, 255, 0.03);
+            padding: 6px 12px;
+            border-radius: 8px;
+            border: 1px solid var(--border-translucent);
+        }
+
+        .btn-apply-desktop {
+            background-color: var(--accent-blue);
+            border: none;
+            color: #fff;
+            padding: 10px 24px;
+            border-radius: 10px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition-smooth);
+            box-shadow: 0 4px 15px rgba(0, 136, 255, 0.3);
+        }
+
+        .btn-apply-desktop:hover {
+            background-color: #339cff;
+            box-shadow: 0 6px 20px rgba(0, 136, 255, 0.4);
+            transform: translateY(-1px);
+        }
+
+        /* Coluna da Direita (Timeline & Gráficos) */
+        .sidebar-right-card {
+            background-color: var(--bg-dark-card);
+            border: 1px solid var(--border-translucent);
+            border-radius: 20px;
+            padding: 24px;
+            margin-bottom: 24px;
+        }
+
+        .right-card-title {
+            font-size: 16px;
+            font-weight: 800;
+            margin-bottom: 20px;
+            color: #fff;
+        }
+
+        /* Gráfico de Barras em HTML/CSS */
+        .chart-container {
+            padding: 10px 0;
+            border-bottom: 1px solid var(--border-translucent);
+            margin-bottom: 16px;
+        }
+
+        .chart-bars {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+            height: 120px;
+            position: relative;
+            padding: 0 8px;
+        }
+
+        .chart-bar-wrapper {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            flex: 1;
+            position: relative;
+            cursor: pointer;
+        }
+
+        .chart-bar-fill {
+            width: 14px;
+            background: linear-gradient(to top, var(--accent-blue) 0%, #339cff 100%);
+            border-radius: 4px;
+            transition: all 0.3s ease;
+            box-shadow: 0 0 10px rgba(0, 136, 255, 0.1);
+        }
+
+        .chart-bar-wrapper:hover .chart-bar-fill {
+            background: linear-gradient(to top, var(--accent-green) 0%, #60d67e 100%);
+            box-shadow: 0 0 15px var(--accent-green-glow);
+            transform: scaleX(1.1);
+        }
+
+        .chart-tooltip {
+            position: absolute;
+            bottom: 100%;
+            background-color: #0f172a;
+            color: #fff;
+            padding: 4px 8px;
+            border-radius: 6px;
+            font-size: 10px;
+            font-weight: 700;
+            white-space: nowrap;
+            opacity: 0;
+            transform: translateY(-5px);
+            pointer-events: none;
+            transition: all 0.2s ease;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            z-index: 10;
+        }
+
+        .chart-bar-wrapper:hover .chart-tooltip {
+            opacity: 1;
+            transform: translateY(-8px);
+        }
+
+        .chart-day {
+            font-size: 10px;
+            color: var(--text-muted);
+            margin-top: 8px;
+            font-weight: 600;
+        }
+
+        /* Timeline de Eventos */
+        .timeline-desktop {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .timeline-item-desktop {
+            display: flex;
+            gap: 16px;
+            position: relative;
+        }
+
+        .timeline-dot-desktop {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background-color: var(--text-muted);
+            margin-top: 5px;
+            z-index: 2;
+            flex-shrink: 0;
+        }
+
+        .timeline-dot-desktop.success {
+            background-color: var(--accent-green);
+            box-shadow: 0 0 8px var(--accent-green-glow);
+        }
+
+        .timeline-info-desktop h5 {
+            font-size: 13px;
+            font-weight: 700;
+            color: #fff;
+        }
+
+        .timeline-info-desktop p {
+            font-size: 11px;
+            color: var(--text-secondary);
+            margin-top: 4px;
+        }
+
+        /* ================= MODAL PREMIUM DE ENVIO DE PROPOSTAS ================= */
+        .kargo-modal-backdrop {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(3, 7, 12, 0.85);
+            backdrop-filter: blur(8px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 3000;
+            opacity: 0;
+            pointer-events: none;
+            transition: var(--transition-smooth);
+            padding: 20px;
+        }
+
+        .kargo-modal-backdrop.show {
+            opacity: 1;
+            pointer-events: all;
+        }
+
+        .kargo-modal-wrapper {
+            background-color: var(--bg-dark-card);
+            border: 1px solid var(--border-translucent);
+            border-radius: 24px;
+            width: 100%;
+            max-width: 520px;
+            overflow: hidden;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5), 0 0 30px rgba(0, 136, 255, 0.05);
+            transform: scale(0.95);
+            transition: var(--transition-smooth);
+        }
+
+        .kargo-modal-backdrop.show .kargo-modal-wrapper {
+            transform: scale(1);
+        }
+
+        .kargo-modal-header {
+            padding: 24px;
+            border-bottom: 1px solid var(--border-translucent);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .kargo-modal-title {
+            font-size: 18px;
+            font-weight: 800;
+            letter-spacing: -0.3px;
+        }
+
+        .kargo-modal-close-btn {
+            background: none;
+            border: none;
+            color: var(--text-secondary);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 4px;
+            border-radius: 50%;
+            transition: var(--transition-smooth);
+        }
+
+        .kargo-modal-close-btn:hover {
+            background-color: rgba(255, 255, 255, 0.05);
+            color: #fff;
+        }
+
+        .kargo-modal-body {
+            padding: 24px;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        /* Card mini-perfil de motorista freelancer */
+        .driver-premium-card {
+            background-color: rgba(255, 255, 255, 0.02);
+            border: 1px solid var(--border-translucent);
+            border-radius: 16px;
+            padding: 16px;
+        }
+
+        .driver-header-info {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 14px;
+        }
+
+        .driver-profile-mini {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .driver-mini-avatar {
+            width: 38px;
+            height: 38px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 1.5px solid var(--accent-blue);
+        }
+
+        .driver-mini-name {
+            font-size: 13px;
+            font-weight: 700;
+        }
+
+        .driver-mini-rating {
+            font-size: 11px;
+            color: var(--accent-orange);
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 3px;
+        }
+
+        .driver-badge-verified {
+            font-size: 9px;
+            font-weight: 800;
+            color: var(--accent-green);
+            background-color: rgba(52, 199, 89, 0.1);
+            border: 1px solid rgba(52, 199, 89, 0.2);
+            padding: 3px 8px;
+            border-radius: 99px;
+            text-transform: uppercase;
+        }
+
+        .vehicle-mini-specs {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 8px;
+            background-color: rgba(0, 0, 0, 0.2);
+            padding: 10px;
+            border-radius: 10px;
+        }
+
+        .mini-spec-item {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+        }
+
+        .mini-spec-label {
+            font-size: 9px;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            font-weight: 700;
+        }
+
+        .mini-spec-val {
+            font-size: 11px;
+            font-weight: 600;
+            color: var(--text-secondary);
+        }
+
+        /* Alerta de frete médio sugerido */
+        .suggested-freight-alert {
+            background-color: rgba(0, 136, 255, 0.08);
+            border: 1px solid rgba(0, 136, 255, 0.15);
+            border-radius: 12px;
+            padding: 12px 16px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .suggested-freight-label {
+            font-size: 12px;
+            color: var(--text-secondary);
+            font-weight: 600;
+        }
+
+        .suggested-freight-value {
+            font-size: 15px;
+            font-weight: 900;
+            color: var(--accent-blue);
+        }
+
+        /* Input de Proposta */
+        .proposal-input-block {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .proposal-input-label {
+            font-size: 12px;
+            color: var(--text-secondary);
+            font-weight: 700;
+        }
+
+        .proposal-input-wrapper {
+            position: relative;
+            display: flex;
+            align-items: center;
+        }
+
+        .proposal-input-prefix {
+            position: absolute;
+            left: 16px;
+            font-size: 16px;
+            font-weight: 800;
+            color: var(--text-muted);
+        }
+
+        .proposal-input-field {
+            width: 100%;
+            background-color: rgba(0, 0, 0, 0.2);
+            border: 1px solid var(--border-translucent);
+            border-radius: 12px;
+            padding: 14px 16px 14px 44px;
+            color: #fff;
+            font-family: inherit;
+            font-size: 16px;
+            font-weight: 800;
+            outline: none;
+            transition: var(--transition-smooth);
+        }
+
+        .proposal-input-field:focus {
+            border-color: var(--accent-blue);
+            background-color: rgba(0, 136, 255, 0.03);
+            box-shadow: 0 0 0 3px rgba(0, 136, 255, 0.15);
+        }
+
+        .costs-disclaimer-card {
+            background-color: rgba(255, 159, 10, 0.05);
+            border: 1px solid rgba(255, 159, 10, 0.1);
+            border-radius: 12px;
+            padding: 12px 16px;
+            display: flex;
+            gap: 12px;
+            align-items: flex-start;
+        }
+
+        .costs-disclaimer-icon {
+            color: var(--accent-orange);
+            flex-shrink: 0;
+            margin-top: 2px;
+        }
+
+        .costs-disclaimer-text {
+            font-size: 11px;
+            color: var(--text-secondary);
+            line-height: 1.4;
+        }
+
+        .kargo-modal-footer {
+            padding: 16px 24px 24px 24px;
+            border-top: 1px solid var(--border-translucent);
+            display: flex;
+            gap: 12px;
+        }
+
+        .modal-btn-cancel {
+            flex: 1;
+            background: none;
+            border: 1px solid var(--border-translucent);
+            color: var(--text-secondary);
+            padding: 12px;
+            border-radius: 10px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition-smooth);
+        }
+
+        .modal-btn-cancel:hover {
+            background-color: rgba(255, 255, 255, 0.03);
+            color: #fff;
+        }
+
+        .modal-btn-submit {
+            flex: 2;
+            background-color: var(--accent-blue);
+            border: none;
+            color: #fff;
+            padding: 12px;
+            border-radius: 10px;
+            font-size: 14px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: var(--transition-smooth);
+            box-shadow: 0 4px 15px rgba(0, 136, 255, 0.3);
+        }
+
+        .modal-btn-submit:hover {
+            background-color: #339cff;
+            box-shadow: 0 6px 20px rgba(0, 136, 255, 0.45);
+        }
+
+        /* === PREMIUM BOTTOM NAVIGATION BAR (MOBILE) === */
+        .mp-bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 72px;
+            background-color: rgba(11, 15, 25, 0.95);
+            backdrop-filter: blur(20px);
+            border-top: 1px solid var(--border-translucent);
+            display: none;
+            grid-template-columns: repeat(5, 1fr);
+            padding-bottom: 8px;
+            z-index: 1000;
+        }
+
+        .mp-bottom-nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-muted);
+            text-decoration: none;
+            font-size: 10px;
+            font-weight: 600;
+            transition: var(--transition-smooth);
+            gap: 4px;
+            cursor: pointer;
+        }
+
+        .mp-bottom-nav-item svg {
+            width: 20px;
+            height: 20px;
+            stroke-width: 2.2;
+            transition: var(--transition-smooth);
+        }
+
+        .mp-bottom-nav-item:hover, .mp-bottom-nav-item.active {
+            color: var(--accent-blue);
+        }
+
+        .mp-bottom-nav-item.active svg {
+            filter: drop-shadow(0 0 6px var(--accent-blue-glow));
+        }
+
+        /* ================= RESPONSIVIDADE (MOBILE & DISPOSITIVOS MENORES) ================= */
+        @media (max-width: 991px) {
+            .mp-sidebar {
+                display: none !important;
+            }
+
+            .main-content {
+                margin-left: 0 !important;
+                padding: 16px 16px 88px 16px !important;
+            }
+
+            .topbar {
+                background-color: var(--bg-dark-sidebar);
+                border-bottom: 1px solid var(--border-translucent);
+                margin: -16px -16px 24px -16px;
+                padding: 16px;
+                height: 72px;
+                position: sticky;
+                top: 0;
+                z-index: 200;
+                backdrop-filter: blur(10px);
+                background: var(--bg-dark-topbar);
+            }
+
+            .topbar-logo-mobile {
+                display: block;
+            }
+
+            .topbar-logo-mobile .logo-img-mobile {
+                height: 32px;
+                width: auto;
+                filter: drop-shadow(0 2px 8px rgba(0, 136, 255, 0.2));
+            }
+
+            .page-title {
+                display: none; /* Esconde título principal desktop no header */
+            }
+
+            .mp-bottom-nav {
+                display: grid !important;
+            }
+
+            .stats-grid {
+                grid-template-columns: 1fr !important;
+                gap: 16px !important;
+            }
+
+            .dashboard-grid-two-columns {
+                grid-template-columns: 1fr !important;
+                gap: 24px !important;
+            }
+
+            .stat-card {
+                padding: 20px !important;
+            }
+
+            .stat-card-left .value {
+                font-size: 24px !important;
+            }
+        }
+    </style>
+    <link rel="stylesheet" href="css/marketplace.css">
+</head>
+<body>
+
+    <div class="layout-container">
+        
+        <!-- SIDEBAR LATERAL (NAVEGAÇÃO DESKTOP) -->
+                        <aside class="mp-sidebar">
+            <div class="mp-sidebar-logo">
+                <a href="index.html">
+                    <img src="assets/images/LOGO.png" alt="KarGO" class="logo-img">
+                </a>
+            </div>
+            
+            <nav class="mp-sidebar-menu">
+                <div class="mp-sidebar-links">
+                    <a href="dashboard.html" class="mp-menu-item active">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="9"/><rect x="14" y="3" width="7" height="5"/><rect x="14" y="12" width="7" height="9"/><rect x="3" y="16" width="7" height="5"/></svg>
+                        Dashboard
+                    </a>
+                    <a href="marketplace.html" class="mp-menu-item ">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+                        Buscar Cargas
+                    </a>
+                    <a href="minhas-viagens.html" class="mp-menu-item ">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="3" width="15" height="13" rx="2" ry="2"/><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>
+                        Minhas Viagens
+                    </a>
+                    <a href="pagamentos.html" class="mp-menu-item ">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><line x1="12" y1="4" x2="12" y2="20"/><line x1="2" y1="12" x2="22" y2="12"/></svg>
+                        Pagamentos
+                    </a>
+                    <a href="chat.html" class="mp-menu-item ">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+                        Chat / Mensagens
+                        <span class="chat-badge-dot"></span>
+                    </a>
+                    <a href="veiculos.html" class="mp-menu-item ">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 17h2c.6 0 1-.4 1-1v-3c0-.9-.7-1.7-1.5-1.9C18.7 10.6 16 10 16 10s-1.3-1.4-2.2-2.3c-.5-.4-1.1-.7-1.8-.7H5c-.6 0-1 .4-1 1v7c0 .6.4 1 1 1h2"/><circle cx="7" cy="17" r="2"/><path d="M9 17h6"/><circle cx="17" cy="17" r="2"/></svg>
+                        Meus Veículos
+                    </a>
+                    <a href="perfil.html" class="mp-menu-item ">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+                        Meu Perfil
+                    </a>
+                </div>
+                
+                <div class="mp-sidebar-bottom">
+                    <a href="configuracoes.html" class="mp-menu-item ">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+                        Configurações
+                    </a>
+                </div>
+            </nav>
+        </aside>
+
+        <!-- CONTEÚDO PRINCIPAL -->
+        <main class="main-content">
+            
+            <!-- HEADER TOPBAR -->
+            <header class="topbar">
+                <!-- Logo Mobile (Oculto no Desktop) -->
+                <div class="topbar-logo-mobile">
+                    <a href="index.html">
+                        <img src="assets/images/LOGO.png" alt="KarGO" class="logo-img-mobile">
+                    </a>
+                </div>
+
+                <div class="page-title">
+                    <h1>Olá, João</h1>
+                    <p>Aqui está o resumo da sua operação de transporte para hoje.</p>
+                </div>
+                
+                <div class="topbar-actions">
+                    <button class="notification-btn" aria-label="Notificações">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="20" height="20"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+                        <span class="notification-badge"></span>
+                    </button>
+                    
+                    <div class="user-profile">
+                        <img src="assets/images/motorista.png" alt="Avatar João Transportes" class="user-avatar">
+                        <div class="user-info">
+                            <span class="user-name">João Transportes</span>
+                            <span class="user-role">
+                                <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>
+                                Motorista Verificado
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </header>
+
+            <!-- ============ FILTROS DE PERÍODO TEMPORAL DO DASHBOARD ============ -->
+            <div class="db-filter-bar" style="background: rgba(18, 24, 36, 0.65); border: 1px solid rgba(255, 255, 255, 0.05); border-radius: 16px; padding: 20px; backdrop-filter: blur(10px); margin-bottom: 24px; display: flex; flex-wrap: wrap; justify-content: space-between; align-items: flex-end; gap: 20px; position: relative; overflow: hidden;">
+                
+                <!-- Barra com gradiente neon azul no lado esquerdo para dar efeito premium -->
+                <div style="position: absolute; left: 0; top: 0; bottom: 0; width: 4px; background: linear-gradient(180deg, var(--accent-blue), transparent);"></div>
+                
+                <div style="display: flex; flex-wrap: wrap; gap: 20px; align-items: flex-end; flex: 1;">
+                    <!-- Seletor de Tipo de Período -->
+                    <div style="display: flex; flex-direction: column; gap: 8px;">
+                        <label style="font-size: 11px; font-weight: 700; color: #94a3b8; text-transform: uppercase; letter-spacing: 0.05em;">Tipo de Período</label>
+                        <div style="position: relative; display: flex; align-items: center;">
+                            <select id="dashboard-filter-type" style="padding: 10px 36px 10px 14px; font-size: 13px; font-weight: 600; width: 150px; background: rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.08); border-radius: 10px; color: #fff; appearance: none; cursor: pointer; outline: none; transition: var(--transition-smooth);" onchange="toggleDashboardFilterInputs(this.value)">
+                                <option value="semanal" selected>Semanal</option>
+                                <option value="mensal">Mensal</option>
+                                <option value="personalizado">Personalizado</option>
+                            </select>
+                            <svg style="position: absolute; right: 12px; color: #94a3b8; pointer-events: none;" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+                        </div>
+                    </div>
+
+                    <!-- Seletor de Semana -->
+                    <div id="db-semana-block" style="display: flex; flex-direction: column; gap: 8px;">
+                        <label style="font-size: 11px; font-weight: 700; color: #94a3b8; text-transform: uppercase; letter-spacing: 0.05em;">Escolher Semana</label>
+                        <div style="position: relative; display: flex; align-items: center;">
+                            <select id="db-filter-semana" style="padding: 10px 36px 10px 14px; font-size: 13px; font-weight: 600; width: 240px; background: rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.08); border-radius: 10px; color: #fff; appearance: none; cursor: pointer; outline: none; transition: var(--transition-smooth);">
+                                <option value="atual" selected>Semana Atual (18 - 24 Mai)</option>
+                                <option value="anterior">Semana Anterior (11 - 17 Mai)</option>
+                                <option value="passada">Duas Semanas Atrás (04 - 10 Mai)</option>
+                            </select>
+                            <svg style="position: absolute; right: 12px; color: #94a3b8; pointer-events: none;" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+                        </div>
+                    </div>
+
+                    <!-- Seletor de Mês/Ano (Oculto inicialmente) -->
+                    <div id="db-mes-block" style="display: none; gap: 12px; align-items: flex-end;">
+                        <div style="display: flex; flex-direction: column; gap: 8px;">
+                            <label style="font-size: 11px; font-weight: 700; color: #94a3b8; text-transform: uppercase; letter-spacing: 0.05em;">Mês</label>
+                            <div style="position: relative; display: flex; align-items: center;">
+                                <select id="db-filter-mes" style="padding: 10px 36px 10px 14px; font-size: 13px; font-weight: 600; width: 130px; background: rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.08); border-radius: 10px; color: #fff; appearance: none; cursor: pointer; outline: none; transition: var(--transition-smooth);">
+                                    <option value="05" selected>Maio</option>
+                                    <option value="04">Abril</option>
+                                    <option value="03">Março</option>
+                                    <option value="02">Fevereiro</option>
+                                    <option value="01">Janeiro</option>
+                                </select>
+                                <svg style="position: absolute; right: 12px; color: #94a3b8; pointer-events: none;" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+                            </div>
+                        </div>
+                        <div style="display: flex; flex-direction: column; gap: 8px;">
+                            <label style="font-size: 11px; font-weight: 700; color: #94a3b8; text-transform: uppercase; letter-spacing: 0.05em;">Ano</label>
+                            <div style="position: relative; display: flex; align-items: center;">
+                                <select id="db-filter-ano" style="padding: 10px 36px 10px 14px; font-size: 13px; font-weight: 600; width: 110px; background: rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.08); border-radius: 10px; color: #fff; appearance: none; cursor: pointer; outline: none; transition: var(--transition-smooth);">
+                                    <option value="2026" selected>2026</option>
+                                    <option value="2025">2025</option>
+                                </select>
+                                <svg style="position: absolute; right: 12px; color: #94a3b8; pointer-events: none;" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Período Personalizado (Oculto inicialmente) -->
+                    <div id="db-personalizado-block" style="display: none; gap: 12px; align-items: flex-end;">
+                        <div style="display: flex; flex-direction: column; gap: 8px;">
+                            <label style="font-size: 11px; font-weight: 700; color: #94a3b8; text-transform: uppercase; letter-spacing: 0.05em;">Data Inicial</label>
+                            <input type="date" id="db-filter-de" style="padding: 9px 12px; font-size: 13px; font-weight: 500; width: 160px; background: rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.08); border-radius: 10px; color: #fff; outline: none; transition: var(--transition-smooth);">
+                        </div>
+                        <div style="display: flex; flex-direction: column; gap: 8px;">
+                            <label style="font-size: 11px; font-weight: 700; color: #94a3b8; text-transform: uppercase; letter-spacing: 0.05em;">Data Final</label>
+                            <input type="date" id="db-filter-ate" style="padding: 9px 12px; font-size: 13px; font-weight: 500; width: 160px; background: rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.08); border-radius: 10px; color: #fff; outline: none; transition: var(--transition-smooth);">
+                        </div>
+                    </div>
+
+                    <!-- Botão Aplicar Filtro Premium -->
+                    <button type="button" style="background: var(--accent-blue); color: #fff; border: none; padding: 10px 24px; border-radius: 10px; font-size: 13px; font-weight: 700; cursor: pointer; transition: var(--transition-smooth); box-shadow: 0 4px 12px rgba(0, 136, 255, 0.25); height: 38px; display: flex; align-items: center; gap: 6px; outline: none;" onclick="applyDashboardPeriodFilter()" onmouseover="this.style.background='#339cff'; this.style.boxShadow='0 6px 16px rgba(0, 136, 255, 0.4)';" onmouseout="this.style.background='var(--accent-blue)'; this.style.boxShadow='0 4px 12px rgba(0, 136, 255, 0.25)';">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"/></svg>
+                        Aplicar Filtro
+                    </button>
+                </div>
+                
+                <!-- Label de Período Ativo (Alinhado à Direita) -->
+                <div style="font-size: 12px; color: #94a3b8; font-weight: 600;" id="db-active-period-label">
+                    Período: <span style="color: #fff; font-weight: 700;">Semana Atual (18 - 24 Mai 2026)</span>
+                </div>
+            </div>
+
+            <!-- CARDS OPERACIONAIS -->
+            <section class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-card-left">
+                        <h3 id="card-fat-title">Faturamento Semanal</h3>
+                        <div class="value" id="card-fat-val">R$ 14.250</div>
+                        <div class="trend up" id="card-fat-trend">
+                            <span>▲ 12.5%</span> em relação à semana anterior
+                        </div>
+                    </div>
+                    <div class="stat-card-right">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--accent-green)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+                    </div>
+                </div>
+                
+                <div class="stat-card">
+                    <div class="stat-card-left">
+                        <h3>Quilometragem Rodada</h3>
+                        <div class="value" id="card-km-val">2.450 km</div>
+                        <div class="trend up" id="card-km-trend">
+                            <span>▲ 8.2%</span> maior produtividade
+                        </div>
+                    </div>
+                    <div class="stat-card-right">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--accent-blue)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polygon points="3 6 9 3 15 6 21 3 21 18 15 21 9 18 3 21"/><line x1="9" y1="3" x2="9" y2="18"/><line x1="15" y1="6" x2="15" y2="21"/></svg>
+                    </div>
+                </div>
+
+                <div class="stat-card">
+                    <div class="stat-card-left">
+                        <h3>Cargas Realizadas</h3>
+                        <div class="value" id="card-cargas-val">12 Cargas</div>
+                        <div class="trend up" id="card-cargas-trend">
+                            <span>▲ 4.1%</span> em relação ao período anterior
+                        </div>
+                    </div>
+                    <div class="stat-card-right">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--accent-orange)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="16.5" y1="9.4" x2="7.5" y2="4.21"/><polygon points="12 22.08 12 12 3 6.92 3 17.08 12 22.08"/><polygon points="12 12 21 6.92 21 17.08 12 22.08"/><polygon points="12 2 21 6.92 12 12 3 6.92 12 2"/><line x1="12" y1="22.08" x2="12" y2="12"/></svg>
+                    </div>
+                </div>
+            </section>
+
+            <!-- GRID PRINCIPAL DE DUAS COLUNAS -->
+            <div class="dashboard-grid-two-columns">
+                
+                <!-- COLUNA DA ESQUERDA (Feed Oportunidades) -->
+                <section>
+                    <div class="feed-section-title">
+                        <h4>Cargas Recomendadas para Você</h4>
+                        <a href="marketplace.html">Ver Todas no Marketplace →</a>
+                    </div>
+
+                    <div class="recommended-grid">
+                        <!-- Carga 1 -->
+                        <article class="load-card-desktop">
+                            <div class="card-header-desktop">
+                                <div class="company-profile">
+                                    <div class="company-logo-desktop">AF</div>
+                                    <div class="company-info-desktop">
+                                        <h4>AgroFrete S/A</h4>
+                                        <p>Pontuação: 4.8 ★ (120 viagens)</p>
+                                    </div>
+                                </div>
+                                <span class="price-desktop">R$ 12.000</span>
+                            </div>
+
+                            <div class="route-visual-desktop">
+                                <div class="route-step">
+                                    <span class="route-step-label">Origem</span>
+                                    <span class="route-step-val">Rondonópolis, MT</span>
+                                </div>
+                                <span class="route-arrow">➔</span>
+                                <div class="route-step">
+                                    <span class="route-step-label">Destino</span>
+                                    <span class="route-step-val">Porto de Santos, SP</span>
+                                </div>
+                            </div>
+
+                            <div class="card-footer-desktop">
+                                <div class="specs-row">
+                                    <span class="spec-item">Soja a Granel</span>
+                                    <span class="spec-item">1.400 km</span>
+                                    <span class="spec-item">37 toneladas</span>
+                                </div>
+                                <button class="btn-apply-desktop js-propose-btn" data-suggested="12.000,00" data-company="AgroFrete S/A" data-product="Soja a Granel" data-route="Rondonópolis, MT → Porto de Santos, SP">
+                                    Candidatar-se
+                                </button>
+                            </div>
+                        </article>
+
+                        <!-- Carga 2 -->
+                        <article class="load-card-desktop">
+                            <div class="card-header-desktop">
+                                <div class="company-profile">
+                                    <div class="company-logo-desktop">TL</div>
+                                    <div class="company-info-desktop">
+                                        <h4>TransLogística Brasil</h4>
+                                        <p>Pontuação: 4.9 ★ (340 viagens)</p>
+                                    </div>
+                                </div>
+                                <span class="price-desktop">R$ 15.500</span>
+                            </div>
+
+                            <div class="route-visual-desktop">
+                                <div class="route-step">
+                                    <span class="route-step-label">Origem</span>
+                                    <span class="route-step-val">Lucas do Rio Verde, MT</span>
+                                </div>
+                                <span class="route-arrow">➔</span>
+                                <div class="route-step">
+                                    <span class="route-step-label">Destino</span>
+                                    <span class="route-step-val">Porto de Paranaguá, PR</span>
+                                </div>
+                            </div>
+
+                            <div class="card-footer-desktop">
+                                <div class="specs-row">
+                                    <span class="spec-item">Milho</span>
+                                    <span class="spec-item">1.850 km</span>
+                                    <span class="spec-item">38 toneladas</span>
+                                </div>
+                                <button class="btn-apply-desktop js-propose-btn" data-suggested="15.500,00" data-company="TransLogística Brasil" data-product="Milho" data-route="Lucas do Rio Verde, MT → Porto de Paranaguá, PR">
+                                    Candidatar-se
+                                </button>
+                            </div>
+                        </article>
+                    </div>
+                </section>
+
+                <!-- COLUNA DA DIREITA (Gráfico e Atividade) -->
+                <aside>
+                    <!-- Gráfico de Desempenho de Ganhos -->
+                    <div class="sidebar-right-card">
+                        <h4 class="right-card-title">Desempenho Semanal (Ganhos)</h4>
+                        <div class="chart-container">
+                            <div class="chart-bars">
+                                <div class="chart-bar-wrapper">
+                                    <span class="chart-tooltip">R$ 1.800</span>
+                                    <div class="chart-bar-fill" style="height: 55px;"></div>
+                                    <span class="chart-day">Seg</span>
+                                </div>
+                                <div class="chart-bar-wrapper">
+                                    <span class="chart-tooltip">R$ 2.400</span>
+                                    <div class="chart-bar-fill" style="height: 75px;"></div>
+                                    <span class="chart-day">Ter</span>
+                                </div>
+                                <div class="chart-bar-wrapper">
+                                    <span class="chart-tooltip">R$ 3.200</span>
+                                    <div class="chart-bar-fill" style="height: 98px;"></div>
+                                    <span class="chart-day">Qua</span>
+                                </div>
+                                <div class="chart-bar-wrapper">
+                                    <span class="chart-tooltip">R$ 2.100</span>
+                                    <div class="chart-bar-fill" style="height: 65px;"></div>
+                                    <span class="chart-day">Qui</span>
+                                </div>
+                                <div class="chart-bar-wrapper">
+                                    <span class="chart-tooltip">R$ 2.900</span>
+                                    <div class="chart-bar-fill" style="height: 88px;"></div>
+                                    <span class="chart-day">Sex</span>
+                                </div>
+                                <div class="chart-bar-wrapper">
+                                    <span class="chart-tooltip">R$ 1.200</span>
+                                    <div class="chart-bar-fill" style="height: 38px;"></div>
+                                    <span class="chart-day">Sáb</span>
+                                </div>
+                                <div class="chart-bar-wrapper">
+                                    <span class="chart-tooltip">R$ 600</span>
+                                    <div class="chart-bar-fill" style="height: 20px;"></div>
+                                    <span class="chart-day">Dom</span>
+                                </div>
+                            </div>
+                        </div>
+                        <p style="font-size: 12px; color: var(--text-muted); text-align: center; font-weight: 500;">
+                            Passe o mouse nas barras para detalhar os ganhos
+                        </p>
+                    </div>
+
+                    <!-- Timeline de Atividades Recentes -->
+                    <div class="sidebar-right-card">
+                        <h4 class="right-card-title">Eventos Recentes</h4>
+                        
+                        <div class="timeline-desktop">
+                            <div class="timeline-item-desktop">
+                                <span class="timeline-dot-desktop success"></span>
+                                <div class="timeline-info-desktop">
+                                    <h5>Carga entregue em Santos - SP</h5>
+                                    <p>Há 2 horas • Transportadora: AgroFrete S/A</p>
+                                </div>
+                            </div>
+                            <div class="timeline-item-desktop">
+                                <span class="timeline-dot-desktop"></span>
+                                <div class="timeline-info-desktop">
+                                    <h5>Candidatura aceita para Lucas do Rio Verde</h5>
+                                    <p>Há 5 horas • Transportadora: TransLogística</p>
+                                </div>
+                            </div>
+                            <div class="timeline-item-desktop">
+                                <span class="timeline-dot-desktop success"></span>
+                                <div class="timeline-info-desktop">
+                                    <h5>Pagamento de R$ 4.200 liberado</h5>
+                                    <p>Ontem • Saldo disponível para saque imediato</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </aside>
+
+            </div>
+
+        </main>
+    </div>
+
+    <!-- ============ MODAL PREMIUM DE ENVIO DE PROPOSTA (IGUAL AO MARKETPLACE) ============ -->
+    <div class="kargo-modal-backdrop" id="proposal-modal-backdrop">
+        <div class="kargo-modal-wrapper">
+            <header class="kargo-modal-header">
+                <h3 class="kargo-modal-title">Enviar Proposta de Frete</h3>
+                <button class="kargo-modal-close-btn" id="btn-close-modal" aria-label="Fechar">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+                </button>
+            </header>
+            
+            <div class="kargo-modal-body">
+                <!-- Card de Perfil do Motorista Logado -->
+                <div class="driver-premium-card">
+                    <div class="driver-header-info">
+                        <div class="driver-profile-mini">
+                            <img src="assets/images/motorista.png" alt="João Transportes" class="driver-mini-avatar">
+                            <div>
+                                <h4 class="driver-mini-name">João Transportes</h4>
+                                <span class="driver-mini-rating">
+                                    <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor" style="vertical-align: middle;"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+                                    4.9 (152 avaliações)
+                                </span>
+                            </div>
+                        </div>
+                        <span class="driver-badge-verified">
+                            <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>
+                            Verificado
+                        </span>
+                    </div>
+                    
+                    <div class="proposal-vehicle-select-container" style="margin-top: 15px; margin-bottom: 12px;">
+                        <label for="driver-vehicle-select" style="font-size: 11px; font-weight: 700; color: var(--text-muted); text-transform: uppercase; display: block; margin-bottom: 6px; letter-spacing: 0.5px;">Selecionar Veículo para o Frete</label>
+                        <div style="position: relative; width: 100%;">
+                            <select id="driver-vehicle-select" class="pix-select" style="width: 100%; padding: 10px 14px; background: rgba(0, 0, 0, 0.35); border: 1px solid rgba(255, 255, 255, 0.08); color: #fff; border-radius: 10px; font-size: 13px; font-weight: 600; appearance: none; cursor: pointer; transition: border-color 0.2s;" onchange="updateModalVehicleSpecs(this.value)">
+                                <option value="scania">Scania R450 6x2 - Sider (Placa KRG-2E26)</option>
+                                <option value="volvo">Volvo FH 540 - Carreta Sider (Placa KRG-3A88)</option>
+                            </select>
+                            <svg style="position: absolute; right: 14px; top: 50%; transform: translateY(-50%); color: var(--text-muted); pointer-events: none;" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+                        </div>
+                    </div>
+                    
+                    <div class="vehicle-mini-specs">
+                        <div class="mini-spec-item">
+                            <span class="mini-spec-label">Veículo</span>
+                            <span class="mini-spec-val" id="modal-spec-type">Sider / Baú</span>
+                        </div>
+                        <div class="mini-spec-item">
+                            <span class="mini-spec-label">Capacidade</span>
+                            <span class="mini-spec-val" id="modal-spec-capacity">14 Ton</span>
+                        </div>
+                        <div class="mini-spec-item">
+                            <span class="mini-spec-label">Placa</span>
+                            <span class="mini-spec-val" id="modal-spec-plate">KRG-2E26</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="proposal-form-section">
+                    <!-- Detalhes do Frete Médio Rápido -->
+                    <div class="suggested-freight-alert">
+                        <span class="suggested-freight-label">Frete Médio Sugerido para Rota</span>
+                        <span class="suggested-freight-value" id="modal-suggested-value">R$ 12.000,00</span>
+                    </div>
+                    
+                    <!-- Input de proposta de valor do motorista -->
+                    <div class="proposal-input-block">
+                        <label class="proposal-input-label" for="driver-bid-input">Sua Oferta de Frete</label>
+                        <div class="proposal-input-wrapper">
+                            <span class="proposal-input-prefix">R$</span>
+                            <input type="text" class="proposal-input-field" id="driver-bid-input" value="12.000,00">
+                        </div>
+                    </div>
+                    
+                    <!-- Aviso de custos autônomos -->
+                    <div class="costs-disclaimer-card">
+                        <svg class="costs-disclaimer-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+                        <div class="costs-disclaimer-text">
+                            Aviso: Custos com <strong>pedágio, combustível e alimentação</strong> são de inteira responsabilidade do motorista autônomo. O pagamento do saldo será realizado <strong>Na Entrega</strong> por padrão da plataforma.
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <footer class="kargo-modal-footer">
+                <button class="modal-btn-cancel" id="btn-cancel-modal">Cancelar</button>
+                <button class="modal-btn-submit" id="btn-submit-proposal">Enviar Oferta de Frete</button>
+            </footer>
+        </div>
+    </div>
+
+    <!-- ============ ELEMENTOS MOBILE EXCLUSIVOS ============ -->
+    <!-- Bottom Navigation Bar responsiva -->
+    <nav class="mp-bottom-nav">
+        <a href="dashboard.html" class="mp-bottom-nav-item active">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="9"/><rect x="14" y="3" width="7" height="5"/><rect x="14" y="12" width="7" height="9"/><rect x="3" y="16" width="7" height="5"/></svg>
+            <span>Dashboard</span>
+        </a>
+        <a href="marketplace.html" class="mp-bottom-nav-item">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+            <span>Buscar</span>
+        </a>
+        <a href="minhas-viagens.html" class="mp-bottom-nav-item">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="3" width="15" height="13" rx="2" ry="2"/><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>
+            <span>Viagens</span>
+        </a>
+        <a href="chat.html" class="mp-bottom-nav-item">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+            <span>Chat</span>
+            <span class="chat-badge-dot"></span>
+        </a>
+        <a href="perfil.html" class="mp-bottom-nav-item">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+            <span>Perfil</span>
+        </a>
+    </nav>
+
+    <!-- JS de Interações -->
+    <script>
+        // --- CONTROLE DO MODAL DE PROPOSTAS (IGUAL AO MARKETPLACE) ---
+        const modalBackdrop = document.getElementById('proposal-modal-backdrop');
+        const btnCloseModal = document.getElementById('btn-close-modal');
+        const btnCancelModal = document.getElementById('btn-cancel-modal');
+        const btnSubmitProposal = document.getElementById('btn-submit-proposal');
+        const modalSuggestedValue = document.getElementById('modal-suggested-value');
+        const driverBidInput = document.getElementById('driver-bid-input');
+        
+        let currentSuggestedAmount = '';
+
+        // Captura cliques nos botões de candidatar
+        document.body.addEventListener('click', (e) => {
+            const btn = e.target.closest('.js-propose-btn');
+            if (btn && modalBackdrop) {
+                e.preventDefault();
+                
+                // Pega dados do botão
+                const suggested = btn.getAttribute('data-suggested') || '0,00';
+                currentSuggestedAmount = suggested;
+
+                // Preenche o modal
+                if (modalSuggestedValue) {
+                    modalSuggestedValue.textContent = `R$ ${suggested}`;
+                }
+                if (driverBidInput) {
+                    driverBidInput.value = suggested;
+                }
+
+                // Abre o modal com animação
+                modalBackdrop.classList.add('show');
+                
+                // Foco no input
+                setTimeout(() => {
+                    if (driverBidInput) driverBidInput.select();
+                }, 100);
+            }
+        });
+
+        // Fechar modal
+        function closeModal() {
+            if (modalBackdrop) {
+                modalBackdrop.classList.remove('show');
+            }
+        }
+
+        if (btnCloseModal) btnCloseModal.addEventListener('click', closeModal);
+        if (btnCancelModal) btnCancelModal.addEventListener('click', closeModal);
+
+        // Fecha se clicar fora do modal-wrapper
+        if (modalBackdrop) {
+            modalBackdrop.addEventListener('click', (e) => {
+                if (e.target === modalBackdrop) {
+                    closeModal();
+                }
+            });
+        }
+
+        // Submissão da proposta
+        if (btnSubmitProposal) {
+            btnSubmitProposal.addEventListener('click', () => {
+                const finalBid = driverBidInput ? driverBidInput.value.trim() : currentSuggestedAmount;
+
+                if (!finalBid) {
+                    showToast('Por favor, informe um valor de frete válido.', 'error');
+                    return;
+                }
+
+                // Efeito de carregamento
+                const originalText = btnSubmitProposal.textContent;
+                btnSubmitProposal.disabled = true;
+                btnSubmitProposal.textContent = 'Enviando...';
+
+                setTimeout(() => {
+                    // Restaura botão e fecha modal
+                    btnSubmitProposal.disabled = false;
+                    btnSubmitProposal.textContent = originalText;
+                    closeModal();
+
+                    // Obtém veículo selecionado
+                    const selectVehicle = document.getElementById('driver-vehicle-select');
+                    const vehicleName = selectVehicle ? selectVehicle.options[selectVehicle.selectedIndex].text : 'Scania R450 6x2 - Sider (Placa KRG-2E26)';
+                    const plateMatch = vehicleName.match(/\((.*?)\)/);
+                    const plate = plateMatch ? plateMatch[1] : 'KRG-2E26';
+                    const modelName = vehicleName.split(' - ')[0];
+
+                    // Toast de sucesso premium
+                    showToast(`Sua proposta de R$ ${finalBid} com o veículo ${modelName} (${plate}) foi enviada com sucesso!`);
+                }, 800);
+            });
+        }
+
+        // Função global de alteração de especificações do veículo no modal
+        window.updateModalVehicleSpecs = function(value) {
+            const specType = document.getElementById('modal-spec-type');
+            const specCapacity = document.getElementById('modal-spec-capacity');
+            const specPlate = document.getElementById('modal-spec-plate');
+
+            if (value === 'scania') {
+                if (specType) specType.textContent = 'Sider / Baú';
+                if (specCapacity) specCapacity.textContent = '14 Ton';
+                if (specPlate) specPlate.textContent = 'KRG-2E26';
+            } else if (value === 'volvo') {
+                if (specType) specType.textContent = 'Carreta Sider';
+                if (specCapacity) specCapacity.textContent = '30 Ton';
+                if (specPlate) specPlate.textContent = 'KRG-3A88';
+            }
+        };
+
+        // --- TOAST NOTIFICATION PREMIUM ---
+        function showToast(message, type = 'success') {
+            // Remove toast existente se houver
+            const existingToast = document.querySelector('.kargo-toast');
+            if (existingToast) {
+                existingToast.remove();
+            }
+
+            const toast = document.createElement('div');
+            toast.className = `kargo-toast ${type}`;
+            
+            // Icone SVG de acordo com o tipo
+            let iconSvg = '';
+            if (type === 'success') {
+                iconSvg = `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>`;
+            } else {
+                iconSvg = `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>`;
+            }
+
+            toast.innerHTML = `
+                <div class="toast-content">
+                    <span class="toast-icon">${iconSvg}</span>
+                    <span class="toast-text">${message}</span>
+                </div>
+            `;
+
+            // Estilos do Toast via JS para consistência absoluta
+            Object.assign(toast.style, {
+                position: 'fixed',
+                bottom: '30px',
+                right: '30px',
+                backgroundColor: '#0F172A', // Slate 900
+                color: '#FFFFFF',
+                padding: '12px 20px',
+                borderRadius: '8px',
+                boxShadow: '0 10px 25px -5px rgba(0, 0, 0, 0.3), 0 8px 10px -6px rgba(0, 0, 0, 0.3)',
+                zIndex: '9999',
+                display: 'flex',
+                alignItems: 'center',
+                gap: '10px',
+                fontFamily: '"Inter", sans-serif',
+                fontSize: '14px',
+                fontWeight: '500',
+                opacity: '0',
+                transform: 'translateY(10px)',
+                transition: 'all 0.3s cubic-bezier(0.16, 1, 0.3, 1)'
+            });
+
+            document.body.appendChild(toast);
+
+            // Reflow e Animação de entrada
+            toast.offsetHeight;
+            toast.style.opacity = '1';
+            toast.style.transform = 'translateY(0)';
+
+            // Timeout para sumir
+            setTimeout(() => {
+                toast.style.opacity = '0';
+                toast.style.transform = 'translateY(10px)';
+                setTimeout(() => {
+                    toast.remove();
+                }, 300);
+            }, 3500);
+        }
+
+        // Alternar inputs de período do Dashboard
+        window.toggleDashboardFilterInputs = function(value) {
+            const semanaBlock = document.getElementById('db-semana-block');
+            const mesBlock = document.getElementById('db-mes-block');
+            const personalizadoBlock = document.getElementById('db-personalizado-block');
+
+            if (semanaBlock) semanaBlock.style.display = value === 'semanal' ? 'flex' : 'none';
+            if (mesBlock) mesBlock.style.display = value === 'mensal' ? 'flex' : 'none';
+            if (personalizadoBlock) personalizadoBlock.style.display = value === 'personalizado' ? 'flex' : 'none';
+        }
+
+        // Aplicar filtro de período no Dashboard com simulação de loading
+        window.applyDashboardPeriodFilter = function() {
+            const filterType = document.getElementById('dashboard-filter-type').value;
+            const label = document.getElementById('db-active-period-label');
+            
+            let periodText = '';
+            let fat = '';
+            let fatTrend = '';
+            let km = '';
+            let kmTrend = '';
+            let cargas = '';
+            let cargasTrend = '';
+
+            if (filterType === 'semanal') {
+                const semanaVal = document.getElementById('db-filter-semana').value;
+                if (semanaVal === 'atual') {
+                    periodText = 'Período: Semana Atual (18 - 24 Mai 2026)';
+                    fat = 'R$ 14.250';
+                    fatTrend = '<span>▲ 12.5%</span> em relação à semana anterior';
+                    km = '2.450 km';
+                    kmTrend = '<span>▲ 8.2%</span> maior produtividade';
+                    cargas = '12 Cargas';
+                    cargasTrend = '<span>▲ 4.1%</span> em relação ao período anterior';
+                } else if (semanaVal === 'anterior') {
+                    periodText = 'Período: Semana Anterior (11 - 17 Mai 2026)';
+                    fat = 'R$ 12.800';
+                    fatTrend = '<span>▲ 5.2%</span> em relação à semana anterior';
+                    km = '2.100 km';
+                    kmTrend = '<span>▼ 3.1%</span> menor quilometragem';
+                    cargas = '10 Cargas';
+                    cargasTrend = '<span>▲ 2.0%</span> em relação ao período anterior';
+                } else {
+                    periodText = 'Período: Duas Semanas Atrás (04 - 10 Mai 2026)';
+                    fat = 'R$ 15.100';
+                    fatTrend = '<span>▲ 15.0%</span> em relação à semana anterior';
+                    km = '2.600 km';
+                    kmTrend = '<span>▲ 10.5%</span> maior produtividade';
+                    cargas = '13 Cargas';
+                    cargasTrend = '<span>▲ 6.5%</span> em relação ao período anterior';
+                }
+            } else if (filterType === 'mensal') {
+                const mesSelect = document.getElementById('db-filter-mes');
+                const mesNome = mesSelect.options[mesSelect.selectedIndex].text;
+                const anoVal = document.getElementById('db-filter-ano').value;
+                
+                periodText = `Período: Mês de ${mesNome} / ${anoVal}`;
+                
+                // Valores simulados mensais dependendo do mês
+                if (mesSelect.value === '05') { // Maio
+                    fat = 'R$ 58.600';
+                    fatTrend = '<span>▲ 8.4%</span> em relação ao mês anterior';
+                    km = '9.800 km';
+                    kmTrend = '<span>▲ 6.2%</span> maior quilometragem';
+                    cargas = '48 Cargas';
+                    cargasTrend = '<span>▲ 5.2%</span> em relação ao período anterior';
+                } else if (mesSelect.value === '04') { // Abril
+                    fat = 'R$ 54.050';
+                    fatTrend = '<span>▲ 10.2%</span> em relação ao mês anterior';
+                    km = '9.230 km';
+                    kmTrend = '<span>▲ 4.8%</span> maior quilometragem';
+                    cargas = '45 Cargas';
+                    cargasTrend = '<span>▲ 8.1%</span> em relação ao período anterior';
+                } else {
+                    fat = 'R$ 49.300';
+                    fatTrend = '<span>▲ 3.5%</span> em relação ao mês anterior';
+                    km = '8.500 km';
+                    kmTrend = '<span>▼ 1.5%</span> menor quilometragem';
+                    cargas = '40 Cargas';
+                    cargasTrend = '<span>▼ 2.4%</span> em relação ao período anterior';
+                }
+            } else if (filterType === 'personalizado') {
+                const de = document.getElementById('db-filter-de').value;
+                const ate = document.getElementById('db-filter-ate').value;
+
+                if (!de || !ate) {
+                    showToast('Por favor, selecione as datas inicial e final para filtrar.', 'error');
+                    return;
+                }
+
+                // Formatação simples de data dd/mm/aaaa
+                const formatData = (dStr) => dStr.split('-').reverse().join('/');
+                periodText = `Período: ${formatData(de)} até ${formatData(ate)}`;
+
+                // Calcular valores dinâmicos proporcionais baseados na diferença de dias
+                const dataDe = new Date(de);
+                const dataAte = new Date(ate);
+                const diffTime = Math.abs(dataAte - dataDe);
+                const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24)) || 1;
+
+                // Faturamento médio por dia = R$ 2000, Km = 350, Cargas = 1.7
+                const calcFat = Math.round(diffDays * 1950);
+                const calcKm = Math.round(diffDays * 335);
+                const calcCargas = Math.round(diffDays * 1.6);
+
+                fat = `R$ ${calcFat.toLocaleString('pt-BR')}`;
+                fatTrend = `<span>▲ 2.5%</span> proporcional aos ${diffDays} dias`;
+                km = `${calcKm.toLocaleString('pt-BR')} km`;
+                kmTrend = `<span>▲ 1.8%</span> de média diária`;
+                cargas = `${calcCargas} Cargas`;
+                cargasTrend = `<span>▲ Proporcional</span> período filtrado`;
+            }
+
+            // Simulação de Loading nos Cards
+            const cardFat = document.getElementById('card-fat-val');
+            const cardKm = document.getElementById('card-km-val');
+            const cardCargas = document.getElementById('card-cargas-val');
+            
+            const cardFatTitle = document.getElementById('card-fat-title');
+            
+            const cardFatTrend = document.getElementById('card-fat-trend');
+            const cardKmTrend = document.getElementById('card-km-trend');
+            const cardCargasTrend = document.getElementById('card-cargas-trend');
+
+            // Aplica opacidade para simular loading
+            const cards = [cardFat, cardKm, cardCargas];
+            cards.forEach(c => { if(c) c.style.opacity = '0.3'; });
+
+            setTimeout(() => {
+                // Atualiza Textos
+                if (label) label.textContent = periodText;
+                
+                if (cardFat) {
+                    cardFat.textContent = fat;
+                    cardFat.style.opacity = '1';
+                }
+                if (cardFatTitle) {
+                    cardFatTitle.textContent = filterType === 'semanal' ? 'Faturamento Semanal' : (filterType === 'mensal' ? 'Faturamento Mensal' : 'Faturamento do Período');
+                }
+                if (cardFatTrend) cardFatTrend.innerHTML = fatTrend;
+
+                if (cardKm) {
+                    cardKm.textContent = km;
+                    cardKm.style.opacity = '1';
+                }
+                if (cardKmTrend) cardKmTrend.innerHTML = kmTrend;
+
+                if (cardCargas) {
+                    cardCargas.textContent = cargas;
+                    cardCargas.style.opacity = '1';
+                }
+                if (cardCargasTrend) cardCargasTrend.innerHTML = cargasTrend;
+
+                showToast('Painel Atualizado!', 'success');
+            }, 600);
+        }
+    </script>
+</body>
+</html>

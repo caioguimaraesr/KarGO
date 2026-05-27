@@ -1,0 +1,514 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="KarGO — Frota e Veículos Cadastrados">
+    <title>KarGO — Meus Veículos</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/marketplace.css?v=1.3">
+    <link rel="stylesheet" href="css/pagamentos.css">
+    <!-- Tailwind CSS CDN para consistência de estilos auxiliares -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            corePlugins: {
+                preflight: false,
+            }
+        }
+    </script>
+</head>
+<body class="mp-body">
+
+    <div class="mp-layout-container">
+        
+        <!-- ============ SIDEBAR LATERAL (NAVEGAÇÃO DESKTOP) ============ -->
+                        <aside class="mp-sidebar">
+            <div class="mp-sidebar-logo">
+                <a href="index.html">
+                    <img src="assets/images/LOGO.png" alt="KarGO" class="logo-img">
+                </a>
+            </div>
+            
+            <nav class="mp-sidebar-menu">
+                <div class="mp-sidebar-links">
+                    <a href="dashboard.html" class="mp-menu-item ">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="9"/><rect x="14" y="3" width="7" height="5"/><rect x="14" y="12" width="7" height="9"/><rect x="3" y="16" width="7" height="5"/></svg>
+                        Dashboard
+                    </a>
+                    <a href="marketplace.html" class="mp-menu-item ">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+                        Buscar Cargas
+                    </a>
+                    <a href="minhas-viagens.html" class="mp-menu-item ">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="3" width="15" height="13" rx="2" ry="2"/><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>
+                        Minhas Viagens
+                    </a>
+                    <a href="pagamentos.html" class="mp-menu-item ">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><line x1="12" y1="4" x2="12" y2="20"/><line x1="2" y1="12" x2="22" y2="12"/></svg>
+                        Pagamentos
+                    </a>
+                    <a href="chat.html" class="mp-menu-item ">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+                        Chat / Mensagens
+                        <span class="chat-badge-dot"></span>
+                    </a>
+                    <a href="veiculos.html" class="mp-menu-item active">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 17h2c.6 0 1-.4 1-1v-3c0-.9-.7-1.7-1.5-1.9C18.7 10.6 16 10 16 10s-1.3-1.4-2.2-2.3c-.5-.4-1.1-.7-1.8-.7H5c-.6 0-1 .4-1 1v7c0 .6.4 1 1 1h2"/><circle cx="7" cy="17" r="2"/><path d="M9 17h6"/><circle cx="17" cy="17" r="2"/></svg>
+                        Meus Veículos
+                    </a>
+                    <a href="perfil.html" class="mp-menu-item ">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+                        Meu Perfil
+                    </a>
+                </div>
+                
+                <div class="mp-sidebar-bottom">
+                    <a href="configuracoes.html" class="mp-menu-item ">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+                        Configurações
+                    </a>
+                </div>
+            </nav>
+        </aside>
+
+        <!-- ============ CONTEÚDO PRINCIPAL (DIREITA) ============ -->
+        <div class="mp-main-content">
+            
+            <!-- TOPBAR HEADER -->
+            <header class="mp-topbar">
+                <div class="mp-topbar-logo-mobile">
+                    <a href="index.html">
+                        <img src="assets/images/LOGO.png" alt="KarGO" class="logo-img-mobile">
+                    </a>
+                </div>
+                <h1 class="mp-page-title">Meus Veículos</h1>
+                
+                <div class="mp-topbar-actions">
+                    <!-- Sino de Notificações -->
+                    <button class="mp-notification-btn" aria-label="Notificações">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+                        <span class="notification-badge"></span>
+                    </button>
+                    
+                    <!-- Perfil do Usuário -->
+                    <div class="mp-user-profile" onclick="window.location.href='perfil.html'">
+                        <div class="user-info">
+                            <span class="user-name">João Transportes</span>
+                            <span class="user-role">
+                                <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>
+                                Motorista Verificado
+                            </span>
+                        </div>
+                        <div class="user-avatar">
+                            <img src="assets/images/motorista.png" alt="Avatar João Transportes">
+                        </div>
+                    </div>
+                </div>
+            </header>
+
+            <div class="mp-content-wrapper">
+                
+                <!-- ============ HEADER DE VEÍCULOS ============ -->
+                <div class="veiculos-header-row">
+                    <div>
+                        <h2 class="text-2xl font-black text-white m-0">Veículos Cadastrados</h2>
+                        <p class="text-slate-400 text-sm mt-1">Gerencie a frota de caminhões habilitada para o recebimento de fretes.</p>
+                    </div>
+                    <button class="btn-add-vehicle" onclick="toggleDrawer(true)">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+                        Solicitar Novo Veículo
+                    </button>
+                </div>
+
+                <!-- ============ GRID DE VEÍCULOS ============ -->
+                <section class="veiculos-grid" id="vehicles-list-grid">
+                    <!-- Veículo Principal -->
+                    <div class="vehicle-card" id="vehicle-card-KRG2E26">
+                        <div class="vehicle-card-header">
+                            <div class="vehicle-title-block">
+                                <h3>Scania R450 6x2</h3>
+                                <p class="text-slate-400">Cavalo Mecânico + Semirreboque Sider</p>
+                            </div>
+                            <span class="vehicle-badge-active">Ativo</span>
+                        </div>
+                        
+                        <div class="vehicle-details-grid">
+                            <div class="v-detail-item">
+                                <span class="v-detail-label">Placa</span>
+                                <span class="v-detail-val">KRG-2E26</span>
+                            </div>
+                            <div class="v-detail-item">
+                                <span class="v-detail-label">Capacidade</span>
+                                <span class="v-detail-val">14 Ton</span>
+                            </div>
+                            <div class="v-detail-item">
+                                <span class="v-detail-label">Ano</span>
+                                <span class="v-detail-val">2021</span>
+                            </div>
+                            <div class="v-detail-item">
+                                <span class="v-detail-label">Carroceria</span>
+                                <span class="v-detail-val">Sider / Baú</span>
+                            </div>
+                            <div class="v-detail-item">
+                                <span class="v-detail-label">Capac. Tipo</span>
+                                <span class="v-detail-val">Por Peso</span>
+                            </div>
+                            <div class="v-detail-item">
+                                <span class="v-detail-label">ANTT</span>
+                                <span class="v-detail-val">459871260</span>
+                            </div>
+                        </div>
+                        
+                        <div class="vehicle-actions">
+                            <button class="btn-solicitar-remocao" onclick="requestVehicleRemoval('KRG-2E26')">
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/><line x1="10" y1="11" x2="10" y2="17"/><line x1="14" y1="11" x2="14" y2="17"/></svg>
+                                Solicitar Remoção
+                            </button>
+                        </div>
+                    </div>
+                </section>
+
+                <div class="bg-slate-900/30 border border-white/5 rounded-2xl p-6 mt-8 flex gap-4 items-start">
+                    <svg class="text-amber-500 mt-1 flex-shrink-0" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
+                    <div>
+                        <h4 class="text-white text-sm font-bold m-0">Regra de Frota e Segurança KarGO</h4>
+                        <p class="text-slate-400 text-xs mt-2 leading-relaxed">
+                            Para garantir a segurança das transações em garantia (escrow) e combater fraudes fiscais, a alteração direta de placas ou a exclusão de veículos ativos é desabilitada. Qualquer remoção deve ser solicitada à nossa equipe de auditoria clicando em <strong>Solicitar Remoção</strong>. Novas inclusões passam por uma checagem rápida de ANTT e chassis antes de serem habilitadas no painel.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ============ DRAWER DE SOLICITAÇÃO DE NOVO VEÍCULO (DIREITA) ============ -->
+    <div class="vehicle-drawer-backdrop" id="drawer-backdrop" onclick="if(event.target === this) toggleDrawer(false)">
+        <div class="vehicle-drawer">
+            <header class="vehicle-drawer-header">
+                <h2 class="text-lg font-black text-white m-0">Solicitar Inclusão de Veículo</h2>
+                <button class="kargo-modal-close-btn" onclick="toggleDrawer(false)" aria-label="Fechar">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+                </button>
+            </header>
+            
+            <form id="vehicle-request-form" onsubmit="event.preventDefault(); submitVehicleRequest();" class="flex flex-col h-[calc(100vh-80px)]">
+                <div class="vehicle-drawer-body">
+                    <!-- Tipo de Veículo -->
+                    <div class="form-group-kargo">
+                        <label class="form-label-kargo">Tipo de veículo</label>
+                        <div class="form-chips-container" id="type-chips">
+                            <div class="form-chip" onclick="selectChip('type', this, 'Van/Utilitário')">Van/Utilitário</div>
+                            <div class="form-chip" onclick="selectChip('type', this, 'Caminhão 3/4')">Caminhão 3/4</div>
+                            <div class="form-chip" onclick="selectChip('type', this, 'Caminhão Toco')">Caminhão Toco</div>
+                            <div class="form-chip selected" onclick="selectChip('type', this, 'Caminhão Truck')">Caminhão Truck</div>
+                            <div class="form-chip" onclick="selectChip('type', this, 'Carreta')">Carreta</div>
+                        </div>
+                        <input type="hidden" id="v-type" value="Caminhão Truck">
+                    </div>
+
+                    <!-- Placa -->
+                    <div class="form-group-kargo">
+                        <label class="form-label-kargo" for="v-plate">Placa do Veículo</label>
+                        <input type="text" id="v-plate" class="form-input-kargo" placeholder="Ex: ABC1D23" maxlength="7" style="text-transform: uppercase;" required>
+                    </div>
+
+                    <!-- Modelo -->
+                    <div class="form-group-kargo">
+                        <label class="form-label-kargo" for="v-model">Modelo / Marca</label>
+                        <input type="text" id="v-model" class="form-input-kargo" placeholder="Ex: Volvo FH 540" required>
+                    </div>
+
+                    <div class="form-row-kargo">
+                        <!-- Ano -->
+                        <div class="form-group-kargo">
+                            <label class="form-label-kargo" for="v-year">Ano de Fabricação</label>
+                            <select id="v-year" class="form-select-kargo" required>
+                                <option value="" disabled>Ano</option>
+                                <option value="2026">2026</option>
+                                <option value="2025">2025</option>
+                                <option value="2024">2024</option>
+                                <option value="2023">2023</option>
+                                <option value="2022">2022</option>
+                                <option value="2021" selected>2021</option>
+                                <option value="2020">2020</option>
+                                <option value="2019">2019</option>
+                                <option value="2018">2018</option>
+                                <option value="2017">2017</option>
+                                <option value="2016">2016</option>
+                            </select>
+                        </div>
+                        
+                        <!-- Capacidade Tipo -->
+                        <div class="form-group-kargo">
+                            <label class="form-label-kargo" for="v-capacity-type">Tipo de Medida</label>
+                            <select id="v-capacity-type" class="form-select-kargo" required>
+                                <option value="weight" selected>Por Peso (Ton)</option>
+                                <option value="volume">Por Volume (m³)</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- Capacidade Máxima -->
+                    <div class="form-group-kargo">
+                        <label class="form-label-kargo" for="v-capacity" id="v-capacity-label">Carga Máxima (Toneladas)</label>
+                        <input type="number" id="v-capacity" class="form-input-kargo" placeholder="Ex: 14" step="0.1" required>
+                    </div>
+
+                    <!-- Tipo de Carroceria -->
+                    <div class="form-group-kargo">
+                        <label class="form-label-kargo">Tipo de carroceria</label>
+                        <div class="form-chips-container" id="body-chips">
+                            <div class="form-chip" onclick="selectChip('body', this, 'Baú Fechado')">Baú Fechado</div>
+                            <div class="form-chip" onclick="selectChip('body', this, 'Graneleiro')">Graneleiro</div>
+                            <div class="form-chip" onclick="selectChip('body', this, 'Refrigerado')">Refrigerado</div>
+                            <div class="form-chip" onclick="selectChip('body', this, 'Plataforma')">Plataforma</div>
+                            <div class="form-chip selected" onclick="selectChip('body', this, 'Sider')">Sider</div>
+                            <div class="form-chip" onclick="selectChip('body', this, 'Outro')">Outro</div>
+                        </div>
+                        <input type="hidden" id="v-body" value="Sider">
+                    </div>
+
+                    <!-- Registro ANTT -->
+                    <div class="form-group-kargo">
+                        <label class="form-label-kargo" for="v-antt">Registro ANTT (Opcional)</label>
+                        <input type="text" id="v-antt" class="form-input-kargo" placeholder="Ex: 459871260">
+                    </div>
+                </div>
+                
+                <div class="vehicle-drawer-footer">
+                    <button type="button" class="btn-resgate-submit flex-1 bg-slate-800 border border-white/5 text-slate-300 hover:bg-slate-700" style="background:rgba(255,255,255,0.03); box-shadow:none;" onclick="toggleDrawer(false)">
+                        Cancelar
+                    </button>
+                    <button type="submit" class="btn-resgate-submit flex-1" id="btn-submit-vehicle">
+                        Solicitar Inclusão
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- CONTÊINER DE TOASTS REATIVOS -->
+    <div class="kargo-toast-container" id="toast-container"></div>
+
+    <!-- Bottom Navigation Bar responsiva (Mobile) -->
+    <nav class="mp-bottom-nav">
+        <a href="dashboard.html" class="mp-bottom-nav-item">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="9"/><rect x="14" y="3" width="7" height="5"/><rect x="14" y="12" width="7" height="9"/><rect x="3" y="16" width="7" height="5"/></svg>
+            <span>Dashboard</span>
+        </a>
+        <a href="marketplace.html" class="mp-bottom-nav-item">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+            <span>Buscar</span>
+        </a>
+        <a href="minhas-viagens.html" class="mp-bottom-nav-item">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="3" width="15" height="13" rx="2" ry="2"/><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>
+            <span>Viagens</span>
+        </a>
+        <a href="chat.html" class="mp-bottom-nav-item">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+            <span>Chat</span>
+            <span class="chat-badge-dot"></span>
+        </a>
+        <a href="perfil.html" class="mp-bottom-nav-item">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+            <span>Perfil</span>
+        </a>
+    </nav>
+
+    <!-- ============ LÓGICA JAVASCRIPT DE VEÍCULOS ============ -->
+    <script>
+        // Abre e fecha Drawer de Inclusão
+        function toggleDrawer(isOpen) {
+            const drawer = document.getElementById('drawer-backdrop');
+            if (isOpen) {
+                drawer.classList.add('show');
+            } else {
+                drawer.classList.remove('show');
+            }
+        }
+
+        // Lógica de seleção de chips estilizados
+        function selectChip(category, element, value) {
+            const container = element.parentElement;
+            const chips = container.querySelectorAll('.form-chip');
+            chips.forEach(c => c.classList.remove('selected'));
+            element.classList.add('selected');
+            
+            if (category === 'type') {
+                document.getElementById('v-type').value = value;
+            } else if (category === 'body') {
+                document.getElementById('v-body').value = value;
+            }
+        }
+
+        // Evento para atualizar label de capacidade dependendo do tipo
+        document.getElementById('v-capacity-type').addEventListener('change', function(e) {
+            const label = document.getElementById('v-capacity-label');
+            const input = document.getElementById('v-capacity');
+            if (e.target.value === 'weight') {
+                label.textContent = 'Carga Máxima (Toneladas)';
+                input.placeholder = 'Ex: 14';
+            } else {
+                label.textContent = 'Carga Máxima (m³)';
+                input.placeholder = 'Ex: 90';
+            }
+        });
+
+        // Mostra Toast de Sucesso/Info
+        function showToast(title, desc, type = 'success') {
+            const container = document.getElementById('toast-container');
+            
+            const toast = document.createElement('div');
+            toast.className = `kargo-toast ${type}`;
+            
+            const iconSvg = type === 'success' 
+                ? '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>'
+                : '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>';
+
+            toast.innerHTML = `
+                <div class="toast-icon ${type}">
+                    ${iconSvg}
+                </div>
+                <div class="toast-content">
+                    <div class="toast-title">${title}</div>
+                    <div class="toast-desc">${desc}</div>
+                </div>
+                <div class="toast-progress-bar"></div>
+            `;
+            
+            container.appendChild(toast);
+            toast.offsetHeight;
+            toast.classList.add('show');
+            
+            const progress = toast.querySelector('.toast-progress-bar');
+            progress.style.animation = 'progress-deplete 4.5s linear forwards';
+            
+            setTimeout(() => {
+                toast.classList.remove('show');
+                setTimeout(() => { toast.remove(); }, 400);
+            }, 4500);
+        }
+
+        // Submissão do Formulário de Novo Veículo
+        function submitVehicleRequest() {
+            const btn = document.getElementById('btn-submit-vehicle');
+            const originalText = btn.innerHTML;
+            
+            btn.disabled = true;
+            btn.innerHTML = '<div class="spinner"></div> Solicitando...';
+
+            // Dados do veículo
+            const type = document.getElementById('v-type').value;
+            const plate = document.getElementById('v-plate').value.toUpperCase();
+            const model = document.getElementById('v-model').value;
+            const year = document.getElementById('v-year').value;
+            const capacityType = document.getElementById('v-capacity-type').value === 'weight' ? 'Por Peso' : 'Por Volume';
+            const capacity = document.getElementById('v-capacity').value;
+            const capacityLabel = document.getElementById('v-capacity-type').value === 'weight' ? 'Ton' : 'm³';
+            const body = document.getElementById('v-body').value;
+            const antt = document.getElementById('v-antt').value || 'Não informado';
+
+            setTimeout(() => {
+                // Restaura botão e fecha drawer
+                btn.disabled = false;
+                btn.innerHTML = originalText;
+                toggleDrawer(false);
+
+                // Cria o card pendente de veículo no grid de forma animada
+                const grid = document.getElementById('vehicles-list-grid');
+                const newCard = document.createElement('div');
+                newCard.className = 'vehicle-card opacity-80 border-dashed border-sky-500/30';
+                newCard.style.background = 'linear-gradient(135deg, rgba(18, 24, 36, 0.4) 0%, rgba(11, 15, 25, 0.5) 100%)';
+                
+                newCard.innerHTML = `
+                    <div class="vehicle-card-header">
+                        <div class="vehicle-title-block">
+                            <h3 class="text-sky-400">${model}</h3>
+                            <p class="text-slate-400">${type} • ${body}</p>
+                        </div>
+                        <span class="vehicle-badge-active" style="background-color:rgba(0,136,255,0.1); color:var(--accent-blue); border:1px solid rgba(0,136,255,0.2);">Em Análise</span>
+                    </div>
+                    
+                    <div class="vehicle-details-grid">
+                        <div class="v-detail-item">
+                            <span class="v-detail-label">Placa</span>
+                            <span class="v-detail-val">${plate}</span>
+                        </div>
+                        <div class="v-detail-item">
+                            <span class="v-detail-label">Capacidade</span>
+                            <span class="v-detail-val">${capacity} ${capacityLabel}</span>
+                        </div>
+                        <div class="v-detail-item">
+                            <span class="v-detail-label">Ano</span>
+                            <span class="v-detail-val">${year}</span>
+                        </div>
+                        <div class="v-detail-item">
+                            <span class="v-detail-label">Carroceria</span>
+                            <span class="v-detail-val">${body}</span>
+                        </div>
+                        <div class="v-detail-item">
+                            <span class="v-detail-label">Capac. Tipo</span>
+                            <span class="v-detail-val">${capacityType}</span>
+                        </div>
+                        <div class="v-detail-item">
+                            <span class="v-detail-label">ANTT</span>
+                            <span class="v-detail-val">${antt}</span>
+                        </div>
+                    </div>
+                    
+                    <div class="vehicle-actions text-xs text-sky-400 font-semibold italic flex items-center gap-1.5 justify-end">
+                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>
+                        Aguardando auditoria fiscal
+                    </div>
+                `;
+
+                grid.appendChild(newCard);
+
+                // Limpa formulário
+                document.getElementById('vehicle-request-form').reset();
+
+                // Mostra Toast
+                showToast(
+                    'Solicitação Recebida!', 
+                    `A inclusão do veículo ${model} (Placa ${plate}) foi enviada para triagem fiscal do suporte.`
+                );
+
+            }, 1200);
+        }
+
+        // Solicitação de Remoção do Veículo
+        function requestVehicleRemoval(plate) {
+            const confirmacao = confirm(`Tem certeza de que deseja solicitar a remoção do veículo placa ${plate}? Esta ação exige auditoria do suporte KarGO e desativa temporariamente o veículo.`);
+            
+            if (confirmacao) {
+                // Seleciona o card correspondente para dar um efeito visual de opacidade/desativação
+                const card = document.getElementById(`vehicle-card-KRG2E26`);
+                if (card) {
+                    card.style.opacity = '0.5';
+                    const badge = card.querySelector('.vehicle-badge-active');
+                    if (badge) {
+                        badge.textContent = 'Remoção Pendente';
+                        badge.style.backgroundColor = 'rgba(255, 59, 48, 0.1)';
+                        badge.style.color = 'var(--accent-red)';
+                        badge.style.borderColor = 'rgba(255, 59, 48, 0.2)';
+                    }
+                    
+                    const actionsDiv = card.querySelector('.vehicle-actions');
+                    if (actionsDiv) {
+                        actionsDiv.innerHTML = '<span class="text-xs text-rose-400 font-semibold italic flex items-center gap-1.5"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg> Solicitação enviada ao suporte</span>';
+                    }
+                }
+
+                showToast(
+                    'Solicitação de Remoção Enviada!', 
+                    `O chamado para desativação da placa ${plate} foi encaminhado para nossa equipe técnica.`,
+                    'info'
+                );
+            }
+        }
+    </script>
+</body>
+</html>
