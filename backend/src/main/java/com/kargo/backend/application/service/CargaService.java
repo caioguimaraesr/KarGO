@@ -2,9 +2,9 @@ package com.kargo.backend.application.service;
 
 import com.kargo.backend.domain.exception.RecursoNaoEncontradoException;
 import com.kargo.backend.domain.model.Carga;
-import com.kargo.backend.domain.model.Usuario;
 import com.kargo.backend.domain.repository.CargaRepository;
-import com.kargo.backend.domain.repository.UsuarioRepository;
+import com.kargo.backend.domain.model.Embarcador;
+import com.kargo.backend.domain.repository.EmbarcadorRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -16,7 +16,7 @@ import java.util.List;
 public class CargaService {
 
     private final CargaRepository cargaRepository;
-    private final UsuarioRepository usuarioRepository;
+    private final EmbarcadorRepository embarcadorRepository;
 
 
     public List<Carga> listar() {
@@ -31,7 +31,7 @@ public class CargaService {
     @Transactional
     public Carga criar(Carga carga) {
         carga.setId(null);
-        carga.setEmbarcador(buscarUsuario(exigirIdEmbarcador(carga)));
+        carga.setEmbarcador(buscarEmbarcador(exigirIdEmbarcador(carga)));
         return cargaRepository.save(carga);
     }
 
@@ -44,7 +44,7 @@ public class CargaService {
         carga.setPesoKg(cargaAtualizada.getPesoKg());
         carga.setValorSugerido(cargaAtualizada.getValorSugerido());
         carga.setAtiva(cargaAtualizada.getAtiva());
-        carga.setEmbarcador(buscarUsuario(exigirIdEmbarcador(cargaAtualizada)));
+        carga.setEmbarcador(buscarEmbarcador(exigirIdEmbarcador(cargaAtualizada)));
         return cargaRepository.save(carga);
     }
 
@@ -54,9 +54,9 @@ public class CargaService {
         cargaRepository.delete(carga);
     }
 
-    private Usuario buscarUsuario(Long id) {
-        return usuarioRepository.findById(id)
-            .orElseThrow(() -> new RecursoNaoEncontradoException("Usuario nao encontrado: " + id));
+    private Embarcador buscarEmbarcador(Long id) {
+        return embarcadorRepository.findById(id)
+            .orElseThrow(() -> new RecursoNaoEncontradoException("Embarcador nao encontrado: " + id));
     }
 
     private Long exigirIdEmbarcador(Carga carga) {

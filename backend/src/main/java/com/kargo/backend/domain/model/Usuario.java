@@ -1,27 +1,33 @@
 package com.kargo.backend.domain.model;
 
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
+import jakarta.persistence.Inheritance;
+import jakarta.persistence.InheritanceType;
 import jakarta.persistence.Id;
+import jakarta.persistence.PrePersist;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Pattern;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.time.LocalDateTime;
+
 @Entity
 @Table(name = "usuarios")
+@Inheritance(strategy = InheritanceType.JOINED)
+@JsonPropertyOrder({"id", "nome", "email", "telefone", "senha", "tipoUsuario", "dataCadastro"})
 @Getter
 @Setter
 @NoArgsConstructor
-public class Usuario {
+public abstract class Usuario {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -38,17 +44,22 @@ public class Usuario {
     @NotBlank
     private String telefone;
 
-    @NotNull
+    @NotBlank
+    private String senha;
+
     @Enumerated(EnumType.STRING)
-    private TipoUsuario tipo;
+    @Column(name = "tipo_usuario", nullable = false)
+    private TipoUsuario tipoUsuario;
 
-    @Pattern(regexp = "^\\d{11}$", message = "cpf deve conter 11 digitos numericos")
-    @Column(unique = true)
-    private String cpf;
+    @Column(name = "data_cadastro", nullable = false, updatable = false)
+    private LocalDateTime dataCadastro;
 
-    @Pattern(regexp = "^\\d{14}$", message = "cnpj deve conter 14 digitos numericos")
-    @Column(unique = true)
-    private String cnpj;
+    @PrePersist
+    void preencherDataCadastro() {
+        if (dataCadastro == null) {
+            dataCadastro = LocalDateTime.now();
+        }
+    }
 
 }
 

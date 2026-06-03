@@ -9,12 +9,16 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.DecimalMin;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "fretes")
@@ -27,26 +31,53 @@ public class Frete {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne(optional = false)
-    @JoinColumn(name = "carga_id")
-    private Carga carga;
+    @NotBlank
+    private String titulo;
 
+    @NotBlank
+    private String descricao;
+
+    @NotBlank
+    private String origem;
+
+    @NotBlank
+    private String destino;
+
+    @NotNull
+    @DecimalMin(value = "0.0", inclusive = false)
+    private Double pesoCargaKg;
+
+    @NotNull
+    @DecimalMin(value = "0.0", inclusive = false)
+    private BigDecimal valorFrete;
+
+    @NotNull
+    private LocalDate dataEntrega;
+
+    @NotNull
+    private LocalDateTime dataPublicacao;
+
+    private LocalDateTime dataAceite;
+
+    @NotNull
+    @Enumerated(EnumType.STRING)
+    private StatusFrete status;
+
+    @NotNull
+    @ManyToOne(optional = false)
+    @JoinColumn(name = "embarcador_id")
+    private Embarcador embarcador;
+
+    @NotNull
     @ManyToOne(optional = false)
     @JoinColumn(name = "motorista_id")
-    private Usuario motorista;
+    private Motorista motorista;
 
+    @NotNull
     @ManyToOne(optional = false)
     @JoinColumn(name = "veiculo_id")
     private Veiculo veiculo;
 
-    private BigDecimal valorNegociado;
-
-    @Enumerated(EnumType.STRING)
-    private StatusFrete status;
-
-    private LocalDate dataColetaPrevista;
-
-    private LocalDate dataEntregaPrevista;
 
 }
 

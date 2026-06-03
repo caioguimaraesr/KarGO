@@ -49,7 +49,7 @@ public class Carga {
     @NotNull
     @ManyToOne(optional = false)
     @JoinColumn(name = "embarcador_id")
-    private Usuario embarcador;
+    private Embarcador embarcador;
 
 }
 

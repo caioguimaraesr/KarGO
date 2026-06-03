@@ -4,14 +4,19 @@ Backend inicial da KarGO em Spring Boot para validar o dominio principal do mark
 
 ## Dominio inicial
 
-- `Usuario`: motorista, embarcador ou PME.
+- `Usuario` (superclasse): dados comuns de acesso e cadastro.
+- `Motorista` (subclasse): cpf, cnh, disponibilidade e avaliacao.
+- `Embarcador` (subclasse): cpf/cnpj para publicar fretes.
 - `Veiculo`: veiculo cadastrado por um motorista.
-- `Carga`: oferta de carga criada por embarcador/PME.
-- `Frete`: negociacao entre carga, motorista e veiculo.
+- `Frete`: publicacao realizada por embarcador, aceita por motorista com veiculo.
 
 ## Endpoints
 
-- `GET/POST/PUT/DELETE /api/usuarios`
+- `GET /api/usuarios`
+- `GET /api/usuarios/{id}`
+- `DELETE /api/usuarios/{id}`
+- `GET/POST/PUT/DELETE /api/motoristas`
+- `GET/POST/PUT/DELETE /api/embarcadores`
 - `GET/POST/PUT/DELETE /api/veiculos`
 - `GET/POST/PUT/DELETE /api/cargas`
 - `GET/POST/PUT/DELETE /api/fretes`

@@ -1,11 +1,12 @@
 package com.kargo.backend.api;
 
-import com.kargo.backend.application.service.UsuarioService;
-import com.kargo.backend.domain.model.TipoUsuario;
-import com.kargo.backend.domain.model.Usuario;
+import com.kargo.backend.application.service.MotoristaService;
+import com.kargo.backend.domain.model.Motorista;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+
+import java.time.LocalDate;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
@@ -15,24 +16,27 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 class UsuarioCrudIntegrationTest {
 
     @Autowired
-    private UsuarioService usuarioService;
+    private MotoristaService motoristaService;
 
     @Test
-    void deveCriarEListarUsuarios() {
-        Usuario usuario = new Usuario();
-        usuario.setNome("Joao Motorista");
-        usuario.setEmail("joao@kargo.com");
-        usuario.setTelefone("81999999999");
-        usuario.setTipo(TipoUsuario.MOTORISTA);
-        usuario.setCpf("12345678901");
+    void deveCriarEListarMotoristas() {
+        Motorista motorista = new Motorista();
+        motorista.setNome("Joao Motorista");
+        motorista.setEmail("joao@kargo.com");
+        motorista.setTelefone("81999999999");
+        motorista.setSenha("123456");
+        motorista.setCpf("12345678901");
+        motorista.setCnh("12345678900");
+        motorista.setDataValidadeCnh(LocalDate.now().plusYears(2));
+        motorista.setDisponivel(true);
 
-        Usuario salvo = usuarioService.criar(usuario);
+        Motorista salvo = motoristaService.criar(motorista);
         assertNotNull(salvo.getId());
 
-        var usuarios = usuarioService.listar();
-        assertFalse(usuarios.isEmpty());
-        assertEquals("joao@kargo.com", usuarios.getFirst().getEmail());
-        assertEquals("12345678901", usuarios.getFirst().getCpf());
+        var motoristas = motoristaService.listar();
+        assertFalse(motoristas.isEmpty());
+        assertEquals("joao@kargo.com", motoristas.getFirst().getEmail());
+        assertEquals("12345678901", motoristas.getFirst().getCpf());
     }
 }
 

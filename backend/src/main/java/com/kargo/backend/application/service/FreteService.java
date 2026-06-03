@@ -1,13 +1,13 @@
 package com.kargo.backend.application.service;
 
 import com.kargo.backend.domain.exception.RecursoNaoEncontradoException;
-import com.kargo.backend.domain.model.Carga;
+import com.kargo.backend.domain.model.Embarcador;
 import com.kargo.backend.domain.model.Frete;
-import com.kargo.backend.domain.model.Usuario;
+import com.kargo.backend.domain.model.Motorista;
 import com.kargo.backend.domain.model.Veiculo;
-import com.kargo.backend.domain.repository.CargaRepository;
+import com.kargo.backend.domain.repository.EmbarcadorRepository;
 import com.kargo.backend.domain.repository.FreteRepository;
-import com.kargo.backend.domain.repository.UsuarioRepository;
+import com.kargo.backend.domain.repository.MotoristaRepository;
 import com.kargo.backend.domain.repository.VeiculoRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -20,8 +20,8 @@ import java.util.List;
 public class FreteService {
 
     private final FreteRepository freteRepository;
-    private final CargaRepository cargaRepository;
-    private final UsuarioRepository usuarioRepository;
+    private final EmbarcadorRepository embarcadorRepository;
+    private final MotoristaRepository motoristaRepository;
     private final VeiculoRepository veiculoRepository;
 
 
@@ -44,13 +44,17 @@ public class FreteService {
     @Transactional
     public Frete atualizar(Long id, Frete freteAtualizado) {
         Frete frete = buscarPorId(id);
-        frete.setCarga(buscarCarga(exigirIdCarga(freteAtualizado)));
-        frete.setMotorista(buscarUsuario(exigirIdMotorista(freteAtualizado)));
-        frete.setVeiculo(buscarVeiculo(exigirIdVeiculo(freteAtualizado)));
-        frete.setValorNegociado(freteAtualizado.getValorNegociado());
+        frete.setTitulo(freteAtualizado.getTitulo());
+        frete.setDescricao(freteAtualizado.getDescricao());
+        frete.setOrigem(freteAtualizado.getOrigem());
+        frete.setDestino(freteAtualizado.getDestino());
+        frete.setPesoCargaKg(freteAtualizado.getPesoCargaKg());
+        frete.setValorFrete(freteAtualizado.getValorFrete());
+        frete.setDataEntrega(freteAtualizado.getDataEntrega());
+        frete.setDataPublicacao(freteAtualizado.getDataPublicacao());
+        frete.setDataAceite(freteAtualizado.getDataAceite());
         frete.setStatus(freteAtualizado.getStatus());
-        frete.setDataColetaPrevista(freteAtualizado.getDataColetaPrevista());
-        frete.setDataEntregaPrevista(freteAtualizado.getDataEntregaPrevista());
+        vincularReferencias(frete, freteAtualizado);
         return freteRepository.save(frete);
     }
 
@@ -61,19 +65,31 @@ public class FreteService {
     }
 
     private void vincularReferencias(Frete frete) {
-        frete.setCarga(buscarCarga(exigirIdCarga(frete)));
-        frete.setMotorista(buscarUsuario(exigirIdMotorista(frete)));
-        frete.setVeiculo(buscarVeiculo(exigirIdVeiculo(frete)));
+        vincularReferencias(frete, frete);
     }
 
-    private Carga buscarCarga(Long id) {
-        return cargaRepository.findById(id)
-            .orElseThrow(() -> new RecursoNaoEncontradoException("Carga nao encontrada: " + id));
+    private void vincularReferencias(Frete destino, Frete origem) {
+        Embarcador embarcador = buscarEmbarcador(exigirIdEmbarcador(origem));
+        Motorista motorista = buscarMotorista(exigirIdMotorista(origem));
+        Veiculo veiculo = buscarVeiculo(exigirIdVeiculo(origem));
+
+        if (!veiculo.getMotorista().getId().equals(motorista.getId())) {
+            throw new IllegalArgumentException("O veiculo informado nao pertence ao motorista selecionado");
+        }
+
+        destino.setEmbarcador(embarcador);
+        destino.setMotorista(motorista);
+        destino.setVeiculo(veiculo);
     }
 
-    private Usuario buscarUsuario(Long id) {
-        return usuarioRepository.findById(id)
-            .orElseThrow(() -> new RecursoNaoEncontradoException("Usuario nao encontrado: " + id));
+    private Embarcador buscarEmbarcador(Long id) {
+        return embarcadorRepository.findById(id)
+            .orElseThrow(() -> new RecursoNaoEncontradoException("Embarcador nao encontrado: " + id));
+    }
+
+    private Motorista buscarMotorista(Long id) {
+        return motoristaRepository.findById(id)
+            .orElseThrow(() -> new RecursoNaoEncontradoException("Motorista nao encontrado: " + id));
     }
 
     private Veiculo buscarVeiculo(Long id) {
@@ -81,11 +97,11 @@ public class FreteService {
             .orElseThrow(() -> new RecursoNaoEncontradoException("Veiculo nao encontrado: " + id));
     }
 
-    private Long exigirIdCarga(Frete frete) {
-        if (frete.getCarga() == null || frete.getCarga().getId() == null) {
-            throw new RecursoNaoEncontradoException("Frete precisa informar um id de carga valido");
+    private Long exigirIdEmbarcador(Frete frete) {
+        if (frete.getEmbarcador() == null || frete.getEmbarcador().getId() == null) {
+            throw new RecursoNaoEncontradoException("Frete precisa informar um id de embarcador valido");
         }
-        return frete.getCarga().getId();
+        return frete.getEmbarcador().getId();
     }
 
     private Long exigirIdMotorista(Frete frete) {

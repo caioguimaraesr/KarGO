@@ -1,10 +1,9 @@
 package com.kargo.backend.api.controller;
 
-import com.kargo.backend.application.service.FreteService;
-import com.kargo.backend.domain.model.Frete;
+import com.kargo.backend.application.service.MotoristaService;
+import com.kargo.backend.domain.model.Motorista;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -17,40 +16,41 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
+import static org.springframework.http.HttpStatus.CREATED;
+import static org.springframework.http.HttpStatus.NO_CONTENT;
+
 @RestController
-@RequestMapping("/api/fretes")
+@RequestMapping("/api/motoristas")
 @RequiredArgsConstructor
-public class FreteController {
+public class MotoristaController {
 
-    private final FreteService freteService;
-
+    private final MotoristaService motoristaService;
 
     @GetMapping
-    public List<Frete> listar() {
-        return freteService.listar();
+    public List<Motorista> listar() {
+        return motoristaService.listar();
     }
 
     @GetMapping("/{id}")
-    public Frete buscarPorId(@PathVariable Long id) {
-        return freteService.buscarPorId(id);
+    public Motorista buscarPorId(@PathVariable Long id) {
+        return motoristaService.buscarPorId(id);
     }
 
     @PostMapping
-    @ResponseStatus(HttpStatus.CREATED)
-    public Frete criar(@Valid @RequestBody Frete frete) {
-        return freteService.criar(frete);
+    @ResponseStatus(CREATED)
+    public Motorista criar(@Valid @RequestBody Motorista motorista) {
+        return motoristaService.criar(motorista);
     }
 
     @PutMapping("/{id}")
-    public Frete atualizar(@PathVariable Long id, @Valid @RequestBody Frete frete) {
-        return freteService.atualizar(id, frete);
+    public Motorista atualizar(@PathVariable Long id, @Valid @RequestBody Motorista motorista) {
+        return motoristaService.atualizar(id, motorista);
     }
 
     @DeleteMapping("/{id}")
-    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @ResponseStatus(NO_CONTENT)
     public void deletar(@PathVariable Long id) {
-        freteService.deletar(id);
+        motoristaService.deletar(id);
     }
 }
-
 

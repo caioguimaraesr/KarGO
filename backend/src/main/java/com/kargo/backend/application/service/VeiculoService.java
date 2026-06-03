@@ -1,9 +1,9 @@
 package com.kargo.backend.application.service;
 
 import com.kargo.backend.domain.exception.RecursoNaoEncontradoException;
-import com.kargo.backend.domain.model.Usuario;
+import com.kargo.backend.domain.model.Motorista;
 import com.kargo.backend.domain.model.Veiculo;
-import com.kargo.backend.domain.repository.UsuarioRepository;
+import com.kargo.backend.domain.repository.MotoristaRepository;
 import com.kargo.backend.domain.repository.VeiculoRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -16,7 +16,7 @@ import java.util.List;
 public class VeiculoService {
 
     private final VeiculoRepository veiculoRepository;
-    private final UsuarioRepository usuarioRepository;
+    private final MotoristaRepository motoristaRepository;
 
 
     public List<Veiculo> listar() {
@@ -31,18 +31,21 @@ public class VeiculoService {
     @Transactional
     public Veiculo criar(Veiculo veiculo) {
         veiculo.setId(null);
-        veiculo.setMotorista(buscarUsuario(exigirIdMotorista(veiculo)));
+        veiculo.setMotorista(buscarMotorista(exigirIdMotorista(veiculo)));
         return veiculoRepository.save(veiculo);
     }
 
     @Transactional
     public Veiculo atualizar(Long id, Veiculo veiculoAtualizado) {
         Veiculo veiculo = buscarPorId(id);
+        veiculo.setAtivo(veiculoAtualizado.getAtivo());
+        veiculo.setCapacidadeKg(veiculoAtualizado.getCapacidadeKg());
+        veiculo.setTipoVeiculo(veiculoAtualizado.getTipoVeiculo());
+        veiculo.setAno(veiculoAtualizado.getAno());
+        veiculo.setMarca(veiculoAtualizado.getMarca());
         veiculo.setPlaca(veiculoAtualizado.getPlaca());
         veiculo.setModelo(veiculoAtualizado.getModelo());
-        veiculo.setTipo(veiculoAtualizado.getTipo());
-        veiculo.setCapacidadeKg(veiculoAtualizado.getCapacidadeKg());
-        veiculo.setMotorista(buscarUsuario(exigirIdMotorista(veiculoAtualizado)));
+        veiculo.setMotorista(buscarMotorista(exigirIdMotorista(veiculoAtualizado)));
         return veiculoRepository.save(veiculo);
     }
 
@@ -52,9 +55,9 @@ public class VeiculoService {
         veiculoRepository.delete(veiculo);
     }
 
-    private Usuario buscarUsuario(Long id) {
-        return usuarioRepository.findById(id)
-            .orElseThrow(() -> new RecursoNaoEncontradoException("Usuario nao encontrado: " + id));
+    private Motorista buscarMotorista(Long id) {
+        return motoristaRepository.findById(id)
+            .orElseThrow(() -> new RecursoNaoEncontradoException("Motorista nao encontrado: " + id));
     }
 
     private Long exigirIdMotorista(Veiculo veiculo) {

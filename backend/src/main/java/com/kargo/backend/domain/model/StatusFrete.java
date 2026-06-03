@@ -1,8 +1,7 @@
 package com.kargo.backend.domain.model;
 
 public enum StatusFrete {
-    ABERTO,
-    NEGOCIACAO,
+    PUBLICADO,
     ACEITO,
     EM_TRANSITO,
     CONCLUIDO,
