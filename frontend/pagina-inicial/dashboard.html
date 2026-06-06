@@ -1437,8 +1437,61 @@
         </a>
     </nav>
 
+    <script src="js/api-client.js"></script>
     <!-- JS de Interações -->
     <script>
+        const api = window.KargoApi;
+
+        async function hydrateDashboardFromBackend() {
+            if (!api) return;
+
+            const session = api.getSession();
+            if (session && session.name) {
+                document.querySelectorAll('.user-name').forEach(el => {
+                    el.textContent = session.name;
+                });
+                const title = document.querySelector('.page-title h1');
+                if (title) {
+                    const firstName = session.name.split(' ')[0];
+                    title.textContent = `Ola, ${firstName}`;
+                }
+            }
+
+            if (!session || session.type !== 'MOTORISTA' || !session.id) {
+                return;
+            }
+
+            try {
+                const fretes = await api.request('/api/fretes', { method: 'GET' });
+                const doMotorista = Array.isArray(fretes)
+                    ? fretes.filter(item => item.motorista && item.motorista.id === session.id)
+                    : [];
+
+                if (doMotorista.length === 0) return;
+
+                const totalFaturamento = doMotorista.reduce((acc, item) => acc + Number(item.valorFrete || 0), 0);
+                const totalCargaKg = doMotorista.reduce((acc, item) => acc + Number(item.pesoCargaKg || 0), 0);
+
+                const faturamentoEl = document.getElementById('card-fat-val');
+                const kmEl = document.getElementById('card-km-val');
+                const cargasEl = document.getElementById('card-cargas-val');
+
+                if (faturamentoEl) {
+                    faturamentoEl.textContent = totalFaturamento.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+                }
+                if (kmEl) {
+                    kmEl.textContent = `${Math.round(totalCargaKg / 3).toLocaleString('pt-BR')} km`;
+                }
+                if (cargasEl) {
+                    cargasEl.textContent = `${doMotorista.length} Cargas`;
+                }
+            } catch (error) {
+                console.error('Falha ao carregar dados do dashboard:', error.message);
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', hydrateDashboardFromBackend);
+
         // --- CONTROLE DO MODAL DE PROPOSTAS (IGUAL AO MARKETPLACE) ---
         const modalBackdrop = document.getElementById('proposal-modal-backdrop');
         const btnCloseModal = document.getElementById('btn-close-modal');

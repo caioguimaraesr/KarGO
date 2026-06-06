@@ -5,7 +5,133 @@
     'use strict';
 
     document.addEventListener('DOMContentLoaded', () => {
-        
+        const api = window.KargoApi;
+        let selectedCargaData = null;
+
+        function escapeHtml(value) {
+            return String(value || '')
+                .replace(/&/g, '&amp;')
+                .replace(/</g, '&lt;')
+                .replace(/>/g, '&gt;')
+                .replace(/"/g, '&quot;')
+                .replace(/'/g, '&#039;');
+        }
+
+        function formatCurrency(value) {
+            return Number(value || 0).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+        }
+
+        function formatBidValue(value) {
+            return Number(value || 0).toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+        }
+
+        function parseBidValue(value) {
+            const sanitized = String(value || '').replace(/\./g, '').replace(',', '.').replace(/[^0-9.]/g, '');
+            const parsed = Number(sanitized);
+            return Number.isFinite(parsed) ? parsed : 0;
+        }
+
+        function toLocalDateTimeString(date) {
+            const local = new Date(date.getTime() - date.getTimezoneOffset() * 60000);
+            return local.toISOString().slice(0, 19);
+        }
+
+        function toDateString(date) {
+            const local = new Date(date.getTime() - date.getTimezoneOffset() * 60000);
+            return local.toISOString().slice(0, 10);
+        }
+
+        function setUserNameOnTopbar() {
+            if (!api) return;
+            const session = api.getSession();
+            if (!session || !session.name) return;
+            document.querySelectorAll('.user-name').forEach(el => {
+                el.textContent = session.name;
+            });
+        }
+
+        async function loadCargasFromBackend() {
+            if (!api) return;
+
+            try {
+                const cargas = await api.listCargas();
+                if (!Array.isArray(cargas) || cargas.length === 0) {
+                    return;
+                }
+
+                const cardsContainer = document.getElementById('cards-container');
+                const resultsCount = document.getElementById('results-count');
+                if (!cardsContainer) return;
+
+                const html = cargas.map((carga) => {
+                    const valor = Number(carga.valorSugerido || 0);
+                    const suggested = formatBidValue(valor);
+                    const origem = escapeHtml(carga.origem || 'Origem');
+                    const destino = escapeHtml(carga.destino || 'Destino');
+                    const descricao = escapeHtml(carga.descricao || 'Carga');
+                    const pesoTon = (Number(carga.pesoKg || 0) / 1000).toFixed(1);
+                    const embarcadorNome = escapeHtml(carga.embarcador && carga.embarcador.nome ? carga.embarcador.nome : 'Embarcador');
+                    const embarcadorId = carga.embarcador && carga.embarcador.id ? carga.embarcador.id : '';
+                    return `
+                        <article class="cargo-card">
+                            <div class="card-header-row">
+                                <span class="card-tag info">NOVA CARGA</span>
+                                <span class="card-publish-time">Publicada agora</span>
+                            </div>
+                            <div class="card-main-grid">
+                                <div class="card-route-horizontal">
+                                    <div class="route-origin">
+                                        <span class="route-label">ORIGEM</span>
+                                        <h4 class="route-city">${origem}</h4>
+                                        <span class="route-time">Saida imediata</span>
+                                    </div>
+                                    <div class="route-connector-container">
+                                        <span class="route-distance">-</span>
+                                        <div class="route-line-connector"></div>
+                                    </div>
+                                    <div class="route-destination">
+                                        <span class="route-label">DESTINO</span>
+                                        <h4 class="route-city">${destino}</h4>
+                                        <span class="route-time">Consulte prazo</span>
+                                    </div>
+                                </div>
+                                <div class="card-specs-grid">
+                                    <div class="spec-tile"><span class="spec-label">PESO</span><span class="spec-value">${pesoTon} Ton</span></div>
+                                    <div class="spec-tile"><span class="spec-label">PRODUTO</span><span class="spec-value">${descricao}</span></div>
+                                    <div class="spec-tile"><span class="spec-label">PAGAMENTO</span><span class="spec-value">Na Entrega</span></div>
+                                    <div class="spec-tile"><span class="spec-label">STATUS</span><span class="spec-value">Disponivel</span></div>
+                                </div>
+                                <div class="card-action-column">
+                                    <div class="price-box">
+                                        <span class="price-label">FRETE SUGERIDO</span>
+                                        <h3 class="price-value">${formatCurrency(valor)}</h3>
+                                    </div>
+                                    <div class="actions-group">
+                                        <a href="detalhe-carga.html" class="card-btn-outline">Ver Detalhes</a>
+                                        <button class="card-btn-primary js-propose-btn" data-suggested="${suggested}" data-origin="${origem}" data-destination="${destino}" data-carga-id="${carga.id}" data-embarcador-id="${embarcadorId}" data-peso-kg="${Number(carga.pesoKg || 0)}" data-descricao="${descricao}">Enviar Proposta</button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="card-contractor-section">
+                                <div class="contractor-info">
+                                    <div class="contractor-details">
+                                        <div class="contractor-name-row"><span class="contractor-name">${embarcadorNome}</span></div>
+                                        <div class="contractor-rating-row"><span class="rating-count">Embarcador vinculado a carga</span></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </article>
+                    `;
+                }).join('');
+
+                cardsContainer.innerHTML = html;
+                if (resultsCount) resultsCount.textContent = String(cargas.length);
+                animateCards();
+            } catch (error) {
+                showToast(`Falha ao carregar cargas: ${error.message}`, 'error');
+            }
+        }
+
         // --- 1. SLIDER DE PESO ---
         const weightSlider = document.getElementById('weight-slider');
         const weightSliderVal = document.getElementById('weight-slider-val');
@@ -281,7 +407,16 @@
             const btn = e.target.closest('.js-propose-btn');
             if (btn && modalBackdrop) {
                 e.preventDefault();
-                
+
+                selectedCargaData = {
+                    cargaId: Number(btn.getAttribute('data-carga-id') || 0),
+                    embarcadorId: Number(btn.getAttribute('data-embarcador-id') || 0),
+                    origem: btn.getAttribute('data-origin') || '',
+                    destino: btn.getAttribute('data-destination') || '',
+                    pesoKg: Number(btn.getAttribute('data-peso-kg') || 1000),
+                    descricao: btn.getAttribute('data-descricao') || 'Frete'
+                };
+
                 // Pega dados do botão
                 const suggested = btn.getAttribute('data-suggested') || '0,00';
                 currentSuggestedAmount = suggested;
@@ -325,11 +460,27 @@
 
         // Submissão da proposta
         if (btnSubmitProposal) {
-            btnSubmitProposal.addEventListener('click', () => {
+            btnSubmitProposal.addEventListener('click', async () => {
                 const finalBid = driverBidInput ? driverBidInput.value.trim() : currentSuggestedAmount;
 
                 if (!finalBid) {
                     showToast('Por favor, informe um valor de frete válido.', 'error');
+                    return;
+                }
+
+                if (!api) {
+                    showToast('Cliente de API indisponivel.', 'error');
+                    return;
+                }
+
+                const session = api.getSession();
+                if (!session || session.type !== 'MOTORISTA') {
+                    showToast('Faca login como motorista para enviar propostas.', 'error');
+                    return;
+                }
+
+                if (!selectedCargaData || !selectedCargaData.embarcadorId) {
+                    showToast('Nao foi possivel identificar os dados da carga.', 'error');
                     return;
                 }
 
@@ -338,22 +489,41 @@
                 btnSubmitProposal.disabled = true;
                 btnSubmitProposal.textContent = 'Enviando...';
 
-                setTimeout(() => {
-                    // Restaura botão e fecha modal
+                try {
+                    const veiculos = await api.listVeiculos();
+                    const veiculoAtivo = veiculos.find(v => v.motorista && v.motorista.id === session.id && v.ativo);
+
+                    if (!veiculoAtivo) {
+                        throw new Error('Nenhum veiculo ativo encontrado para este motorista.');
+                    }
+
+                    const now = new Date();
+                    const entrega = new Date(now.getTime() + 24 * 60 * 60 * 1000);
+
+                    await api.createFrete({
+                        titulo: `Proposta para carga ${selectedCargaData.cargaId || ''}`.trim(),
+                        descricao: `Proposta enviada via marketplace para ${selectedCargaData.descricao}`,
+                        origem: selectedCargaData.origem,
+                        destino: selectedCargaData.destino,
+                        pesoCargaKg: selectedCargaData.pesoKg || 1000,
+                        valorFrete: parseBidValue(finalBid),
+                        dataEntrega: toDateString(entrega),
+                        dataPublicacao: toLocalDateTimeString(now),
+                        status: 'PUBLICADO',
+                        embarcador: { id: selectedCargaData.embarcadorId },
+                        motorista: { id: session.id },
+                        veiculo: { id: veiculoAtivo.id }
+                    });
+
                     btnSubmitProposal.disabled = false;
                     btnSubmitProposal.textContent = originalText;
                     closeModal();
-
-                    // Obtém veículo selecionado
-                    const selectVehicle = document.getElementById('driver-vehicle-select');
-                    const vehicleName = selectVehicle ? selectVehicle.options[selectVehicle.selectedIndex].text : 'Scania R450 6x2 - Sider (Placa KRG-2E26)';
-                    const plateMatch = vehicleName.match(/\((.*?)\)/);
-                    const plate = plateMatch ? plateMatch[1] : 'KRG-2E26';
-                    const modelName = vehicleName.split(' - ')[0];
-
-                    // Toast de sucesso premium detalhando o veículo
-                    showToast(`Proposta Enviada!`, `Sua proposta de R$ ${finalBid} com o veículo ${modelName} (${plate}) foi enviada com sucesso!`);
-                }, 800);
+                    showToast(`Proposta enviada com sucesso para a carga ${selectedCargaData.cargaId}.`);
+                } catch (error) {
+                    btnSubmitProposal.disabled = false;
+                    btnSubmitProposal.textContent = originalText;
+                    showToast(`Falha ao enviar proposta: ${error.message}`, 'error');
+                }
             });
         }
 
@@ -398,6 +568,8 @@
         }
 
         // Executa animação inicial nos cards
+        setUserNameOnTopbar();
+        loadCargasFromBackend();
         animateCards();
     });
 

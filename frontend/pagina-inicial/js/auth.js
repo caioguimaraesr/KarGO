@@ -4,6 +4,7 @@
    ============================================ */
 
 document.addEventListener('DOMContentLoaded', () => {
+    const api = window.KargoApi;
 
     // ========================================
     // TAB SYSTEM (Login Page)
@@ -380,23 +381,150 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
+    function sanitizeDigits(value) {
+        return (value || '').replace(/\D/g, '');
+    }
+
+    function defaultDateAfterYears(years) {
+        const date = new Date();
+        date.setFullYear(date.getFullYear() + years);
+        return date.toISOString().slice(0, 10);
+    }
+
+    async function ensureDefaultVehicle(motoristaId) {
+        if (!api) return;
+        const veiculos = await api.listVeiculos();
+        const hasOwnVehicle = veiculos.some(v => v.motorista && v.motorista.id === motoristaId);
+        if (hasOwnVehicle) return;
+
+        const uniquePlate = `KRG${Date.now().toString().slice(-4)}A`;
+        await api.createVeiculo({
+            ativo: true,
+            capacidadeKg: 10000,
+            tipoVeiculo: 'TRUCK',
+            ano: 2022,
+            marca: 'Nao informado',
+            modelo: 'Nao informado',
+            placa: uniquePlate,
+            motorista: { id: motoristaId }
+        });
+    }
+
     // Login form handler
     const loginForm = document.getElementById('login-form');
     if (loginForm) {
-        loginForm.addEventListener('submit', (e) => {
+        loginForm.addEventListener('submit', async (e) => {
             e.preventDefault();
-            // Simulate login
-            window.location.href = 'marketplace.html';
+
+            if (!api) {
+                alert('Cliente de API nao encontrado. Verifique o carregamento de js/api-client.js.');
+                return;
+            }
+
+            const loginValue = document.getElementById('login-email')?.value?.trim();
+            const senhaValue = document.getElementById('login-password')?.value || '';
+
+            if (!loginValue || !senhaValue) {
+                alert('Preencha e-mail/telefone e senha para entrar.');
+                return;
+            }
+
+            try {
+                const user = await api.findUserByLogin(loginValue, senhaValue);
+                if (!user) {
+                    alert('Usuario ou senha invalidos.');
+                    return;
+                }
+
+                api.saveSessionFromApi(user);
+
+                if (user.tipoUsuario === 'MOTORISTA') {
+                    window.location.href = 'dashboard.html';
+                } else {
+                    window.location.href = 'marketplace.html';
+                }
+            } catch (error) {
+                alert(`Falha ao realizar login: ${error.message}`);
+            }
         });
     }
 
     // Signup form handler
     const signupForm = document.getElementById('signup-form');
     if (signupForm) {
-        signupForm.addEventListener('submit', (e) => {
+        signupForm.addEventListener('submit', async (e) => {
             e.preventDefault();
-            // Navigate to cadastro page
-            window.location.href = 'cadastro.html';
+
+            if (!api) {
+                alert('Cliente de API nao encontrado. Verifique o carregamento de js/api-client.js.');
+                return;
+            }
+
+            if (!selectedProfile) {
+                alert('Selecione o tipo de perfil antes de continuar.');
+                return;
+            }
+
+            const nome = document.getElementById('signup-name')?.value?.trim() || '';
+            const email = document.getElementById('signup-email')?.value?.trim() || '';
+            const telefone = document.getElementById('signup-phone')?.value?.trim() || '';
+            const senha = document.getElementById('signup-password')?.value || '';
+            const confirmacao = document.getElementById('signup-confirm-password')?.value || '';
+            const cpfCnpjRaw = document.getElementById('signup-cpf')?.value || '';
+            const cpfCnpj = sanitizeDigits(cpfCnpjRaw);
+
+            if (!nome || !email || !telefone || !senha) {
+                alert('Preencha os dados obrigatorios para criar a conta.');
+                return;
+            }
+
+            if (senha !== confirmacao) {
+                alert('A confirmacao de senha nao confere.');
+                return;
+            }
+
+            try {
+                if (selectedProfile === 'motorista') {
+                    if (cpfCnpj.length !== 11) {
+                        alert('Para motorista, informe um CPF com 11 digitos.');
+                        return;
+                    }
+
+                    const motorista = await api.createMotorista({
+                        nome,
+                        email,
+                        telefone,
+                        senha,
+                        cpf: cpfCnpj,
+                        cnh: 'PENDENTE',
+                        dataValidadeCnh: defaultDateAfterYears(5),
+                        disponivel: true,
+                        avaliacaoMedia: 0
+                    });
+
+                    await ensureDefaultVehicle(motorista.id);
+                    api.saveSessionFromApi(motorista);
+                } else {
+                    if (cpfCnpj.length !== 11 && cpfCnpj.length !== 14) {
+                        alert('Para PME/embarcador, informe CPF ou CNPJ com 11 ou 14 digitos.');
+                        return;
+                    }
+
+                    const embarcador = await api.createEmbarcador({
+                        nome,
+                        email,
+                        telefone,
+                        senha,
+                        cpfCnpj
+                    });
+
+                    api.saveSessionFromApi(embarcador);
+                }
+
+                window.location.href = 'cadastro.html';
+            } catch (error) {
+                alert(`Falha ao criar conta: ${error.message}`);
+            }
         });
     }
 

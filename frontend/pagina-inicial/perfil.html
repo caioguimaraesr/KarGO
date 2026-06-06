@@ -321,7 +321,11 @@
         </a>
     </nav>
 
+    <script src="js/api-client.js"></script>
     <script>
+        const api = window.KargoApi;
+        let currentMotorista = null;
+
         function showToast(title, desc, type = 'success') {
             const container = document.getElementById('toast-container');
             
@@ -356,19 +360,88 @@
             }, 3500);
         }
 
-        function saveProfileChanges() {
+        function applyMotoristaToForm(motorista) {
+            const nome = document.getElementById('prof-name');
+            const cpf = document.getElementById('prof-cnpj');
+            const phone = document.getElementById('prof-phone');
+            const email = document.getElementById('prof-email');
+
+            if (nome) nome.value = motorista.nome || '';
+            if (cpf) cpf.value = motorista.cpf || '';
+            if (phone) phone.value = motorista.telefone || '';
+            if (email) email.value = motorista.email || '';
+
+            document.querySelectorAll('.user-name').forEach(el => {
+                el.textContent = motorista.nome || 'Motorista';
+            });
+            const profileName = document.querySelector('.profile-name');
+            if (profileName) profileName.textContent = motorista.nome || 'Motorista';
+        }
+
+        async function loadProfileFromBackend() {
+            if (!api) return;
+
+            try {
+                const session = api.getSession();
+
+                if (session && session.type === 'MOTORISTA' && session.id) {
+                    currentMotorista = await api.getMotorista(session.id);
+                } else {
+                    const motoristas = await api.listMotoristas();
+                    currentMotorista = Array.isArray(motoristas) && motoristas.length > 0 ? motoristas[0] : null;
+                }
+
+                if (currentMotorista) {
+                    applyMotoristaToForm(currentMotorista);
+                }
+            } catch (error) {
+                showToast('Falha ao carregar perfil', error.message, 'error');
+            }
+        }
+
+        async function saveProfileChanges() {
             const btn = document.getElementById('btn-save-profile');
             const originalText = btn.innerHTML;
-            
+
+            if (!api) {
+                showToast('Falha de integracao', 'Cliente de API nao encontrado.', 'error');
+                return;
+            }
+
+            if (!currentMotorista || !currentMotorista.id) {
+                showToast('Perfil indisponivel', 'Nenhum motorista carregado para atualizacao.', 'error');
+                return;
+            }
+
             btn.disabled = true;
             btn.innerHTML = '<div class="spinner"></div> Salvando...';
-            
-            setTimeout(() => {
+
+            const payload = {
+                nome: document.getElementById('prof-name').value.trim(),
+                email: document.getElementById('prof-email').value.trim(),
+                telefone: document.getElementById('prof-phone').value.trim(),
+                senha: currentMotorista.senha || '123456',
+                cpf: (document.getElementById('prof-cnpj').value || currentMotorista.cpf || '').replace(/\D/g, ''),
+                cnh: currentMotorista.cnh || 'PENDENTE',
+                dataValidadeCnh: currentMotorista.dataValidadeCnh || '2030-12-31',
+                disponivel: currentMotorista.disponivel !== false,
+                avaliacaoMedia: currentMotorista.avaliacaoMedia == null ? 0 : currentMotorista.avaliacaoMedia
+            };
+
+            try {
+                const updated = await api.updateMotorista(currentMotorista.id, payload);
+                currentMotorista = updated;
+                applyMotoristaToForm(updated);
+                api.saveSessionFromApi(updated);
+
                 btn.disabled = false;
                 btn.innerHTML = originalText;
-                
                 showToast('Perfil Atualizado!', 'As alterações do seu cadastro foram salvas com sucesso no banco de dados.');
-            }, 1000);
+            } catch (error) {
+                btn.disabled = false;
+                btn.innerHTML = originalText;
+                showToast('Falha ao salvar', error.message, 'error');
+            }
         }
 
         function triggerFileInput(id) {
@@ -441,6 +514,8 @@
                 input.value = "";
             }, 1500);
         }
+
+        document.addEventListener('DOMContentLoaded', loadProfileFromBackend);
     </script>
 </body>
 </html>
