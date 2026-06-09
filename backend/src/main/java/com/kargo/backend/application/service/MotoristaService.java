@@ -5,6 +5,7 @@ import com.kargo.backend.domain.model.Motorista;
 import com.kargo.backend.domain.model.TipoUsuario;
 import com.kargo.backend.domain.repository.MotoristaRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -15,6 +16,7 @@ import java.util.List;
 public class MotoristaService {
 
     private final MotoristaRepository motoristaRepository;
+    private final PasswordEncoder passwordEncoder;
 
     public List<Motorista> listar() {
         return motoristaRepository.findAll();
@@ -30,6 +32,7 @@ public class MotoristaService {
         motorista.setId(null);
         motorista.setCpf(normalizarDigitos(motorista.getCpf()));
         motorista.setTipoUsuario(TipoUsuario.MOTORISTA);
+        motorista.setSenha(passwordEncoder.encode(motorista.getSenha()));
         return motoristaRepository.save(motorista);
     }
 
@@ -39,7 +42,7 @@ public class MotoristaService {
         motorista.setNome(motoristaAtualizado.getNome());
         motorista.setEmail(motoristaAtualizado.getEmail());
         motorista.setTelefone(motoristaAtualizado.getTelefone());
-        motorista.setSenha(motoristaAtualizado.getSenha());
+        motorista.setSenha(hashSenhaSeNecessario(motoristaAtualizado.getSenha()));
         motorista.setCpf(normalizarDigitos(motoristaAtualizado.getCpf()));
         motorista.setCnh(motoristaAtualizado.getCnh());
         motorista.setDataValidadeCnh(motoristaAtualizado.getDataValidadeCnh());
@@ -59,6 +62,14 @@ public class MotoristaService {
             return valor;
         }
         return valor.replaceAll("\\D", "");
+    }
+
+    // Evita double-hashing: se a senha já for um hash BCrypt, mantém como está
+    private String hashSenhaSeNecessario(String senha) {
+        if (senha != null && !senha.startsWith("$2")) {
+            return passwordEncoder.encode(senha);
+        }
+        return senha;
     }
 }
 

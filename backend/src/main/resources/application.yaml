@@ -1,3 +1,7 @@
+jwt:
+  secret: kargo-jwt-secret-key-deve-ser-alterado-em-producao-minimo-32-chars
+  expiration-ms: 86400000
+
 spring:
   application:
     name: backend

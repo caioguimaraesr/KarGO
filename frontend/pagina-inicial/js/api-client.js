@@ -19,10 +19,25 @@
         return apiBase;
     }
 
+    function getToken() {
+        return localStorage.getItem('kargoToken');
+    }
+
+    function setToken(token) {
+        if (token) {
+            localStorage.setItem('kargoToken', token);
+        } else {
+            localStorage.removeItem('kargoToken');
+        }
+    }
+
     async function request(path, options) {
+        const token = getToken();
+        const authHeader = token ? { 'Authorization': 'Bearer ' + token } : {};
         const response = await fetch(buildUrl(path), {
             headers: {
-                'Content-Type': 'application/json'
+                'Content-Type': 'application/json',
+                ...authHeader
             },
             ...options
         });
@@ -75,6 +90,21 @@
             email: user.email,
             phone: user.telefone
         });
+    }
+
+    async function login(loginValue, senha) {
+        const data = await request('/api/auth/login', {
+            method: 'POST',
+            body: JSON.stringify({ login: loginValue, senha: senha })
+        });
+        setToken(data.token);
+        setSession({
+            id: data.id,
+            type: data.tipoUsuario,
+            name: data.nome,
+            email: data.email
+        });
+        return data;
     }
 
     async function listMotoristas() {
@@ -132,33 +162,6 @@
         });
     }
 
-    async function findUserByLogin(login, senha) {
-        const normalizedLogin = (login || '').trim().toLowerCase();
-
-        const [motoristas, embarcadores] = await Promise.all([
-            listMotoristas(),
-            listEmbarcadores()
-        ]);
-
-        const foundMotorista = motoristas.find(function (item) {
-            return (
-                (item.email || '').toLowerCase() === normalizedLogin ||
-                normalizeDigits(item.telefone) === normalizeDigits(normalizedLogin)
-            ) && item.senha === senha;
-        });
-
-        if (foundMotorista) {
-            return foundMotorista;
-        }
-
-        return embarcadores.find(function (item) {
-            return (
-                (item.email || '').toLowerCase() === normalizedLogin ||
-                normalizeDigits(item.telefone) === normalizeDigits(normalizedLogin)
-            ) && item.senha === senha;
-        }) || null;
-    }
-
     window.KargoApi = {
         get apiBase() { return apiBase; },
         setApiBase: setApiBase,
@@ -166,7 +169,10 @@
         request: request,
         setSession: setSession,
         getSession: getSession,
+        getToken: getToken,
+        setToken: setToken,
         saveSessionFromApi: saveSessionFromApi,
+        login: login,
         listMotoristas: listMotoristas,
         getMotorista: getMotorista,
         createMotorista: createMotorista,
@@ -176,8 +182,7 @@
         listVeiculos: listVeiculos,
         createVeiculo: createVeiculo,
         listCargas: listCargas,
-        createFrete: createFrete,
-        findUserByLogin: findUserByLogin
+        createFrete: createFrete
     };
 })();
 

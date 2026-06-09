@@ -430,15 +430,9 @@ document.addEventListener('DOMContentLoaded', () => {
             }
 
             try {
-                const user = await api.findUserByLogin(loginValue, senhaValue);
-                if (!user) {
-                    alert('Usuario ou senha invalidos.');
-                    return;
-                }
+                const data = await api.login(loginValue, senhaValue);
 
-                api.saveSessionFromApi(user);
-
-                if (user.tipoUsuario === 'MOTORISTA') {
+                if (data.tipoUsuario === 'MOTORISTA') {
                     window.location.href = 'dashboard.html';
                 } else {
                     window.location.href = 'marketplace.html';

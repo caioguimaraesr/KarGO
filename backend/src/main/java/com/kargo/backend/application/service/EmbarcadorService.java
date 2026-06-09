@@ -5,6 +5,7 @@ import com.kargo.backend.domain.model.Embarcador;
 import com.kargo.backend.domain.model.TipoUsuario;
 import com.kargo.backend.domain.repository.EmbarcadorRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -15,6 +16,7 @@ import java.util.List;
 public class EmbarcadorService {
 
     private final EmbarcadorRepository embarcadorRepository;
+    private final PasswordEncoder passwordEncoder;
 
     public List<Embarcador> listar() {
         return embarcadorRepository.findAll();
@@ -30,6 +32,7 @@ public class EmbarcadorService {
         embarcador.setId(null);
         embarcador.setCpfCnpj(normalizarDigitos(embarcador.getCpfCnpj()));
         embarcador.setTipoUsuario(TipoUsuario.EMBARCADOR);
+        embarcador.setSenha(passwordEncoder.encode(embarcador.getSenha()));
         return embarcadorRepository.save(embarcador);
     }
 
@@ -39,7 +42,7 @@ public class EmbarcadorService {
         embarcador.setNome(embarcadorAtualizado.getNome());
         embarcador.setEmail(embarcadorAtualizado.getEmail());
         embarcador.setTelefone(embarcadorAtualizado.getTelefone());
-        embarcador.setSenha(embarcadorAtualizado.getSenha());
+        embarcador.setSenha(hashSenhaSeNecessario(embarcadorAtualizado.getSenha()));
         embarcador.setCpfCnpj(normalizarDigitos(embarcadorAtualizado.getCpfCnpj()));
         return embarcadorRepository.save(embarcador);
     }
@@ -55,6 +58,14 @@ public class EmbarcadorService {
             return valor;
         }
         return valor.replaceAll("\\D", "");
+    }
+
+    // Evita double-hashing: se a senha já for um hash BCrypt, mantém como está
+    private String hashSenhaSeNecessario(String senha) {
+        if (senha != null && !senha.startsWith("$2")) {
+            return passwordEncoder.encode(senha);
+        }
+        return senha;
     }
 }
 

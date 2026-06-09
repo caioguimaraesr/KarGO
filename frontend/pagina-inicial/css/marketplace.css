@@ -154,6 +154,27 @@ body.mp-body {
     filter: drop-shadow(0 0 5px var(--accent-blue-glow));
 }
 
+/* Botão de Logout */
+.mp-logout-btn {
+    background: none;
+    border: 1px solid transparent;
+    cursor: pointer;
+    width: 100%;
+    text-align: left;
+    color: var(--text-secondary);
+    margin-top: 4px;
+}
+
+.mp-logout-btn:hover {
+    background-color: rgba(255, 59, 48, 0.08);
+    color: #ff3b30;
+    border-color: rgba(255, 59, 48, 0.2);
+}
+
+.mp-logout-btn:hover svg {
+    color: #ff3b30;
+}
+
 /* Notificação do Chat */
 .chat-badge-dot {
     width: 8px;
