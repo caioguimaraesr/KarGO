@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="KarGO — Pagamentos. Controle suas despesas, faturas e comprovantes de frete.">
+    <title>KarGO — Financeiro do Contratante</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/contratante.css">
+</head>
+<body>
+    <div class="layout-container">
+
+        <!-- SIDEBAR DARK -->
+        <aside class="ct-sidebar">
+            <div class="ct-sidebar-logo">
+                <a href="../index.html"><img src="../assets/images/LOGO.png" alt="KarGO" class="logo-img"></a>
+            </div>
+            <nav class="ct-sidebar-menu">
+                <div class="ct-sidebar-links">
+                    <a href="dashboard.html" class="ct-menu-item">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="9"/><rect x="14" y="3" width="7" height="5"/><rect x="14" y="12" width="7" height="9"/><rect x="3" y="16" width="7" height="5"/></svg>
+                        Dashboard
+                    </a>
+                    <a href="publicar-carga.html" class="ct-menu-item">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="16"/><line x1="8" y1="12" x2="16" y2="12"/></svg>
+                        Publicar Carga
+                    </a>
+                    <a href="minhas-cargas.html" class="ct-menu-item">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><polyline points="3.27 6.96 12 12.01 20.73 6.96"/><line x1="12" y1="22.08" x2="12" y2="12"/></svg>
+                        Acompanhar Cargas
+                    </a>
+                    <a href="pagamentos.html" class="ct-menu-item active">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="4" width="22" height="16" rx="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>
+                        Pagamentos
+                    </a>
+                    <a href="chat.html" class="ct-menu-item">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+                        Chat
+                        <span class="chat-badge-dot"></span>
+                    </a>
+                    <a href="ocorrencias.html" class="ct-menu-item">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+                        Ocorrências
+                    </a>
+                    <div class="ct-sidebar-divider"></div>
+                    <a href="perfil.html" class="ct-menu-item">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+                        Meu Perfil
+                    </a>
+                </div>
+                <div class="ct-sidebar-bottom">
+                    <a href="configuracoes.html" class="ct-menu-item">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.6 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.6a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9c.26.604.852.997 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+                        Configurações
+                    </a>
+                </div>
+            </nav>
+        </aside>
+
+        <!-- CONTEÚDO PRINCIPAL -->
+        <main class="main-content">
+            <div class="ct-content-area">
+
+                <!-- TOPBAR -->
+                <header class="ct-topbar">
+                    <div class="ct-topbar-mobile-logo">
+                        <a href="../index.html"><img src="../assets/images/LOGO.png" alt="KarGO" class="logo-img-mobile"></a>
+                    </div>
+                    <div class="ct-topbar-actions">
+                        <div class="ct-user-profile">
+                            <img src="../assets/images/embarcador.png" alt="Maria" class="ct-user-avatar">
+                            <div class="ct-user-info">
+                                <span class="ct-user-name">Maria Logística</span>
+                            </div>
+                        </div>
+                    </div>
+                </header>
+
+                <!-- TÍTULO DA PÁGINA (Fora do header travado) -->
+                <div class="ct-page-title ct-reveal" style="margin-bottom: 24px;">
+                    <h1>Financeiro e Pagamentos</h1>
+                    <p>Controle suas despesas, acompanhe repasses aos motoristas e baixe faturas.</p>
+                </div>
+
+                <!-- METRICS GRID -->
+                <div class="ct-stats-grid ct-reveal">
+                    <div class="ct-stat-card">
+                        <div class="ct-stat-left">
+                            <h3>Total Pago no Mês</h3>
+                            <div class="ct-stat-value" style="color: var(--accent-green);">R$ 12.300</div>
+                            <div class="ct-stat-trend up">7 fretes liquidados</div>
+                        </div>
+                        <div class="ct-stat-icon green">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="24" height="24"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+                        </div>
+                    </div>
+                    <div class="ct-stat-card">
+                        <div class="ct-stat-left">
+                            <h3>Valores a Pagar</h3>
+                            <div class="ct-stat-value" style="color: var(--accent-orange);">R$ 2.800</div>
+                            <div class="ct-stat-trend">1 frete em andamento</div>
+                        </div>
+                        <div class="ct-stat-icon orange">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="24" height="24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                        </div>
+                    </div>
+                    <div class="ct-stat-card">
+                        <div class="ct-stat-left">
+                            <h3>Em Análise/Retidos</h3>
+                            <div class="ct-stat-value" style="color: var(--accent-red);">R$ 0,00</div>
+                            <div class="ct-stat-trend">Sem disputas ativas</div>
+                        </div>
+                        <div class="ct-stat-icon red">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="24" height="24"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/></svg>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- HISTÓRICO DE TRANSAÇÕES -->
+                <div class="ct-section-card ct-reveal" style="margin-top: 20px;">
+                    <div class="ct-section-header">
+                        <h2 class="ct-section-title">Histórico de Transações</h2>
+                        <button class="ct-btn ct-btn-outline ct-btn-sm" onclick="alert('Exportando CSV...')">Exportar Planilha</button>
+                    </div>
+
+                    <!-- Tabela de Transações -->
+                    <div style="overflow-x:auto;">
+                        <table style="width:100%; border-collapse:collapse; text-align:left; font-size:13px;">
+                            <thead>
+                                <tr style="border-bottom:1px solid var(--border-light); color:var(--text-muted); font-weight:700;">
+                                    <th style="padding:14px 10px;">ID do Frete</th>
+                                    <th style="padding:14px 10px;">Motorista</th>
+                                    <th style="padding:14px 10px;">Rota</th>
+                                    <th style="padding:14px 10px;">Data Conclusão</th>
+                                    <th style="padding:14px 10px;">Valor</th>
+                                    <th style="padding:14px 10px;">Status</th>
+                                    <th style="padding:14px 10px; text-align:right;">Ações</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <!-- Linha 1 -->
+                                <tr style="border-bottom:1px solid var(--border-light); color:var(--text-body);">
+                                    <td style="padding:16px 10px; font-weight:700; color:var(--text-dark);">#KG-1234</td>
+                                    <td style="padding:16px 10px; display:flex; align-items:center; gap:8px;">
+                                        <img src="../assets/images/motorista.png" alt="João" style="width:28px; height:28px; border-radius:50%; object-fit:cover;">
+                                        João Silva
+                                    </td>
+                                    <td style="padding:16px 10px;">Recife, PE → Natal, RN</td>
+                                    <td style="padding:16px 10px;">Em trânsito</td>
+                                    <td style="padding:16px 10px; font-weight:700;">R$ 2.800,00</td>
+                                    <td style="padding:16px 10px;"><span class="ct-badge ct-badge-orange"><span class="status-indicator-dot orange"></span>Aguardando Entrega</span></td>
+                                    <td style="padding:16px 10px; text-align:right;">
+                                        <button class="ct-btn ct-btn-secondary ct-btn-sm" style="opacity:0.5; cursor:not-allowed;" disabled>NF-e indisponível</button>
+                                    </td>
+                                </tr>
+                                <!-- Linha 2 -->
+                                <tr style="border-bottom:1px solid var(--border-light); color:var(--text-body);">
+                                    <td style="padding:16px 10px; font-weight:700; color:var(--text-dark);">#KG-1230</td>
+                                    <td style="padding:16px 10px; display:flex; align-items:center; gap:8px;">
+                                        <img src="../assets/images/motorista.png" alt="Ana" style="width:28px; height:28px; border-radius:50%; object-fit:cover;">
+                                        Ana Paula
+                                    </td>
+                                    <td style="padding:16px 10px;">Recife, PE → João Pessoa, PB</td>
+                                    <td style="padding:16px 10px;">05/06/2026</td>
+                                    <td style="padding:16px 10px; font-weight:700; color:var(--accent-green);">R$ 1.200,00</td>
+                                    <td style="padding:16px 10px;"><span class="ct-badge ct-badge-green"><span class="status-indicator-dot green"></span>Pago</span></td>
+                                    <td style="padding:16px 10px; text-align:right;">
+                                        <button class="ct-btn ct-btn-outline ct-btn-sm" onclick="alert('Fazendo download do comprovante...')">Comprovante</button>
+                                    </td>
+                                </tr>
+                                <!-- Linha 3 -->
+                                <tr style="border-bottom:1px solid var(--border-light); color:var(--text-body);">
+                                    <td style="padding:16px 10px; font-weight:700; color:var(--text-dark);">#KG-1225</td>
+                                    <td style="padding:16px 10px; display:flex; align-items:center; gap:8px;">
+                                        <img src="../assets/images/motorista.png" alt="Carlos" style="width:28px; height:28px; border-radius:50%; object-fit:cover;">
+                                        Carlos Santos
+                                    </td>
+                                    <td style="padding:16px 10px;">Recife, PE → Caruaru, PE</td>
+                                    <td style="padding:16px 10px;">30/05/2026</td>
+                                    <td style="padding:16px 10px; font-weight:700; color:var(--accent-green);">R$ 1.350,00</td>
+                                    <td style="padding:16px 10px;"><span class="ct-badge ct-badge-green"><span class="status-indicator-dot green"></span>Pago</span></td>
+                                    <td style="padding:16px 10px; text-align:right;">
+                                        <button class="ct-btn ct-btn-outline ct-btn-sm" onclick="alert('Fazendo download do comprovante...')">Comprovante</button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+            </div><!-- /ct-content-area -->
+        </main>
+    </div>
+
+    <!-- BOTTOM NAV MOBILE -->
+    <nav class="ct-bottom-nav">
+        <a href="dashboard.html" class="ct-bottom-item">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="9"/><rect x="14" y="3" width="7" height="5"/><rect x="14" y="12" width="7" height="9"/><rect x="3" y="16" width="7" height="5"/></svg>
+            Home
+        </a>
+        <a href="minhas-cargas.html" class="ct-bottom-item">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg>
+            Cargas
+        </a>
+        <a href="publicar-carga.html" class="ct-bottom-item" style="position:relative;">
+            <div style="width:48px;height:48px;border-radius:50%;background:var(--accent-blue);display:flex;align-items:center;justify-content:center;margin-top:-20px;box-shadow:0 4px 16px rgba(0,136,255,0.35);">
+                <svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5" width="22" height="22"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+            </div>
+            Publicar
+        </a>
+        <a href="chat.html" class="ct-bottom-item">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+            Chat
+        </a>
+        <a href="perfil.html" class="ct-bottom-item">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+            Perfil
+        </a>
+    </nav>
+
+    <script src="js/contratante.js"></script>
+</body>
+</html>

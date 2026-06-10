@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="KarGO — Chat. Comunique-se em tempo real com seus motoristas parceiros.">
+    <title>KarGO — Chat de Mensagens</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/contratante.css">
+    <style>
+        .ct-chat-layout {
+            display: grid;
+            grid-template-columns: 320px 1fr;
+            height: calc(100vh - 170px);
+            background: var(--bg-card);
+            border: 1px solid var(--border-light);
+            border-radius: var(--radius-lg);
+            overflow: hidden;
+            box-shadow: var(--shadow-sm);
+        }
+        .ct-chat-sidebar {
+            border-right: 1px solid var(--border-light);
+            display: flex;
+            flex-direction: column;
+            background: #fff;
+        }
+        .ct-chat-search {
+            padding: 16px;
+            border-bottom: 1px solid var(--border-light);
+        }
+        .ct-chat-search input {
+            width: 100%;
+            padding: 10px 12px;
+            border: 1px solid var(--border-light);
+            border-radius: var(--radius-sm);
+            background: var(--bg-body);
+            font-size: 13px;
+            outline: none;
+        }
+        .ct-chat-list {
+            flex: 1;
+            overflow-y: auto;
+        }
+        .ct-chat-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 16px;
+            border-bottom: 1px solid var(--border-light);
+            cursor: pointer;
+            transition: var(--transition-fast);
+        }
+        .ct-chat-item:hover, .ct-chat-item.active {
+            background: var(--bg-body);
+        }
+        .ct-chat-item-avatar {
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 2px solid var(--accent-blue-light);
+        }
+        .ct-chat-item-info {
+            flex: 1;
+            min-width: 0;
+        }
+        .ct-chat-item-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+            margin-bottom: 4px;
+        }
+        .ct-chat-item-name {
+            font-size: 14px;
+            font-weight: 700;
+            color: var(--text-dark);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        .ct-chat-item-time {
+            font-size: 11px;
+            color: var(--text-muted);
+        }
+        .ct-chat-item-msg {
+            font-size: 12px;
+            color: var(--text-body);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        .ct-chat-main {
+            display: flex;
+            flex-direction: column;
+            background: var(--bg-body);
+        }
+        .ct-chat-header {
+            padding: 16px 24px;
+            background: #fff;
+            border-bottom: 1px solid var(--border-light);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .ct-chat-user-details {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        .ct-chat-messages {
+            flex: 1;
+            padding: 24px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+        .ct-chat-bubble {
+            max-width: 60%;
+            padding: 12px 16px;
+            border-radius: 16px;
+            font-size: 14px;
+            line-height: 1.5;
+            position: relative;
+        }
+        .ct-chat-bubble.sent {
+            background: var(--accent-blue);
+            color: #fff;
+            align-self: flex-end;
+            border-bottom-right-radius: 4px;
+        }
+        .ct-chat-bubble.received {
+            background: #fff;
+            color: var(--text-dark);
+            align-self: flex-start;
+            border-bottom-left-radius: 4px;
+            border: 1px solid var(--border-light);
+        }
+        .ct-chat-bubble-time {
+            font-size: 10px;
+            margin-top: 6px;
+            text-align: right;
+            opacity: 0.7;
+        }
+        .ct-chat-bubble.received .ct-chat-bubble-time {
+            color: var(--text-muted);
+        }
+        .ct-chat-input-area {
+            padding: 16px 24px;
+            background: #fff;
+            border-top: 1px solid var(--border-light);
+            display: flex;
+            gap: 12px;
+            align-items: center;
+        }
+        .ct-chat-input {
+            flex: 1;
+            padding: 12px 16px;
+            border: 1px solid var(--border-light);
+            border-radius: var(--radius-pill);
+            outline: none;
+            font-size: 14px;
+            background: var(--bg-body);
+        }
+        .ct-chat-context-card {
+            background: var(--accent-blue-light);
+            border: 1px solid rgba(0,136,255,0.1);
+            padding: 12px 16px;
+            border-radius: var(--radius-sm);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 13px;
+            margin: 0 24px 16px;
+        }
+    </style>
+</head>
+<body>
+    <div class="layout-container">
+
+        <!-- SIDEBAR DARK -->
+        <aside class="ct-sidebar">
+            <div class="ct-sidebar-logo">
+                <a href="../index.html"><img src="../assets/images/LOGO.png" alt="KarGO" class="logo-img"></a>
+            </div>
+            <nav class="ct-sidebar-menu">
+                <div class="ct-sidebar-links">
+                    <a href="dashboard.html" class="ct-menu-item">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="9"/><rect x="14" y="3" width="7" height="5"/><rect x="14" y="12" width="7" height="9"/><rect x="3" y="16" width="7" height="5"/></svg>
+                        Dashboard
+                    </a>
+                    <a href="publicar-carga.html" class="ct-menu-item">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="16"/><line x1="8" y1="12" x2="16" y2="12"/></svg>
+                        Publicar Carga
+                    </a>
+                    <a href="minhas-cargas.html" class="ct-menu-item">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><polyline points="3.27 6.96 12 12.01 20.73 6.96"/><line x1="12" y1="22.08" x2="12" y2="12"/></svg>
+                        Acompanhar Cargas
+                    </a>
+                    <a href="pagamentos.html" class="ct-menu-item">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="4" width="22" height="16" rx="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>
+                        Pagamentos
+                    </a>
+                    <a href="chat.html" class="ct-menu-item active">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+                        Chat
+                        <span class="chat-badge-dot"></span>
+                    </a>
+                    <a href="ocorrencias.html" class="ct-menu-item">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+                        Ocorrências
+                    </a>
+                    <div class="ct-sidebar-divider"></div>
+                    <a href="perfil.html" class="ct-menu-item">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+                        Meu Perfil
+                    </a>
+                </div>
+                <div class="ct-sidebar-bottom">
+                    <a href="configuracoes.html" class="ct-menu-item">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.6 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.6a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9c.26.604.852.997 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+                        Configurações
+                    </a>
+                </div>
+            </nav>
+        </aside>
+
+        <!-- CONTEÚDO PRINCIPAL -->
+        <main class="main-content" style="padding-bottom: 24px;">
+            <div class="ct-content-area">
+
+                <!-- TOPBAR -->
+                <header class="ct-topbar">
+                    <div class="ct-topbar-mobile-logo">
+                        <a href="../index.html"><img src="../assets/images/LOGO.png" alt="KarGO" class="logo-img-mobile"></a>
+                    </div>
+                    <div class="ct-topbar-actions">
+                        <div class="ct-user-profile">
+                            <img src="../assets/images/embarcador.png" alt="Maria" class="ct-user-avatar">
+                            <div class="ct-user-info">
+                                <span class="ct-user-name">Maria Logística</span>
+                            </div>
+                        </div>
+                    </div>
+                </header>
+
+                <!-- TÍTULO DA PÁGINA (Fora do header travado) -->
+                <div class="ct-page-title ct-reveal" style="margin-bottom: 24px;">
+                    <h1>Mensagens do Frete</h1>
+                    <p>Fale diretamente com os motoristas responsáveis pelo transporte das suas cargas.</p>
+                </div>
+
+                <!-- LAYOUT DO CHAT -->
+                <div class="ct-chat-layout ct-reveal">
+                    
+                    <!-- Sidebar do Chat -->
+                    <div class="ct-chat-sidebar">
+                        <div class="ct-chat-search">
+                            <input type="text" placeholder="Buscar conversa...">
+                        </div>
+                        <div class="ct-chat-list">
+                            <!-- Conversa Ativa -->
+                            <div class="ct-chat-item active">
+                                <img src="../assets/images/motorista.png" alt="João Silva" class="ct-chat-item-avatar">
+                                <div class="ct-chat-item-info">
+                                    <div class="ct-chat-item-header">
+                                        <span class="ct-chat-item-name">João Silva</span>
+                                        <span class="ct-chat-item-time">14:30</span>
+                                    </div>
+                                    <p class="ct-chat-item-msg">BR-101, Km 85 — Acabei de passar do posto fiscal.</p>
+                                </div>
+                            </div>
+                            <!-- Conversa 2 -->
+                            <div class="ct-chat-item" onclick="alert('Histórico de conversa antiga...')">
+                                <img src="../assets/images/motorista.png" alt="Carlos Santos" class="ct-chat-item-avatar">
+                                <div class="ct-chat-item-info">
+                                    <div class="ct-chat-item-header">
+                                        <span class="ct-chat-item-name">Carlos Santos</span>
+                                        <span class="ct-chat-item-time">Ontem</span>
+                                    </div>
+                                    <p class="ct-chat-item-msg">Certo, aceito sim os R$ 1.350.</p>
+                                </div>
+                            </div>
+                            <!-- Conversa 3 -->
+                            <div class="ct-chat-item" onclick="alert('Histórico de conversa antiga...')">
+                                <img src="../assets/images/motorista.png" alt="Ana Paula" class="ct-chat-item-avatar">
+                                <div class="ct-chat-item-info">
+                                    <div class="ct-chat-item-header">
+                                        <span class="ct-chat-item-name">Ana Paula</span>
+                                        <span class="ct-chat-item-time">05/06</span>
+                                    </div>
+                                    <p class="ct-chat-item-msg">Carga entregue. Aguardo a confirmação.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Main Chat Area -->
+                    <div class="ct-chat-main">
+                        <!-- Header do chat -->
+                        <div class="ct-chat-header">
+                            <div class="ct-chat-user-details">
+                                <img src="../assets/images/motorista.png" alt="João Silva" style="width:40px; height:40px; border-radius:50%; object-fit:cover;">
+                                <div>
+                                    <h4 style="font-size:14px; font-weight:700; color:var(--text-dark);">João Silva</h4>
+                                    <p style="font-size:11px; color:var(--accent-green); font-weight:600; display:flex; align-items:center; gap:4px;">
+                                        <span class="status-indicator-dot green"></span> Online · Frete #KG-2026-1234
+                                    </p>
+                                </div>
+                            </div>
+                            <div style="display:flex; gap:10px;">
+                                <a href="rastreamento.html" class="ct-btn ct-btn-outline ct-btn-sm">Rastrear Veículo</a>
+                                <a href="detalhes-frete.html" class="ct-btn ct-btn-secondary ct-btn-sm" style="color:var(--accent-red); border-color:var(--accent-red-light);">Reportar Ocorrência</a>
+                            </div>
+                        </div>
+
+                        <!-- Card de Contexto Automático -->
+                        <div class="ct-chat-context-card" style="margin-top:16px;">
+                            <div style="display:flex; align-items:center; gap:12px;">
+                                <div style="color:var(--accent-blue);">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="22" height="22"><rect x="1" y="3" width="15" height="13" rx="2" ry="2"/><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>
+                                </div>
+                                <div>
+                                    <span style="font-weight:700; color:var(--text-dark);">Status do Frete: Em Trânsito</span>
+                                    <p style="font-size:11px; color:var(--text-body); margin-top:2px;">João Silva está a caminho de Natal, RN. Previsão de chegada: 18:30.</p>
+                                </div>
+                            </div>
+                            <a href="detalhes-frete.html" class="ct-btn ct-btn-primary ct-btn-sm" style="box-shadow:none;">Ver Painel</a>
+                        </div>
+
+                        <!-- Balões de conversa -->
+                        <div class="ct-chat-messages">
+                            <div class="ct-chat-bubble received">
+                                Olá Maria, bom dia! A carga já foi carregada e devidamente lacrada no veículo.
+                                <div class="ct-chat-bubble-time">08:15</div>
+                            </div>
+                            <div class="ct-chat-bubble sent">
+                                Bom dia, João! Excelente. Por favor, lembre de atualizar o rastreamento e nos manter avisados de qualquer parada.
+                                <div class="ct-chat-bubble-time">08:20 ✓✓</div>
+                            </div>
+                            <div class="ct-chat-bubble received">
+                                Pode deixar, já saí de Recife e estou pegando a BR-101 sentido norte. Tudo sob controle.
+                                <div class="ct-chat-bubble-time">08:32</div>
+                            </div>
+                            <div class="ct-chat-bubble received">
+                                BR-101, Km 85 — Acabei de passar do posto fiscal. Sem filas, seguindo viagem normal.
+                                <div class="ct-chat-bubble-time">14:30</div>
+                            </div>
+                        </div>
+
+                        <!-- Atalhos Rápidos de Texto -->
+                        <div style="padding: 10px 24px; display:flex; gap:8px; overflow-x:auto; background:#fff; border-top:1px solid var(--border-light);">
+                            <button class="ct-btn ct-btn-secondary ct-btn-sm" style="border-radius:20px;" onclick="document.getElementById('chat-input').value = 'Qual a sua previsão de chegada?';">Qual a previsão?</button>
+                            <button class="ct-btn ct-btn-secondary ct-btn-sm" style="border-radius:20px;" onclick="document.getElementById('chat-input').value = 'Está tudo certo com a carga?';">Tudo certo?</button>
+                            <button class="ct-btn ct-btn-secondary ct-btn-sm" style="border-radius:20px;" onclick="document.getElementById('chat-input').value = 'Favor enviar foto dos canhotos das notas fiscais.';">Enviar canhoto</button>
+                        </div>
+
+                        <!-- Input Area -->
+                        <div class="ct-chat-input-area">
+                            <button class="ct-btn ct-btn-secondary ct-btn-icon" style="border-radius:50%; display:flex; align-items:center; justify-content:center;" onclick="alert('Simulação de anexo...')">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18"><path d="M21.44 11.05l-9.19 9.19a6 6 0 0 1-8.49-8.49l9.19-9.19a4 4 0 0 1 5.66 5.66l-9.2 9.19a2 2 0 0 1-2.83-2.83l8.49-8.48"/></svg>
+                            </button>
+                            <input type="text" id="chat-input" class="ct-chat-input" placeholder="Digite uma mensagem para João Silva..." onkeydown="if(event.key === 'Enter') sendChatMessage()">
+                            <button class="ct-btn ct-btn-primary" style="padding: 12px 20px; border-radius:30px; box-shadow:none;" onclick="sendChatMessage()">Enviar</button>
+                        </div>
+                    </div>
+
+                </div>
+
+            </div><!-- /ct-content-area -->
+        </main>
+    </div>
+
+    <!-- BOTTOM NAV MOBILE -->
+    <nav class="ct-bottom-nav">
+        <a href="dashboard.html" class="ct-bottom-item">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="9"/><rect x="14" y="3" width="7" height="5"/><rect x="14" y="12" width="7" height="9"/><rect x="3" y="16" width="7" height="5"/></svg>
+            Home
+        </a>
+        <a href="minhas-cargas.html" class="ct-bottom-item">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg>
+            Cargas
+        </a>
+        <a href="publicar-carga.html" class="ct-bottom-item" style="position:relative;">
+            <div style="width:48px;height:48px;border-radius:50%;background:var(--accent-blue);display:flex;align-items:center;justify-content:center;margin-top:-20px;box-shadow:0 4px 16px rgba(0,136,255,0.35);">
+                <svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5" width="22" height="22"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+            </div>
+            Publicar
+        </a>
+        <a href="chat.html" class="ct-bottom-item active">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+            Chat
+        </a>
+        <a href="perfil.html" class="ct-bottom-item">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+            Perfil
+        </a>
+    </nav>
+
+    <script src="js/contratante.js"></script>
+</body>
+</html>

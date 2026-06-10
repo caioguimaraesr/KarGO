@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="KarGO — Configurações. Gerencie suas preferências de privacidade, notificações e alertas automáticos.">
+    <title>KarGO — Configurações da Conta</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/contratante.css">
+</head>
+<body>
+    <div class="layout-container">
+
+        <!-- SIDEBAR DARK -->
+        <aside class="ct-sidebar">
+            <div class="ct-sidebar-logo">
+                <a href="../index.html"><img src="../assets/images/LOGO.png" alt="KarGO" class="logo-img"></a>
+            </div>
+            <nav class="ct-sidebar-menu">
+                <div class="ct-sidebar-links">
+                    <a href="dashboard.html" class="ct-menu-item">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="9"/><rect x="14" y="3" width="7" height="5"/><rect x="14" y="12" width="7" height="9"/><rect x="3" y="16" width="7" height="5"/></svg>
+                        Dashboard
+                    </a>
+                    <a href="publicar-carga.html" class="ct-menu-item">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="16"/><line x1="8" y1="12" x2="16" y2="12"/></svg>
+                        Publicar Carga
+                    </a>
+                    <a href="minhas-cargas.html" class="ct-menu-item">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><polyline points="3.27 6.96 12 12.01 20.73 6.96"/><line x1="12" y1="22.08" x2="12" y2="12"/></svg>
+                        Minhas Cargas
+                    </a>
+                    <a href="pagamentos.html" class="ct-menu-item">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="4" width="22" height="16" rx="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>
+                        Pagamentos
+                    </a>
+                    <a href="chat.html" class="ct-menu-item">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+                        Chat
+                        <span class="chat-badge-dot"></span>
+                    </a>
+                    <a href="ocorrencias.html" class="ct-menu-item">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+                        Ocorrências
+                    </a>
+                    <div class="ct-sidebar-divider"></div>
+                    <a href="perfil.html" class="ct-menu-item">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+                        Meu Perfil
+                    </a>
+                </div>
+                <div class="ct-sidebar-bottom">
+                    <a href="configuracoes.html" class="ct-menu-item active">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.6 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.6a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9c.26.604.852.997 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+                        Configurações
+                    </a>
+                </div>
+            </nav>
+        </aside>
+
+        <!-- CONTEÚDO PRINCIPAL -->
+        <main class="main-content">
+            <div class="ct-content-area">
+
+                <!-- TOPBAR -->
+                <header class="ct-topbar">
+                    <div class="ct-topbar-mobile-logo">
+                        <a href="../index.html"><img src="../assets/images/LOGO.png" alt="KarGO" class="logo-img-mobile"></a>
+                    </div>
+                    <div class="ct-topbar-actions">
+                        <div class="ct-user-profile">
+                            <img src="../assets/images/embarcador.png" alt="Maria" class="ct-user-avatar">
+                            <div class="ct-user-info">
+                                <span class="ct-user-name">Maria Logística</span>
+                            </div>
+                        </div>
+                    </div>
+                </header>
+
+                <!-- TÍTULO DA PÁGINA (Fora do header travado) -->
+                <div class="ct-page-title ct-reveal" style="margin-bottom: 24px;">
+                    <h1 style="display:flex; align-items:center; gap:8px;">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="24" height="24" style="color:var(--text-dark);"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.6 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.6a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9c.26.604.852.997 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+                        Configurações
+                    </h1>
+                    <p>Ajuste suas preferências operacionais de rastreamento, notificações e dados da conta.</p>
+                </div>
+
+                <!-- GRID CONFIGURAÇÕES -->
+                <div class="ct-grid-equal ct-reveal">
+                    
+                    <!-- Coluna Esquerda: Rastreamento & Alertas -->
+                    <div>
+                        <!-- Preferências de Acompanhamento -->
+                        <div class="ct-section-card">
+                            <h3 class="ct-section-title" style="margin-bottom:12px;">Preferências de Rastreamento</h3>
+                            <p style="font-size:13px; color:var(--text-muted); margin-bottom:20px;">Defina como deseja monitorar os motoristas contratados durante as entregas.</p>
+
+                            <div style="display:flex; flex-direction:column; gap:16px;">
+                                <div>
+                                    <label style="display:block; font-size:13px; font-weight:700; color:var(--text-dark); margin-bottom:6px;">Frequência de Atualização GPS</label>
+                                    <select style="width:100%; padding:10px 12px; border:1px solid var(--border-light); border-radius:var(--radius-sm); font-size:13px; outline:none; background:var(--bg-body); color:var(--text-body);">
+                                        <option>A cada 2 minutos (Altamente Recomendado)</option>
+                                        <option>A cada 5 minutos</option>
+                                        <option>A cada 15 minutos</option>
+                                        <option>Somente em paradas e eventos chaves</option>
+                                    </select>
+                                </div>
+
+                                <div style="margin-top:8px;">
+                                    <h4 style="font-size:13px; font-weight:700; color:var(--text-dark); margin-bottom:10px;">Alertas de Segurança Automáticos</h4>
+                                    <div style="display:flex; flex-direction:column; gap:10px; font-size:13px; color:var(--text-body);">
+                                        <label style="display:flex; align-items:center; gap:8px; cursor:pointer;">
+                                            <input type="checkbox" checked> Alerta se o veículo desviar da rota traçada em > 5km
+                                        </label>
+                                        <label style="display:flex; align-items:center; gap:8px; cursor:pointer;">
+                                            <input type="checkbox" checked> Alerta de parada não autorizada superior a 30 min
+                                        </label>
+                                        <label style="display:flex; align-items:center; gap:8px; cursor:pointer;">
+                                            <input type="checkbox" checked> Alerta de velocidade acima do limite da via
+                                        </label>
+                                        <label style="display:flex; align-items:center; gap:8px; cursor:pointer;">
+                                            <input type="checkbox"> Alerta de movimentação noturna (22h às 05h)
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Notificações -->
+                        <div class="ct-section-card">
+                            <h3 class="ct-section-title" style="margin-bottom:12px;">Canais de Notificação</h3>
+                            <p style="font-size:13px; color:var(--text-muted); margin-bottom:20px;">Escolha por onde quer receber atualizações dos fretes ativas e propostas.</p>
+
+                            <div style="display:flex; flex-direction:column; gap:12px; font-size:13px; color:var(--text-body);">
+                                <label style="display:flex; align-items:center; gap:8px; cursor:pointer;">
+                                    <input type="checkbox" checked> Notificações no navegador (Push)
+                                </label>
+                                <label style="display:flex; align-items:center; gap:8px; cursor:pointer;">
+                                    <input type="checkbox" checked> E-mail diário com resumo das entregas
+                                </label>
+                                <label style="display:flex; align-items:center; gap:8px; cursor:pointer;">
+                                    <input type="checkbox" checked> E-mail imediato para novas Ocorrências e Alertas
+                                </label>
+                                <label style="display:flex; align-items:center; gap:8px; cursor:pointer;">
+                                    <input type="checkbox"> WhatsApp corporativo para aviso de entregas finalizadas
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Coluna Direita: Dados de Segurança e Senha -->
+                    <div>
+                        <!-- Alteração de Senha -->
+                        <div class="ct-section-card">
+                            <h3 class="ct-section-title" style="margin-bottom:16px;">Segurança da Conta</h3>
+                            
+                            <div style="display:flex; flex-direction:column; gap:16px;">
+                                <div>
+                                    <label style="display:block; font-size:13px; font-weight:600; color:var(--text-body); margin-bottom:6px;">Senha Atual</label>
+                                    <input type="password" placeholder="••••••••" style="width:100%; padding:10px 12px; border:1px solid var(--border-light); border-radius:var(--radius-sm); outline:none; background:var(--bg-body);">
+                                </div>
+                                <div>
+                                    <label style="display:block; font-size:13px; font-weight:600; color:var(--text-body); margin-bottom:6px;">Nova Senha</label>
+                                    <input type="password" placeholder="Nova senha (min. 8 caracteres)" style="width:100%; padding:10px 12px; border:1px solid var(--border-light); border-radius:var(--radius-sm); outline:none; background:var(--bg-body);">
+                                </div>
+                                <div>
+                                    <label style="display:block; font-size:13px; font-weight:600; color:var(--text-body); margin-bottom:6px;">Confirmar Nova Senha</label>
+                                    <input type="password" placeholder="Confirme a nova senha" style="width:100%; padding:10px 12px; border:1px solid var(--border-light); border-radius:var(--radius-sm); outline:none; background:var(--bg-body);">
+                                </div>
+                                
+                                <button class="ct-btn ct-btn-primary ct-btn-sm" style="align-self:flex-start; margin-top:8px;" onclick="alert('Senha atualizada com sucesso!')">Atualizar Senha</button>
+                            </div>
+                        </div>
+
+                        <!-- Termos e LGPD -->
+                        <div class="ct-section-card">
+                            <h3 class="ct-section-title" style="margin-bottom:12px;">Privacidade e LGPD</h3>
+                            <p style="font-size:13px; color:var(--text-body); line-height:1.5;">
+                                Seus dados estão protegidos de acordo com as diretrizes da LGPD corporativa da KarGO. Compartilhamos localização de carga com motoristas apenas durante a execução ativa de cada contrato.
+                            </p>
+                            <div style="margin-top:16px; display:flex; gap:12px;">
+                                <button class="ct-btn ct-btn-secondary ct-btn-sm" style="flex:1;" onclick="alert('Abrindo termos de uso...')">Termos de Serviço</button>
+                                <button class="ct-btn ct-btn-secondary ct-btn-sm" style="flex:1;" onclick="alert('Abrindo políticas de privacidade...')">Políticas</button>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+            </div><!-- /ct-content-area -->
+        </main>
+    </div>
+
+    <!-- BOTTOM NAV MOBILE -->
+    <nav class="ct-bottom-nav">
+        <a href="dashboard.html" class="ct-bottom-item">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="9"/><rect x="14" y="3" width="7" height="5"/><rect x="14" y="12" width="7" height="9"/><rect x="3" y="16" width="7" height="5"/></svg>
+            Home
+        </a>
+        <a href="minhas-cargas.html" class="ct-bottom-item">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg>
+            Cargas
+        </a>
+        <a href="publicar-carga.html" class="ct-bottom-item" style="position:relative;">
+            <div style="width:48px;height:48px;border-radius:50%;background:var(--accent-blue);display:flex;align-items:center;justify-content:center;margin-top:-20px;box-shadow:0 4px 16px rgba(0,136,255,0.35);">
+                <svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5" width="22" height="22"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+            </div>
+            Publicar
+        </a>
+        <a href="chat.html" class="ct-bottom-item">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+            Chat
+        </a>
+        <a href="perfil.html" class="ct-bottom-item">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+            Perfil
+        </a>
+    </nav>
+
+    <script src="js/contratante.js"></script>
+</body>
+</html>

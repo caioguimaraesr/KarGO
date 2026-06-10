@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="KarGO — Publicar Carga. Cadastre suas demandas de transporte em nosso marketplace em 5 etapas simples.">
+    <title>KarGO — Publicar Carga</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/contratante.css">
+</head>
+<body>
+    <div class="layout-container">
+
+        <!-- SIDEBAR DARK -->
+        <aside class="ct-sidebar">
+            <div class="ct-sidebar-logo">
+                <a href="../index.html"><img src="../assets/images/LOGO.png" alt="KarGO" class="logo-img"></a>
+            </div>
+            <nav class="ct-sidebar-menu">
+                <div class="ct-sidebar-links">
+                    <a href="dashboard.html" class="ct-menu-item">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="9"/><rect x="14" y="3" width="7" height="5"/><rect x="14" y="12" width="7" height="9"/><rect x="3" y="16" width="7" height="5"/></svg>
+                        Dashboard
+                    </a>
+                    <a href="publicar-carga.html" class="ct-menu-item active">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="16"/><line x1="8" y1="12" x2="16" y2="12"/></svg>
+                        Publicar Carga
+                    </a>
+                    <a href="minhas-cargas.html" class="ct-menu-item">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><polyline points="3.27 6.96 12 12.01 20.73 6.96"/><line x1="12" y1="22.08" x2="12" y2="12"/></svg>
+                        Acompanhar Cargas
+                    </a>
+                    <a href="pagamentos.html" class="ct-menu-item">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="4" width="22" height="16" rx="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>
+                        Pagamentos
+                    </a>
+                    <a href="chat.html" class="ct-menu-item">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+                        Chat
+                        <span class="chat-badge-dot"></span>
+                    </a>
+                    <a href="ocorrencias.html" class="ct-menu-item">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+                        Ocorrências
+                    </a>
+                    <div class="ct-sidebar-divider"></div>
+                    <a href="perfil.html" class="ct-menu-item">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+                        Meu Perfil
+                    </a>
+                </div>
+                <div class="ct-sidebar-bottom">
+                    <a href="configuracoes.html" class="ct-menu-item">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.6 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.6a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9c.26.604.852.997 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+                        Configurações
+                    </a>
+                </div>
+            </nav>
+        </aside>
+
+        <!-- CONTEÚDO PRINCIPAL -->
+        <main class="main-content">
+            <div class="ct-content-area">
+
+                <!-- TOPBAR -->
+                <header class="ct-topbar">
+                    <div class="ct-topbar-mobile-logo">
+                        <a href="../index.html"><img src="../assets/images/LOGO.png" alt="KarGO" class="logo-img-mobile"></a>
+                    </div>
+                    <div class="ct-topbar-actions">
+                        <div class="ct-user-profile">
+                            <img src="../assets/images/embarcador.png" alt="Maria" class="ct-user-avatar">
+                            <div class="ct-user-info">
+                                <span class="ct-user-name">Maria Logística</span>
+                            </div>
+                        </div>
+                    </div>
+                </header>
+
+                <!-- TÍTULO DA PÁGINA (Fora do header travado) -->
+                <div class="ct-page-title ct-reveal" style="margin-bottom: 24px;">
+                    <h1>Publicar Nova Carga</h1>
+                    <p>Anuncie sua carga no marketplace e receba propostas de motoristas verificados.</p>
+                </div>
+
+                <!-- WIZARD CONTAINER -->
+                <div class="ct-section-card ct-reveal ct-wizard" style="max-width: 800px; margin: 0 auto; padding: 40px 30px;">
+                    
+                    <!-- Linha de Progresso Visual -->
+                    <div class="ct-wizard-progress" style="display:flex; align-items:center; justify-content:space-between; margin-bottom:40px; position:relative;">
+                        <!-- Step 1 -->
+                        <div style="display:flex; flex-direction:column; align-items:center; z-index:2; flex:1;">
+                            <div class="ct-wizard-dot active" style="width:36px; height:36px; border-radius:50%; background:#fff; border:2px solid var(--border-light); color:var(--text-muted); display:flex; align-items:center; justify-content:center; font-weight:700; font-size:14px; transition:var(--transition);">1</div>
+                            <span style="font-size:11px; font-weight:700; color:var(--text-muted); margin-top:8px; text-transform:uppercase;">Tipo Carga</span>
+                        </div>
+                        <div class="ct-wizard-line" style="flex:1; height:3px; background:var(--border-light); margin-top:-20px; transition:var(--transition);"></div>
+
+                        <!-- Step 2 -->
+                        <div style="display:flex; flex-direction:column; align-items:center; z-index:2; flex:1;">
+                            <div class="ct-wizard-dot" style="width:36px; height:36px; border-radius:50%; background:#fff; border:2px solid var(--border-light); color:var(--text-muted); display:flex; align-items:center; justify-content:center; font-weight:700; font-size:14px; transition:var(--transition);">2</div>
+                            <span style="font-size:11px; font-weight:700; color:var(--text-muted); margin-top:8px; text-transform:uppercase;">Dimensões</span>
+                        </div>
+                        <div class="ct-wizard-line" style="flex:1; height:3px; background:var(--border-light); margin-top:-20px; transition:var(--transition);"></div>
+
+                        <!-- Step 3 -->
+                        <div style="display:flex; flex-direction:column; align-items:center; z-index:2; flex:1;">
+                            <div class="ct-wizard-dot" style="width:36px; height:36px; border-radius:50%; background:#fff; border:2px solid var(--border-light); color:var(--text-muted); display:flex; align-items:center; justify-content:center; font-weight:700; font-size:14px; transition:var(--transition);">3</div>
+                            <span style="font-size:11px; font-weight:700; color:var(--text-muted); margin-top:8px; text-transform:uppercase;">Rota</span>
+                        </div>
+                        <div class="ct-wizard-line" style="flex:1; height:3px; background:var(--border-light); margin-top:-20px; transition:var(--transition);"></div>
+
+                        <!-- Step 4 -->
+                        <div style="display:flex; flex-direction:column; align-items:center; z-index:2; flex:1;">
+                            <div class="ct-wizard-dot" style="width:36px; height:36px; border-radius:50%; background:#fff; border:2px solid var(--border-light); color:var(--text-muted); display:flex; align-items:center; justify-content:center; font-weight:700; font-size:14px; transition:var(--transition);">4</div>
+                            <span style="font-size:11px; font-weight:700; color:var(--text-muted); margin-top:8px; text-transform:uppercase;">Veículo</span>
+                        </div>
+                        <div class="ct-wizard-line" style="flex:1; height:3px; background:var(--border-light); margin-top:-20px; transition:var(--transition);"></div>
+
+                        <!-- Step 5 -->
+                        <div style="display:flex; flex-direction:column; align-items:center; z-index:2; flex:1;">
+                            <div class="ct-wizard-dot" style="width:36px; height:36px; border-radius:50%; background:#fff; border:2px solid var(--border-light); color:var(--text-muted); display:flex; align-items:center; justify-content:center; font-weight:700; font-size:14px; transition:var(--transition);">5</div>
+                            <span style="font-size:11px; font-weight:700; color:var(--text-muted); margin-top:8px; text-transform:uppercase;">Confirmação</span>
+                        </div>
+                    </div>
+
+                    <!-- ETAPA 1: Tipo de Carga -->
+                    <div class="ct-wizard-panel active" id="step-1">
+                        <h2 style="font-size:20px; font-weight:800; color:var(--text-dark); margin-bottom:10px;">Selecione o tipo de carga</h2>
+                        <p style="font-size:14px; color:var(--text-muted); margin-bottom:24px;">Escolha a categoria que melhor define as mercadorias que serão transportadas.</p>
+                        
+                        <div class="ct-option-list ct-grid-2col-responsive" data-type="radio">
+                            <div class="ct-option-item selected" style="padding:16px; border:1px solid var(--border-light); border-radius:var(--radius-md); display:flex; align-items:center; gap:16px; cursor:pointer;">
+                                <input type="radio" name="tipo-carga" value="seca" checked style="display:none;">
+                                <div style="color:var(--accent-blue);">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="32" height="32"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg>
+                                </div>
+                                <div>
+                                    <h4 style="font-size:14px; font-weight:700; color:var(--text-dark);">Carga Seca</h4>
+                                    <p style="font-size:12px; color:var(--text-muted); margin-top:2px;">Produtos manufaturados, caixas, móveis, etc.</p>
+                                </div>
+                            </div>
+                            <div class="ct-option-item" style="padding:16px; border:1px solid var(--border-light); border-radius:var(--radius-md); display:flex; align-items:center; gap:16px; cursor:pointer;">
+                                <input type="radio" name="tipo-carga" value="alimentos" style="display:none;">
+                                <div style="color:var(--accent-green);">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="32" height="32"><path d="M12 2a10 10 0 1 0 10 10H12V2z"/><path d="M12 2a10 10 0 0 1 10 10h-10V2z"/></svg>
+                                </div>
+                                <div>
+                                    <h4 style="font-size:14px; font-weight:700; color:var(--text-dark);">Alimentos e Perecíveis</h4>
+                                    <p style="font-size:12px; color:var(--text-muted); margin-top:2px;">Frutas, vegetais, grãos ou frigorificados.</p>
+                                </div>
+                            </div>
+                            <div class="ct-option-item" style="padding:16px; border:1px solid var(--border-light); border-radius:var(--radius-md); display:flex; align-items:center; gap:16px; cursor:pointer;">
+                                <input type="radio" name="tipo-carga" value="perigosa" style="display:none;">
+                                <div style="color:var(--accent-red);">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="32" height="32"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+                                </div>
+                                <div>
+                                    <h4 style="font-size:14px; font-weight:700; color:var(--text-dark);">Carga Perigosa</h4>
+                                    <p style="font-size:12px; color:var(--text-muted); margin-top:2px;">Combustíveis, químicos ou inflamáveis.</p>
+                                </div>
+                            </div>
+                            <div class="ct-option-item" style="padding:16px; border:1px solid var(--border-light); border-radius:var(--radius-md); display:flex; align-items:center; gap:16px; cursor:pointer;">
+                                <input type="radio" name="tipo-carga" value="outros" style="display:none;">
+                                <div style="color:var(--accent-purple);">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="32" height="32"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.6 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.6a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9c.26.604.852.997 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+                                </div>
+                                <div>
+                                    <h4 style="font-size:14px; font-weight:700; color:var(--text-dark);">Equipamentos</h4>
+                                    <p style="font-size:12px; color:var(--text-muted); margin-top:2px;">Peças mecânicas, tratores ou motores.</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div style="display:flex; justify-content:flex-end; margin-top:30px;">
+                            <button class="ct-btn ct-btn-primary" onclick="wizardNext()">Avançar</button>
+                        </div>
+                    </div>
+
+                    <!-- ETAPA 2: Dimensões e Peso -->
+                    <div class="ct-wizard-panel" id="step-2">
+                        <h2 style="font-size:20px; font-weight:800; color:var(--text-dark); margin-bottom:10px;">Peso e Dimensões</h2>
+                        <p style="font-size:14px; color:var(--text-muted); margin-bottom:24px;">Informe o peso estimado da carga e o volume ocupado para calcular os requisitos de espaço.</p>
+                        
+                        <div class="ct-grid-2col-responsive">
+                            <div>
+                                <label style="display:block; font-size:13px; font-weight:600; color:var(--text-body); margin-bottom:6px;">Peso Estimado (em Toneladas)</label>
+                                <input type="number" placeholder="Ex: 8.5" style="width:100%; padding:12px; border:1px solid var(--border-light); border-radius:var(--radius-sm); outline:none; background:var(--bg-body);">
+                            </div>
+                            <div>
+                                <label style="display:block; font-size:13px; font-weight:600; color:var(--text-body); margin-bottom:6px;">Volume Ocupado (m³ - Opcional)</label>
+                                <input type="number" placeholder="Ex: 35" style="width:100%; padding:12px; border:1px solid var(--border-light); border-radius:var(--radius-sm); outline:none; background:var(--bg-body);">
+                            </div>
+                            <div style="grid-column: span 2;">
+                                <label style="display:block; font-size:13px; font-weight:600; color:var(--text-body); margin-bottom:6px;">Descrição da Carga e Embalagem</label>
+                                <textarea placeholder="Ex: Carga de alimentos em caixas de papelão paletizadas. Requer manuseio cuidadoso." style="width:100%; height:100px; padding:12px; border:1px solid var(--border-light); border-radius:var(--radius-sm); outline:none; background:var(--bg-body); font-family:var(--font); resize:none;"></textarea>
+                            </div>
+                        </div>
+
+                        <div style="display:flex; justify-content:space-between; margin-top:30px;">
+                            <button class="ct-btn ct-btn-secondary" onclick="wizardPrev()">Voltar</button>
+                            <button class="ct-btn ct-btn-primary" onclick="wizardNext()">Avançar</button>
+                        </div>
+                    </div>
+
+                    <!-- ETAPA 3: Origem e Destino -->
+                    <div class="ct-wizard-panel" id="step-3">
+                        <h2 style="font-size:20px; font-weight:800; color:var(--text-dark); margin-bottom:10px;">Origem e Destino</h2>
+                        <p style="font-size:14px; color:var(--text-muted); margin-bottom:24px;">Indique onde a carga deve ser coletada e onde deve ser entregue, além das datas previstas.</p>
+                        
+                        <div class="ct-grid-2col-responsive">
+                            <div>
+                                <label style="display:block; font-size:13px; font-weight:600; color:var(--text-body); margin-bottom:6px;">CEP de Origem</label>
+                                <input type="text" placeholder="Ex: 50000-000" style="width:100%; padding:12px; border:1px solid var(--border-light); border-radius:var(--radius-sm); outline:none; background:var(--bg-body);">
+                            </div>
+                            <div>
+                                <label style="display:block; font-size:13px; font-weight:600; color:var(--text-body); margin-bottom:6px;">CEP de Destino</label>
+                                <input type="text" placeholder="Ex: 59000-000" style="width:100%; padding:12px; border:1px solid var(--border-light); border-radius:var(--radius-sm); outline:none; background:var(--bg-body);">
+                            </div>
+                            <div>
+                                <label style="display:block; font-size:13px; font-weight:600; color:var(--text-body); margin-bottom:6px;">Endereço de Coleta (Rua, Número, Bairro)</label>
+                                <input type="text" placeholder="Ex: Av. Barbosa Lima, 100 - Bairro do Recife" style="width:100%; padding:12px; border:1px solid var(--border-light); border-radius:var(--radius-sm); outline:none; background:var(--bg-body);">
+                            </div>
+                            <div>
+                                <label style="display:block; font-size:13px; font-weight:600; color:var(--text-body); margin-bottom:6px;">Endereço de Entrega (Rua, Número, Bairro)</label>
+                                <input type="text" placeholder="Ex: Av. Prudente de Morais, 500 - Lagoa Nova" style="width:100%; padding:12px; border:1px solid var(--border-light); border-radius:var(--radius-sm); outline:none; background:var(--bg-body);">
+                            </div>
+                            <div>
+                                <label style="display:block; font-size:13px; font-weight:600; color:var(--text-body); margin-bottom:6px;">Data de Coleta</label>
+                                <input type="date" style="width:100%; padding:12px; border:1px solid var(--border-light); border-radius:var(--radius-sm); outline:none; background:var(--bg-body); color:var(--text-body);">
+                            </div>
+                            <div>
+                                <label style="display:block; font-size:13px; font-weight:600; color:var(--text-body); margin-bottom:6px;">Previsão de Entrega</label>
+                                <input type="date" style="width:100%; padding:12px; border:1px solid var(--border-light); border-radius:var(--radius-sm); outline:none; background:var(--bg-body); color:var(--text-body);">
+                            </div>
+                        </div>
+
+                        <div style="display:flex; justify-content:space-between; margin-top:30px;">
+                            <button class="ct-btn ct-btn-secondary" onclick="wizardPrev()">Voltar</button>
+                            <button class="ct-btn ct-btn-primary" onclick="wizardNext()">Avançar</button>
+                        </div>
+                    </div>
+
+                    <!-- ETAPA 4: Requisitos do Veículo -->
+                    <div class="ct-wizard-panel" id="step-4">
+                        <h2 style="font-size:20px; font-weight:800; color:var(--text-dark); margin-bottom:10px;">Requisitos do Veículo</h2>
+                        <p style="font-size:14px; color:var(--text-muted); margin-bottom:24px;">Especifique qual tipo de veículo e carroceria são necessários para o transporte.</p>
+                        
+                        <div class="ct-grid-2col-responsive">
+                            <div>
+                                <label style="display:block; font-size:13px; font-weight:600; color:var(--text-body); margin-bottom:6px;">Tipo de Caminhão</label>
+                                <select style="width:100%; padding:12px; border:1px solid var(--border-light); border-radius:var(--radius-sm); outline:none; background:var(--bg-body); color:var(--text-body);">
+                                    <option>Truck (Até 14t)</option>
+                                    <option>Carreta (Até 30t)</option>
+                                    <option>Toco (Até 6t)</option>
+                                    <option>VUC / 3/4 (Até 4t)</option>
+                                    <option>Bitrem / Rodotrem</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label style="display:block; font-size:13px; font-weight:600; color:var(--text-body); margin-bottom:6px;">Tipo de Carroceria</label>
+                                <select style="width:100%; padding:12px; border:1px solid var(--border-light); border-radius:var(--radius-sm); outline:none; background:var(--bg-body); color:var(--text-body);">
+                                    <option>Baú Fechado</option>
+                                    <option>Sider (Lona)</option>
+                                    <option>Grade Baixa (Aberto)</option>
+                                    <option>Refrigerado / Frigorífico</option>
+                                    <option>Graneleiro</option>
+                                </select>
+                            </div>
+                            <div style="grid-column: span 2;">
+                                <label style="display:block; font-size:13px; font-weight:600; color:var(--text-body); margin-bottom:6px;">Exigências Adicionais</label>
+                                <div class="ct-grid-2col-responsive" style="margin-top:6px; gap:12px !important;">
+                                    <label style="display:flex; align-items:center; gap:8px; font-size:13px; color:var(--text-body); cursor:pointer;">
+                                        <input type="checkbox"> Motorista com ajudante
+                                    </label>
+                                    <label style="display:flex; align-items:center; gap:8px; font-size:13px; color:var(--text-body); cursor:pointer;">
+                                        <input type="checkbox"> Possuir seguro de carga ativo
+                                    </label>
+                                    <label style="display:flex; align-items:center; gap:8px; font-size:13px; color:var(--text-body); cursor:pointer;">
+                                        <input type="checkbox"> Rastreador instalado no veículo
+                                    </label>
+                                    <label style="display:flex; align-items:center; gap:8px; font-size:13px; color:var(--text-body); cursor:pointer;">
+                                        <input type="checkbox"> Certificação ANTT regularizada
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div style="display:flex; justify-content:space-between; margin-top:30px;">
+                            <button class="ct-btn ct-btn-secondary" onclick="wizardPrev()">Voltar</button>
+                            <button class="ct-btn ct-btn-primary" onclick="wizardNext()">Avançar</button>
+                        </div>
+                    </div>
+
+                    <!-- ETAPA 5: Confirmação e Preço -->
+                    <div class="ct-wizard-panel" id="step-5">
+                        <h2 style="font-size:20px; font-weight:800; color:var(--text-dark); margin-bottom:10px;">Valor e Publicação</h2>
+                        <p style="font-size:14px; color:var(--text-muted); margin-bottom:24px;">Para finalizar, defina o valor do frete. A KarGO sugere um valor com base em rotas similares.</p>
+                        
+                        <div style="padding:20px; background:var(--accent-blue-light); border-radius:var(--radius-md); display:flex; align-items:center; gap:20px; margin-bottom:24px; border:1px solid rgba(0,136,255,0.15);">
+                            <div style="color:var(--accent-blue);">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="28" height="28"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
+                            </div>
+                            <div>
+                                <h4 style="font-size:14px; font-weight:700; color:var(--accent-blue);">Preço Sugerido KarGO</h4>
+                                <p style="font-size:13px; color:var(--text-body); margin-top:2px;">Recomendamos oferecer entre <strong>R$ 2.500</strong> e <strong>R$ 2.900</strong> para esta rota e peso para receber propostas mais rápido.</p>
+                            </div>
+                        </div>
+
+                        <div class="ct-grid-2col-responsive" style="margin-bottom:24px;">
+                            <div>
+                                <label style="display:block; font-size:13px; font-weight:600; color:var(--text-body); margin-bottom:6px;">Valor do Frete Proposto (R$)</label>
+                                <input type="text" placeholder="Ex: 2.800,00" onkeyup="formatCurrency(this)" style="width:100%; padding:12px; border:1px solid var(--border-light); border-radius:var(--radius-sm); outline:none; background:var(--bg-body); font-weight:700;">
+                            </div>
+                            <div>
+                                <label style="display:block; font-size:13px; font-weight:600; color:var(--text-body); margin-bottom:6px;">Forma de Pagamento</label>
+                                <select style="width:100%; padding:12px; border:1px solid var(--border-light); border-radius:var(--radius-sm); outline:none; background:var(--bg-body); color:var(--text-body);">
+                                    <option>50% na Coleta + 50% na Entrega</option>
+                                    <option>100% na Entrega (Confirmada)</option>
+                                    <option>Saldo em 24h após entrega</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <!-- Resumo Final -->
+                        <div style="border:1px dashed var(--border-light); border-radius:var(--radius-md); padding:20px; background:var(--bg-body);">
+                            <h4 style="font-size:14px; font-weight:700; color:var(--text-dark); margin-bottom:12px; text-transform:uppercase; letter-spacing:0.5px;">Resumo da Publicação</h4>
+                            <div class="ct-grid-2col-responsive" style="gap:12px !important; font-size:13px;">
+                                <p><strong>Carga:</strong> Alimentos Perecíveis (8.5t)</p>
+                                <p><strong>Veículo:</strong> Truck (Baú Fechado)</p>
+                                <p><strong>Coleta:</strong> Recife, PE</p>
+                                <p><strong>Entrega:</strong> Natal, RN</p>
+                            </div>
+                        </div>
+
+                        <div style="display:flex; justify-content:space-between; margin-top:30px;">
+                            <button class="ct-btn ct-btn-secondary" onclick="wizardPrev()">Voltar</button>
+                            <button class="ct-btn ct-btn-success" onclick="alert('Parabéns! Sua carga foi anunciada com sucesso. Aguarde as propostas na aba de Acompanhar Cargas.'); window.location.href='minhas-cargas.html';">Publicar Anúncio de Carga</button>
+                        </div>
+                    </div>
+
+                </div>
+
+            </div><!-- /ct-content-area -->
+        </main>
+    </div>
+
+    <!-- BOTTOM NAV MOBILE -->
+    <nav class="ct-bottom-nav">
+        <a href="dashboard.html" class="ct-bottom-item">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="9"/><rect x="14" y="3" width="7" height="5"/><rect x="14" y="12" width="7" height="9"/><rect x="3" y="16" width="7" height="5"/></svg>
+            Home
+        </a>
+        <a href="minhas-cargas.html" class="ct-bottom-item">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg>
+            Cargas
+        </a>
+        <a href="publicar-carga.html" class="ct-bottom-item active" style="position:relative;">
+            <div style="width:48px;height:48px;border-radius:50%;background:var(--accent-blue);display:flex;align-items:center;justify-content:center;margin-top:-20px;box-shadow:0 4px 16px rgba(0,136,255,0.35);">
+                <svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5" width="22" height="22"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+            </div>
+            Publicar
+        </a>
+        <a href="chat.html" class="ct-bottom-item">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+            Chat
+        </a>
+        <a href="perfil.html" class="ct-bottom-item">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+            Perfil
+        </a>
+    </nav>
+
+    <script src="js/contratante.js"></script>
+</body>
+</html>

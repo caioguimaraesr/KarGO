@@ -173,7 +173,7 @@
     transition: color 0.25s ease;
 }
 .auth-tab.active {
-    color: #fff;
+    color: #0F172A;
 }
 .auth-tab::after {
     content: '';
@@ -193,10 +193,8 @@
 
 /* === AUTH CARD (GLASSMORPHISM) === */
 .auth-card {
-    background: rgba(13, 17, 23, 0.8);
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
-    border: 1px solid rgba(255, 255, 255, 0.06);
+    background: #FFFFFF;
+    border: 1px solid rgba(0, 0, 0, 0.08);
     border-radius: 20px;
     padding: 24px;
     margin: 12px;
@@ -206,6 +204,8 @@
     max-width: 460px;
     width: calc(100% - 24px);
     align-self: center;
+    color: #0F172A;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.15);
 }
 
 /* === TAB CONTENT === */
@@ -240,7 +240,7 @@
     display: block;
     font-size: 13px;
     font-weight: 500;
-    color: #94A3B8;
+    color: #475569;
     margin-bottom: 8px;
 }
 .input-wrapper {
@@ -259,11 +259,11 @@
 }
 .form-input {
     width: 100%;
-    background: #0D1117;
-    border: 1px solid rgba(255, 255, 255, 0.08);
+    background: #F8FAFC;
+    border: 1px solid rgba(0, 0, 0, 0.08);
     border-radius: 12px;
     padding: 14px 16px;
-    color: #FFFFFF;
+    color: #0F172A;
     font-family: 'Inter', sans-serif;
     font-size: 15px;
     transition: all 0.2s ease;
@@ -281,12 +281,12 @@
 .form-input:-webkit-autofill:hover, 
 .form-input:-webkit-autofill:focus, 
 .form-input:-webkit-autofill:active {
-    -webkit-box-shadow: 0 0 0 1000px #0D1117 inset !important;
-    -webkit-text-fill-color: #FFFFFF !important;
+    -webkit-box-shadow: 0 0 0 1000px #F8FAFC inset !important;
+    -webkit-text-fill-color: #0F172A !important;
     transition: background-color 5000s ease-in-out 0s;
 }
 .form-input::placeholder {
-    color: #64748B;
+    color: #94A3B8;
 }
 .form-input:focus {
     border-color: #3498FF;
@@ -421,18 +421,18 @@
     width: 100%;
     padding: 14px;
     background: transparent;
-    color: #94A3B8;
+    color: #475569;
     font-family: 'Inter', sans-serif;
     font-size: 15px;
     font-weight: 500;
-    border: 1px solid rgba(255, 255, 255, 0.08);
+    border: 1px solid rgba(0, 0, 0, 0.08);
     border-radius: 12px;
     cursor: pointer;
     transition: all 0.2s ease;
 }
 .auth-btn-secondary:hover {
-    border-color: rgba(255, 255, 255, 0.2);
-    color: #fff;
+    border-color: rgba(0, 0, 0, 0.15);
+    color: #0F172A;
 }
 
 /* === DIVIDER === */
@@ -447,7 +447,7 @@
     content: '';
     flex: 1;
     height: 1px;
-    background: rgba(255, 255, 255, 0.08);
+    background: rgba(0, 0, 0, 0.08);
 }
 .auth-divider span {
     color: #64748B;
@@ -463,19 +463,19 @@
     gap: 10px;
     width: 100%;
     padding: 14px;
-    background: transparent;
-    color: #fff;
+    background: #FFFFFF;
+    color: #0F172A;
     font-family: 'Inter', sans-serif;
     font-size: 15px;
     font-weight: 500;
-    border: 1px solid rgba(255, 255, 255, 0.12);
+    border: 1px solid rgba(0, 0, 0, 0.08);
     border-radius: 12px;
     cursor: pointer;
     transition: all 0.2s ease;
 }
 .auth-btn-social:hover {
-    background: rgba(255, 255, 255, 0.04);
-    border-color: rgba(255, 255, 255, 0.2);
+    background: #F8FAFC;
+    border-color: rgba(0, 0, 0, 0.15);
 }
 .google-icon {
     width: 20px;
@@ -510,8 +510,8 @@
     display: flex;
     align-items: center;
     gap: 14px;
-    background: #13191F;
-    border: 1px solid rgba(255, 255, 255, 0.06);
+    background: #F8FAFC;
+    border: 1px solid rgba(0, 0, 0, 0.06);
     border-radius: 16px;
     padding: 18px 20px;
     cursor: pointer;
@@ -519,26 +519,26 @@
 }
 .profile-card:hover {
     border-color: rgba(52, 152, 255, 0.3);
-    background: rgba(52, 152, 255, 0.03);
+    background: rgba(52, 152, 255, 0.02);
 }
 .profile-card.selected {
     border-color: #3498FF;
-    background: rgba(52, 152, 255, 0.06);
+    background: rgba(52, 152, 255, 0.04);
 }
 .profile-card-icon {
     width: 44px;
     height: 44px;
     border-radius: 12px;
-    background: rgba(255, 255, 255, 0.04);
+    background: rgba(0, 0, 0, 0.04);
     display: flex;
     align-items: center;
     justify-content: center;
-    color: #94A3B8;
+    color: #64748B;
     flex-shrink: 0;
     transition: all 0.25s ease;
 }
 .profile-card-icon svg {
-    color: #94A3B8;
+    color: #64748B;
     transition: color 0.25s ease;
 }
 .profile-card:hover .profile-card-icon svg {
@@ -554,12 +554,12 @@
 .profile-card-info h4 {
     font-size: 15px;
     font-weight: 700;
-    color: #fff;
+    color: #0F172A;
     margin: 0 0 2px;
 }
 .profile-card-info p {
     font-size: 13px;
-    color: #94A3B8;
+    color: #64748B;
     margin: 0;
     line-height: 1.4;
 }
@@ -568,7 +568,7 @@
     width: 22px;
     height: 22px;
     border-radius: 50%;
-    border: 2px solid rgba(255, 255, 255, 0.12);
+    border: 2px solid rgba(0, 0, 0, 0.12);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -584,13 +584,13 @@
 .step-title {
     font-size: 24px;
     font-weight: 800;
-    color: #fff;
+    color: #0F172A;
     margin-bottom: 6px;
     letter-spacing: -0.02em;
 }
 .step-subtitle {
     font-size: 14px;
-    color: #94A3B8;
+    color: #64748B;
     margin-bottom: 24px;
     line-height: 1.5;
 }

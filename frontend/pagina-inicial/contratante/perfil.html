@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="KarGO — Perfil do Embarcador. Monitore suas estatísticas, reputação e dados da empresa.">
+    <title>KarGO — Perfil do Embarcador</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/contratante.css">
+</head>
+<body>
+    <div class="layout-container">
+
+        <!-- SIDEBAR DARK -->
+        <aside class="ct-sidebar">
+            <div class="ct-sidebar-logo">
+                <a href="../index.html"><img src="../assets/images/LOGO.png" alt="KarGO" class="logo-img"></a>
+            </div>
+            <nav class="ct-sidebar-menu">
+                <div class="ct-sidebar-links">
+                    <a href="dashboard.html" class="ct-menu-item">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="9"/><rect x="14" y="3" width="7" height="5"/><rect x="14" y="12" width="7" height="9"/><rect x="3" y="16" width="7" height="5"/></svg>
+                        Dashboard
+                    </a>
+                    <a href="publicar-carga.html" class="ct-menu-item">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="16"/><line x1="8" y1="12" x2="16" y2="12"/></svg>
+                        Publicar Carga
+                    </a>
+                    <a href="minhas-cargas.html" class="ct-menu-item">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><polyline points="3.27 6.96 12 12.01 20.73 6.96"/><line x1="12" y1="22.08" x2="12" y2="12"/></svg>
+                        Acompanhar Cargas
+                    </a>
+                    <a href="pagamentos.html" class="ct-menu-item">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="4" width="22" height="16" rx="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>
+                        Pagamentos
+                    </a>
+                    <a href="chat.html" class="ct-menu-item">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+                        Chat
+                        <span class="chat-badge-dot"></span>
+                    </a>
+                    <a href="ocorrencias.html" class="ct-menu-item">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+                        Ocorrências
+                    </a>
+                    <div class="ct-sidebar-divider"></div>
+                    <a href="perfil.html" class="ct-menu-item active">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+                        Meu Perfil
+                    </a>
+                </div>
+                <div class="ct-sidebar-bottom">
+                    <a href="configuracoes.html" class="ct-menu-item">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.6 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.6a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9c.26.604.852.997 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+                        Configurações
+                    </a>
+                </div>
+            </nav>
+        </aside>
+
+        <!-- CONTEÚDO PRINCIPAL -->
+        <main class="main-content">
+            <div class="ct-content-area">
+
+                <!-- TOPBAR -->
+                <header class="ct-topbar">
+                    <div class="ct-topbar-mobile-logo">
+                        <a href="../index.html"><img src="../assets/images/LOGO.png" alt="KarGO" class="logo-img-mobile"></a>
+                    </div>
+                    <div class="ct-topbar-actions">
+                        <div class="ct-user-profile">
+                            <img src="../assets/images/embarcador.png" alt="Maria" class="ct-user-avatar">
+                            <div class="ct-user-info">
+                                <span class="ct-user-name">Maria Logística</span>
+                            </div>
+                        </div>
+                    </div>
+                </header>
+
+                <!-- TÍTULO DA PÁGINA (Fora do header travado) -->
+                <div class="ct-page-title ct-reveal" style="margin-bottom: 24px;">
+                    <h1>Perfil Corporativo</h1>
+                    <p>Monitore estatísticas de envios, reputação e dados de cadastro da empresa.</p>
+                </div>
+
+                <!-- GRID PERFIL -->
+                <div class="ct-grid-2col ct-reveal">
+                    
+                    <!-- Coluna Principal (Dados e Info) -->
+                    <div>
+                        <!-- Bloco Geral do Perfil -->
+                        <div class="ct-section-card" style="display:flex; align-items:center; gap:24px; padding:30px;">
+                            <img src="../assets/images/embarcador.png" alt="Maria" style="width:96px; height:96px; border-radius:50%; border:4px solid var(--accent-blue-light); object-fit:cover;">
+                            <div>
+                                <span class="ct-badge ct-badge-blue" style="margin-bottom:8px;">Embarcador Premium</span>
+                                <h2 style="font-size:22px; font-weight:800; color:var(--text-dark);">Maria Logística e Alimentos Ltda.</h2>
+                                <p style="font-size:13px; color:var(--text-muted); margin-top:2px;">CNPJ: 12.345.678/0001-90 · Desde Junho de 2024</p>
+                                <p style="font-size:14px; color:var(--text-body); margin-top:10px; display:flex; align-items:center; gap:6px;">
+                                    <svg class="star-icon-inline" viewBox="0 0 24 24" style="width:16px; height:16px;"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+                                    <strong>4.9 de Avaliação</strong> (Média dada por 32 motoristas parceiros)
+                                </p>
+                            </div>
+                        </div>
+
+                        <!-- Detalhes Cadastrais -->
+                        <div class="ct-section-card">
+                            <h3 class="ct-section-title" style="margin-bottom:16px;">Dados da Empresa</h3>
+                            <div class="ct-grid-2col-responsive" style="font-size:13px; color:var(--text-body);">
+                                <div>
+                                    <span style="font-weight:600; color:var(--text-muted); display:block;">Razão Social</span>
+                                    <span style="font-weight:700; color:var(--text-dark); margin-top:2px; display:block;">Maria Alimentos e Distribuição Ltda</span>
+                                </div>
+                                <div>
+                                    <span style="font-weight:600; color:var(--text-muted); display:block;">Inscrição Estadual</span>
+                                    <span style="font-weight:700; color:var(--text-dark); margin-top:2px; display:block;">182.748.291.011</span>
+                                </div>
+                                <div>
+                                    <span style="font-weight:600; color:var(--text-muted); display:block;">Telefone Corporativo</span>
+                                    <span style="font-weight:700; color:var(--text-dark); margin-top:2px; display:block;">(81) 3444-9000</span>
+                                </div>
+                                <div>
+                                    <span style="font-weight:600; color:var(--text-muted); display:block;">E-mail para Faturamento</span>
+                                    <span style="font-weight:700; color:var(--text-dark); margin-top:2px; display:block;">financeiro@mariaalimentos.com</span>
+                                </div>
+                                <div style="grid-column: span 2;">
+                                    <span style="font-weight:600; color:var(--text-muted); display:block;">Endereço Sede</span>
+                                    <span style="font-weight:700; color:var(--text-dark); margin-top:2px; display:block;">Av. Barbosa Lima, 100 - Bairro do Recife, Recife - PE, CEP 50030-017</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Coluna Lateral (Estatísticas Rápidas) -->
+                    <div>
+                        <div class="ct-section-card">
+                            <h3 class="ct-section-title" style="margin-bottom:20px;">Estatísticas Operacionais</h3>
+                            
+                            <div style="display:flex; flex-direction:column; gap:16px;">
+                                <!-- Fretes Concluídos -->
+                                <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid var(--border-light); padding-bottom:12px;">
+                                    <div>
+                                        <span style="font-size:13px; font-weight:700; color:var(--text-dark);">Fretes Totais</span>
+                                        <p style="font-size:11px; color:var(--text-muted);">Realizados no último ano</p>
+                                    </div>
+                                    <span style="font-size:20px; font-weight:800; color:var(--accent-blue);">45</span>
+                                </div>
+
+                                <!-- Taxa de Entrega no Prazo -->
+                                <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid var(--border-light); padding-bottom:12px;">
+                                    <div>
+                                        <span style="font-size:13px; font-weight:700; color:var(--text-dark);">Entregas no Prazo</span>
+                                        <p style="font-size:11px; color:var(--text-muted);">Média de pontualidade</p>
+                                    </div>
+                                    <span style="font-size:20px; font-weight:800; color:var(--accent-green);">96.8%</span>
+                                </div>
+
+                                <!-- Ocorrências Resolvidas -->
+                                <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid var(--border-light); padding-bottom:12px;">
+                                    <div>
+                                        <span style="font-size:13px; font-weight:700; color:var(--text-dark);">Ocorrências</span>
+                                        <p style="font-size:11px; color:var(--text-muted);">Todas resolvidas com suporte</p>
+                                    </div>
+                                    <span style="font-size:20px; font-weight:800; color:var(--accent-orange);">2</span>
+                                </div>
+
+                                <!-- Pagamento Médio -->
+                                <div style="display:flex; justify-content:space-between; align-items:center;">
+                                    <div>
+                                        <span style="font-size:13px; font-weight:700; color:var(--text-dark);">Repasse Médio</span>
+                                        <p style="font-size:11px; color:var(--text-muted);">Após confirmação de recebimento</p>
+                                    </div>
+                                    <span style="font-size:16px; font-weight:800; color:var(--text-dark);">~4h úteis</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Avaliação Recente do Motorista -->
+                        <div class="ct-section-card">
+                            <h3 class="ct-section-title" style="margin-bottom:16px;">Comentário de Motorista</h3>
+                            <div style="padding:14px; background:var(--bg-body); border-radius:var(--radius-sm); border:1px solid var(--border-light); font-size:12px;">
+                                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+                                    <span style="font-weight:700;">Ana Paula (Motorista Toco)</span>
+                                    <span style="color:var(--accent-orange);">
+                                        <svg class="star-icon-inline" viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+                                        <svg class="star-icon-inline" viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+                                        <svg class="star-icon-inline" viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+                                        <svg class="star-icon-inline" viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+                                        <svg class="star-icon-inline" viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+                                    </span>
+                                </div>
+                                <p style="color:var(--text-body); font-style:italic;">
+                                    "A Maria Logística é uma excelente parceira. Carga estava pronta na hora marcada e a liberação do pagamento na entrega foi quase imediata. Recomendo muito!"
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+            </div><!-- /ct-content-area -->
+        </main>
+    </div>
+
+    <!-- BOTTOM NAV MOBILE -->
+    <nav class="ct-bottom-nav">
+        <a href="dashboard.html" class="ct-bottom-item">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="9"/><rect x="14" y="3" width="7" height="5"/><rect x="14" y="12" width="7" height="9"/><rect x="3" y="16" width="7" height="5"/></svg>
+            Home
+        </a>
+        <a href="minhas-cargas.html" class="ct-bottom-item">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg>
+            Cargas
+        </a>
+        <a href="publicar-carga.html" class="ct-bottom-item" style="position:relative;">
+            <div style="width:48px;height:48px;border-radius:50%;background:var(--accent-blue);display:flex;align-items:center;justify-content:center;margin-top:-20px;box-shadow:0 4px 16px rgba(0,136,255,0.35);">
+                <svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5" width="22" height="22"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+            </div>
+            Publicar
+        </a>
+        <a href="chat.html" class="ct-bottom-item">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+            Chat
+        </a>
+        <a href="perfil.html" class="ct-bottom-item active">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+            Perfil
+        </a>
+    </nav>
+
+    <script src="js/contratante.js"></script>
+</body>
+</html>

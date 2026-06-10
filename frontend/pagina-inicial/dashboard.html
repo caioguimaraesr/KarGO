@@ -11,26 +11,26 @@
     <style>
         /* === DESIGN SYSTEM TOKENS === */
         :root {
-            --bg-dark-deep: #080c14;
-            --bg-dark-card: #121824;
+            --bg-dark-deep: #f8fafc;
+            --bg-dark-card: #ffffff;
             --bg-dark-sidebar: #0b0f19;
-            --bg-dark-topbar: rgba(11, 15, 25, 0.85);
+            --bg-dark-topbar: rgba(255, 255, 255, 0.9);
             
-            --text-primary: #ffffff;
-            --text-secondary: #94a3b8;
+            --text-primary: #0f172a;
+            --text-secondary: #475569;
             --text-muted: #64748b;
             
             --accent-blue: #0088ff;
-            --accent-blue-glow: rgba(0, 136, 255, 0.35);
+            --accent-blue-glow: rgba(0, 136, 255, 0.15);
             --accent-orange: #ff9f0a;
-            --accent-orange-glow: rgba(255, 159, 10, 0.3);
+            --accent-orange-glow: rgba(255, 159, 10, 0.15);
             --accent-red: #ff3b30;
-            --accent-red-glow: rgba(255, 59, 48, 0.3);
+            --accent-red-glow: rgba(255, 59, 48, 0.15);
             --accent-green: #34c759;
-            --accent-green-glow: rgba(52, 199, 89, 0.25);
+            --accent-green-glow: rgba(52, 199, 89, 0.1);
             
-            --border-translucent: rgba(255, 255, 255, 0.05);
-            --border-glow-blue: rgba(0, 136, 255, 0.15);
+            --border-translucent: rgba(0, 0, 0, 0.08);
+            --border-glow-blue: rgba(0, 136, 255, 0.08);
             
             --font-primary: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
             --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
@@ -118,8 +118,8 @@
         }
 
         .notification-btn:hover {
-            color: #fff;
-            border-color: rgba(255, 255, 255, 0.1);
+            color: var(--text-primary);
+            border-color: var(--accent-blue);
             transform: translateY(-2px);
         }
 
@@ -166,7 +166,7 @@
         .user-name {
             font-size: 13px;
             font-weight: 700;
-            color: #fff;
+            color: var(--text-primary);
         }
 
         .user-role {
@@ -188,7 +188,6 @@
         }
 
         .stat-card {
-            background: linear-gradient(135deg, var(--bg-dark-card) 0%, rgba(18, 24, 36, 0.5) 100%);
             border: 1px solid var(--border-translucent);
             border-radius: 20px;
             padding: 24px;
@@ -196,12 +195,63 @@
             justify-content: space-between;
             align-items: center;
             transition: var(--transition-smooth);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.03);
         }
 
         .stat-card:hover {
             transform: translateY(-4px);
-            border-color: rgba(255, 255, 255, 0.08);
-            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.08);
+        }
+
+        .stat-card.fat-card {
+            background: linear-gradient(135deg, #10B981 0%, #059669 100%);
+            border-color: rgba(16, 185, 129, 0.2);
+        }
+        .stat-card.km-card {
+            background: linear-gradient(135deg, #3B82F6 0%, #1D4ED8 100%);
+            border-color: rgba(59, 130, 246, 0.2);
+        }
+        .stat-card.load-card {
+            background: linear-gradient(135deg, #F59E0B 0%, #D97706 100%);
+            border-color: rgba(245, 158, 11, 0.2);
+        }
+        
+        .stat-card.fat-card .stat-card-left h3,
+        .stat-card.km-card .stat-card-left h3,
+        .stat-card.load-card .stat-card-left h3 {
+            color: rgba(255, 255, 255, 0.85);
+        }
+        
+        .stat-card.fat-card .value,
+        .stat-card.km-card .value,
+        .stat-card.load-card .value {
+            color: #ffffff !important;
+        }
+        
+        .stat-card.fat-card .trend,
+        .stat-card.km-card .trend,
+        .stat-card.load-card .trend {
+            color: rgba(255, 255, 255, 0.9) !important;
+        }
+        
+        .stat-card.fat-card .trend.up span,
+        .stat-card.km-card .trend.up span,
+        .stat-card.load-card .trend.up span {
+            color: #ffffff;
+            font-weight: 700;
+        }
+        
+        .stat-card.fat-card .stat-card-right,
+        .stat-card.km-card .stat-card-right,
+        .stat-card.load-card .stat-card-right {
+            background-color: rgba(255, 255, 255, 0.15);
+            border-color: rgba(255, 255, 255, 0.25);
+            color: #ffffff !important;
+        }
+        .stat-card.fat-card .stat-card-right svg,
+        .stat-card.km-card .stat-card-right svg,
+        .stat-card.load-card .stat-card-right svg {
+            stroke: #ffffff !important;
         }
 
         .stat-card-left h3 {
@@ -416,7 +466,7 @@
             font-size: 16px;
             font-weight: 800;
             margin-bottom: 20px;
-            color: #fff;
+            color: var(--text-primary);
         }
 
         /* Gráfico de Barras em HTML/CSS */
@@ -519,7 +569,7 @@
         .timeline-info-desktop h5 {
             font-size: 13px;
             font-weight: 700;
-            color: #fff;
+            color: var(--text-primary);
         }
 
         .timeline-info-desktop p {
@@ -535,7 +585,7 @@
             left: 0;
             right: 0;
             bottom: 0;
-            background-color: rgba(3, 7, 12, 0.85);
+            background-color: rgba(15, 23, 42, 0.5);
             backdrop-filter: blur(8px);
             display: flex;
             align-items: center;
@@ -559,7 +609,7 @@
             width: 100%;
             max-width: 520px;
             overflow: hidden;
-            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5), 0 0 30px rgba(0, 136, 255, 0.05);
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.08), 0 0 30px rgba(0, 136, 255, 0.05);
             transform: scale(0.95);
             transition: var(--transition-smooth);
         }
@@ -596,8 +646,8 @@
         }
 
         .kargo-modal-close-btn:hover {
-            background-color: rgba(255, 255, 255, 0.05);
-            color: #fff;
+            background-color: #f1f5f9;
+            color: var(--text-primary);
         }
 
         .kargo-modal-body {
@@ -609,7 +659,7 @@
 
         /* Card mini-perfil de motorista freelancer */
         .driver-premium-card {
-            background-color: rgba(255, 255, 255, 0.02);
+            background-color: #f8fafc;
             border: 1px solid var(--border-translucent);
             border-radius: 16px;
             padding: 16px;
@@ -665,7 +715,7 @@
             display: grid;
             grid-template-columns: repeat(3, 1fr);
             gap: 8px;
-            background-color: rgba(0, 0, 0, 0.2);
+            background-color: #f1f5f9;
             padding: 10px;
             border-radius: 10px;
         }
@@ -741,11 +791,11 @@
 
         .proposal-input-field {
             width: 100%;
-            background-color: rgba(0, 0, 0, 0.2);
+            background-color: #f1f5f9;
             border: 1px solid var(--border-translucent);
             border-radius: 12px;
             padding: 14px 16px 14px 44px;
-            color: #fff;
+            color: var(--text-primary);
             font-family: inherit;
             font-size: 16px;
             font-weight: 800;
@@ -802,8 +852,8 @@
         }
 
         .modal-btn-cancel:hover {
-            background-color: rgba(255, 255, 255, 0.03);
-            color: #fff;
+            background-color: #f1f5f9;
+            color: var(--text-primary);
         }
 
         .modal-btn-submit {
@@ -827,18 +877,20 @@
 
         /* === PREMIUM BOTTOM NAVIGATION BAR (MOBILE) === */
         .mp-bottom-nav {
-            position: fixed;
-            bottom: 0;
-            left: 0;
-            right: 0;
+            position: fixed !important;
+            bottom: 0 !important;
+            left: 0 !important;
+            right: 0 !important;
             height: 72px;
-            background-color: rgba(11, 15, 25, 0.95);
-            backdrop-filter: blur(20px);
-            border-top: 1px solid var(--border-translucent);
+            background-color: rgba(11, 15, 25, 0.96) !important;
+            backdrop-filter: blur(20px) !important;
+            -webkit-backdrop-filter: blur(20px) !important;
+            border-top: 1px solid rgba(255, 255, 255, 0.08) !important;
             display: none;
             grid-template-columns: repeat(5, 1fr);
             padding-bottom: 8px;
-            z-index: 1000;
+            z-index: 9999 !important;
+            box-shadow: 0 -8px 30px rgba(0, 0, 0, 0.3) !important;
         }
 
         .mp-bottom-nav-item {
@@ -846,7 +898,7 @@
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            color: var(--text-muted);
+            color: #94a3b8 !important;
             text-decoration: none;
             font-size: 10px;
             font-weight: 600;
@@ -859,16 +911,19 @@
             width: 20px;
             height: 20px;
             stroke-width: 2.2;
+            color: #64748b !important;
             transition: var(--transition-smooth);
         }
 
         .mp-bottom-nav-item:hover, .mp-bottom-nav-item.active {
-            color: var(--accent-blue);
+            color: var(--accent-blue) !important;
         }
 
         .mp-bottom-nav-item.active svg {
+            color: var(--accent-blue) !important;
             filter: drop-shadow(0 0 6px var(--accent-blue-glow));
         }
+
 
         /* ================= RESPONSIVIDADE (MOBILE & DISPOSITIVOS MENORES) ================= */
         @media (max-width: 991px) {
@@ -882,8 +937,8 @@
             }
 
             .topbar {
-                background-color: var(--bg-dark-sidebar);
-                border-bottom: 1px solid var(--border-translucent);
+                background-color: #0b0f19 !important;
+                border-bottom: 1px solid rgba(255, 255, 255, 0.08) !important;
                 margin: -16px -16px 24px -16px;
                 padding: 16px;
                 height: 72px;
@@ -891,7 +946,25 @@
                 top: 0;
                 z-index: 200;
                 backdrop-filter: blur(10px);
-                background: var(--bg-dark-topbar);
+                background: #0b0f19 !important;
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+            }
+            .notification-btn {
+                background: rgba(255, 255, 255, 0.05) !important;
+                border: 1px solid rgba(255, 255, 255, 0.08) !important;
+                color: #ffffff !important;
+            }
+            .user-profile {
+                background: rgba(255, 255, 255, 0.05) !important;
+                border: 1px solid rgba(255, 255, 255, 0.08) !important;
+            }
+            .user-name {
+                color: #ffffff !important;
+            }
+            .user-role {
+                color: #94a3b8 !important;
             }
 
             .topbar-logo-mobile {
@@ -930,8 +1003,16 @@
                 font-size: 24px !important;
             }
         }
+
+        /* Limitador de Largura Desktop (Ultrawide) */
+        .mp-content-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            width: 100%;
+            box-sizing: border-box;
+        }
     </style>
-    <link rel="stylesheet" href="css/marketplace.css">
+    <link rel="stylesheet" href="css/marketplace.css?v=2.2">
 </head>
 <body>
 
@@ -983,16 +1064,13 @@
                         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
                         Configurações
                     </a>
-                    <button type="button" class="mp-menu-item mp-logout-btn" onclick="localStorage.removeItem('kargoSession');localStorage.removeItem('kargoToken');window.location.href='login.html'">
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
-                        Sair
-                    </button>
                 </div>
             </nav>
         </aside>
 
         <!-- CONTEÚDO PRINCIPAL -->
         <main class="main-content">
+            <div class="mp-content-container">
             
             <!-- HEADER TOPBAR -->
             <header class="topbar">
@@ -1028,7 +1106,7 @@
             </header>
 
             <!-- ============ FILTROS DE PERÍODO TEMPORAL DO DASHBOARD ============ -->
-            <div class="db-filter-bar" style="background: rgba(18, 24, 36, 0.65); border: 1px solid rgba(255, 255, 255, 0.05); border-radius: 16px; padding: 20px; backdrop-filter: blur(10px); margin-bottom: 24px; display: flex; flex-wrap: wrap; justify-content: space-between; align-items: flex-end; gap: 20px; position: relative; overflow: hidden;">
+            <div class="db-filter-bar" style="background: #ffffff; border: 1px solid var(--border-translucent); border-radius: 16px; padding: 20px; box-shadow: 0 4px 15px rgba(0,0,0,0.03); margin-bottom: 24px; display: flex; flex-wrap: wrap; justify-content: space-between; align-items: flex-end; gap: 20px; position: relative; overflow: hidden;">
                 
                 <!-- Barra com gradiente neon azul no lado esquerdo para dar efeito premium -->
                 <div style="position: absolute; left: 0; top: 0; bottom: 0; width: 4px; background: linear-gradient(180deg, var(--accent-blue), transparent);"></div>
@@ -1036,53 +1114,53 @@
                 <div style="display: flex; flex-wrap: wrap; gap: 20px; align-items: flex-end; flex: 1;">
                     <!-- Seletor de Tipo de Período -->
                     <div style="display: flex; flex-direction: column; gap: 8px;">
-                        <label style="font-size: 11px; font-weight: 700; color: #94a3b8; text-transform: uppercase; letter-spacing: 0.05em;">Tipo de Período</label>
+                        <label style="font-size: 11px; font-weight: 700; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 0.05em;">Tipo de Período</label>
                         <div style="position: relative; display: flex; align-items: center;">
-                            <select id="dashboard-filter-type" style="padding: 10px 36px 10px 14px; font-size: 13px; font-weight: 600; width: 150px; background: rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.08); border-radius: 10px; color: #fff; appearance: none; cursor: pointer; outline: none; transition: var(--transition-smooth);" onchange="toggleDashboardFilterInputs(this.value)">
+                            <select id="dashboard-filter-type" style="padding: 10px 36px 10px 14px; font-size: 13px; font-weight: 600; width: 150px; background: #f1f5f9; border: 1px solid var(--border-translucent); border-radius: 10px; color: var(--text-primary); appearance: none; cursor: pointer; outline: none; transition: var(--transition-smooth);" onchange="toggleDashboardFilterInputs(this.value)">
                                 <option value="semanal" selected>Semanal</option>
                                 <option value="mensal">Mensal</option>
                                 <option value="personalizado">Personalizado</option>
                             </select>
-                            <svg style="position: absolute; right: 12px; color: #94a3b8; pointer-events: none;" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+                            <svg style="position: absolute; right: 12px; color: var(--text-muted); pointer-events: none;" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
                         </div>
                     </div>
 
                     <!-- Seletor de Semana -->
                     <div id="db-semana-block" style="display: flex; flex-direction: column; gap: 8px;">
-                        <label style="font-size: 11px; font-weight: 700; color: #94a3b8; text-transform: uppercase; letter-spacing: 0.05em;">Escolher Semana</label>
+                        <label style="font-size: 11px; font-weight: 700; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 0.05em;">Escolher Semana</label>
                         <div style="position: relative; display: flex; align-items: center;">
-                            <select id="db-filter-semana" style="padding: 10px 36px 10px 14px; font-size: 13px; font-weight: 600; width: 240px; background: rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.08); border-radius: 10px; color: #fff; appearance: none; cursor: pointer; outline: none; transition: var(--transition-smooth);">
+                            <select id="db-filter-semana" style="padding: 10px 36px 10px 14px; font-size: 13px; font-weight: 600; width: 240px; background: #f1f5f9; border: 1px solid var(--border-translucent); border-radius: 10px; color: var(--text-primary); appearance: none; cursor: pointer; outline: none; transition: var(--transition-smooth);">
                                 <option value="atual" selected>Semana Atual (18 - 24 Mai)</option>
                                 <option value="anterior">Semana Anterior (11 - 17 Mai)</option>
                                 <option value="passada">Duas Semanas Atrás (04 - 10 Mai)</option>
                             </select>
-                            <svg style="position: absolute; right: 12px; color: #94a3b8; pointer-events: none;" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+                            <svg style="position: absolute; right: 12px; color: var(--text-muted); pointer-events: none;" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
                         </div>
                     </div>
 
                     <!-- Seletor de Mês/Ano (Oculto inicialmente) -->
                     <div id="db-mes-block" style="display: none; gap: 12px; align-items: flex-end;">
                         <div style="display: flex; flex-direction: column; gap: 8px;">
-                            <label style="font-size: 11px; font-weight: 700; color: #94a3b8; text-transform: uppercase; letter-spacing: 0.05em;">Mês</label>
+                            <label style="font-size: 11px; font-weight: 700; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 0.05em;">Mês</label>
                             <div style="position: relative; display: flex; align-items: center;">
-                                <select id="db-filter-mes" style="padding: 10px 36px 10px 14px; font-size: 13px; font-weight: 600; width: 130px; background: rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.08); border-radius: 10px; color: #fff; appearance: none; cursor: pointer; outline: none; transition: var(--transition-smooth);">
+                                <select id="db-filter-mes" style="padding: 10px 36px 10px 14px; font-size: 13px; font-weight: 600; width: 130px; background: #f1f5f9; border: 1px solid var(--border-translucent); border-radius: 10px; color: var(--text-primary); appearance: none; cursor: pointer; outline: none; transition: var(--transition-smooth);">
                                     <option value="05" selected>Maio</option>
                                     <option value="04">Abril</option>
                                     <option value="03">Março</option>
                                     <option value="02">Fevereiro</option>
                                     <option value="01">Janeiro</option>
                                 </select>
-                                <svg style="position: absolute; right: 12px; color: #94a3b8; pointer-events: none;" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+                                <svg style="position: absolute; right: 12px; color: var(--text-muted); pointer-events: none;" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
                             </div>
                         </div>
                         <div style="display: flex; flex-direction: column; gap: 8px;">
-                            <label style="font-size: 11px; font-weight: 700; color: #94a3b8; text-transform: uppercase; letter-spacing: 0.05em;">Ano</label>
+                            <label style="font-size: 11px; font-weight: 700; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 0.05em;">Ano</label>
                             <div style="position: relative; display: flex; align-items: center;">
-                                <select id="db-filter-ano" style="padding: 10px 36px 10px 14px; font-size: 13px; font-weight: 600; width: 110px; background: rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.08); border-radius: 10px; color: #fff; appearance: none; cursor: pointer; outline: none; transition: var(--transition-smooth);">
+                                <select id="db-filter-ano" style="padding: 10px 36px 10px 14px; font-size: 13px; font-weight: 600; width: 110px; background: #f1f5f9; border: 1px solid var(--border-translucent); border-radius: 10px; color: var(--text-primary); appearance: none; cursor: pointer; outline: none; transition: var(--transition-smooth);">
                                     <option value="2026" selected>2026</option>
                                     <option value="2025">2025</option>
                                 </select>
-                                <svg style="position: absolute; right: 12px; color: #94a3b8; pointer-events: none;" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+                                <svg style="position: absolute; right: 12px; color: var(--text-muted); pointer-events: none;" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
                             </div>
                         </div>
                     </div>
@@ -1090,12 +1168,12 @@
                     <!-- Período Personalizado (Oculto inicialmente) -->
                     <div id="db-personalizado-block" style="display: none; gap: 12px; align-items: flex-end;">
                         <div style="display: flex; flex-direction: column; gap: 8px;">
-                            <label style="font-size: 11px; font-weight: 700; color: #94a3b8; text-transform: uppercase; letter-spacing: 0.05em;">Data Inicial</label>
-                            <input type="date" id="db-filter-de" style="padding: 9px 12px; font-size: 13px; font-weight: 500; width: 160px; background: rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.08); border-radius: 10px; color: #fff; outline: none; transition: var(--transition-smooth);">
+                            <label style="font-size: 11px; font-weight: 700; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 0.05em;">Data Inicial</label>
+                            <input type="date" id="db-filter-de" style="padding: 9px 12px; font-size: 13px; font-weight: 500; width: 160px; background: #f1f5f9; border: 1px solid var(--border-translucent); border-radius: 10px; color: var(--text-primary); outline: none; transition: var(--transition-smooth);">
                         </div>
                         <div style="display: flex; flex-direction: column; gap: 8px;">
-                            <label style="font-size: 11px; font-weight: 700; color: #94a3b8; text-transform: uppercase; letter-spacing: 0.05em;">Data Final</label>
-                            <input type="date" id="db-filter-ate" style="padding: 9px 12px; font-size: 13px; font-weight: 500; width: 160px; background: rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.08); border-radius: 10px; color: #fff; outline: none; transition: var(--transition-smooth);">
+                            <label style="font-size: 11px; font-weight: 700; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 0.05em;">Data Final</label>
+                            <input type="date" id="db-filter-ate" style="padding: 9px 12px; font-size: 13px; font-weight: 500; width: 160px; background: #f1f5f9; border: 1px solid var(--border-translucent); border-radius: 10px; color: var(--text-primary); outline: none; transition: var(--transition-smooth);">
                         </div>
                     </div>
 
@@ -1107,14 +1185,14 @@
                 </div>
                 
                 <!-- Label de Período Ativo (Alinhado à Direita) -->
-                <div style="font-size: 12px; color: #94a3b8; font-weight: 600;" id="db-active-period-label">
-                    Período: <span style="color: #fff; font-weight: 700;">Semana Atual (18 - 24 Mai 2026)</span>
+                <div style="font-size: 12px; color: var(--text-secondary); font-weight: 600;" id="db-active-period-label">
+                    Período: <span style="color: var(--text-primary); font-weight: 700;">Semana Atual (18 - 24 Mai 2026)</span>
                 </div>
             </div>
 
             <!-- CARDS OPERACIONAIS -->
             <section class="stats-grid">
-                <div class="stat-card">
+                <div class="stat-card fat-card">
                     <div class="stat-card-left">
                         <h3 id="card-fat-title">Faturamento Semanal</h3>
                         <div class="value" id="card-fat-val">R$ 14.250</div>
@@ -1127,7 +1205,7 @@
                     </div>
                 </div>
                 
-                <div class="stat-card">
+                <div class="stat-card km-card">
                     <div class="stat-card-left">
                         <h3>Quilometragem Rodada</h3>
                         <div class="value" id="card-km-val">2.450 km</div>
@@ -1140,7 +1218,7 @@
                     </div>
                 </div>
 
-                <div class="stat-card">
+                <div class="stat-card load-card">
                     <div class="stat-card-left">
                         <h3>Cargas Realizadas</h3>
                         <div class="value" id="card-cargas-val">12 Cargas</div>
@@ -1321,6 +1399,8 @@
                 </aside>
 
             </div>
+            
+            </div>
 
         </main>
     </div>
@@ -1358,7 +1438,7 @@
                     <div class="proposal-vehicle-select-container" style="margin-top: 15px; margin-bottom: 12px;">
                         <label for="driver-vehicle-select" style="font-size: 11px; font-weight: 700; color: var(--text-muted); text-transform: uppercase; display: block; margin-bottom: 6px; letter-spacing: 0.5px;">Selecionar Veículo para o Frete</label>
                         <div style="position: relative; width: 100%;">
-                            <select id="driver-vehicle-select" class="pix-select" style="width: 100%; padding: 10px 14px; background: rgba(0, 0, 0, 0.35); border: 1px solid rgba(255, 255, 255, 0.08); color: #fff; border-radius: 10px; font-size: 13px; font-weight: 600; appearance: none; cursor: pointer; transition: border-color 0.2s;" onchange="updateModalVehicleSpecs(this.value)">
+                            <select id="driver-vehicle-select" class="pix-select" style="width: 100%; padding: 10px 14px; background: #f1f5f9; border: 1px solid var(--border-translucent); color: var(--text-primary); border-radius: 10px; font-size: 13px; font-weight: 600; appearance: none; cursor: pointer; transition: border-color 0.2s;" onchange="updateModalVehicleSpecs(this.value)">
                                 <option value="scania">Scania R450 6x2 - Sider (Placa KRG-2E26)</option>
                                 <option value="volvo">Volvo FH 540 - Carreta Sider (Placa KRG-3A88)</option>
                             </select>
@@ -1441,61 +1521,8 @@
         </a>
     </nav>
 
-    <script src="js/api-client.js"></script>
     <!-- JS de Interações -->
     <script>
-        const api = window.KargoApi;
-
-        async function hydrateDashboardFromBackend() {
-            if (!api) return;
-
-            const session = api.getSession();
-            if (session && session.name) {
-                document.querySelectorAll('.user-name').forEach(el => {
-                    el.textContent = session.name;
-                });
-                const title = document.querySelector('.page-title h1');
-                if (title) {
-                    const firstName = session.name.split(' ')[0];
-                    title.textContent = `Ola, ${firstName}`;
-                }
-            }
-
-            if (!session || session.type !== 'MOTORISTA' || !session.id) {
-                return;
-            }
-
-            try {
-                const fretes = await api.request('/api/fretes', { method: 'GET' });
-                const doMotorista = Array.isArray(fretes)
-                    ? fretes.filter(item => item.motorista && item.motorista.id === session.id)
-                    : [];
-
-                if (doMotorista.length === 0) return;
-
-                const totalFaturamento = doMotorista.reduce((acc, item) => acc + Number(item.valorFrete || 0), 0);
-                const totalCargaKg = doMotorista.reduce((acc, item) => acc + Number(item.pesoCargaKg || 0), 0);
-
-                const faturamentoEl = document.getElementById('card-fat-val');
-                const kmEl = document.getElementById('card-km-val');
-                const cargasEl = document.getElementById('card-cargas-val');
-
-                if (faturamentoEl) {
-                    faturamentoEl.textContent = totalFaturamento.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
-                }
-                if (kmEl) {
-                    kmEl.textContent = `${Math.round(totalCargaKg / 3).toLocaleString('pt-BR')} km`;
-                }
-                if (cargasEl) {
-                    cargasEl.textContent = `${doMotorista.length} Cargas`;
-                }
-            } catch (error) {
-                console.error('Falha ao carregar dados do dashboard:', error.message);
-            }
-        }
-
-        document.addEventListener('DOMContentLoaded', hydrateDashboardFromBackend);
-
         // --- CONTROLE DO MODAL DE PROPOSTAS (IGUAL AO MARKETPLACE) ---
         const modalBackdrop = document.getElementById('proposal-modal-backdrop');
         const btnCloseModal = document.getElementById('btn-close-modal');

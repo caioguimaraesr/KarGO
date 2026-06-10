@@ -1,0 +1,434 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="KarGO — Painel do Contratante. Gerencie seus fretes, cargas e motoristas de forma simplificada.">
+    <title>KarGO — Dashboard Contratante</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/contratante.css">
+</head>
+<body>
+    <div class="layout-container">
+
+        <!-- SIDEBAR DARK -->
+        <aside class="ct-sidebar">
+            <div class="ct-sidebar-logo">
+                <a href="../index.html"><img src="../assets/images/LOGO.png" alt="KarGO" class="logo-img"></a>
+            </div>
+            <nav class="ct-sidebar-menu">
+                <div class="ct-sidebar-links">
+                    <a href="dashboard.html" class="ct-menu-item active">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="9"/><rect x="14" y="3" width="7" height="5"/><rect x="14" y="12" width="7" height="9"/><rect x="3" y="16" width="7" height="5"/></svg>
+                        Dashboard
+                    </a>
+                    <a href="publicar-carga.html" class="ct-menu-item">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="16"/><line x1="8" y1="12" x2="16" y2="12"/></svg>
+                        Publicar Carga
+                    </a>
+                    <a href="minhas-cargas.html" class="ct-menu-item">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><polyline points="3.27 6.96 12 12.01 20.73 6.96"/><line x1="12" y1="22.08" x2="12" y2="12"/></svg>
+                        Acompanhar Cargas
+                    </a>
+                    <a href="pagamentos.html" class="ct-menu-item">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="4" width="22" height="16" rx="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>
+                        Pagamentos
+                    </a>
+                    <a href="chat.html" class="ct-menu-item">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+                        Chat
+                        <span class="chat-badge-dot"></span>
+                    </a>
+                    <a href="ocorrencias.html" class="ct-menu-item">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+                        Ocorrências
+                    </a>
+                    <div class="ct-sidebar-divider"></div>
+                    <a href="perfil.html" class="ct-menu-item">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+                        Meu Perfil
+                    </a>
+                </div>
+                <div class="ct-sidebar-bottom">
+                    <a href="configuracoes.html" class="ct-menu-item">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.6 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.6a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9c.26.604.852.997 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+                        Configurações
+                    </a>
+                </div>
+            </nav>
+        </aside>
+
+        <!-- CONTEÚDO PRINCIPAL -->
+        <main class="main-content">
+            <div class="ct-content-area">
+
+                <!-- TOPBAR -->
+                <header class="ct-topbar">
+                    <div class="ct-topbar-mobile-logo">
+                        <a href="../index.html"><img src="../assets/images/LOGO.png" alt="KarGO" class="logo-img-mobile"></a>
+                    </div>
+                    <div class="ct-topbar-actions">
+                        <div class="ct-user-profile">
+                            <img src="../assets/images/embarcador.png" alt="Maria" class="ct-user-avatar">
+                            <div class="ct-user-info">
+                                <span class="ct-user-name">Maria Logística</span>
+                            </div>
+                        </div>
+                    </div>
+                </header>
+
+                <!-- TÍTULO DA PÁGINA (Fora do header travado) -->
+                <div class="ct-page-title ct-reveal" style="margin-bottom: 24px;">
+                    <h1>Olá, Maria</h1>
+                    <p>Gerencie seus fretes e acompanhe suas entregas em tempo real com facilidade.</p>
+                </div>
+
+                <!-- AÇÕES RÁPIDAS -->
+                <div class="ct-quick-actions ct-reveal">
+                    <a href="publicar-carga.html" class="ct-quick-btn primary">
+                        <div class="ct-quick-icon">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" width="20" height="20"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+                        </div>
+                        <span class="ct-quick-label">Publicar Nova Carga</span>
+                    </a>
+                    <a href="minhas-cargas.html" class="ct-quick-btn">
+                        <div class="ct-quick-icon" style="background:var(--accent-blue-light); color:var(--accent-blue);">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg>
+                        </div>
+                        <span class="ct-quick-label">Acompanhar Cargas</span>
+                    </a>
+                    <a href="pagamentos.html" class="ct-quick-btn">
+                        <div class="ct-quick-icon" style="background:var(--accent-green-light); color:var(--accent-green);">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20"><rect x="1" y="4" width="22" height="16" rx="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>
+                        </div>
+                        <span class="ct-quick-label">Pagamentos</span>
+                    </a>
+                    <a href="ocorrencias.html" class="ct-quick-btn">
+                        <div class="ct-quick-icon" style="background:var(--accent-orange-light); color:var(--accent-orange);">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/></svg>
+                        </div>
+                        <span class="ct-quick-label">Ocorrências</span>
+                    </a>
+                </div>
+
+                <!-- CARDS DE STATUS -->
+                <div class="ct-stats-grid ct-reveal">
+                    <div class="ct-stat-card blue-grad">
+                        <div class="ct-stat-left">
+                            <h3>Fretes Ativos</h3>
+                            <div class="ct-stat-value">3</div>
+                            <div class="ct-stat-trend">
+                                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/></svg>
+                                +2 esta semana
+                            </div>
+                        </div>
+                        <div class="ct-stat-icon">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="24" height="24"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg>
+                        </div>
+                    </div>
+                    <div class="ct-stat-card green-grad">
+                        <div class="ct-stat-left">
+                            <h3>Gastos do Mês</h3>
+                            <div class="ct-stat-value">R$ 12.300</div>
+                            <div class="ct-stat-trend">
+                                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="23 18 13.5 8.5 8.5 13.5 1 6"/></svg>
+                                -8% vs mês anterior
+                            </div>
+                        </div>
+                        <div class="ct-stat-icon">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="24" height="24"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+                        </div>
+                    </div>
+                    <div class="ct-stat-card orange-grad">
+                        <div class="ct-stat-left">
+                            <h3>Próxima Coleta</h3>
+                            <div class="ct-stat-value">Hoje 14h</div>
+                            <div class="ct-stat-trend">
+                                Recife, PE → Natal, RN
+                            </div>
+                        </div>
+                        <div class="ct-stat-icon">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="24" height="24"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- GRID 2 COLUNAS -->
+                <div class="ct-grid-2col">
+                    <!-- COLUNA ESQUERDA -->
+                    <div>
+                        <!-- CARGAS RECENTES -->
+                        <div class="ct-section-card ct-reveal">
+                            <div class="ct-section-header">
+                                <h2 class="ct-section-title">Anúncios de Carga Ativos</h2>
+                                <a href="minhas-cargas.html" class="ct-section-link">Ver todas as cargas →</a>
+                            </div>
+
+                            <!-- Carga ativa -->
+                            <div class="ct-cargo-card">
+                                <div class="ct-cargo-header">
+                                    <div>
+                                        <span class="ct-badge ct-badge-green"><span class="status-indicator-dot green"></span>Em Trânsito</span>
+                                        <p style="font-size:12px;color:var(--text-muted);margin-top:4px;">Frete #KG-2026-1234</p>
+                                    </div>
+                                    <span style="font-size:20px;font-weight:900;color:var(--accent-green);">R$ 2.800</span>
+                                </div>
+                                <div class="ct-cargo-route">
+                                    <div class="ct-route-point">
+                                        <div class="ct-route-label">Origem</div>
+                                        <div class="ct-route-city">Recife, PE</div>
+                                    </div>
+                                    <div class="ct-route-arrow">➔</div>
+                                    <div class="ct-route-point">
+                                        <div class="ct-route-label">Destino</div>
+                                        <div class="ct-route-city">Natal, RN</div>
+                                    </div>
+                                </div>
+                                <div class="ct-cargo-meta">
+                                    <span class="ct-meta-chip">
+                                        <svg class="meta-icon-inline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg>
+                                        Alimentos - 8t
+                                    </span>
+                                    <span class="ct-meta-chip">
+                                        <svg class="meta-icon-inline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+                                        300 km
+                                    </span>
+                                    <span class="ct-meta-chip">
+                                        <svg class="meta-icon-inline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                                        Hoje 08:00
+                                    </span>
+                                </div>
+                                <div class="ct-cargo-driver">
+                                    <img src="../assets/images/motorista.png" alt="João" class="ct-driver-avatar">
+                                    <div>
+                                        <div class="ct-driver-name">João Silva</div>
+                                        <div class="ct-driver-rating" style="color:var(--accent-orange); font-size:12px; font-weight:600;">
+                                            <svg class="star-icon-inline" viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+                                            4.9 (152 fretes) · Verificado
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="ct-progress-bar">
+                                    <div class="ct-progress-fill blue" style="width: 65%;"></div>
+                                </div>
+                                <div style="display:flex;justify-content:space-between;font-size:12px;color:var(--text-muted);margin-bottom:12px;">
+                                    <span>65% concluído</span>
+                                    <span>Previsão: Hoje 18:30</span>
+                                </div>
+                                <div class="ct-cargo-actions">
+                                    <a href="rastreamento.html" class="ct-btn ct-btn-primary ct-btn-sm" style="display:inline-flex; align-items:center; gap:6px;">
+                                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+                                        Rastrear
+                                    </a>
+                                    <a href="chat.html" class="ct-btn ct-btn-secondary ct-btn-sm" style="display:inline-flex; align-items:center; gap:6px;">
+                                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+                                        Chat
+                                    </a>
+                                    <a href="detalhes-frete.html" class="ct-btn ct-btn-secondary ct-btn-sm" style="display:inline-flex; align-items:center; gap:6px;">
+                                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+                                        Detalhes
+                                    </a>
+                                </div>
+                            </div>
+
+                            <!-- Carga pendente -->
+                            <div class="ct-cargo-card">
+                                <div class="ct-cargo-header">
+                                    <div>
+                                        <span class="ct-badge ct-badge-orange"><span class="status-indicator-dot orange"></span>Aguardando Propostas</span>
+                                        <p style="font-size:12px;color:var(--text-muted);margin-top:4px;">Anúncio #KG-2026-1235</p>
+                                    </div>
+                                    <span style="font-size:20px;font-weight:900;color:var(--accent-blue);">R$ 1.500</span>
+                                </div>
+                                <div class="ct-cargo-route">
+                                    <div class="ct-route-point">
+                                        <div class="ct-route-label">Origem</div>
+                                        <div class="ct-route-city">Jaboatão, PE</div>
+                                    </div>
+                                    <div class="ct-route-arrow">➔</div>
+                                    <div class="ct-route-point">
+                                        <div class="ct-route-label">Destino</div>
+                                        <div class="ct-route-city">Caruaru, PE</div>
+                                    </div>
+                                </div>
+                                <div class="ct-cargo-meta">
+                                    <span class="ct-meta-chip">Móveis - 5t</span>
+                                    <span class="ct-meta-chip">150 km</span>
+                                    <span class="ct-meta-chip" style="color:var(--accent-blue); font-weight:700;">4 propostas recebidas</span>
+                                </div>
+                                <div class="ct-cargo-actions">
+                                    <a href="minhas-cargas.html#tab-pendentes" class="ct-btn ct-btn-primary ct-btn-sm">Ver Propostas e Candidatos</a>
+                                    <a href="minhas-cargas.html" class="ct-btn ct-btn-secondary ct-btn-sm">Editar Anúncio</a>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- PROPOSTAS RECEBIDAS (Aceitar diretamente no dashboard) -->
+                        <div class="ct-section-card ct-reveal">
+                            <div class="ct-section-header">
+                                <h2 class="ct-section-title">Últimas Propostas para Carga #KG-2026-1235</h2>
+                                <span class="ct-badge ct-badge-blue">4 novas</span>
+                            </div>
+
+                            <div class="ct-proposal-card" style="display:flex; justify-content:space-between; align-items:center; padding:16px; border-bottom:1px solid var(--border-light); margin-bottom:8px;">
+                                <div style="display:flex; gap:12px; align-items:center;">
+                                    <img src="../assets/images/motorista.png" alt="Carlos" class="ct-proposal-avatar" style="width:40px; height:40px; border-radius:50%;">
+                                    <div>
+                                        <div class="ct-proposal-name" style="font-weight:700; font-size:14px;">Carlos Santos</div>
+                                        <div class="ct-proposal-detail" style="font-size:12px; color:var(--text-muted);">
+                                            <svg class="star-icon-inline" viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+                                            4.8 · Caminhão Truck · 120 fretes
+                                        </div>
+                                    </div>
+                                </div>
+                                <div style="display:flex; align-items:center; gap:16px;">
+                                    <div class="ct-proposal-value" style="font-weight:800; color:var(--text-dark); font-size:16px;">R$ 1.350</div>
+                                    <button class="ct-btn ct-btn-success ct-btn-sm" onclick="alert('Proposta de Carlos Santos aceita! O motorista foi notificado para coleta.')">Aceitar</button>
+                                </div>
+                            </div>
+
+                            <div class="ct-proposal-card" style="display:flex; justify-content:space-between; align-items:center; padding:16px; border-bottom:1px solid var(--border-light); margin-bottom:8px;">
+                                <div style="display:flex; gap:12px; align-items:center;">
+                                    <img src="../assets/images/motorista.png" alt="Maria" class="ct-proposal-avatar" style="width:40px; height:40px; border-radius:50%;">
+                                    <div>
+                                        <div class="ct-proposal-name" style="font-weight:700; font-size:14px;">Maria Oliveira</div>
+                                        <div class="ct-proposal-detail" style="font-size:12px; color:var(--text-muted);">
+                                            <svg class="star-icon-inline" viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+                                            4.9 · Caminhão Toco · 89 fretes
+                                        </div>
+                                    </div>
+                                </div>
+                                <div style="display:flex; align-items:center; gap:16px;">
+                                    <div class="ct-proposal-value" style="font-weight:800; color:var(--text-dark); font-size:16px;">R$ 1.400</div>
+                                    <button class="ct-btn ct-btn-success ct-btn-sm" onclick="alert('Proposta de Maria Oliveira aceita! O motorista foi notificado.')">Aceitar</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- COLUNA DIREITA -->
+                    <div>
+                        <!-- GRÁFICO DE GASTOS -->
+                        <div class="ct-section-card ct-reveal">
+                            <h2 class="ct-section-title" style="margin-bottom:16px;">Gastos Semanais (Fretes)</h2>
+                            <div class="ct-chart-container">
+                                <div class="ct-chart-bars">
+                                    <div class="ct-chart-bar-wrap">
+                                        <span class="ct-chart-tooltip">R$ 1.200</span>
+                                        <div class="ct-chart-bar" style="height: 45px;"></div>
+                                        <span class="ct-chart-label">Seg</span>
+                                    </div>
+                                    <div class="ct-chart-bar-wrap">
+                                        <span class="ct-chart-tooltip">R$ 2.800</span>
+                                        <div class="ct-chart-bar" style="height: 95px;"></div>
+                                        <span class="ct-chart-label">Ter</span>
+                                    </div>
+                                    <div class="ct-chart-bar-wrap">
+                                        <span class="ct-chart-tooltip">R$ 0</span>
+                                        <div class="ct-chart-bar" style="height: 8px;"></div>
+                                        <span class="ct-chart-label">Qua</span>
+                                    </div>
+                                    <div class="ct-chart-bar-wrap">
+                                        <span class="ct-chart-tooltip">R$ 1.500</span>
+                                        <div class="ct-chart-bar" style="height: 55px;"></div>
+                                        <span class="ct-chart-label">Qui</span>
+                                    </div>
+                                    <div class="ct-chart-bar-wrap">
+                                        <span class="ct-chart-tooltip">R$ 3.200</span>
+                                        <div class="ct-chart-bar" style="height: 110px;"></div>
+                                        <span class="ct-chart-label">Sex</span>
+                                    </div>
+                                    <div class="ct-chart-bar-wrap">
+                                        <span class="ct-chart-tooltip">R$ 1.800</span>
+                                        <div class="ct-chart-bar" style="height: 65px;"></div>
+                                        <span class="ct-chart-label">Sáb</span>
+                                    </div>
+                                    <div class="ct-chart-bar-wrap">
+                                        <span class="ct-chart-tooltip">R$ 1.800</span>
+                                        <div class="ct-chart-bar" style="height: 65px;"></div>
+                                        <span class="ct-chart-label">Dom</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div style="display:flex;justify-content:space-between;font-size:12px;color:var(--text-muted);margin-top:12px;">
+                                <span>Total Semanal: <strong style="color:var(--text-dark);">R$ 12.300</strong></span>
+                                <span>7 fretes finalizados</span>
+                            </div>
+                        </div>
+
+                        <!-- ATIVIDADE RECENTE -->
+                        <div class="ct-section-card ct-reveal">
+                            <h2 class="ct-section-title" style="margin-bottom:16px;">Timeline de Eventos</h2>
+                            <div class="ct-timeline">
+                                <div class="ct-timeline-item">
+                                    <div class="ct-timeline-dot green"></div>
+                                    <div class="ct-timeline-content">
+                                        <div class="ct-timeline-title">Frete #1234 — Coletado</div>
+                                        <div class="ct-timeline-desc">Motorista João confirmou retirada em Recife</div>
+                                    </div>
+                                    <div class="ct-timeline-time">Hoje 08:00</div>
+                                </div>
+                                <div class="ct-timeline-item">
+                                    <div class="ct-timeline-dot blue"></div>
+                                    <div class="ct-timeline-content">
+                                        <div class="ct-timeline-title">Proposta Recebida</div>
+                                        <div class="ct-timeline-desc">Carlos Santos enviou proposta para Frete #1235</div>
+                                    </div>
+                                    <div class="ct-timeline-time">Hoje 07:45</div>
+                                </div>
+                                <div class="ct-timeline-item">
+                                    <div class="ct-timeline-dot green"></div>
+                                    <div class="ct-timeline-content">
+                                        <div class="ct-timeline-title">Pagamento confirmado</div>
+                                        <div class="ct-timeline-desc">Repasse efetuado para Frete #1230</div>
+                                    </div>
+                                    <div class="ct-timeline-time">Ontem 16:30</div>
+                                </div>
+                                <div class="ct-timeline-item">
+                                    <div class="ct-timeline-dot orange"></div>
+                                    <div class="ct-timeline-content">
+                                        <div class="ct-timeline-title">Avaliação pendente</div>
+                                        <div class="ct-timeline-desc">Você ainda não avaliou a entrega do Frete #1230</div>
+                                    </div>
+                                    <div class="ct-timeline-time">Ontem 15:00</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div><!-- /ct-content-area -->
+        </main>
+    </div>
+
+    <!-- BOTTOM NAV MOBILE -->
+    <nav class="ct-bottom-nav">
+        <a href="dashboard.html" class="ct-bottom-item active">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="9"/><rect x="14" y="3" width="7" height="5"/><rect x="14" y="12" width="7" height="9"/><rect x="3" y="16" width="7" height="5"/></svg>
+            Home
+        </a>
+        <a href="minhas-cargas.html" class="ct-bottom-item">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg>
+            Cargas
+        </a>
+        <a href="publicar-carga.html" class="ct-bottom-item" style="position:relative;">
+            <div style="width:48px;height:48px;border-radius:50%;background:var(--accent-blue);display:flex;align-items:center;justify-content:center;margin-top:-20px;box-shadow:0 4px 16px rgba(0,136,255,0.35);">
+                <svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5" width="22" height="22"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+            </div>
+            Publicar
+        </a>
+        <a href="chat.html" class="ct-bottom-item">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+            Chat
+        </a>
+        <a href="perfil.html" class="ct-bottom-item">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+            Perfil
+        </a>
+    </nav>
+
+    <script src="js/contratante.js"></script>
+</body>
+</html>

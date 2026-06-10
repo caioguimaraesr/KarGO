@@ -1,0 +1,491 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="KarGO — Detalhes completos do frete com rastreamento, confirmação de entrega e reporte de problemas.">
+    <title>KarGO — Detalhes do Frete</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/contratante.css">
+</head>
+<body>
+    <div class="layout-container">
+        
+        <!-- SIDEBAR -->
+        <aside class="ct-sidebar">
+            <div class="ct-sidebar-logo">
+                <a href="../index.html"><img src="../assets/images/LOGO.png" alt="KarGO" class="logo-img"></a>
+            </div>
+            <nav class="ct-sidebar-menu">
+                <div class="ct-sidebar-links">
+                    <a href="dashboard.html" class="ct-menu-item">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="9"/><rect x="14" y="3" width="7" height="5"/><rect x="14" y="12" width="7" height="9"/><rect x="3" y="16" width="7" height="5"/></svg>
+                        Dashboard
+                    </a>
+                    <a href="publicar-carga.html" class="ct-menu-item">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="16"/><line x1="8" y1="12" x2="16" y2="12"/></svg>
+                        Publicar Carga
+                    </a>
+                    <a href="minhas-cargas.html" class="ct-menu-item active">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg>
+                        Acompanhar Cargas
+                    </a>
+                    <a href="pagamentos.html" class="ct-menu-item">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="4" width="22" height="16" rx="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>
+                        Pagamentos
+                    </a>
+                    <a href="chat.html" class="ct-menu-item">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+                        Chat
+                        <span class="chat-badge-dot"></span>
+                    </a>
+                    <a href="ocorrencias.html" class="ct-menu-item">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+                        Ocorrências
+                    </a>
+                    <div class="ct-sidebar-divider"></div>
+                    <a href="perfil.html" class="ct-menu-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>Meu Perfil</a>
+                </div>
+                <div class="ct-sidebar-bottom">
+                    <a href="configuracoes.html" class="ct-menu-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.6 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.6a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9c.26.604.852.997 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>Configurações</a>
+                </div>
+            </nav>
+        </aside>
+
+        <main class="main-content">
+            <div class="ct-content-area">
+
+            <!-- TOPBAR -->
+            <header class="ct-topbar">
+                <div class="ct-topbar-mobile-logo"><a href="../index.html"><img src="../assets/images/LOGO.png" alt="KarGO" class="logo-img-mobile"></a></div>
+                <div class="ct-topbar-actions">
+                    <span class="ct-badge ct-badge-green" style="padding:8px 16px;font-size:13px;margin-right:12px;">
+                        <span class="status-indicator-dot green"></span>
+                        Em Trânsito — 65%
+                    </span>
+                    <div class="ct-user-profile">
+                        <img src="../assets/images/embarcador.png" alt="Maria" class="ct-user-avatar">
+                        <div class="ct-user-info">
+                            <span class="ct-user-name">Maria Logística</span>
+                        </div>
+                    </div>
+                </div>
+            </header>
+
+            <!-- TÍTULO DA PÁGINA (Fora do header travado) -->
+            <div class="ct-page-title ct-reveal" style="margin-bottom: 24px;">
+                <div style="display:flex;align-items:center;gap:12px;">
+                    <a href="minhas-cargas.html" style="color:var(--text-muted);display:flex;align-items:center;">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+                    </a>
+                    <div>
+                        <h1>Frete #KG-2026-1234</h1>
+                        <p>Recife → Natal · R$ 2.800,00</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- MAPA DE RASTREAMENTO -->
+            <div class="ct-map-container ct-reveal" style="height:250px;margin-bottom:24px;">
+                <div class="ct-map-route">
+                    <div class="ct-map-route-done" style="width:65%;"></div>
+                </div>
+                <div class="ct-map-pin start" style="font-size:14px; font-weight:700; color:var(--accent-green);">A</div>
+                <div class="ct-map-pin current" style="left:65%; display:flex; align-items:center; justify-content:center; background:#0088FF; color:#fff; border-radius:50%; width:32px; height:32px; box-shadow:0 0 10px rgba(0,136,255,0.5); border:2px solid #fff;">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16"><rect x="1" y="3" width="15" height="13"/><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>
+                </div>
+                <div class="ct-map-pin end" style="font-size:14px; font-weight:700; color:var(--accent-red);">B</div>
+                <div style="position:absolute;bottom:16px;left:16px;background:rgba(255,255,255,0.95);padding:10px 16px;border-radius:10px;font-size:12px;color:var(--text-body);box-shadow:var(--shadow-sm); border:1px solid var(--border-light);">
+                    <strong>BR-101, Km 85</strong> — Goiana, PE<br>
+                    <span style="color:var(--accent-blue);font-weight:600;">Última atualização: há 2 min</span>
+                </div>
+                <a href="rastreamento.html" style="position:absolute;bottom:16px;right:16px;background:var(--accent-blue);color:#fff;padding:8px 16px;border-radius:8px;font-size:12px;font-weight:600;box-shadow:var(--shadow-blue);">Abrir Rastreamento →</a>
+            </div>
+
+            <div class="ct-grid-2col">
+                <!-- COLUNA ESQUERDA -->
+                <div>
+                    <!-- RESUMO DO FRETE -->
+                    <div class="ct-section-card ct-reveal">
+                        <h2 class="ct-section-title" style="margin-bottom:16px;">Resumo da Carga</h2>
+                        <div class="ct-grid-2col-responsive">
+                            <div style="background:var(--bg-body);padding:14px;border-radius:var(--radius-md);border:1px solid var(--border-light);">
+                                <div style="font-size:11px;color:var(--text-muted);text-transform:uppercase;font-weight:700;">Tipo</div>
+                                <div style="font-size:15px;font-weight:700;margin-top:4px;">Alimentos Perecíveis</div>
+                            </div>
+                            <div style="background:var(--bg-body);padding:14px;border-radius:var(--radius-md);border:1px solid var(--border-light);">
+                                <div style="font-size:11px;color:var(--text-muted);text-transform:uppercase;font-weight:700;">Peso</div>
+                                <div style="font-size:15px;font-weight:700;margin-top:4px;">8 toneladas</div>
+                            </div>
+                            <div style="background:var(--bg-body);padding:14px;border-radius:var(--radius-md);border:1px solid var(--border-light);">
+                                <div style="font-size:11px;color:var(--text-muted);text-transform:uppercase;font-weight:700;">Distância</div>
+                                <div style="font-size:15px;font-weight:700;margin-top:4px;">300 km</div>
+                            </div>
+                            <div style="background:var(--bg-body);padding:14px;border-radius:var(--radius-md);border:1px solid var(--border-light);">
+                                <div style="font-size:11px;color:var(--text-muted);text-transform:uppercase;font-weight:700;">Valor do Frete</div>
+                                <div style="font-size:15px;font-weight:700;color:var(--accent-green);margin-top:4px;">R$ 2.800,00</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- ROTA -->
+                    <div class="ct-section-card ct-reveal">
+                        <h2 class="ct-section-title" style="margin-bottom:16px;">Rota de Entrega</h2>
+                        <div class="ct-cargo-route">
+                            <div class="ct-route-point">
+                                <div class="ct-route-label">Origem (Coleta)</div>
+                                <div class="ct-route-city">Depósito Central Materiais</div>
+                                <div style="font-size:12px;color:var(--text-muted);margin-top:2px;">Av. Cruz Cabugá, 1234 — Recife, PE</div>
+                                <div style="font-size:12px;color:var(--accent-blue);font-weight:600;margin-top:4px; display:flex; align-items:center; gap:4px;">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" width="12" height="12" style="color:var(--accent-green);"><polyline points="20 6 9 17 4 12"/></svg>
+                                    05/06/2026 às 08:00 Concluído
+                                </div>
+                            </div>
+                            <div class="ct-route-arrow">➔</div>
+                            <div class="ct-route-point">
+                                <div class="ct-route-label">Destino (Entrega)</div>
+                                <div class="ct-route-city">Distribuidora Natal Foods</div>
+                                <div style="font-size:12px;color:var(--text-muted);margin-top:2px;">Rua das Flores, 567 — Natal, RN</div>
+                                <div style="font-size:12px;color:var(--accent-orange);font-weight:600;margin-top:4px;">Previsto: 05/06/2026 até 18:00</div>
+                            </div>
+                        </div>
+                        <div style="display:flex;gap:12px;margin-top:8px;">
+                            <span class="ct-meta-chip">Duração: ~3h30 de viagem</span>
+                            <span class="ct-meta-chip">Distância: 300 km</span>
+                            <span class="ct-meta-chip">Refrigeração: Ativa</span>
+                        </div>
+                    </div>
+
+                    <!-- MOTORISTA -->
+                    <div class="ct-section-card ct-reveal">
+                        <h2 class="ct-section-title" style="margin-bottom:16px;">Dados do Motorista</h2>
+                        <div style="display:flex;align-items:center;gap:16px;padding:16px;background:var(--bg-body);border-radius:var(--radius-md);border:1px solid var(--border-light);">
+                            <img src="../assets/images/motorista.png" alt="João Silva" style="width:56px;height:56px;border-radius:50%;object-fit:cover;border:3px solid var(--accent-blue-light);">
+                            <div style="flex:1;">
+                                <div style="font-size:16px;font-weight:800;color:var(--text-dark);">João Silva</div>
+                                <div style="font-size:13px;color:var(--accent-orange);font-weight:600;margin-top:2px;">
+                                    <svg class="star-icon-inline" viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+                                    4.9 (152 avaliações)
+                                </div>
+                                <div style="font-size:12px;color:var(--text-muted);margin-top:2px;">Mercedes Atego 1719 · ABC-1234 · Baú Refrigerado</div>
+                            </div>
+                            <span class="ct-badge ct-badge-green">Verificado</span>
+                        </div>
+                        <div style="display:flex;gap:10px;margin-top:14px;">
+                            <a href="chat.html" class="ct-btn ct-btn-primary ct-btn-sm" style="flex:1;justify-content:center;display:inline-flex;align-items:center;gap:6px;">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" width="14" height="14"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+                                Chat
+                            </a>
+                            <button class="ct-btn ct-btn-secondary ct-btn-sm" style="flex:1;justify-content:center;" onclick="alert('Ligando para João Silva...')">Ligar</button>
+                            <a href="perfil.html" class="ct-btn ct-btn-outline ct-btn-sm" style="flex:1;justify-content:center;">Ver Perfil</a>
+                        </div>
+                    </div>
+
+                    <!-- DOCUMENTAÇÃO -->
+                    <div class="ct-section-card ct-reveal">
+                        <h2 class="ct-section-title" style="margin-bottom:16px;">Documentos Digitais</h2>
+                        <div style="display:flex;flex-direction:column;gap:10px;">
+                            <div style="display:flex;align-items:center;gap:12px;padding:12px 16px;background:var(--bg-body);border-radius:var(--radius-sm);border:1px solid var(--border-light);">
+                                <span style="color:var(--accent-green); font-weight:700;">✓</span>
+                                <span style="font-size:14px;font-weight:600;flex:1;">CT-e emitido — #CT-2026-001234</span>
+                                <button class="ct-btn ct-btn-secondary ct-btn-sm" onclick="alert('Fazendo download do CT-e...')">Baixar</button>
+                            </div>
+                            <div style="display:flex;align-items:center;gap:12px;padding:12px 16px;background:var(--bg-body);border-radius:var(--radius-sm);border:1px solid var(--border-light);">
+                                <span style="color:var(--accent-green); font-weight:700;">✓</span>
+                                <span style="font-size:14px;font-weight:600;flex:1;">MDF-e gerado — #MDF-2026-567</span>
+                                <button class="ct-btn ct-btn-secondary ct-btn-sm" onclick="alert('Fazendo download do MDF-e...')">Baixar</button>
+                            </div>
+                            <div style="display:flex;align-items:center;gap:12px;padding:12px 16px;background:var(--bg-body);border-radius:var(--radius-sm);border:1px solid var(--border-light);">
+                                <span style="color:var(--accent-green); font-weight:700;">✓</span>
+                                <span style="font-size:14px;font-weight:600;flex:1;">Nota fiscal anexada</span>
+                                <button class="ct-btn ct-btn-secondary ct-btn-sm" onclick="alert('Fazendo download da Nota Fiscal...')">Baixar</button>
+                            </div>
+                            <div style="display:flex;align-items:center;gap:12px;padding:12px 16px;background:var(--accent-green-light);border-radius:var(--radius-sm);border:1px solid rgba(34,197,94,0.2);">
+                                <span style="color:var(--accent-green);">🛡️</span>
+                                <span style="font-size:14px;font-weight:600;color:var(--accent-green);">Seguro de carga KarGO ativo</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- COLUNA DIREITA -->
+                <div>
+                    <!-- STATUS ATUAL -->
+                    <div class="ct-section-card ct-reveal" style="border-left:4px solid var(--accent-blue);">
+                        <h2 class="ct-section-title" style="margin-bottom:12px;">Posição Atual</h2>
+                        <div style="font-size:15px;font-weight:700;color:var(--text-dark);margin-bottom:4px;">BR-101, Km 85 — Goiana, PE</div>
+                        <div style="font-size:13px;color:var(--text-muted);margin-bottom:16px;">Última atualização: há 2 minutos</div>
+                        <div class="ct-grid-2col-responsive" style="gap:12px !important;">
+                            <div style="text-align:center;padding:12px;background:var(--bg-body);border-radius:var(--radius-sm);border:1px solid var(--border-light);">
+                                <div style="font-size:20px;font-weight:800;color:var(--accent-blue);">80</div>
+                                <div style="font-size:11px;color:var(--text-muted);font-weight:600;">km/h</div>
+                            </div>
+                            <div style="text-align:center;padding:12px;background:var(--bg-body);border-radius:var(--radius-sm);border:1px solid var(--border-light);">
+                                <div style="font-size:20px;font-weight:800;color:var(--accent-green);">135</div>
+                                <div style="font-size:11px;color:var(--text-muted);font-weight:600;">km percorridos</div>
+                            </div>
+                            <div style="text-align:center;padding:12px;background:var(--bg-body);border-radius:var(--radius-sm);border:1px solid var(--border-light);">
+                                <div style="font-size:20px;font-weight:800;color:var(--accent-orange);">165</div>
+                                <div style="font-size:11px;color:var(--text-muted);font-weight:600;">km restantes</div>
+                            </div>
+                            <div style="text-align:center;padding:12px;background:var(--bg-body);border-radius:var(--radius-sm);border:1px solid var(--border-light);">
+                                <div style="font-size:20px;font-weight:800;color:var(--text-dark);">2h15</div>
+                                <div style="font-size:11px;color:var(--text-muted);font-weight:600;">tempo estimado</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- TIMELINE DO FRETE -->
+                    <div class="ct-section-card ct-reveal">
+                        <h2 class="ct-section-title" style="margin-bottom:16px;">Histórico do Frete</h2>
+                        <div class="ct-timeline">
+                            <div class="ct-timeline-item">
+                                <div class="ct-timeline-dot green"></div>
+                                <div class="ct-timeline-content">
+                                    <div class="ct-timeline-title">Carga coletada</div>
+                                    <div class="ct-timeline-desc">Motorista confirmou retirada no galpão. Fotos anexadas.</div>
+                                </div>
+                                <div class="ct-timeline-time">08:00</div>
+                            </div>
+                            <div class="ct-timeline-item">
+                                <div class="ct-timeline-dot green"></div>
+                                <div class="ct-timeline-content">
+                                    <div class="ct-timeline-title">Viagem iniciada</div>
+                                    <div class="ct-timeline-desc">Saída de Recife confirmada pelo GPS.</div>
+                                </div>
+                                <div class="ct-timeline-time">08:30</div>
+                            </div>
+                            <div class="ct-timeline-item">
+                                <div class="ct-timeline-dot blue"></div>
+                                <div class="ct-timeline-content">
+                                    <div class="ct-timeline-title">Em trânsito</div>
+                                    <div class="ct-timeline-desc">Passando por Goiana, PE — BR-101, km 85</div>
+                                </div>
+                                <div class="ct-timeline-time">14:30</div>
+                            </div>
+                            <div class="ct-timeline-item">
+                                <div class="ct-timeline-dot gray"></div>
+                                <div class="ct-timeline-content">
+                                    <div class="ct-timeline-title">Entrega prevista</div>
+                                    <div class="ct-timeline-desc">Natal, RN — Rua das Flores, 567</div>
+                                </div>
+                                <div class="ct-timeline-time">~18:30</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- AÇÕES DE ACOMPANHAMENTO -->
+                    <div class="ct-section-card ct-reveal" style="background:linear-gradient(135deg, #F0F9FF, #F0FDF4);border:1px solid rgba(0,136,255,0.1);">
+                        <h2 class="ct-section-title" style="margin-bottom:16px;">Ações de Acompanhamento</h2>
+                        <div style="display:flex;flex-direction:column;gap:10px;">
+                            <button onclick="openModal('modal-confirmar-entrega')" class="ct-btn ct-btn-success" style="width:100%;justify-content:center;padding:14px;font-size:15px;">Confirmar Recebimento da Carga</button>
+                            <button onclick="openModal('modal-reportar-problema')" class="ct-btn ct-btn-danger" style="width:100%;justify-content:center;padding:14px;font-size:15px;">Reportar Problema / Sinistro</button>
+                            <a href="rastreamento.html" class="ct-btn ct-btn-primary" style="width:100%;justify-content:center;padding:14px;font-size:15px;">Rastreamento Completo</a>
+                            <button class="ct-btn ct-btn-secondary" style="width:100%;justify-content:center;" onclick="alert('Link de compartilhamento de rastreio copiado para área de transferência!')">Compartilhar Link de Rastreio</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            </div>
+        </main>
+    </div>
+
+    <!-- ===================== MODAL: CONFIRMAR ENTREGA ===================== -->
+    <div class="ct-modal-backdrop" id="modal-confirmar-entrega">
+        <div class="ct-modal" style="max-width:580px;">
+            <div class="ct-modal-header">
+                <h2 class="ct-modal-title">Confirmar Recebimento de Entrega</h2>
+                <button class="ct-modal-close" onclick="closeModal('modal-confirmar-entrega')">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+                </button>
+            </div>
+
+            <!-- FORMULÁRIO -->
+            <div class="ct-modal-body" id="confirm-form">
+                <div style="background:var(--accent-blue-light);padding:14px 18px;border-radius:var(--radius-md);display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">
+                    <div>
+                        <div style="font-size:13px;font-weight:700;color:var(--text-dark);">Frete #KG-2026-1234</div>
+                        <div style="font-size:12px;color:var(--text-muted);">Recife → Natal · Motorista: João Silva</div>
+                    </div>
+                    <span style="font-size:17px;font-weight:800;color:var(--accent-blue);">R$ 2.800</span>
+                </div>
+
+                <!-- Fotos -->
+                <div class="ct-form-group">
+                    <label class="ct-form-label">Fotos do Recebimento (Requerido)</label>
+                    <p style="font-size:12px;color:var(--text-muted);margin-bottom:10px;">Faça upload de fotos da carga recebida e comprovantes assinados</p>
+                    <div class="ct-upload-grid">
+                        <div class="ct-upload-box" onclick="alert('Upload de fotos da carga simulado...')">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20" style="margin-bottom:6px;"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+                            Foto Carga
+                        </div>
+                        <div class="ct-upload-box" onclick="alert('Upload de documento/NF simulado...')">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20" style="margin-bottom:6px;"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+                            Foto NF
+                        </div>
+                        <div class="ct-upload-box" onclick="alert('Upload de comprovante de entrega simulado...')">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20" style="margin-bottom:6px;"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+                            Assinatura NF
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Estado da Carga -->
+                <div class="ct-form-group">
+                    <label class="ct-form-label">Estado da Carga no Destino</label>
+                    <div class="ct-option-list" data-type="radio">
+                        <div class="ct-option-item selected">
+                            <input type="radio" name="cargo-state" checked style="margin-right:8px;">
+                            <span>Perfeito estado — sem avarias</span>
+                        </div>
+                        <div class="ct-option-item" style="margin-top:8px;">
+                            <input type="radio" name="cargo-state" style="margin-right:8px;">
+                            <span>Divergência leve — avaria menor</span>
+                        </div>
+                        <div class="ct-option-item" style="margin-top:8px;">
+                            <input type="radio" name="cargo-state" style="margin-right:8px;">
+                            <span>Dano severo — carga danificada</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Assinatura -->
+                <div class="ct-form-group" style="margin-top:16px;">
+                    <label class="ct-form-label">Assinatura Digital do Recebedor</label>
+                    <div class="ct-signature-area" style="height:120px; border:1px dashed var(--border-light); background:var(--bg-body); border-radius:var(--radius-sm); display:flex; align-items:center; justify-content:center; color:var(--text-muted); cursor:pointer;" onclick="alert('Canvas para desenhar assinatura digital ativado...')">
+                        Clique para assinar com o mouse ou tela sensível
+                    </div>
+                </div>
+
+                <!-- Observações -->
+                <div class="ct-form-group" style="margin-top:16px;">
+                    <label class="ct-form-label">Observações Adicionais</label>
+                    <textarea class="ct-form-input ct-form-textarea" placeholder="Descreva observações caso ocorra divergência..." rows="3" style="width:100%; border:1px solid var(--border-light); border-radius:var(--radius-sm); padding:10px; background:var(--bg-body); resize:none; font-family:var(--font);"></textarea>
+                </div>
+
+                <!-- Checkbox de confirmação -->
+                <div style="display:flex;align-items:flex-start;gap:10px;padding:14px 16px;background:var(--accent-green-light);border-radius:var(--radius-sm);border:1px solid rgba(34,197,94,0.2); margin-top:16px;">
+                    <input type="checkbox" style="width:18px;height:18px;accent-color:var(--accent-green);margin-top:2px;">
+                    <span style="font-size:13px;color:var(--text-body);line-height:1.5;">Confirmo o recebimento integral da mercadoria conforme a nota fiscal.</span>
+                </div>
+            </div>
+
+            <!-- SUCESSO -->
+            <div class="ct-modal-body" id="confirm-success" style="display:none;">
+                <div class="ct-success-state" style="text-align:center; padding:20px;">
+                    <div class="ct-success-icon" style="color:var(--accent-green); display:flex; justify-content:center; margin-bottom:12px;">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="48" height="48"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+                    </div>
+                    <h3 class="ct-success-title" style="font-size:20px; font-weight:800; color:var(--accent-green);">Recebimento Confirmado!</h3>
+                    <p class="ct-success-desc" style="font-size:14px; color:var(--text-body); margin-top:8px;">O repasse de pagamento do frete foi agendado e será liquidado.<br>Protocolo: <strong>#CONF-2026-001234</strong></p>
+
+                    <div style="text-align:left; margin-top:20px;">
+                        <label class="ct-form-label" style="text-align:center; display:block;">Avalie o serviço do motorista</label>
+                        <div class="ct-star-rating" style="display:flex; justify-content:center; gap:8px; margin-top:8px; font-size:24px; cursor:pointer;">
+                            <span>☆</span><span>☆</span><span>☆</span><span>☆</span><span>☆</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="ct-modal-footer" id="confirm-form-footer">
+                <button class="ct-btn ct-btn-secondary" style="flex:1;" onclick="closeModal('modal-confirmar-entrega')">Cancelar</button>
+                <button class="ct-btn ct-btn-success" style="flex:2;" onclick="showConfirmSuccess(); document.getElementById('confirm-form-footer').style.display='none'; document.getElementById('confirm-success-footer').style.display='flex';">Confirmar Entrega</button>
+            </div>
+            <div class="ct-modal-footer" id="confirm-success-footer" style="display:none;">
+                <button class="ct-btn ct-btn-secondary" style="flex:1;" onclick="closeModal('modal-confirmar-entrega')">Pular</button>
+                <button class="ct-btn ct-btn-primary" style="flex:2;" onclick="closeModal('modal-confirmar-entrega'); alert('Avaliação enviada com sucesso!')">Enviar Avaliação</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ===================== MODAL: REPORTAR PROBLEMA ===================== -->
+    <div class="ct-modal-backdrop" id="modal-reportar-problema">
+        <div class="ct-modal" style="max-width:580px;">
+            <div class="ct-modal-header">
+                <h2 class="ct-modal-title">Reportar Ocorrência / Problema</h2>
+                <button class="ct-modal-close" onclick="closeModal('modal-reportar-problema')">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+                </button>
+            </div>
+
+            <!-- FORMULÁRIO -->
+            <div class="ct-modal-body" id="report-form">
+                <div style="background:var(--accent-red-light);padding:14px 18px;border-radius:var(--radius-md);margin-bottom:16px;">
+                    <div style="font-size:13px;font-weight:700;color:#991B1B;">Frete #KG-2026-1234 — Recife → Natal</div>
+                    <div style="font-size:12px;color:#B91C1C;">Motorista: João Silva</div>
+                </div>
+
+                <!-- Tipo de Problema -->
+                <div class="ct-form-group">
+                    <label class="ct-form-label">Selecione o Tipo de Problema</label>
+                    <div class="ct-option-list ct-grid-2col-responsive" data-type="radio" style="gap:8px !important;">
+                        <label style="display:flex; align-items:center; gap:6px; font-size:13px;"><input type="radio" name="p-type" checked> Atraso na Coleta/Entrega</label>
+                        <label style="display:flex; align-items:center; gap:6px; font-size:13px;"><input type="radio" name="p-type"> Carga Danificada</label>
+                        <label style="display:flex; align-items:center; gap:6px; font-size:13px;"><input type="radio" name="p-type"> Motorista não compareceu</label>
+                        <label style="display:flex; align-items:center; gap:6px; font-size:13px;"><input type="radio" name="p-type"> Sinistro / Roubo / Extravio</label>
+                        <label style="display:flex; align-items:center; gap:6px; font-size:13px;"><input type="radio" name="p-type"> Outros motivos</label>
+                    </div>
+                </div>
+
+                <!-- Urgência -->
+                <div class="ct-form-group" style="margin-top:16px;">
+                    <label class="ct-form-label">Urgência do Relato</label>
+                    <div class="ct-urgency-selector" style="display:flex; gap:10px;">
+                        <button class="ct-urgency-btn low" style="flex:1;" onclick="event.preventDefault()">Baixa</button>
+                        <button class="ct-urgency-btn medium selected" style="flex:1;" onclick="event.preventDefault()">Média</button>
+                        <button class="ct-urgency-btn high" style="flex:1;" onclick="event.preventDefault()">Alta</button>
+                    </div>
+                </div>
+
+                <!-- Descrição -->
+                <div class="ct-form-group" style="margin-top:16px;">
+                    <label class="ct-form-label">Descreva o Problema Detalhadamente</label>
+                    <textarea class="ct-form-input ct-form-textarea" placeholder="Forneça o máximo de informações possível para o suporte KarGO resolver rápido..." rows="4" style="width:100%; border:1px solid var(--border-light); border-radius:var(--radius-sm); padding:10px; background:var(--bg-body); resize:none; font-family:var(--font);"></textarea>
+                </div>
+
+                <!-- Evidências -->
+                <div class="ct-form-group" style="margin-top:16px;">
+                    <label class="ct-form-label">Anexar Fotos / Evidências</label>
+                    <div class="ct-upload-grid">
+                        <div class="ct-upload-box" onclick="alert('Upload de foto de evidência...')">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+                            Anexar Foto
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SUCESSO -->
+            <div class="ct-modal-body" id="report-success" style="display:none;">
+                <div class="ct-success-state" style="text-align:center; padding:20px;">
+                    <div class="ct-success-icon" style="color:var(--accent-red); display:flex; justify-content:center; margin-bottom:12px;">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="48" height="48"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+                    </div>
+                    <h3 class="ct-success-title" style="font-size:20px; font-weight:800; color:var(--accent-red);">Ocorrência Aberta</h3>
+                    <p class="ct-success-desc" style="font-size:14px; color:var(--text-body); margin-top:8px;">Protocolo: <strong>#OC-2026-004567</strong>. O suporte KarGO analisará o caso em até 24h.</p>
+                </div>
+            </div>
+
+            <div class="ct-modal-footer" id="report-form-footer">
+                <button class="ct-btn ct-btn-secondary" style="flex:1;" onclick="closeModal('modal-reportar-problema')">Cancelar</button>
+                <button class="ct-btn ct-btn-danger" style="flex:2;" onclick="showReportSuccess(); document.getElementById('report-form-footer').style.display='none';">Enviar Ocorrência</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- BOTTOM NAV -->
+    <nav class="ct-bottom-nav">
+        <a href="dashboard.html" class="ct-bottom-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="9"/><rect x="14" y="3" width="7" height="5"/><rect x="14" y="12" width="7" height="9"/><rect x="3" y="16" width="7" height="5"/></svg>Home</a>
+        <a href="minhas-cargas.html" class="ct-bottom-item active"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg>Cargas</a>
+        <a href="publicar-carga.html" class="ct-bottom-item"><div style="width:48px;height:48px;border-radius:50%;background:var(--accent-blue);display:flex;align-items:center;justify-content:center;margin-top:-20px;box-shadow:0 4px 16px rgba(0,136,255,0.35);"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5" width="22" height="22"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></div>Publicar</a>
+        <a href="chat.html" class="ct-bottom-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>Chat</a>
+        <a href="perfil.html" class="ct-bottom-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>Perfil</a>
+    </nav>
+
+    <script src="js/contratante.js"></script>
+</body>
+</html>

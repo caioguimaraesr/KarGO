@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="KarGO — Ocorrências. Acompanhe a resolução de disputas, atrasos e problemas com cargas.">
+    <title>KarGO — Central de Ocorrências</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/contratante.css">
+</head>
+<body>
+    <div class="layout-container">
+
+        <!-- SIDEBAR DARK -->
+        <aside class="ct-sidebar">
+            <div class="ct-sidebar-logo">
+                <a href="../index.html"><img src="../assets/images/LOGO.png" alt="KarGO" class="logo-img"></a>
+            </div>
+            <nav class="ct-sidebar-menu">
+                <div class="ct-sidebar-links">
+                    <a href="dashboard.html" class="ct-menu-item">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="9"/><rect x="14" y="3" width="7" height="5"/><rect x="14" y="12" width="7" height="9"/><rect x="3" y="16" width="7" height="5"/></svg>
+                        Dashboard
+                    </a>
+                    <a href="publicar-carga.html" class="ct-menu-item">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="16"/><line x1="8" y1="12" x2="16" y2="12"/></svg>
+                        Publicar Carga
+                    </a>
+                    <a href="minhas-cargas.html" class="ct-menu-item">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><polyline points="3.27 6.96 12 12.01 20.73 6.96"/><line x1="12" y1="22.08" x2="12" y2="12"/></svg>
+                        Acompanhar Cargas
+                    </a>
+                    <a href="pagamentos.html" class="ct-menu-item">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="4" width="22" height="16" rx="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>
+                        Pagamentos
+                    </a>
+                    <a href="chat.html" class="ct-menu-item">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+                        Chat
+                        <span class="chat-badge-dot"></span>
+                    </a>
+                    <a href="ocorrencias.html" class="ct-menu-item active">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+                        Ocorrências
+                    </a>
+                    <div class="ct-sidebar-divider"></div>
+                    <a href="perfil.html" class="ct-menu-item">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+                        Meu Perfil
+                    </a>
+                </div>
+                <div class="ct-sidebar-bottom">
+                    <a href="configuracoes.html" class="ct-menu-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.6 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.6a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9c.26.604.852.997 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>Configurações</a>
+                </div>
+            </nav>
+        </aside>
+
+        <!-- CONTEÚDO PRINCIPAL -->
+        <main class="main-content">
+            <div class="ct-content-area">
+
+                <!-- TOPBAR -->
+                <header class="ct-topbar">
+                    <div class="ct-topbar-mobile-logo">
+                        <a href="../index.html"><img src="../assets/images/LOGO.png" alt="KarGO" class="logo-img-mobile"></a>
+                    </div>
+                    <div class="ct-topbar-actions">
+                        <div class="ct-user-profile">
+                            <img src="../assets/images/embarcador.png" alt="Maria" class="ct-user-avatar">
+                            <div class="ct-user-info">
+                                <span class="ct-user-name">Maria Logística</span>
+                            </div>
+                        </div>
+                    </div>
+                </header>
+
+                <!-- TÍTULO DA PÁGINA (Fora do header travado) -->
+                <div class="ct-page-title ct-reveal" style="margin-bottom: 24px;">
+                    <h1>Central de Ocorrências</h1>
+                    <p>Gerencie problemas, atrasos ou divergências relatadas em seus fretes.</p>
+                </div>
+
+                <!-- TABS DE FILTRO -->
+                <div class="ct-tabs ct-reveal">
+                    <button class="ct-tab active" data-tab="tab-todas">Todas as Ocorrências (2)</button>
+                    <button class="ct-tab" data-tab="tab-analise">Em Análise (1)</button>
+                    <button class="ct-tab" data-tab="tab-resolvido">Resolvidas (1)</button>
+                </div>
+
+                <!-- LISTA DE OCORRÊNCIAS -->
+                <div class="ct-reveal">
+                    
+                    <!-- Ocorrência 1 (Em análise) -->
+                    <div class="ct-section-card" style="border-left: 4px solid var(--accent-orange);">
+                        <div style="display:flex; justify-content:space-between; align-items:flex-start;">
+                            <div>
+                                <span class="ct-badge ct-badge-orange" style="margin-bottom:8px;"><span class="status-indicator-dot orange"></span>Em Análise</span>
+                                <span style="font-size:12px; color:var(--text-muted); margin-left:8px;">Protocolo #OC-2026-004567</span>
+                                <h3 style="font-size:16px; font-weight:800; color:var(--text-dark); margin-top:4px;">Atraso no carregamento da carga</h3>
+                                <p style="font-size:13px; color:var(--text-body); margin-top:6px;">
+                                    <strong>Frete:</strong> #KG-2026-1234 (Recife, PE → Natal, RN) | <strong>Motorista:</strong> João Silva
+                                </p>
+                            </div>
+                            <span class="ct-badge ct-badge-red" style="font-weight:800; border: 1px solid var(--accent-red-light);">Urgência: Alta</span>
+                        </div>
+
+                        <div style="margin-top:16px; padding:12px; background:var(--bg-body); border-radius:var(--radius-sm); border:1px solid var(--border-light); font-size:13px;">
+                            <p><strong>Descrição do Contratante:</strong> "O motorista deveria ter chegado para coleta às 08:00, mas houve um atraso e só compareceu ao galpão às 10:30, comprometendo o horário de entrega."</p>
+                            <p style="margin-top:10px; color:var(--accent-blue); font-weight:600;">ℹ️ Resposta KarGO: "Nossa equipe de suporte entrou em contato com o motorista. Ele alegou que pegou trânsito pesado devido a um acidente na via de acesso. O suporte está acompanhando o rastreamento em tempo real."</p>
+                        </div>
+
+                        <div style="margin-top:16px; display:flex; justify-content:flex-end; gap:10px;">
+                            <button class="ct-btn ct-btn-secondary ct-btn-sm" onclick="alert('Comentário enviado ao suporte.')">Comentar</button>
+                            <a href="detalhes-frete.html" class="ct-btn ct-btn-primary ct-btn-sm">Ver Frete</a>
+                        </div>
+                    </div>
+
+                    <!-- Ocorrência 2 (Resolvida) -->
+                    <div class="ct-section-card" style="border-left: 4px solid var(--accent-green); margin-top:20px;">
+                        <div style="display:flex; justify-content:space-between; align-items:flex-start;">
+                            <div>
+                                <span class="ct-badge ct-badge-green" style="margin-bottom:8px;"><span class="status-indicator-dot green"></span>Resolvida</span>
+                                <span style="font-size:12px; color:var(--text-muted); margin-left:8px;">Protocolo #OC-2026-004112</span>
+                                <h3 style="font-size:16px; font-weight:800; color:var(--text-dark); margin-top:4px;">Divergência de peso no posto fiscal</h3>
+                                <p style="font-size:13px; color:var(--text-body); margin-top:6px;">
+                                    <strong>Frete:</strong> #KG-2026-1230 (Recife, PE → João Pessoa, PB) | <strong>Motorista:</strong> Ana Paula
+                                </p>
+                            </div>
+                            <span class="ct-badge ct-badge-gray" style="font-weight:800;">Urgência: Baixa</span>
+                        </div>
+
+                        <div style="margin-top:16px; padding:12px; background:var(--bg-body); border-radius:var(--radius-sm); border:1px solid var(--border-light); font-size:13px;">
+                            <p><strong>Descrição do Contratante:</strong> "Balança da pesagem na saída registrou 3.100kg, porém na nota fiscal constava 3.000kg. Solicitamos verificação rápida antes do início da viagem."</p>
+                            <p style="margin-top:10px; color:var(--accent-green); font-weight:600;">✓ Resolução final: "A motorista reajustou a amarração da lona molhada que causou a leve variação no peso. Carga liberada e entregue sem avarias."</p>
+                        </div>
+
+                        <div style="margin-top:16px; display:flex; justify-content:flex-end; gap:10px;">
+                            <button class="ct-btn ct-btn-outline ct-btn-sm" onclick="alert('Esta ocorrência está resolvida.')">Protocolo de Resolução</button>
+                            <a href="minhas-cargas.html" class="ct-btn ct-btn-secondary ct-btn-sm">Ver Frete</a>
+                        </div>
+                    </div>
+
+                </div>
+
+            </div><!-- /ct-content-area -->
+        </main>
+    </div>
+
+    <!-- BOTTOM NAV MOBILE -->
+    <nav class="ct-bottom-nav">
+        <a href="dashboard.html" class="ct-bottom-item">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="9"/><rect x="14" y="3" width="7" height="5"/><rect x="14" y="12" width="7" height="9"/><rect x="3" y="16" width="7" height="5"/></svg>
+            Home
+        </a>
+        <a href="minhas-cargas.html" class="ct-bottom-item">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg>
+            Cargas
+        </a>
+        <a href="publicar-carga.html" class="ct-bottom-item" style="position:relative;">
+            <div style="width:48px;height:48px;border-radius:50%;background:var(--accent-blue);display:flex;align-items:center;justify-content:center;margin-top:-20px;box-shadow:0 4px 16px rgba(0,136,255,0.35);">
+                <svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5" width="22" height="22"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+            </div>
+            Publicar
+        </a>
+        <a href="chat.html" class="ct-bottom-item">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+            Chat
+        </a>
+        <a href="perfil.html" class="ct-bottom-item">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+            Perfil
+        </a>
+    </nav>
+
+    <script src="js/contratante.js"></script>
+</body>
+</html>

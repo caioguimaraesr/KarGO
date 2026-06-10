@@ -435,7 +435,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 if (data.tipoUsuario === 'MOTORISTA') {
                     window.location.href = 'dashboard.html';
                 } else {
-                    window.location.href = 'marketplace.html';
+                    window.location.href = 'contratante/dashboard.html';
                 }
             } catch (error) {
                 alert(`Falha ao realizar login: ${error.message}`);

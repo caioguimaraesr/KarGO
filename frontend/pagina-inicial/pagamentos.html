@@ -8,8 +8,8 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="css/marketplace.css?v=1.3">
-    <link rel="stylesheet" href="css/pagamentos.css">
+    <link rel="stylesheet" href="css/marketplace.css?v=2.2">
+    <link rel="stylesheet" href="css/pagamentos.css?v=2.2">
     <!-- Tailwind CSS CDN para consistência de estilos auxiliares -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
@@ -70,10 +70,6 @@
                         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
                         Configurações
                     </a>
-                    <button type="button" class="mp-menu-item mp-logout-btn" onclick="localStorage.removeItem('kargoSession');localStorage.removeItem('kargoToken');window.location.href='login.html'">
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
-                        Sair
-                    </button>
                 </div>
             </nav>
         </aside>
@@ -305,15 +301,11 @@
         </a>
         <a href="perfil.html" class="mp-bottom-nav-item">
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
-            <span>Perfil</span>
-        </a>
-    </nav>
-
-    <!-- ============ MODAL PREMIUM DE EXTRATO COMPLETO ============ -->
-    <div class="kargo-modal-backdrop" id="extrato-modal-backdrop" style="position: fixed; top: 0; left: 0; right: 0; bottom: 0; background-color: rgba(3, 7, 12, 0.85); backdrop-filter: blur(8px); display: flex; align-items: center; justify-content: center; z-index: 3000; opacity: 0; pointer-events: none; transition: all 0.3s ease;">
-        <div class="kargo-modal-wrapper" style="width: 95%; max-width: 950px; max-height: 90vh; display: flex; flex-direction: column; background: linear-gradient(135deg, rgba(18, 24, 36, 0.95) 0%, rgba(11, 15, 25, 0.98) 100%); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 24px; overflow: hidden; box-shadow: 0 20px 50px rgba(0,0,0,0.6);">
-            <header class="kargo-modal-header" style="padding: 20px 24px; border-bottom: 1px solid rgba(255, 255, 255, 0.05); display: flex; justify-content: space-between; align-items: center;">
-                <h3 class="kargo-modal-title" style="margin: 0; font-size: 18px; font-weight: 800; color: #fff;">Extrato Financeiro Completo</h3>
+         <!-- ============ MODAL PREMIUM DE EXTRATO COMPLETO ============ -->
+    <div class="kargo-modal-backdrop" id="extrato-modal-backdrop" style="position: fixed; top: 0; left: 0; right: 0; bottom: 0; background-color: rgba(15, 23, 42, 0.6); backdrop-filter: blur(8px); display: flex; align-items: center; justify-content: center; z-index: 3000; opacity: 0; pointer-events: none; transition: all 0.3s ease;">
+        <div class="kargo-modal-wrapper" style="width: 95%; max-width: 950px; max-height: 90vh; display: flex; flex-direction: column; background: #ffffff; border: 1px solid var(--border-translucent); border-radius: 24px; overflow: hidden; box-shadow: 0 20px 50px rgba(0,0,0,0.15);">
+            <header class="kargo-modal-header" style="padding: 20px 24px; border-bottom: 1px solid var(--border-translucent); display: flex; justify-content: space-between; align-items: center;">
+                <h3 class="kargo-modal-title" style="margin: 0; font-size: 18px; font-weight: 800; color: var(--text-primary);">Extrato Financeiro Completo</h3>
                 <button class="kargo-modal-close-btn" onclick="closeFullStatementModal()" aria-label="Fechar" style="background: none; border: none; color: var(--text-muted); cursor: pointer; display: flex; align-items: center; justify-content: center;">
                     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
                 </button>
@@ -321,57 +313,57 @@
             
             <div class="kargo-modal-body" style="padding: 24px; overflow-y: auto; flex: 1; display: flex; flex-direction: column; gap: 20px;">
                 <!-- Barra de Filtros Temporal do Extrato -->
-                <div class="bg-slate-900/40 border border-white/5 rounded-xl p-4 flex flex-col lg:flex-row gap-4 items-end justify-between" style="background: rgba(15, 23, 42, 0.3); border: 1px solid rgba(255,255,255,0.05); border-radius: 16px;">
+                <div class="rounded-xl p-4 flex flex-col lg:flex-row gap-4 items-end justify-between" style="background: #f8fafc; border: 1px solid var(--border-translucent); border-radius: 16px;">
                     <div class="flex flex-wrap gap-4 items-end flex-1 w-full">
                         <!-- Tipo de período -->
                         <div style="display: flex; flex-direction: column; gap: 6px;">
-                            <label style="font-size: 11px; font-weight: 700; color: #94a3b8; text-transform: uppercase; letter-spacing: 0.5px;">Visualização</label>
+                            <label style="font-size: 11px; font-weight: 700; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 0.5px;">Visualização</label>
                             <div style="position: relative;">
-                                <select id="extrato-filter-type" class="pix-select" style="padding: 8px 32px 8px 12px; font-size: 12px; width: 140px; background: rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.08); border-radius: 8px; color: #fff; appearance: none; cursor: pointer;" onchange="toggleExtratoFilterInputs(this.value)">
+                                <select id="extrato-filter-type" class="pix-select" style="padding: 8px 32px 8px 12px; font-size: 12px; width: 140px; background: #ffffff; border: 1px solid var(--border-translucent); border-radius: 8px; color: var(--text-primary); appearance: none; cursor: pointer;" onchange="toggleExtratoFilterInputs(this.value)">
                                     <option value="semanal" selected>Semanal</option>
                                     <option value="mensal">Mensal</option>
                                     <option value="personalizado">Personalizado</option>
                                 </select>
-                                <svg style="position: absolute; right: 10px; top: 50%; transform: translateY(-50%); color: #64748b; pointer-events: none;" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+                                <svg style="position: absolute; right: 10px; top: 50%; transform: translateY(-50%); color: var(--text-muted); pointer-events: none;" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
                             </div>
                         </div>
 
                         <!-- Seletor de Semanas -->
                         <div id="extrato-semana-block" style="display: flex; flex-direction: column; gap: 6px;">
-                            <label style="font-size: 11px; font-weight: 700; color: #94a3b8; text-transform: uppercase; letter-spacing: 0.5px;">Semana</label>
+                            <label style="font-size: 11px; font-weight: 700; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 0.5px;">Semana</label>
                             <div style="position: relative;">
-                                <select id="extrato-filter-semana" class="pix-select" style="padding: 8px 32px 8px 12px; font-size: 12px; width: 220px; background: rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.08); border-radius: 8px; color: #fff; appearance: none; cursor: pointer;">
+                                <select id="extrato-filter-semana" class="pix-select" style="padding: 8px 32px 8px 12px; font-size: 12px; width: 220px; background: #ffffff; border: 1px solid var(--border-translucent); border-radius: 8px; color: var(--text-primary); appearance: none; cursor: pointer;">
                                     <option value="atual" selected>Semana Atual (18 - 24 Mai)</option>
                                     <option value="anterior">Semana Anterior (11 - 17 Mai)</option>
                                     <option value="duas-atras">Duas Semanas Atrás (04 - 10 Mai)</option>
                                 </select>
-                                <svg style="position: absolute; right: 10px; top: 50%; transform: translateY(-50%); color: #64748b; pointer-events: none;" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+                                <svg style="position: absolute; right: 10px; top: 50%; transform: translateY(-50%); color: var(--text-muted); pointer-events: none;" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
                             </div>
                         </div>
 
                         <!-- Seletor de Mês e Ano (Oculto por padrão) -->
                         <div id="extrato-mes-block" style="display: none; flex-direction: row; gap: 10px;">
                             <div style="display: flex; flex-direction: column; gap: 6px;">
-                                <label style="font-size: 11px; font-weight: 700; color: #94a3b8; text-transform: uppercase; letter-spacing: 0.5px;">Mês</label>
+                                <label style="font-size: 11px; font-weight: 700; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 0.5px;">Mês</label>
                                 <div style="position: relative;">
-                                    <select id="extrato-filter-mes" class="pix-select" style="padding: 8px 32px 8px 12px; font-size: 12px; width: 120px; background: rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.08); border-radius: 8px; color: #fff; appearance: none; cursor: pointer;">
+                                    <select id="extrato-filter-mes" class="pix-select" style="padding: 8px 32px 8px 12px; font-size: 12px; width: 120px; background: #ffffff; border: 1px solid var(--border-translucent); border-radius: 8px; color: var(--text-primary); appearance: none; cursor: pointer;">
                                         <option value="05" selected>Maio</option>
                                         <option value="04">Abril</option>
                                         <option value="03">Março</option>
                                         <option value="02">Fevereiro</option>
                                         <option value="01">Janeiro</option>
                                     </select>
-                                    <svg style="position: absolute; right: 10px; top: 50%; transform: translateY(-50%); color: #64748b; pointer-events: none;" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+                                    <svg style="position: absolute; right: 10px; top: 50%; transform: translateY(-50%); color: var(--text-muted); pointer-events: none;" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
                                 </div>
                             </div>
                             <div style="display: flex; flex-direction: column; gap: 6px;">
-                                <label style="font-size: 11px; font-weight: 700; color: #94a3b8; text-transform: uppercase; letter-spacing: 0.5px;">Ano</label>
+                                <label style="font-size: 11px; font-weight: 700; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 0.5px;">Ano</label>
                                 <div style="position: relative;">
-                                    <select id="extrato-filter-ano" class="pix-select" style="padding: 8px 32px 8px 12px; font-size: 12px; width: 90px; background: rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.08); border-radius: 8px; color: #fff; appearance: none; cursor: pointer;">
+                                    <select id="extrato-filter-ano" class="pix-select" style="padding: 8px 32px 8px 12px; font-size: 12px; width: 90px; background: #ffffff; border: 1px solid var(--border-translucent); border-radius: 8px; color: var(--text-primary); appearance: none; cursor: pointer;">
                                         <option value="2026" selected>2026</option>
                                         <option value="2025">2025</option>
                                     </select>
-                                    <svg style="position: absolute; right: 10px; top: 50%; transform: translateY(-50%); color: #64748b; pointer-events: none;" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+                                    <svg style="position: absolute; right: 10px; top: 50%; transform: translateY(-50%); color: var(--text-muted); pointer-events: none;" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
                                 </div>
                             </div>
                         </div>
@@ -379,12 +371,12 @@
                         <!-- Data Inicial e Final (Oculto por padrão) -->
                         <div id="extrato-personalizado-block" style="display: none; flex-direction: row; gap: 10px;">
                             <div style="display: flex; flex-direction: column; gap: 6px;">
-                                <label style="font-size: 11px; font-weight: 700; color: #94a3b8; text-transform: uppercase; letter-spacing: 0.5px;">De</label>
-                                <input type="date" id="extrato-filter-de" class="pix-input" style="padding: 7px 12px; font-size: 12px; width: 140px; background: rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.08); color: #fff; border-radius: 8px;">
+                                <label style="font-size: 11px; font-weight: 700; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 0.5px;">De</label>
+                                <input type="date" id="extrato-filter-de" class="pix-input" style="padding: 7px 12px; font-size: 12px; width: 140px; background: #ffffff; border: 1px solid var(--border-translucent); color: var(--text-primary); border-radius: 8px;">
                             </div>
                             <div style="display: flex; flex-direction: column; gap: 6px;">
-                                <label style="font-size: 11px; font-weight: 700; color: #94a3b8; text-transform: uppercase; letter-spacing: 0.5px;">Até</label>
-                                <input type="date" id="extrato-filter-ate" class="pix-input" style="padding: 7px 12px; font-size: 12px; width: 140px; background: rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.08); color: #fff; border-radius: 8px;">
+                                <label style="font-size: 11px; font-weight: 700; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 0.5px;">Até</label>
+                                <input type="date" id="extrato-filter-ate" class="pix-input" style="padding: 7px 12px; font-size: 12px; width: 140px; background: #ffffff; border: 1px solid var(--border-translucent); color: var(--text-primary); border-radius: 8px;">
                             </div>
                         </div>
 
@@ -394,14 +386,14 @@
                     </div>
 
                     <div class="flex gap-2 w-full lg:w-auto justify-end">
-                        <button type="button" class="btn-resgate-submit w-auto px-4 py-2 text-xs bg-slate-800 hover:bg-slate-700 border border-white/5" style="box-shadow: none; background: rgba(255,255,255,0.03); height: 34px; border-radius: 8px;" id="btn-export-extrato" onclick="exportStatement('pdf')">
+                        <button type="button" class="btn-resgate-submit w-auto px-4 py-2 text-xs bg-slate-100 hover:bg-slate-200 border border-slate-200" style="box-shadow: none; background: #f1f5f9; color: var(--text-primary); height: 34px; border-radius: 8px;" id="btn-export-extrato" onclick="exportStatement('pdf')">
                             Exportar PDF
                         </button>
                     </div>
                 </div>
 
                 <!-- Tabela de Lançamentos do Modal -->
-                <div class="table-responsive" style="max-height: 400px; overflow-y: auto; border: 1px solid rgba(255,255,255,0.05); border-radius: 12px;">
+                <div class="table-responsive" style="max-height: 400px; overflow-y: auto; border: 1px solid var(--border-translucent); border-radius: 12px;">
                     <table class="finance-table" style="width: 100%; border-collapse: collapse;">
                         <thead>
                             <tr>
@@ -420,7 +412,7 @@
                 </div>
             </div>
             
-            <footer class="kargo-modal-footer" style="padding: 16px 24px; border-top: 1px solid rgba(255,255,255,0.05); display: flex; justify-content: flex-end; background: rgba(0, 0, 0, 0.15);">
+            <footer class="kargo-modal-footer" style="padding: 16px 24px; border-top: 1px solid var(--border-translucent); display: flex; justify-content: flex-end; background: #f8fafc;">
                 <button class="modal-btn-cancel" onclick="closeFullStatementModal()" style="margin:0; padding: 10px 20px; font-size: 13px; font-weight: 700; border-radius: 10px;">Fechar Extrato</button>
             </footer>
         </div>

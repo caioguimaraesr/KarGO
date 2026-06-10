@@ -11,23 +11,23 @@
     <style>
         /* === DESIGN SYSTEM TOKENS === */
         :root {
-            --bg-dark-deep: #080c14;
-            --bg-dark-card: #121824;
+            --bg-dark-deep: #f8fafc;
+            --bg-dark-card: #ffffff;
             --bg-dark-sidebar: #0b0f19;
-            --bg-dark-topbar: rgba(11, 15, 25, 0.85);
+            --bg-dark-topbar: rgba(255, 255, 255, 0.9);
             
-            --text-primary: #ffffff;
-            --text-secondary: #94a3b8;
+            --text-primary: #0f172a;
+            --text-secondary: #475569;
             --text-muted: #64748b;
             
             --accent-blue: #0088ff;
-            --accent-blue-glow: rgba(0, 136, 255, 0.35);
+            --accent-blue-glow: rgba(0, 136, 255, 0.15);
             --accent-orange: #ff9f0a;
-            --accent-orange-glow: rgba(255, 159, 10, 0.3);
+            --accent-orange-glow: rgba(255, 159, 10, 0.15);
             --accent-red: #ff3b30;
             --accent-green: #34c759;
             
-            --border-translucent: rgba(255, 255, 255, 0.05);
+            --border-translucent: rgba(0, 0, 0, 0.08);
             
             --font-primary: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
             --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
@@ -61,7 +61,7 @@
         .contacts-column {
             width: 320px;
             margin-left: 260px;
-            background-color: #0c111a;
+            background-color: #f8fafc;
             border-right: 1px solid var(--border-translucent);
             display: flex;
             flex-direction: column;
@@ -72,6 +72,7 @@
         .contacts-header {
             padding: 24px 20px;
             border-bottom: 1px solid var(--border-translucent);
+            background-color: #ffffff;
         }
 
         .contacts-header h2 {
@@ -79,6 +80,7 @@
             font-weight: 800;
             letter-spacing: -0.5px;
             margin-bottom: 16px;
+            color: #0f172a;
         }
 
         .search-wrapper {
@@ -87,11 +89,11 @@
 
         .search-input-desktop {
             width: 100%;
-            background-color: var(--bg-dark-card);
+            background-color: #f1f5f9;
             border: 1px solid var(--border-translucent);
             border-radius: 10px;
             padding: 10px 14px 10px 36px;
-            color: #fff;
+            color: #0f172a;
             font-size: 13px;
             outline: none;
             transition: var(--transition-smooth);
@@ -99,6 +101,7 @@
 
         .search-input-desktop:focus {
             border-color: rgba(0, 136, 255, 0.35);
+            background-color: #ffffff;
         }
 
         .search-icon-desktop {
@@ -127,17 +130,18 @@
             padding: 12px;
             border-radius: 14px;
             border: 1px solid transparent;
+            background-color: #ffffff;
             cursor: pointer;
             transition: var(--transition-smooth);
         }
 
         .contact-card-desktop:hover {
-            background-color: rgba(255, 255, 255, 0.02);
+            background-color: #f1f5f9;
             border-color: var(--border-translucent);
         }
 
         .contact-card-desktop.active {
-            background-color: var(--bg-dark-card);
+            background-color: #e2e8f0;
             border-color: rgba(0, 136, 255, 0.2);
             box-shadow: 0 4px 15px rgba(0, 136, 255, 0.03);
         }
@@ -146,7 +150,7 @@
             width: 42px;
             height: 42px;
             border-radius: 50%;
-            background-color: #1a2233;
+            background-color: #e2e8f0;
             color: var(--accent-blue);
             display: flex;
             align-items: center;
@@ -165,7 +169,7 @@
             width: 10px;
             height: 10px;
             background-color: var(--accent-green);
-            border: 2px solid #0c111a;
+            border: 2px solid #ffffff;
             border-radius: 50%;
         }
 
@@ -184,7 +188,7 @@
         .contact-name-desktop {
             font-size: 14px;
             font-weight: 700;
-            color: #fff;
+            color: #0f172a;
             white-space: nowrap;
             overflow: hidden;
             text-overflow: ellipsis;
@@ -230,7 +234,7 @@
             flex: 1;
             display: flex;
             flex-direction: column;
-            background-color: var(--bg-dark-deep);
+            background-color: #f1f5f9;
             transition: var(--transition-smooth);
         }
 
@@ -239,12 +243,11 @@
             height: 80px;
             padding: 0 24px;
             border-bottom: 1px solid var(--border-translucent);
-            background-color: var(--bg-dark-sidebar);
+            background-color: #ffffff;
             display: flex;
             align-items: center;
             justify-content: space-between;
             backdrop-filter: blur(10px);
-            background: var(--bg-dark-topbar);
         }
 
         .btn-back-chat {
@@ -332,7 +335,7 @@
         .bubble-desktop.received {
             background-color: var(--bg-dark-card);
             border: 1px solid var(--border-translucent);
-            color: #fff;
+            color: var(--text-primary);
             border-top-left-radius: 4px;
         }
 
@@ -390,7 +393,7 @@
             gap: 8px;
             overflow-x: auto;
             scrollbar-width: none;
-            background-color: #0c111a;
+            background-color: #f1f5f9;
             border-top: 1px solid var(--border-translucent);
         }
 
@@ -413,13 +416,14 @@
 
         .quick-chip-desktop:hover {
             border-color: var(--accent-blue);
+            background-color: var(--accent-blue);
             color: #fff;
         }
 
         /* INPUT BAR INFERIOR */
         .input-bar-desktop {
             padding: 16px 24px;
-            background-color: var(--bg-dark-sidebar);
+            background-color: var(--bg-dark-card);
             border-top: 1px solid var(--border-translucent);
             display: flex;
             gap: 12px;
@@ -428,11 +432,11 @@
 
         .input-field-desktop {
             flex: 1;
-            background-color: rgba(0, 0, 0, 0.2);
+            background-color: #f1f5f9;
             border: 1px solid var(--border-translucent);
             border-radius: 12px;
             padding: 12px 18px;
-            color: #fff;
+            color: var(--text-primary);
             font-family: inherit;
             font-size: 13.5px;
             outline: none;
@@ -465,18 +469,20 @@
 
         /* === PREMIUM BOTTOM NAVIGATION BAR (MOBILE) === */
         .mp-bottom-nav {
-            position: fixed;
-            bottom: 0;
-            left: 0;
-            right: 0;
+            position: fixed !important;
+            bottom: 0 !important;
+            left: 0 !important;
+            right: 0 !important;
             height: 72px;
-            background-color: rgba(11, 15, 25, 0.95);
-            backdrop-filter: blur(20px);
-            border-top: 1px solid var(--border-translucent);
+            background-color: rgba(11, 15, 25, 0.96) !important;
+            backdrop-filter: blur(20px) !important;
+            -webkit-backdrop-filter: blur(20px) !important;
+            border-top: 1px solid rgba(255, 255, 255, 0.08) !important;
             display: none;
             grid-template-columns: repeat(5, 1fr);
             padding-bottom: 8px;
-            z-index: 1000;
+            z-index: 9999 !important;
+            box-shadow: 0 -8px 30px rgba(0, 0, 0, 0.3) !important;
         }
 
         .mp-bottom-nav-item {
@@ -484,7 +490,7 @@
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            color: var(--text-muted);
+            color: #94a3b8 !important;
             text-decoration: none;
             font-size: 10px;
             font-weight: 600;
@@ -497,14 +503,16 @@
             width: 20px;
             height: 20px;
             stroke-width: 2.2;
+            color: #64748b !important;
             transition: var(--transition-smooth);
         }
 
         .mp-bottom-nav-item:hover, .mp-bottom-nav-item.active {
-            color: var(--accent-blue);
+            color: var(--accent-blue) !important;
         }
 
         .mp-bottom-nav-item.active svg {
+            color: var(--accent-blue) !important;
             filter: drop-shadow(0 0 6px var(--accent-blue-glow));
         }
 
@@ -536,6 +544,10 @@
 
             .btn-back-chat {
                 display: flex !important;
+                color: #ffffff !important;
+            }
+            .btn-back-chat:hover {
+                background-color: rgba(255, 255, 255, 0.08) !important;
             }
 
             .mp-bottom-nav {
@@ -548,6 +560,19 @@
 
             .chat-area-header {
                 height: 72px !important;
+                background-color: #0b0f19 !important;
+                border-bottom: 1px solid rgba(255, 255, 255, 0.08) !important;
+                color: #ffffff !important;
+            }
+            .active-company-name {
+                color: #ffffff !important;
+            }
+            .contacts-header {
+                background-color: #0b0f19 !important;
+                border-bottom: 1px solid rgba(255, 255, 255, 0.08) !important;
+            }
+            .contacts-header h2 {
+                color: #ffffff !important;
             }
 
             .bubble-desktop {
@@ -567,7 +592,7 @@
             }
         }
     </style>
-    <link rel="stylesheet" href="css/marketplace.css">
+    <link rel="stylesheet" href="css/marketplace.css?v=2.2">
 </head>
 <body>
 
@@ -619,10 +644,6 @@
                         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
                         Configurações
                     </a>
-                    <button type="button" class="mp-menu-item mp-logout-btn" onclick="localStorage.removeItem('kargoSession');localStorage.removeItem('kargoToken');window.location.href='login.html'">
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
-                        Sair
-                    </button>
                 </div>
             </nav>
         </aside>
@@ -654,7 +675,7 @@
                             <span class="contact-time-desktop">19:30</span>
                         </div>
                         <div class="contact-preview-row">
-                            <span class="contact-preview-msg" id="preview-af" style="font-weight: 700; color: #fff;">O carregamento de soja já foi liberado?</span>
+                            <span class="contact-preview-msg" id="preview-af" style="font-weight: 700; color: var(--text-primary);">O carregamento de soja já foi liberado?</span>
                             <span class="chat-unread-badge-circle" id="badge-af">1</span>
                         </div>
                     </div>

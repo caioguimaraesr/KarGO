@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="KarGO — Rastreamento em Tempo Real. Monitore a rota de entrega das suas cargas em tempo real.">
+    <title>KarGO — Rastreamento em Tempo Real</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/contratante.css">
+    <style>
+        .map-viewport {
+            height: calc(100vh - 170px);
+            background: #E2E8F0;
+            border-radius: var(--radius-lg);
+            overflow: hidden;
+            position: relative;
+            border: 1px solid var(--border-light);
+            box-shadow: var(--shadow-sm);
+        }
+        /* Mapa Simulado com SVG Estilizado */
+        .simulated-map {
+            width: 100%;
+            height: 100%;
+            background: #F1F5F9;
+            background-image: 
+                radial-gradient(circle, #CBD5E1 1px, transparent 1px),
+                linear-gradient(rgba(203, 213, 225, 0.3) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(203, 213, 225, 0.3) 1px, transparent 1px);
+            background-size: 20px 20px, 40px 40px, 40px 40px;
+            position: relative;
+        }
+        .map-route-line {
+            stroke: #94A3B8;
+            stroke-dasharray: 6;
+            animation: dash 30s linear infinite;
+        }
+        .map-route-completed {
+            stroke: var(--accent-blue);
+            stroke-width: 4px;
+        }
+        @keyframes dash {
+            to { stroke-dashoffset: -1000; }
+        }
+        .truck-marker {
+            transform-origin: center;
+            animation: truck-bounce 1s ease-in-out infinite alternate;
+        }
+        @keyframes truck-bounce {
+            0% { transform: translateY(0); }
+            100% { transform: translateY(-4px); }
+        }
+        .map-floating-panel {
+            position: absolute;
+            bottom: 24px;
+            left: 24px;
+            right: 24px;
+            background: #fff;
+            padding: 20px;
+            border-radius: var(--radius-md);
+            box-shadow: var(--shadow-lg);
+            border: 1px solid var(--border-light);
+            display: grid;
+            grid-template-columns: 2fr 1.2fr 1fr;
+            gap: 20px;
+            z-index: 10;
+        }
+        .map-controls {
+            position: absolute;
+            top: 24px;
+            right: 24px;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            z-index: 10;
+        }
+        .map-control-btn {
+            width: 40px;
+            height: 40px;
+            background: #fff;
+            border: 1px solid var(--border-light);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+            font-weight: 700;
+            cursor: pointer;
+            box-shadow: var(--shadow-sm);
+            transition: var(--transition-fast);
+        }
+        .map-control-btn:hover {
+            background: var(--bg-hover);
+        }
+        
+        @media (max-width: 768px) {
+            .map-floating-panel {
+                grid-template-columns: 1fr !important;
+                position: relative !important;
+                left: 0 !important;
+                right: 0 !important;
+                bottom: 0 !important;
+                margin: 16px 0 0 0 !important;
+                gap: 16px !important;
+            }
+            
+            .map-floating-panel > div {
+                border-left: none !important;
+                padding-left: 0 !important;
+                border-bottom: 1px solid var(--border-light);
+                padding-bottom: 12px;
+            }
+            
+            .map-floating-panel > div:last-child {
+                border-bottom: none !important;
+                padding-bottom: 0 !important;
+            }
+            
+            .map-viewport {
+                height: auto !important;
+                min-height: 400px;
+                display: flex;
+                flex-direction: column;
+            }
+            
+            .simulated-map {
+                height: 350px !important;
+                flex-shrink: 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="layout-container">
+
+        <!-- SIDEBAR DARK -->
+        <aside class="ct-sidebar">
+            <div class="ct-sidebar-logo">
+                <a href="../index.html"><img src="../assets/images/LOGO.png" alt="KarGO" class="logo-img"></a>
+            </div>
+            <nav class="ct-sidebar-menu">
+                <div class="ct-sidebar-links">
+                    <a href="dashboard.html" class="ct-menu-item">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="9"/><rect x="14" y="3" width="7" height="5"/><rect x="14" y="12" width="7" height="9"/><rect x="3" y="16" width="7" height="5"/></svg>
+                        Dashboard
+                    </a>
+                    <a href="publicar-carga.html" class="ct-menu-item">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="16"/><line x1="8" y1="12" x2="16" y2="12"/></svg>
+                        Publicar Carga
+                    </a>
+                    <a href="minhas-cargas.html" class="ct-menu-item active">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><polyline points="3.27 6.96 12 12.01 20.73 6.96"/><line x1="12" y1="22.08" x2="12" y2="12"/></svg>
+                        Minhas Cargas
+                    </a>
+                    <a href="pagamentos.html" class="ct-menu-item">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="4" width="22" height="16" rx="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>
+                        Pagamentos
+                    </a>
+                    <a href="chat.html" class="ct-menu-item">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+                        Chat
+                        <span class="chat-badge-dot"></span>
+                    </a>
+                    <a href="ocorrencias.html" class="ct-menu-item">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+                        Ocorrências
+                    </a>
+                    <div class="ct-sidebar-divider"></div>
+                    <a href="perfil.html" class="ct-menu-item">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+                        Meu Perfil
+                    </a>
+                </div>
+                <div class="ct-sidebar-bottom">
+                    <a href="configuracoes.html" class="ct-menu-item">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.6 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.6a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9c.26.604.852.997 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+                        Configurações
+                    </a>
+                </div>
+            </nav>
+        </aside>
+
+        <!-- CONTEÚDO PRINCIPAL -->
+        <main class="main-content">
+            <div class="ct-content-area">
+
+                <!-- TOPBAR -->
+                <header class="ct-topbar">
+                    <div class="ct-topbar-mobile-logo">
+                        <a href="../index.html"><img src="../assets/images/LOGO.png" alt="KarGO" class="logo-img-mobile"></a>
+                    </div>
+                    <div class="ct-topbar-actions">
+                        <span class="ct-badge ct-badge-green" style="display:inline-flex; align-items:center; gap:6px;"><span class="status-indicator-dot" style="background:#22c55e; box-shadow:0 0 8px #22c55e;"></span> Em Trânsito (65%)</span>
+                        <div class="ct-user-profile">
+                            <img src="../assets/images/embarcador.png" alt="Maria" class="ct-user-avatar">
+                            <div class="ct-user-info">
+                                <span class="ct-user-name">Maria Logística</span>
+                            </div>
+                        </div>
+                    </div>
+                </header>
+
+                <!-- TÍTULO DA PÁGINA (Fora do header travado) -->
+                <div style="display:flex; align-items:center; gap:16px; margin-bottom: 24px;" class="ct-reveal">
+                    <a href="detalhes-frete.html" class="ct-notification-btn" aria-label="Voltar" style="width:36px; height:36px;">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" width="16" height="16"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+                    </a>
+                    <div class="ct-page-title">
+                        <h1 style="display:flex; align-items:center; gap:8px;">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" width="22" height="22" style="color:var(--text-dark);"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+                            Rastreamento em Tempo Real
+                        </h1>
+                        <p>Acompanhamento de rota para o Frete <strong>#KG-2026-1234</strong> (Recife, PE → Natal, RN)</p>
+                    </div>
+                </div>
+
+                <!-- MAP VIEWPORT -->
+                <div class="map-viewport ct-reveal">
+                    
+                    <!-- Botões de controle flutuantes -->
+                    <div class="map-controls">
+                        <button class="map-control-btn" onclick="alert('Simulação: Aumentando Zoom do mapa...')">+</button>
+                        <button class="map-control-btn" onclick="alert('Simulação: Diminuindo Zoom do mapa...')">-</button>
+                        <button class="map-control-btn" onclick="alert('Centralizando no caminhão de João Silva...')" style="font-size:14px; display:flex; align-items:center; justify-content:center;">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg>
+                        </button>
+                    </div>
+
+                    <!-- Visual do mapa simulado -->
+                    <div class="simulated-map">
+                        <svg width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
+                            <!-- Cidade de Origem (Recife) -->
+                            <circle cx="150" cy="320" r="10" fill="#22C55E" />
+                            <text x="140" y="350" font-family="Inter" font-weight="700" font-size="12" fill="#0F172A">Recife (Origem)</text>
+                            
+                            <!-- Cidade de Destino (Natal) -->
+                            <circle cx="680" cy="120" r="10" fill="#EF4444" />
+                            <text x="670" y="100" font-family="Inter" font-weight="700" font-size="12" fill="#0F172A"> Natal (Destino)</text>
+                            
+                            <!-- Rota Planejada Completa -->
+                            <path class="map-route-line" d="M 150 320 Q 300 280, 480 220 T 680 120" fill="none" stroke="#64748B" stroke-width="4" />
+                            
+                            <!-- Rota percorrida (Azul) -->
+                            <path class="map-route-completed" d="M 150 320 Q 300 280, 480 220" fill="none" />
+                            
+                            <!-- Marcador do caminhão em trânsito -->
+                            <g class="truck-marker" transform="translate(480, 220)">
+                                <!-- Glow pulse -->
+                                <circle cx="0" cy="0" r="18" fill="rgba(0, 136, 255, 0.25)" />
+                                <!-- Ponto do caminhão -->
+                                <circle cx="0" cy="0" r="8" fill="#0088FF" stroke="#fff" stroke-width="2" />
+                                <text x="12" y="4" font-family="Inter" font-weight="700" font-size="11" fill="#0088FF">João Silva (80 km/h)</text>
+                            </g>
+                        </svg>
+                    </div>
+
+                    <!-- Painel Flutuante do Rodapé -->
+                    <div class="map-floating-panel">
+                        <!-- Rota / Posição -->
+                        <div>
+                            <span style="font-size:10px; font-weight:700; color:var(--text-muted); text-transform:uppercase; letter-spacing:0.5px;">Localização Atual</span>
+                            <h3 style="font-size:16px; font-weight:800; color:var(--text-dark); margin-top:2px;">Rodovia BR-101, Km 85</h3>
+                            <p style="font-size:12px; color:var(--text-body); margin-top:2px;">Passando por Goiana, PE — Atualizado há 1 min</p>
+                        </div>
+                        
+                        <!-- Progresso da rota -->
+                        <div style="border-left: 1px solid var(--border-light); padding-left: 20px;">
+                            <span style="font-size:10px; font-weight:700; color:var(--text-muted); text-transform:uppercase; letter-spacing:0.5px;">Estatísticas de Viagem</span>
+                            <div style="display:flex; justify-content:space-between; margin-top:4px; font-size:13px; font-weight:700; color:var(--text-dark);">
+                                <span>Distância Restante:</span>
+                                <span>165 km (de 300 km)</span>
+                            </div>
+                            <div style="display:flex; justify-content:space-between; font-size:13px; font-weight:700; color:var(--text-dark); margin-top:2px;">
+                                <span>Previsão de Chegada:</span>
+                                <span>Hoje às 18:30 (~2h15min)</span>
+                            </div>
+                        </div>
+
+                        <!-- Motorista / Contato -->
+                        <div style="border-left: 1px solid var(--border-light); padding-left: 20px; display:flex; align-items:center; justify-content:space-between;">
+                            <div style="display:flex; align-items:center; gap:10px;">
+                                <img src="../assets/images/motorista.png" alt="João Silva" style="width:36px; height:36px; border-radius:50%; object-fit:cover;">
+                                <div>
+                                    <h4 style="font-size:13px; font-weight:700; color:var(--text-dark);">João Silva</h4>
+                                    <span style="font-size:11px; color:var(--accent-orange); font-weight:600; display:inline-flex; align-items:center; gap:4px;">
+                                        <svg viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="2" width="12" height="12" style="color:var(--accent-orange);"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+                                        4.9 • Atego 1719
+                                    </span>
+                                </div>
+                            </div>
+                            <a href="chat.html" class="ct-btn ct-btn-primary ct-btn-sm" style="box-shadow:none; display:inline-flex; align-items:center; gap:6px;">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+                                Chat
+                            </a>
+                        </div>
+                    </div>
+
+                </div>
+
+            </div><!-- /ct-content-area -->
+        </main>
+    </div>
+
+    <!-- BOTTOM NAV MOBILE -->
+    <nav class="ct-bottom-nav">
+        <a href="dashboard.html" class="ct-bottom-item">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="9"/><rect x="14" y="3" width="7" height="5"/><rect x="14" y="12" width="7" height="9"/><rect x="3" y="16" width="7" height="5"/></svg>
+            Home
+        </a>
+        <a href="minhas-cargas.html" class="ct-bottom-item active">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg>
+            Cargas
+        </a>
+        <a href="publicar-carga.html" class="ct-bottom-item" style="position:relative;">
+            <div style="width:48px;height:48px;border-radius:50%;background:var(--accent-blue);display:flex;align-items:center;justify-content:center;margin-top:-20px;box-shadow:0 4px 16px rgba(0,136,255,0.35);">
+                <svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5" width="22" height="22"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+            </div>
+            Publicar
+        </a>
+        <a href="chat.html" class="ct-bottom-item">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+            Chat
+        </a>
+        <a href="perfil.html" class="ct-bottom-item">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+            Perfil
+        </a>
+    </nav>
+
+    <script src="js/contratante.js"></script>
+</body>
+</html>

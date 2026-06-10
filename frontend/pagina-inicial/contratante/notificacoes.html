@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="KarGO — Central de Notificações. Fique atualizado sobre suas propostas de cargas e status de entregas.">
+    <title>KarGO — Central de Notificações</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/contratante.css">
+    <style>
+        .ct-notif-item {
+            padding: 20px;
+            background: #fff;
+            border: 1px solid var(--border-light);
+            border-radius: var(--radius-md);
+            margin-bottom: 12px;
+            display: flex;
+            gap: 16px;
+            align-items: flex-start;
+            transition: var(--transition-fast);
+            position: relative;
+        }
+        .ct-notif-item:hover {
+            border-color: rgba(0,136,255,0.15);
+            box-shadow: var(--shadow-xs);
+        }
+        .ct-notif-item.unread {
+            background: var(--accent-blue-light);
+            border-color: rgba(0,136,255,0.1);
+        }
+        .ct-notif-item.unread::after {
+            content: '';
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            width: 8px;
+            height: 8px;
+            background: var(--accent-blue);
+            border-radius: 50%;
+        }
+        .ct-notif-icon-box {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+            flex-shrink: 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="layout-container">
+
+        <!-- SIDEBAR DARK -->
+        <aside class="ct-sidebar">
+            <div class="ct-sidebar-logo">
+                <a href="../index.html"><img src="../assets/images/LOGO.png" alt="KarGO" class="logo-img"></a>
+            </div>
+            <nav class="ct-sidebar-menu">
+                <div class="ct-sidebar-links">
+                    <a href="dashboard.html" class="ct-menu-item">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="9"/><rect x="14" y="3" width="7" height="5"/><rect x="14" y="12" width="7" height="9"/><rect x="3" y="16" width="7" height="5"/></svg>
+                        Dashboard
+                    </a>
+                    <a href="publicar-carga.html" class="ct-menu-item">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="16"/><line x1="8" y1="12" x2="16" y2="12"/></svg>
+                        Publicar Carga
+                    </a>
+                    <a href="minhas-cargas.html" class="ct-menu-item">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><polyline points="3.27 6.96 12 12.01 20.73 6.96"/><line x1="12" y1="22.08" x2="12" y2="12"/></svg>
+                        Minhas Cargas
+                    </a>
+                    <a href="pagamentos.html" class="ct-menu-item">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="4" width="22" height="16" rx="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>
+                        Pagamentos
+                    </a>
+                    <a href="chat.html" class="ct-menu-item">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+                        Chat
+                        <span class="chat-badge-dot"></span>
+                    </a>
+                    <a href="ocorrencias.html" class="ct-menu-item">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+                        Ocorrências
+                    </a>
+                    <div class="ct-sidebar-divider"></div>
+                    <a href="perfil.html" class="ct-menu-item">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+                        Meu Perfil
+                    </a>
+                </div>
+                <div class="ct-sidebar-bottom">
+                    <a href="configuracoes.html" class="ct-menu-item">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.6 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.6a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9c.26.604.852.997 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+                        Configurações
+                    </a>
+                </div>
+            </nav>
+        </aside>
+
+        <!-- CONTEÚDO PRINCIPAL -->
+        <main class="main-content">
+            <div class="ct-content-area">
+
+                <!-- TOPBAR -->
+                <header class="ct-topbar">
+                    <div class="ct-topbar-mobile-logo">
+                        <a href="../index.html"><img src="../assets/images/LOGO.png" alt="KarGO" class="logo-img-mobile"></a>
+                    </div>
+                    <div class="ct-topbar-actions">
+                        <button class="ct-btn ct-btn-outline ct-btn-sm" style="margin-right: 12px;" onclick="alert('Todas as notificações foram marcadas como lidas.'); document.querySelectorAll('.ct-notif-item').forEach(el => el.classList.remove('unread'));">✓ Marcar todas como lidas</button>
+                        <div class="ct-user-profile">
+                            <img src="../assets/images/embarcador.png" alt="Maria" class="ct-user-avatar">
+                            <div class="ct-user-info">
+                                <span class="ct-user-name">Maria Logística</span>
+                            </div>
+                        </div>
+                    </div>
+                </header>
+
+                <!-- TÍTULO DA PÁGINA (Fora do header travado) -->
+                <div class="ct-page-title ct-reveal" style="margin-bottom: 24px;">
+                    <h1 style="display:flex; align-items:center; gap:8px;">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="24" height="24" style="color:var(--text-dark);"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+                        Central de Notificações
+                    </h1>
+                    <p>Acompanhe todos os eventos importantes em tempo real.</p>
+                </div>
+
+                <!-- LIST OF NOTIFICATIONS -->
+                <div class="ct-reveal" style="max-width:800px; margin: 0 auto;">
+                    
+                    <!-- Notificação 1 (Unread) -->
+                    <div class="ct-notif-item unread">
+                        <div class="ct-notif-icon-box" style="background:var(--accent-blue-light); color:var(--accent-blue);">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18"><rect x="1" y="3" width="15" height="13"/><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>
+                        </div>
+                        <div style="flex:1;">
+                            <div style="display:flex; justify-content:space-between; align-items:baseline;">
+                                <h4 style="font-size:14px; font-weight:700; color:var(--text-dark);">Nova Proposta Recebida</h4>
+                                <span style="font-size:11px; color:var(--text-muted);">Agora mesmo</span>
+                            </div>
+                            <p style="font-size:13px; color:var(--text-body); margin-top:4px;">Carlos Santos enviou uma proposta de R$ 1.350,00 para o Frete #KG-2026-1235.</p>
+                            <div style="margin-top:10px; display:flex; gap:8px;">
+                                <a href="minhas-cargas.html" class="ct-btn ct-btn-primary ct-btn-sm" style="box-shadow:none; padding:6px 12px;">Ver Proposta</a>
+                                <button class="ct-btn ct-btn-secondary ct-btn-sm" style="padding:6px 12px;" onclick="this.closest('.ct-notif-item').classList.remove('unread')">Ignorar</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Notificação 2 (Unread) -->
+                    <div class="ct-notif-item unread">
+                        <div class="ct-notif-icon-box" style="background:var(--accent-orange-light); color:var(--accent-orange);">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+                        </div>
+                        <div style="flex:1;">
+                            <div style="display:flex; justify-content:space-between; align-items:baseline;">
+                                <h4 style="font-size:14px; font-weight:700; color:var(--text-dark);">Motorista Próximo ao Destino</h4>
+                                <span style="font-size:11px; color:var(--text-muted);">há 3 horas</span>
+                            </div>
+                            <p style="font-size:13px; color:var(--text-body); margin-top:4px;">João Silva está a aproximadamente 30 minutos de finalizar a entrega em Natal, RN.</p>
+                            <div style="margin-top:10px; display:flex; gap:8px;">
+                                <a href="rastreamento.html" class="ct-btn ct-btn-primary ct-btn-sm" style="box-shadow:none; padding:6px 12px; background:var(--accent-orange); border-color:transparent;">Rastrear no Mapa</a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Notificação 3 -->
+                    <div class="ct-notif-item">
+                        <div class="ct-notif-icon-box" style="background:var(--accent-green-light); color:var(--accent-green);">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>
+                        </div>
+                        <div style="flex:1;">
+                            <div style="display:flex; justify-content:space-between; align-items:baseline;">
+                                <h4 style="font-size:14px; font-weight:700; color:var(--text-dark);">Pagamento Confirmado</h4>
+                                <span style="font-size:11px; color:var(--text-muted);">há 1 dia</span>
+                            </div>
+                            <p style="font-size:13px; color:var(--text-body); margin-top:4px;">O pagamento no valor de R$ 1.200,00 para o Frete #KG-2026-1230 foi processado e transferido com sucesso para a motorista Ana Paula.</p>
+                            <div style="margin-top:10px; display:flex; gap:8px;">
+                                <a href="pagamentos.html" class="ct-btn ct-btn-secondary ct-btn-sm" style="padding:6px 12px;">Ver Comprovante</a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Notificação 4 -->
+                    <div class="ct-notif-item">
+                        <div class="ct-notif-icon-box" style="background:var(--accent-red-light); color:var(--accent-red);">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+                        </div>
+                        <div style="flex:1;">
+                            <div style="display:flex; justify-content:space-between; align-items:baseline;">
+                                <h4 style="font-size:14px; font-weight:700; color:var(--text-dark);">Ocorrência Atualizada</h4>
+                                <span style="font-size:11px; color:var(--text-muted);">há 2 dias</span>
+                            </div>
+                            <p style="font-size:13px; color:var(--text-body); margin-top:4px;">A ocorrência #OC-2026-004567 recebeu uma nova resposta da equipe de suporte da KarGO.</p>
+                            <div style="margin-top:10px; display:flex; gap:8px;">
+                                <a href="ocorrencias.html" class="ct-btn ct-btn-secondary ct-btn-sm" style="padding:6px 12px;">Ver Histórico</a>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+            </div><!-- /ct-content-area -->
+        </main>
+    </div>
+
+    <!-- BOTTOM NAV MOBILE -->
+    <nav class="ct-bottom-nav">
+        <a href="dashboard.html" class="ct-bottom-item">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="9"/><rect x="14" y="3" width="7" height="5"/><rect x="14" y="12" width="7" height="9"/><rect x="3" y="16" width="7" height="5"/></svg>
+            Home
+        </a>
+        <a href="minhas-cargas.html" class="ct-bottom-item">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg>
+            Cargas
+        </a>
+        <a href="publicar-carga.html" class="ct-bottom-item" style="position:relative;">
+            <div style="width:48px;height:48px;border-radius:50%;background:var(--accent-blue);display:flex;align-items:center;justify-content:center;margin-top:-20px;box-shadow:0 4px 16px rgba(0,136,255,0.35);">
+                <svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5" width="22" height="22"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+            </div>
+            Publicar
+        </a>
+        <a href="chat.html" class="ct-bottom-item">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+            Chat
+        </a>
+        <a href="perfil.html" class="ct-bottom-item">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+            Perfil
+        </a>
+    </nav>
+
+    <script src="js/contratante.js"></script>
+</body>
+</html>

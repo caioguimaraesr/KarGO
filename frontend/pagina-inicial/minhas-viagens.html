@@ -11,24 +11,24 @@
     <style>
         /* === DESIGN SYSTEM TOKENS === */
         :root {
-            --bg-dark-deep: #080c14;
-            --bg-dark-card: #121824;
+            --bg-dark-deep: #f8fafc;
+            --bg-dark-card: #ffffff;
             --bg-dark-sidebar: #0b0f19;
-            --bg-dark-topbar: rgba(11, 15, 25, 0.85);
+            --bg-dark-topbar: rgba(255, 255, 255, 0.9);
             
-            --text-primary: #ffffff;
-            --text-secondary: #94a3b8;
+            --text-primary: #0f172a;
+            --text-secondary: #475569;
             --text-muted: #64748b;
             
             --accent-blue: #0088ff;
-            --accent-blue-glow: rgba(0, 136, 255, 0.35);
+            --accent-blue-glow: rgba(0, 136, 255, 0.15);
             --accent-orange: #ff9f0a;
-            --accent-orange-glow: rgba(255, 159, 10, 0.3);
+            --accent-orange-glow: rgba(255, 159, 10, 0.15);
             --accent-red: #ff3b30;
             --accent-green: #34c759;
-            --accent-green-glow: rgba(52, 199, 89, 0.25);
+            --accent-green-glow: rgba(52, 199, 89, 0.1);
             
-            --border-translucent: rgba(255, 255, 255, 0.05);
+            --border-translucent: rgba(0, 0, 0, 0.08);
             
             --font-primary: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
             --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
@@ -121,7 +121,7 @@
         .user-name {
             font-size: 13px;
             font-weight: 700;
-            color: #fff;
+            color: var(--text-primary);
         }
 
         .user-role {
@@ -155,7 +155,7 @@
         }
 
         .tab-button-desktop:hover {
-            color: #fff;
+            color: var(--text-primary);
         }
 
         .tab-button-desktop.active {
@@ -256,7 +256,7 @@
         }
 
         .trip-meta-desktop strong {
-            color: #fff;
+            color: var(--text-primary);
         }
 
         /* Stepper Horizontal de Rota */
@@ -337,7 +337,7 @@
 
         .step-node-desktop.completed .step-label-desktop,
         .step-node-desktop.active .step-label-desktop {
-            color: #fff;
+            color: var(--text-primary);
         }
 
         /* Barra de Progresso Operacional */
@@ -449,7 +449,7 @@
         .proposal-details h5 {
             font-size: 14px;
             font-weight: 700;
-            color: #fff;
+            color: var(--text-primary);
         }
 
         .proposal-details p {
@@ -505,11 +505,11 @@
 
         .comment-field-desktop {
             width: 100%;
-            background-color: rgba(0, 0, 0, 0.2);
+            background-color: #f1f5f9;
             border: 1px solid var(--border-translucent);
             border-radius: 12px;
             padding: 14px;
-            color: #fff;
+            color: var(--text-primary);
             font-family: inherit;
             font-size: 13px;
             resize: none;
@@ -568,18 +568,20 @@
 
         /* === PREMIUM BOTTOM NAVIGATION BAR (MOBILE) === */
         .mp-bottom-nav {
-            position: fixed;
-            bottom: 0;
-            left: 0;
-            right: 0;
+            position: fixed !important;
+            bottom: 0 !important;
+            left: 0 !important;
+            right: 0 !important;
             height: 72px;
-            background-color: rgba(11, 15, 25, 0.95);
-            backdrop-filter: blur(20px);
-            border-top: 1px solid var(--border-translucent);
+            background-color: rgba(11, 15, 25, 0.96) !important;
+            backdrop-filter: blur(20px) !important;
+            -webkit-backdrop-filter: blur(20px) !important;
+            border-top: 1px solid rgba(255, 255, 255, 0.08) !important;
             display: none;
             grid-template-columns: repeat(5, 1fr);
             padding-bottom: 8px;
-            z-index: 1000;
+            z-index: 9999 !important;
+            box-shadow: 0 -8px 30px rgba(0, 0, 0, 0.3) !important;
         }
 
         .mp-bottom-nav-item {
@@ -587,7 +589,7 @@
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            color: var(--text-muted);
+            color: #94a3b8 !important;
             text-decoration: none;
             font-size: 10px;
             font-weight: 600;
@@ -600,14 +602,16 @@
             width: 20px;
             height: 20px;
             stroke-width: 2.2;
+            color: #64748b !important;
             transition: var(--transition-smooth);
         }
 
         .mp-bottom-nav-item:hover, .mp-bottom-nav-item.active {
-            color: var(--accent-blue);
+            color: var(--accent-blue) !important;
         }
 
         .mp-bottom-nav-item.active svg {
+            color: var(--accent-blue) !important;
             filter: drop-shadow(0 0 6px var(--accent-blue-glow));
         }
 
@@ -623,8 +627,8 @@
             }
 
             .topbar {
-                background-color: var(--bg-dark-sidebar);
-                border-bottom: 1px solid var(--border-translucent);
+                background-color: #0b0f19 !important;
+                border-bottom: 1px solid rgba(255, 255, 255, 0.08) !important;
                 margin: -16px -16px 24px -16px;
                 padding: 16px;
                 height: 72px;
@@ -632,7 +636,25 @@
                 top: 0;
                 z-index: 200;
                 backdrop-filter: blur(10px);
-                background: var(--bg-dark-topbar);
+                background: #0b0f19 !important;
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+            }
+            .notification-btn {
+                background: rgba(255, 255, 255, 0.05) !important;
+                border: 1px solid rgba(255, 255, 255, 0.08) !important;
+                color: #ffffff !important;
+            }
+            .user-profile {
+                background: rgba(255, 255, 255, 0.05) !important;
+                border: 1px solid rgba(255, 255, 255, 0.08) !important;
+            }
+            .user-name {
+                color: #ffffff !important;
+            }
+            .user-role {
+                color: #94a3b8 !important;
             }
 
             .topbar-logo-mobile {
@@ -709,8 +731,16 @@
                 padding-top: 10px;
             }
         }
+
+        /* Limitador de Largura Desktop (Ultrawide) */
+        .mp-content-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            width: 100%;
+            box-sizing: border-box;
+        }
     </style>
-    <link rel="stylesheet" href="css/marketplace.css">
+    <link rel="stylesheet" href="css/marketplace.css?v=2.2">
 </head>
 <body>
 
@@ -762,16 +792,13 @@
                         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
                         Configurações
                     </a>
-                    <button type="button" class="mp-menu-item mp-logout-btn" onclick="localStorage.removeItem('kargoSession');localStorage.removeItem('kargoToken');window.location.href='login.html'">
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
-                        Sair
-                    </button>
                 </div>
             </nav>
         </aside>
 
         <!-- CONTEÚDO PRINCIPAL -->
         <main class="main-content">
+            <div class="mp-content-container">
             
             <!-- HEADER TOPBAR -->
             <header class="topbar">
@@ -949,35 +976,12 @@
                     </div>
                 </article>
 
-            </section>
-
+            </div>
+            
         </main>
     </div>
 
-    <!-- Bottom Navigation Bar responsiva (Mobile) -->
-    <nav class="mp-bottom-nav">
-        <a href="dashboard.html" class="mp-bottom-nav-item">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="9"/><rect x="14" y="3" width="7" height="5"/><rect x="14" y="12" width="7" height="9"/><rect x="3" y="16" width="7" height="5"/></svg>
-            <span>Dashboard</span>
-        </a>
-        <a href="marketplace.html" class="mp-bottom-nav-item">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
-            <span>Buscar</span>
-        </a>
-        <a href="minhas-viagens.html" class="mp-bottom-nav-item active">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="3" width="15" height="13" rx="2" ry="2"/><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>
-            <span>Viagens</span>
-        </a>
-        <a href="chat.html" class="mp-bottom-nav-item">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
-            <span>Chat</span>
-            <span class="chat-badge-dot"></span>
-        </a>
-        <a href="#" class="mp-bottom-nav-item">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
-            <span>Ajustes</span>
-        </a>
-    </nav>
+    <!-- Bottom Navigation Bar duplicada removida para evitar conflitos no mobile -->
 
     <!-- Toast Sucesso -->
     <div class="toast-desktop" id="desktop-toast">
@@ -988,56 +992,8 @@
         </div>
     </div>
 
-    <script src="js/api-client.js"></script>
     <!-- JS de Controle de Abas e Interações -->
     <script>
-        const api = window.KargoApi;
-
-        async function hydrateTripsFromBackend() {
-            if (!api) return;
-
-            const session = api.getSession();
-            if (session && session.name) {
-                document.querySelectorAll('.user-name').forEach(el => {
-                    el.textContent = session.name;
-                });
-            }
-
-            if (!session || session.type !== 'MOTORISTA' || !session.id) {
-                return;
-            }
-
-            try {
-                const fretes = await api.request('/api/fretes', { method: 'GET' });
-                const doMotorista = Array.isArray(fretes)
-                    ? fretes.filter(item => item.motorista && item.motorista.id === session.id)
-                    : [];
-
-                const activeFrete = doMotorista.find(item => item.status === 'EM_TRANSITO' || item.status === 'ACEITO' || item.status === 'PUBLICADO');
-                if (!activeFrete) return;
-
-                const activeCard = document.querySelector('.trip-card-desktop[data-status="andamento"]');
-                if (!activeCard) return;
-
-                const title = activeCard.querySelector('.trip-body-desktop h3');
-                const meta = activeCard.querySelectorAll('.trip-meta-desktop strong');
-
-                if (title) {
-                    title.textContent = `${activeFrete.titulo || 'Frete'} (${Math.round(Number(activeFrete.pesoCargaKg || 0) / 1000)} toneladas)`;
-                }
-                if (meta.length > 0) {
-                    meta[0].textContent = activeFrete.embarcador && activeFrete.embarcador.nome ? activeFrete.embarcador.nome : 'Embarcador';
-                }
-                if (meta.length > 1) {
-                    meta[1].textContent = Number(activeFrete.valorFrete || 0).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
-                }
-            } catch (error) {
-                console.error('Falha ao carregar viagens do backend:', error.message);
-            }
-        }
-
-        document.addEventListener('DOMContentLoaded', hydrateTripsFromBackend);
-
         // Filtro de Abas
         function filterTripsDesktop(status) {
             const buttons = document.querySelectorAll('.tab-button-desktop');
@@ -1114,5 +1070,29 @@
             showToastDesktop('Avaliação Recebida!', 'Seu feedback ajuda a manter a confiabilidade de contratantes.');
         }
     </script>
+    <!-- Bottom Navigation Bar responsiva -->
+    <nav class="mp-bottom-nav">
+        <a href="dashboard.html" class="mp-bottom-nav-item">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="9"/><rect x="14" y="3" width="7" height="5"/><rect x="14" y="12" height="7" height="9"/><rect x="3" y="16" width="7" height="5"/></svg>
+            <span>Dashboard</span>
+        </a>
+        <a href="marketplace.html" class="mp-bottom-nav-item">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+            <span>Buscar</span>
+        </a>
+        <a href="minhas-viagens.html" class="mp-bottom-nav-item active">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="3" width="15" height="13" rx="2" ry="2"/><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>
+            <span>Viagens</span>
+        </a>
+        <a href="chat.html" class="mp-bottom-nav-item">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+            <span>Chat</span>
+            <span class="chat-badge-dot"></span>
+        </a>
+        <a href="perfil.html" class="mp-bottom-nav-item">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+            <span>Perfil</span>
+        </a>
+    </nav>
 </body>
 </html>
