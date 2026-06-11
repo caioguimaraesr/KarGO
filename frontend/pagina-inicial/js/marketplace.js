@@ -7,6 +7,7 @@
     document.addEventListener('DOMContentLoaded', () => {
         const api = window.KargoApi;
         let selectedCargaData = null;
+        let allCargas = [];
 
         function escapeHtml(value) {
             return String(value || '')
@@ -15,6 +16,14 @@
                 .replace(/>/g, '&gt;')
                 .replace(/"/g, '&quot;')
                 .replace(/'/g, '&#039;');
+        }
+
+        function normalizeText(value) {
+            return String(value || '')
+                .normalize('NFD')
+                .replace(/[\u0300-\u036f]/g, '')
+                .toLowerCase()
+                .trim();
         }
 
         function formatCurrency(value) {
@@ -50,20 +59,33 @@
             });
         }
 
-        async function loadCargasFromBackend() {
-            if (!api) return;
+        function renderCargas(cargas) {
+            const session = api ? api.getSession() : null;
+            const canAcceptCargas = !!session && session.type === 'MOTORISTA';
+            const cardsContainer = document.getElementById('cards-container');
+            const resultsCount = document.getElementById('results-count');
 
-            try {
-                const cargas = await api.listCargas();
-                if (!Array.isArray(cargas) || cargas.length === 0) {
-                    return;
-                }
+            if (!cardsContainer) return;
 
-                const cardsContainer = document.getElementById('cards-container');
-                const resultsCount = document.getElementById('results-count');
-                if (!cardsContainer) return;
+            if (!Array.isArray(cargas) || cargas.length === 0) {
+                cardsContainer.innerHTML = `
+                    <article class="cargo-card">
+                        <div class="card-main-grid">
+                            <div class="card-route-horizontal">
+                                <div class="route-origin">
+                                    <span class="route-label">Sem resultados</span>
+                                    <h4 class="route-city">Nenhuma carga encontrada</h4>
+                                    <span class="route-time">Ajuste os filtros para tentar novamente.</span>
+                                </div>
+                            </div>
+                        </div>
+                    </article>
+                `;
+                if (resultsCount) resultsCount.textContent = '0';
+                return;
+            }
 
-                const html = cargas.map((carga) => {
+            const html = cargas.map((carga) => {
                     const valor = Number(carga.valorSugerido || 0);
                     const suggested = formatBidValue(valor);
                     const origem = escapeHtml(carga.origem || 'Origem');
@@ -107,8 +129,10 @@
                                         <h3 class="price-value">${formatCurrency(valor)}</h3>
                                     </div>
                                     <div class="actions-group">
-                                        <a href="detalhe-carga.html" class="card-btn-outline">Ver Detalhes</a>
-                                        <button class="card-btn-primary js-propose-btn" data-suggested="${suggested}" data-origin="${origem}" data-destination="${destino}" data-carga-id="${carga.id}" data-embarcador-id="${embarcadorId}" data-peso-kg="${Number(carga.pesoKg || 0)}" data-descricao="${descricao}">Enviar Proposta</button>
+                                        <a href="detalhe-carga.html?id=${carga.id}" class="card-btn-outline">Ver Detalhes</a>
+                                        ${canAcceptCargas
+                                            ? `<button class="card-btn-primary js-propose-btn" data-suggested="${suggested}" data-origin="${origem}" data-destination="${destino}" data-carga-id="${carga.id}" data-embarcador-id="${embarcadorId}" data-peso-kg="${Number(carga.pesoKg || 0)}" data-descricao="${descricao}">Enviar Proposta</button>`
+                                            : '<button class="card-btn-primary" type="button" disabled title="Apenas motoristas podem aceitar cargas">Apenas Motorista Aceita</button>'}
                                     </div>
                                 </div>
                             </div>
@@ -124,9 +148,49 @@
                     `;
                 }).join('');
 
-                cardsContainer.innerHTML = html;
-                if (resultsCount) resultsCount.textContent = String(cargas.length);
-                animateCards();
+            cardsContainer.innerHTML = html;
+            if (resultsCount) resultsCount.textContent = String(cargas.length);
+            animateCards();
+        }
+
+        function applyFilters() {
+            const selectedTypes = Array.from(document.querySelectorAll('input[name="carga-tipo"]:checked')).map(el => normalizeText(el.value));
+            const minPrice = parseBidValue((document.getElementById('price-min') || {}).value || '0');
+            const maxPrice = parseBidValue((document.getElementById('price-max') || {}).value || '0');
+            const maxWeightTon = Number((document.getElementById('weight-slider') || {}).value || 9999);
+            const originQuery = normalizeText((document.getElementById('quick-origin') || {}).value || '');
+            const destinationQuery = normalizeText((document.getElementById('quick-destination') || {}).value || '');
+
+            const filtered = allCargas.filter((carga) => {
+                const descricao = normalizeText(carga.descricao || '');
+                const origem = normalizeText(carga.origem || '');
+                const destino = normalizeText(carga.destino || '');
+                const valor = Number(carga.valorSugerido || 0);
+                const pesoTon = Number(carga.pesoKg || 0) / 1000;
+
+                if (minPrice > 0 && valor < minPrice) return false;
+                if (maxPrice > 0 && valor > maxPrice) return false;
+                if (Number.isFinite(maxWeightTon) && maxWeightTon > 0 && pesoTon > maxWeightTon) return false;
+                if (originQuery && !origem.includes(originQuery)) return false;
+                if (destinationQuery && !destino.includes(destinationQuery)) return false;
+
+                if (selectedTypes.length) {
+                    return selectedTypes.some((type) => descricao.includes(type));
+                }
+
+                return true;
+            });
+
+            renderCargas(filtered);
+        }
+
+        async function loadCargasFromBackend() {
+            if (!api) return;
+
+            try {
+                const cargas = await api.listCargas();
+                allCargas = Array.isArray(cargas) ? cargas.filter(c => c && c.ativa !== false) : [];
+                applyFilters();
             } catch (error) {
                 showToast(`Falha ao carregar cargas: ${error.message}`, 'error');
             }
@@ -140,7 +204,7 @@
             weightSlider.addEventListener('input', (e) => {
                 const val = e.target.value;
                 weightSliderVal.textContent = val + 'T';
-                simulateFiltering();
+                applyFilters();
             });
         }
 
@@ -160,7 +224,7 @@
                 currentRadiusIdx = (currentRadiusIdx + 1) % radiusOptions.length;
                 radiusLink.textContent = radiusOptions[currentRadiusIdx];
                 showToast(`Raio ajustado para: ${radiusOptions[currentRadiusIdx]}`);
-                simulateFiltering();
+                applyFilters();
             });
         }
 
@@ -171,8 +235,7 @@
                 // Reset checkboxes
                 const checkboxes = document.querySelectorAll('input[name="carga-tipo"]');
                 checkboxes.forEach(cb => {
-                    // Mantém apenas o de construção marcado por padrão
-                    cb.checked = (cb.value === 'construcao');
+                    cb.checked = false;
                 });
 
                 // Reset slider
@@ -192,7 +255,7 @@
                 if (radiusLink) radiusLink.textContent = radiusOptions[1];
 
                 showToast('Filtros redefinidos para os padrões');
-                simulateFiltering();
+                applyFilters();
             });
         }
 
@@ -241,7 +304,7 @@
                 const truck = quickTruck ? quickTruck.options[quickTruck.selectedIndex].text : '';
                 
                 showToast(`Buscando cargas de: "${origin || 'Qualquer'}" para "${dest || 'Qualquer'}" (${truck})`);
-                simulateFiltering();
+                applyFilters();
             });
         }
 
@@ -260,53 +323,11 @@
             });
         }
 
-        // --- 7. SIMULAÇÃO DE FILTRAGEM ---
-        function simulateFiltering() {
-            const resultsCount = document.getElementById('results-count');
-            const cards = document.querySelectorAll('.cargo-card');
-            
-            // Efeito visual nos cards
-            cards.forEach(card => {
-                card.style.opacity = '0.3';
-                card.style.transform = 'scale(0.98)';
-            });
-
-            setTimeout(() => {
-                // Simula contagem variando um pouco
-                if (resultsCount) {
-                    const randomCount = Math.floor(Math.random() * 20) + 15;
-                    resultsCount.textContent = randomCount;
-                }
-                
-                // Restaura cards com efeito de entrada suave
-                cards.forEach((card, idx) => {
-                    card.style.opacity = '1';
-                    card.style.transform = 'scale(1)';
-                    card.style.transition = 'all 0.3s cubic-bezier(0.16, 1, 0.3, 1)';
-                    
-                    // Simula esconder o card de Rota de Retorno se o peso for muito alto
-                    if (weightSlider && parseInt(weightSlider.value) > 25 && card.classList.contains('return')) {
-                        card.style.display = 'none';
-                    } else {
-                        card.style.display = 'block';
-                    }
-                });
-
-                animateCards();
-            }, 300);
-        }
-
         // --- 8. NOTIFICAÇÕES (SINO DE TOAST) ---
         const notificationBtn = document.querySelector('.mp-notification-btn');
         if (notificationBtn) {
             notificationBtn.addEventListener('click', () => {
-                const notifications = [
-                    'Nova carga correspondente cadastrada de Campinas, SP!',
-                    'Embarcador TransLog avaliou sua candidatura positivamente.',
-                    'Seu pagamento da rota SP-RJ foi liberado para saque.'
-                ];
-                const randomNotif = notifications[Math.floor(Math.random() * notifications.length)];
-                showToast(randomNotif, 'info');
+                showToast('Consultas atualizadas com dados reais do banco.', 'info');
                 
                 // Remove a bolinha vermelha se clicado
                 const badge = notificationBtn.querySelector('.notification-badge');
@@ -499,17 +520,22 @@
 
                     const now = new Date();
                     const entrega = new Date(now.getTime() + 24 * 60 * 60 * 1000);
+                    const bidValue = parseBidValue(finalBid);
+                    const suggestedValue = parseBidValue(currentSuggestedAmount);
+                    const aceitaSugestao = Math.abs(bidValue - suggestedValue) < 0.005;
 
                     await api.createFrete({
-                        titulo: `Proposta para carga ${selectedCargaData.cargaId || ''}`.trim(),
-                        descricao: `Proposta enviada via marketplace para ${selectedCargaData.descricao}`,
+                        titulo: `${aceitaSugestao ? 'Aceite' : 'Proposta'} para carga ${selectedCargaData.cargaId || ''}`.trim(),
+                        descricao: `${aceitaSugestao ? 'Aceite imediato' : 'Contraoferta'} via marketplace para ${selectedCargaData.descricao}`,
                         origem: selectedCargaData.origem,
                         destino: selectedCargaData.destino,
                         pesoCargaKg: selectedCargaData.pesoKg || 1000,
-                        valorFrete: parseBidValue(finalBid),
+                        valorFrete: bidValue,
                         dataEntrega: toDateString(entrega),
                         dataPublicacao: toLocalDateTimeString(now),
-                        status: 'PUBLICADO',
+                        dataAceite: aceitaSugestao ? toLocalDateTimeString(now) : null,
+                        status: aceitaSugestao ? 'ACEITO' : 'PUBLICADO',
+                        carga: { id: selectedCargaData.cargaId },
                         embarcador: { id: selectedCargaData.embarcadorId },
                         motorista: { id: session.id },
                         veiculo: { id: veiculoAtivo.id }
@@ -518,7 +544,12 @@
                     btnSubmitProposal.disabled = false;
                     btnSubmitProposal.textContent = originalText;
                     closeModal();
-                    showToast(`Proposta enviada com sucesso para a carga ${selectedCargaData.cargaId}.`);
+                    if (aceitaSugestao) {
+                        showToast(`Carga ${selectedCargaData.cargaId} aceita com sucesso e removida da lista disponível.`);
+                    } else {
+                        showToast(`Contraoferta enviada para a carga ${selectedCargaData.cargaId}. Aguardando decisão do embarcador.`, 'info');
+                    }
+                    await loadCargasFromBackend();
                 } catch (error) {
                     btnSubmitProposal.disabled = false;
                     btnSubmitProposal.textContent = originalText;
@@ -567,10 +598,29 @@
             mpFiltersOverlay.addEventListener('click', closeFilters);
         }
 
-        // Executa animação inicial nos cards
-        setUserNameOnTopbar();
-        loadCargasFromBackend();
-        animateCards();
+        // Executa animação inicial e carrega dados reais
+        (async function initMarketplacePage() {
+            if (api) {
+                await api.hydrateSessionProfile();
+            }
+
+            // Evita filtro inicial excessivo por valores default do HTML.
+            const quickOriginInput = document.getElementById('quick-origin');
+            if (quickOriginInput && normalizeText(quickOriginInput.value) === 'sao paulo, sp') {
+                quickOriginInput.value = '';
+            }
+            const quickDestinationInput = document.getElementById('quick-destination');
+            if (quickDestinationInput) {
+                quickDestinationInput.value = '';
+            }
+            document.querySelectorAll('input[name="carga-tipo"]').forEach((cb) => {
+                cb.checked = false;
+            });
+
+            setUserNameOnTopbar();
+            await loadCargasFromBackend();
+            animateCards();
+        })();
     });
 
 })();

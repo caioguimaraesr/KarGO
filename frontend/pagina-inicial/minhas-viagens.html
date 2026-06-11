@@ -1070,6 +1070,163 @@
             showToastDesktop('Avaliação Recebida!', 'Seu feedback ajuda a manter a confiabilidade de contratantes.');
         }
     </script>
+    <script src="js/api-client.js"></script>
+    <script>
+        (function initMinhasViagensFromApi() {
+            const api = window.KargoApi;
+            if (!api) return;
+
+            function mapStatusToTab(status) {
+                if (status === 'CONCLUIDO') return 'concluido';
+                if (status === 'PUBLICADO') return 'pendente';
+                return 'andamento';
+            }
+
+            function mapStatusLabel(status) {
+                if (status === 'CONCLUIDO') return { label: 'Concluído', css: 'completed' };
+                if (status === 'PUBLICADO') return { label: 'Aguardando confirmação', css: 'pending' };
+                if (status === 'ACEITO') return { label: 'Aceito', css: 'in-transit' };
+                if (status === 'EM_TRANSITO') return { label: 'Em trânsito', css: 'in-transit' };
+                if (status === 'CANCELADO') return { label: 'Cancelado', css: 'pending' };
+                return { label: status || 'Status não informado', css: 'pending' };
+            }
+
+            function formatCurrency(value) {
+                return Number(value || 0).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+            }
+
+            function renderFreteCard(frete) {
+                const statusInfo = mapStatusLabel(frete.status);
+                const tab = mapStatusToTab(frete.status);
+                const title = frete.titulo || frete.descricao || 'Frete';
+                const route = `${frete.origem || '-'} → ${frete.destino || '-'}`;
+                const embarcador = frete.embarcador && frete.embarcador.nome ? frete.embarcador.nome : 'Embarcador';
+                const veiculo = frete.veiculo && frete.veiculo.modelo ? frete.veiculo.modelo : 'Veículo não informado';
+                const dataEntrega = frete.dataEntrega || '-';
+                const canConclude = frete.status === 'ACEITO' || frete.status === 'EM_TRANSITO';
+
+                return `
+                    <article class="trip-card-desktop" data-status="${tab}">
+                        <div>
+                            <div class="trip-card-top">
+                                <span class="trip-badge-desktop">Frete #${frete.id}</span>
+                                <span class="status-pill-desktop ${statusInfo.css}">${statusInfo.label}</span>
+                            </div>
+                            <div class="trip-body-desktop" style="margin-bottom: 12px;">
+                                <h3>${title}</h3>
+                                <div class="trip-meta-desktop">
+                                    <span>Rota: <strong>${route}</strong></span>
+                                    <span>Valor: <strong>${formatCurrency(frete.valorFrete)}</strong></span>
+                                </div>
+                            </div>
+                            <div class="proposals-list-wrapper" style="margin-top: 8px;">
+                                <div class="proposal-item-card">
+                                    <div class="proposal-item-left">
+                                        <div class="proposal-company-circle">${String(embarcador).slice(0, 2).toUpperCase()}</div>
+                                        <div class="proposal-details">
+                                            <h5>${route}</h5>
+                                            <p>Embarcador: ${embarcador} • Veículo: ${veiculo}</p>
+                                        </div>
+                                    </div>
+                                    <div class="proposal-item-right">
+                                        <span class="proposal-bid-val">Entrega: ${dataEntrega}</span>
+                                        <span class="proposal-status-msg">● ${statusInfo.label}</span>
+                                    </div>
+                                </div>
+                            </div>
+                            ${canConclude ? `
+                                <div style="margin-top: 16px; display:flex; justify-content:flex-end;">
+                                    <button type="button" class="btn-apply-desktop js-conclude-frete-btn" data-frete-id="${frete.id}">Completar entrega</button>
+                                </div>
+                            ` : ''}
+                        </div>
+                    </article>
+                `;
+            }
+
+            async function boot() {
+                const session = await api.hydrateSessionProfile();
+                if (!session || session.type !== 'MOTORISTA' || !session.id) {
+                    window.location.href = 'login.html';
+                    return;
+                }
+
+                document.querySelectorAll('.user-name').forEach(el => {
+                    el.textContent = session.name || 'Motorista';
+                });
+
+                const grid = document.getElementById('trips-grid');
+                if (!grid) return;
+
+                try {
+                    const fretes = await api.listFretes({ motoristaId: session.id });
+                    const meusFretes = Array.isArray(fretes) ? fretes : [];
+
+                    if (meusFretes.length === 0) {
+                        grid.innerHTML = `
+                            <article class="trip-card-desktop" data-status="todas">
+                                <div>
+                                    <div class="trip-card-top">
+                                        <span class="trip-badge-desktop">Sem viagens</span>
+                                        <span class="status-pill-desktop pending">Sem registros</span>
+                                    </div>
+                                    <div class="trip-body-desktop">
+                                        <h3>Nenhum frete encontrado no banco de dados</h3>
+                                        <div class="trip-meta-desktop">
+                                            <span>Quando você enviar propostas e aceitar cargas, suas viagens aparecerão aqui.</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </article>
+                        `;
+                        return;
+                    }
+
+                    grid.innerHTML = meusFretes.map(renderFreteCard).join('');
+                } catch (error) {
+                    grid.innerHTML = `
+                        <article class="trip-card-desktop" data-status="todas">
+                            <div>
+                                <div class="trip-card-top">
+                                    <span class="trip-badge-desktop">Erro</span>
+                                    <span class="status-pill-desktop pending">Falha</span>
+                                </div>
+                                <div class="trip-body-desktop">
+                                    <h3>Não foi possível carregar suas viagens</h3>
+                                    <div class="trip-meta-desktop">
+                                        <span>${error.message || 'Erro ao consultar API de fretes.'}</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </article>
+                    `;
+                }
+            }
+
+            document.addEventListener('click', async (event) => {
+                const button = event.target.closest('.js-conclude-frete-btn');
+                if (!button) return;
+
+                const freteId = Number(button.getAttribute('data-frete-id') || 0);
+                if (!freteId) return;
+
+                const originalText = button.textContent;
+                button.disabled = true;
+                button.textContent = 'Concluindo...';
+
+                try {
+                    await api.concludeFrete(freteId);
+                    await boot();
+                } catch (error) {
+                    button.disabled = false;
+                    button.textContent = originalText;
+                    alert(error.message || 'Não foi possível concluir a entrega.');
+                }
+            });
+
+            document.addEventListener('DOMContentLoaded', boot);
+        })();
+    </script>
     <!-- Bottom Navigation Bar responsiva -->
     <nav class="mp-bottom-nav">
         <a href="dashboard.html" class="mp-bottom-nav-item">

@@ -1,35 +1,30 @@
-/* ============================================
-   KARGO — Detalhe da Carga & Candidatura Lógica (Desktop-First)
-   ============================================ */
 (function() {
     'use strict';
 
     document.addEventListener('DOMContentLoaded', () => {
+        const api = window.KargoApi;
+        const params = new URLSearchParams(window.location.search);
+        const cargaId = Number(params.get('id') || 0);
 
-        // --- 1. TOAST NOTIFICATION SYSTEM ---
-        function showToast(message, type = 'success') {
+        const btnApplyTrigger = document.getElementById('btn-apply-trigger');
+        const applyLabel = document.getElementById('dc-apply-button-label');
+        const modalBackdrop = document.getElementById('proposal-modal-backdrop');
+        const btnCloseModal = document.getElementById('js-close-modal');
+        const btnCancelModal = document.getElementById('js-cancel-modal');
+        const btnSubmitProposal = document.getElementById('js-submit-proposal');
+        const modalSuggestedValue = document.getElementById('js-modal-suggested-val');
+        const driverBidInput = document.getElementById('driver-bid-input');
+
+        let currentCarga = null;
+        let currentSuggestedAmount = '0,00';
+
+        function showToast(message, type) {
             const existingToast = document.querySelector('.kargo-toast');
-            if (existingToast) {
-                existingToast.remove();
-            }
+            if (existingToast) existingToast.remove();
 
             const toast = document.createElement('div');
-            toast.className = `kargo-toast ${type}`;
-            
-            let iconSvg = '';
-            if (type === 'success') {
-                iconSvg = `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>`;
-            } else {
-                iconSvg = `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>`;
-            }
-
-            toast.innerHTML = `
-                <div class="toast-content">
-                    <span class="toast-icon">${iconSvg}</span>
-                    <span class="toast-text">${message}</span>
-                </div>
-            `;
-
+            toast.className = `kargo-toast ${type || 'success'}`;
+            toast.textContent = message;
             Object.assign(toast.style, {
                 position: 'fixed',
                 bottom: '30px',
@@ -38,258 +33,215 @@
                 color: '#FFFFFF',
                 padding: '12px 20px',
                 borderRadius: '8px',
-                boxShadow: '0 10px 25px -5px rgba(0, 0, 0, 0.3), 0 8px 10px -6px rgba(0, 0, 0, 0.3)',
+                boxShadow: '0 10px 25px -5px rgba(0, 0, 0, 0.3)',
                 zIndex: '9999',
-                display: 'flex',
-                alignItems: 'center',
-                gap: '10px',
                 fontFamily: '"Inter", sans-serif',
                 fontSize: '14px',
-                fontWeight: '500',
-                opacity: '0',
-                transform: 'translateY(10px)',
-                transition: 'all 0.3s cubic-bezier(0.16, 1, 0.3, 1)'
+                fontWeight: '500'
             });
-
             document.body.appendChild(toast);
-
-            toast.offsetHeight; // Reflow
-            toast.style.opacity = '1';
-            toast.style.transform = 'translateY(0)';
-
-            setTimeout(() => {
-                toast.style.opacity = '0';
-                toast.style.transform = 'translateY(10px)';
-                setTimeout(() => {
-                    toast.remove();
-                }, 300);
-            }, 3500);
+            setTimeout(() => toast.remove(), 3500);
         }
 
-        // --- 2. FAVORITAR CARGA (HEART TOGGLE) ---
-        const btnFavToggle = document.getElementById('btn-fav-toggle');
-        const favText = document.getElementById('fav-text');
-
-        if (btnFavToggle && favText) {
-            btnFavToggle.addEventListener('click', () => {
-                btnFavToggle.classList.toggle('active');
-                
-                const isFav = btnFavToggle.classList.contains('active');
-                if (isFav) {
-                    favText.textContent = 'Carga Salva ✓';
-                    showToast('Carga adicionada aos seus favoritos!');
-                    
-                    // Efeito de pulso rápido
-                    btnFavToggle.style.transform = 'scale(1.05)';
-                    setTimeout(() => { btnFavToggle.style.transform = ''; }, 150);
-                } else {
-                    favText.textContent = 'Salvar Carga';
-                    showToast('Carga removida dos favoritos', 'info');
-                }
-            });
+        function formatCurrency(value) {
+            return Number(value || 0).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
         }
 
-        // --- 3. COMPARTILHAR CARGA ---
-        const btnShareTrigger = document.getElementById('btn-share-trigger');
-        if (btnShareTrigger) {
-            btnShareTrigger.addEventListener('click', async () => {
-                const shareData = {
-                    title: 'KarGO — Recife → Fortaleza',
-                    text: 'Confira esta excelente carga disponível: Recife/PE para Fortaleza/CE com frete de R$ 4.500,00',
-                    url: window.location.href
-                };
-
-                if (navigator.share) {
-                    try {
-                        await navigator.share(shareData);
-                    } catch (err) {
-                        // Compartilhamento cancelado ou falhou
-                    }
-                } else {
-                    // Fallback: Copiar para área de transferência
-                    try {
-                        await navigator.clipboard.writeText(window.location.href);
-                        showToast('Link da carga copiado para o clipboard!');
-                    } catch (e) {
-                        showToast('Não foi possível copiar o link automaticamente.', 'info');
-                    }
-                }
-            });
+        function formatBidValue(value) {
+            return Number(value || 0).toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
         }
 
-        // --- 4. CONTROLE DO MODAL DE PROPOSTAS (ESTILO FREELANCER) ---
-        const btnApplyTrigger = document.getElementById('btn-apply-trigger');
-        const modalBackdrop = document.getElementById('proposal-modal-backdrop');
-        const btnCloseModal = document.getElementById('js-close-modal');
-        const btnCancelModal = document.getElementById('js-cancel-modal');
-        const btnSubmitProposal = document.getElementById('js-submit-proposal');
-        const modalSuggestedValue = document.getElementById('js-modal-suggested-val');
-        const driverBidInput = document.getElementById('driver-bid-input');
-        const successOverlay = document.getElementById('success-overlay');
-        const successProposedVal = document.getElementById('js-success-proposed-val');
+        function parseBidValue(value) {
+            const sanitized = String(value || '').replace(/\./g, '').replace(',', '.').replace(/[^0-9.]/g, '');
+            const parsed = Number(sanitized);
+            return Number.isFinite(parsed) ? parsed : 0;
+        }
 
-        let currentSuggestedAmount = '4.500,00';
+        function toLocalDateTimeString(date) {
+            const local = new Date(date.getTime() - date.getTimezoneOffset() * 60000);
+            return local.toISOString().slice(0, 19);
+        }
+
+        function toDateString(date) {
+            const local = new Date(date.getTime() - date.getTimezoneOffset() * 60000);
+            return local.toISOString().slice(0, 10);
+        }
+
+        function setText(id, value) {
+            const el = document.getElementById(id);
+            if (el) el.textContent = value;
+        }
+
+        function estimateDistance(origem, destino) {
+            const seed = String(origem || '').length * 19 + String(destino || '').length * 23;
+            return Math.max(120, seed * 7);
+        }
+
+        function updateAvailability(isAvailable) {
+            setText('dc-status-text', isAvailable ? 'Disponível' : 'Indisponível');
+            if (btnApplyTrigger) {
+                btnApplyTrigger.disabled = !isAvailable;
+                btnApplyTrigger.style.opacity = isAvailable ? '1' : '0.6';
+                btnApplyTrigger.style.cursor = isAvailable ? 'pointer' : 'not-allowed';
+            }
+            if (applyLabel) {
+                applyLabel.textContent = isAvailable ? 'Enviar Minha Proposta' : 'Carga Fechada';
+            }
+        }
+
+        function populateCarga(carga) {
+            currentCarga = carga;
+            const origem = carga.origem || '-';
+            const destino = carga.destino || '-';
+            const distancia = estimateDistance(origem, destino);
+            const pesoKg = Number(carga.pesoKg || 0);
+            const pesoTon = (pesoKg / 1000).toFixed(1);
+            const valor = Number(carga.valorSugerido || 0);
+
+            document.title = `KarGO — ${origem} -> ${destino}`;
+            setText('dc-route-origin-title', origem);
+            setText('dc-route-destination-title', destino);
+            setText('dc-carga-id', `#${carga.id}`);
+            setText('dc-route-origin', origem);
+            setText('dc-route-destination', destino);
+            setText('dc-origin-address', origem);
+            setText('dc-destination-address', destino);
+            setText('dc-distance-total', `${distancia} km`);
+            setText('dc-distance-small', `${distancia} km`);
+            setText('dc-carga-descricao', carga.descricao || 'Carga');
+            setText('dc-carga-peso', `${pesoKg.toLocaleString('pt-BR')} kg (${pesoTon} Ton)`);
+            setText('dc-peso-small', `${pesoTon} Ton`);
+            setText('dc-frete-sugerido-table', formatCurrency(valor));
+            setText('dc-frete-sugerido-mobile', formatCurrency(valor));
+            setText('dc-price-main', formatCurrency(valor));
+            setText('dc-shipper-name', (carga.embarcador && carga.embarcador.nome) || 'Embarcador');
+
+            currentSuggestedAmount = formatBidValue(valor);
+            if (btnApplyTrigger) {
+                btnApplyTrigger.setAttribute('data-suggested', currentSuggestedAmount);
+                btnApplyTrigger.setAttribute('data-origin', origem);
+                btnApplyTrigger.setAttribute('data-destination', destino);
+                btnApplyTrigger.setAttribute('data-carga-id', String(carga.id));
+                btnApplyTrigger.setAttribute('data-embarcador-id', String(carga.embarcador && carga.embarcador.id ? carga.embarcador.id : ''));
+                btnApplyTrigger.setAttribute('data-peso-kg', String(pesoKg));
+                btnApplyTrigger.setAttribute('data-descricao', carga.descricao || 'Carga');
+            }
+            updateAvailability(carga.ativa !== false);
+        }
+
+        async function loadCarga() {
+            if (!api || !cargaId) {
+                showToast('Carga inválida para exibição.', 'error');
+                updateAvailability(false);
+                return;
+            }
+
+            try {
+                const carga = await api.getCarga(cargaId);
+                populateCarga(carga);
+            } catch (error) {
+                showToast(`Falha ao carregar detalhes da carga: ${error.message}`, 'error');
+                updateAvailability(false);
+            }
+        }
 
         function openModal() {
-            if (btnApplyTrigger && modalBackdrop) {
-                const suggested = btnApplyTrigger.getAttribute('data-suggested') || '4.500,00';
-                currentSuggestedAmount = suggested;
-
-                if (modalSuggestedValue) {
-                    modalSuggestedValue.textContent = `R$ ${suggested}`;
-                }
-                if (driverBidInput) {
-                    driverBidInput.value = suggested;
-                }
-
-                modalBackdrop.classList.add('show');
-                document.body.style.overflow = 'hidden';
-
-                setTimeout(() => {
-                    if (driverBidInput) driverBidInput.select();
-                }, 100);
+            if (!currentCarga || currentCarga.ativa === false || !modalBackdrop) {
+                showToast('Esta carga não aceita mais ofertas.', 'info');
+                return;
             }
+
+            if (modalSuggestedValue) modalSuggestedValue.textContent = `R$ ${currentSuggestedAmount}`;
+            if (driverBidInput) driverBidInput.value = currentSuggestedAmount;
+            modalBackdrop.classList.add('show');
+            document.body.style.overflow = 'hidden';
         }
 
         function closeModal() {
-            if (modalBackdrop) {
-                modalBackdrop.classList.remove('show');
-                document.body.style.overflow = '';
-            }
+            if (modalBackdrop) modalBackdrop.classList.remove('show');
+            document.body.style.overflow = '';
         }
 
-        function showSuccess(finalBid) {
-            closeModal();
-            setTimeout(() => {
-                if (successProposedVal) {
-                    successProposedVal.textContent = `R$ ${finalBid}`;
+        async function submitProposal() {
+            const session = api ? await api.hydrateSessionProfile() : null;
+            if (!session || session.type !== 'MOTORISTA' || !session.id) {
+                showToast('Faça login como motorista para enviar propostas.', 'error');
+                return;
+            }
+            if (!currentCarga || currentCarga.ativa === false) {
+                showToast('Esta carga não aceita mais ofertas.', 'error');
+                updateAvailability(false);
+                return;
+            }
+
+            const finalBid = driverBidInput ? driverBidInput.value.trim() : currentSuggestedAmount;
+            if (!finalBid) {
+                showToast('Informe um valor de frete válido.', 'error');
+                return;
+            }
+
+            const originalText = btnSubmitProposal.textContent;
+            btnSubmitProposal.disabled = true;
+            btnSubmitProposal.textContent = 'Enviando...';
+
+            try {
+                const veiculos = await api.listVeiculos();
+                const veiculoAtivo = Array.isArray(veiculos)
+                    ? veiculos.find(v => v.motorista && v.motorista.id === session.id && v.ativo)
+                    : null;
+                if (!veiculoAtivo) {
+                    throw new Error('Nenhum veículo ativo encontrado para este motorista.');
                 }
-                if (successOverlay) {
-                    successOverlay.classList.add('active');
-                    document.body.style.overflow = 'hidden';
+
+                const now = new Date();
+                const entrega = new Date(now.getTime() + 24 * 60 * 60 * 1000);
+                const bidValue = parseBidValue(finalBid);
+                const suggestedValue = parseBidValue(currentSuggestedAmount);
+                const aceitaSugestao = Math.abs(bidValue - suggestedValue) < 0.005;
+
+                await api.createFrete({
+                    titulo: `${aceitaSugestao ? 'Aceite' : 'Proposta'} para carga ${currentCarga.id}`,
+                    descricao: `${aceitaSugestao ? 'Aceite imediato' : 'Contraoferta'} via detalhe da carga para ${currentCarga.descricao || 'Carga'}`,
+                    origem: currentCarga.origem,
+                    destino: currentCarga.destino,
+                    pesoCargaKg: Number(currentCarga.pesoKg || 0),
+                    valorFrete: bidValue,
+                    dataEntrega: toDateString(entrega),
+                    dataPublicacao: toLocalDateTimeString(now),
+                    dataAceite: aceitaSugestao ? toLocalDateTimeString(now) : null,
+                    status: aceitaSugestao ? 'ACEITO' : 'PUBLICADO',
+                    carga: { id: currentCarga.id },
+                    embarcador: { id: currentCarga.embarcador.id },
+                    motorista: { id: session.id },
+                    veiculo: { id: veiculoAtivo.id }
+                });
+
+                closeModal();
+                if (aceitaSugestao) {
+                    showToast('Carga aceita com sucesso. Ela não receberá mais ofertas.');
+                } else {
+                    showToast('Contraoferta enviada. Aguardando resposta do embarcador.', 'info');
                 }
-            }, 300);
+                await loadCarga();
+            } catch (error) {
+                showToast(`Falha ao enviar proposta: ${error.message}`, 'error');
+                await loadCarga();
+            } finally {
+                btnSubmitProposal.disabled = false;
+                btnSubmitProposal.textContent = originalText;
+            }
         }
 
         if (btnApplyTrigger) btnApplyTrigger.addEventListener('click', openModal);
         if (btnCloseModal) btnCloseModal.addEventListener('click', closeModal);
         if (btnCancelModal) btnCancelModal.addEventListener('click', closeModal);
-
         if (modalBackdrop) {
-            modalBackdrop.addEventListener('click', (e) => {
-                if (e.target === modalBackdrop) {
-                    closeModal();
-                }
+            modalBackdrop.addEventListener('click', (event) => {
+                if (event.target === modalBackdrop) closeModal();
             });
         }
+        if (btnSubmitProposal) btnSubmitProposal.addEventListener('click', submitProposal);
 
-        if (btnSubmitProposal) {
-            btnSubmitProposal.addEventListener('click', () => {
-                const finalBid = driverBidInput ? driverBidInput.value.trim() : currentSuggestedAmount;
-
-                if (!finalBid) {
-                    showToast('Por favor, informe um valor de frete válido.', 'error');
-                    return;
-                }
-
-                const originalText = btnSubmitProposal.textContent;
-                btnSubmitProposal.disabled = true;
-                btnSubmitProposal.textContent = 'Enviando...';
-
-                setTimeout(() => {
-                    btnSubmitProposal.disabled = false;
-                    btnSubmitProposal.textContent = originalText;
-                    
-                    // Obtém veículo selecionado
-                    const selectVehicle = document.getElementById('driver-vehicle-select');
-                    const vehicleName = selectVehicle ? selectVehicle.options[selectVehicle.selectedIndex].text : 'Scania R450 6x2 - Sider (Placa KRG-2E26)';
-                    const plateMatch = vehicleName.match(/\((.*?)\)/);
-                    const plate = plateMatch ? plateMatch[1] : 'KRG-2E26';
-                    const modelName = vehicleName.split(' - ')[0];
-
-                    showSuccess(finalBid);
-                    showToast(`Sua proposta de R$ ${finalBid} com o veículo ${modelName} (${plate}) foi enviada com sucesso!`);
-                }, 800);
-            });
-        }
-
-        // Função global de alteração de especificações do veículo no modal
-        window.updateModalVehicleSpecs = function(value) {
-            const specType = document.getElementById('modal-spec-type');
-            const specCapacity = document.getElementById('modal-spec-capacity');
-            const specPlate = document.getElementById('modal-spec-plate');
-
-            if (value === 'scania') {
-                if (specType) specType.textContent = 'Sider / Baú';
-                if (specCapacity) specCapacity.textContent = '14 Ton';
-                if (specPlate) specPlate.textContent = 'KRG-2E26';
-            } else if (value === 'volvo') {
-                if (specType) specType.textContent = 'Carreta Sider';
-                if (specCapacity) specCapacity.textContent = '30 Ton';
-                if (specPlate) specPlate.textContent = 'KRG-3A88';
-            }
-        };
-
-        // --- 5. CHAT COM EMBARCADOR ---
-        const btnChatTrigger = document.getElementById('btn-chat-trigger');
-        if (btnChatTrigger) {
-            btnChatTrigger.addEventListener('click', () => {
-                const originalContent = btnChatTrigger.innerHTML;
-                
-                // Transição de estado de clique
-                btnChatTrigger.disabled = true;
-                btnChatTrigger.innerHTML = `
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="animation: spin 1s linear infinite;"><circle cx="12" cy="12" r="10"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
-                    Conectando canal...
-                `;
-                
-                // Injeta animação de spin no botão caso não tenha no CSS geral
-                if (!document.getElementById('spin-keyframes-style')) {
-                    const style = document.createElement('style');
-                    style.id = 'spin-keyframes-style';
-                    style.innerHTML = `@keyframes spin { to { transform: rotate(360deg); } }`;
-                    document.head.appendChild(style);
-                }
-
-                setTimeout(() => {
-                    showToast('Canal seguro estabelecido com TransLog Nordeste!', 'success');
-                    btnChatTrigger.innerHTML = `
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
-                        Chat Aberto
-                    `;
-                    
-                    setTimeout(() => {
-                        btnChatTrigger.disabled = false;
-                        btnChatTrigger.innerHTML = originalContent;
-                    }, 3000);
-                }, 1500);
-            });
-        }
-
-        // --- 6. SINO DE NOTIFICAÇÕES (TOPBAR) ---
-        const notifBtn = document.querySelector('.mp-notification-btn');
-        if (notifBtn) {
-            notifBtn.addEventListener('click', () => {
-                const notifications = [
-                    'TransLog Nordeste está aguardando candidatos de Categoria C/D.',
-                    'Seu perfil de João Transportes foi aprovado por 3 embarcadores!',
-                    'Lembre-se: O pagamento é assegurado pelo Escrow Inteligente da KarGO.'
-                ];
-                const msg = notifications[Math.floor(Math.random() * notifications.length)];
-                showToast(msg, 'info');
-            });
-        }
-
-        // --- 7. CARDS HOVER E MICRO-EFEITOS ---
-        const dcCards = document.querySelectorAll('.dc-card');
-        dcCards.forEach(card => {
-            card.addEventListener('mouseenter', () => {
-                card.style.boxShadow = '0 10px 20px -5px rgba(0, 0, 0, 0.04)';
-            });
-            card.addEventListener('mouseleave', () => {
-                card.style.boxShadow = '';
-            });
-        });
+        loadCarga();
     });
-
 })();

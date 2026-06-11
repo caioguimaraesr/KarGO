@@ -78,6 +78,10 @@ public class Frete {
     @JoinColumn(name = "veiculo_id")
     private Veiculo veiculo;
 
+    @ManyToOne
+    @JoinColumn(name = "carga_id")
+    private Carga carga;
+
 
 }
 

@@ -73,7 +73,7 @@
                         <div class="ct-user-profile">
                             <img src="../assets/images/embarcador.png" alt="Maria" class="ct-user-avatar">
                             <div class="ct-user-info">
-                                <span class="ct-user-name">Maria Logística</span>
+                                <span class="ct-user-name" id="ct-user-name">Maria Logística</span>
                             </div>
                         </div>
                     </div>
@@ -95,11 +95,11 @@
                             <img src="../assets/images/embarcador.png" alt="Maria" style="width:96px; height:96px; border-radius:50%; border:4px solid var(--accent-blue-light); object-fit:cover;">
                             <div>
                                 <span class="ct-badge ct-badge-blue" style="margin-bottom:8px;">Embarcador Premium</span>
-                                <h2 style="font-size:22px; font-weight:800; color:var(--text-dark);">Maria Logística e Alimentos Ltda.</h2>
-                                <p style="font-size:13px; color:var(--text-muted); margin-top:2px;">CNPJ: 12.345.678/0001-90 · Desde Junho de 2024</p>
+                                <h2 style="font-size:22px; font-weight:800; color:var(--text-dark);" id="ct-perfil-nome">Maria Logística e Alimentos Ltda.</h2>
+                                <p style="font-size:13px; color:var(--text-muted); margin-top:2px;" id="ct-perfil-cnpj">CNPJ: 12.345.678/0001-90 · Desde Junho de 2024</p>
                                 <p style="font-size:14px; color:var(--text-body); margin-top:10px; display:flex; align-items:center; gap:6px;">
                                     <svg class="star-icon-inline" viewBox="0 0 24 24" style="width:16px; height:16px;"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-                                    <strong>4.9 de Avaliação</strong> (Média dada por 32 motoristas parceiros)
+                                    <strong id="ct-perfil-rating">4.9 de Avaliação</strong> (Média dada por motoristas parceiros)
                                 </p>
                             </div>
                         </div>
@@ -110,23 +110,23 @@
                             <div class="ct-grid-2col-responsive" style="font-size:13px; color:var(--text-body);">
                                 <div>
                                     <span style="font-weight:600; color:var(--text-muted); display:block;">Razão Social</span>
-                                    <span style="font-weight:700; color:var(--text-dark); margin-top:2px; display:block;">Maria Alimentos e Distribuição Ltda</span>
+                                    <span style="font-weight:700; color:var(--text-dark); margin-top:2px; display:block;" id="ct-razao-social">Maria Alimentos e Distribuição Ltda</span>
                                 </div>
                                 <div>
                                     <span style="font-weight:600; color:var(--text-muted); display:block;">Inscrição Estadual</span>
-                                    <span style="font-weight:700; color:var(--text-dark); margin-top:2px; display:block;">182.748.291.011</span>
+                                    <span style="font-weight:700; color:var(--text-dark); margin-top:2px; display:block;" id="ct-inscricao">182.748.291.011</span>
                                 </div>
                                 <div>
                                     <span style="font-weight:600; color:var(--text-muted); display:block;">Telefone Corporativo</span>
-                                    <span style="font-weight:700; color:var(--text-dark); margin-top:2px; display:block;">(81) 3444-9000</span>
+                                    <span style="font-weight:700; color:var(--text-dark); margin-top:2px; display:block;" id="ct-telefone">(81) 3444-9000</span>
                                 </div>
                                 <div>
                                     <span style="font-weight:600; color:var(--text-muted); display:block;">E-mail para Faturamento</span>
-                                    <span style="font-weight:700; color:var(--text-dark); margin-top:2px; display:block;">financeiro@mariaalimentos.com</span>
+                                    <span style="font-weight:700; color:var(--text-dark); margin-top:2px; display:block;" id="ct-email">financeiro@mariaalimentos.com</span>
                                 </div>
                                 <div style="grid-column: span 2;">
                                     <span style="font-weight:600; color:var(--text-muted); display:block;">Endereço Sede</span>
-                                    <span style="font-weight:700; color:var(--text-dark); margin-top:2px; display:block;">Av. Barbosa Lima, 100 - Bairro do Recife, Recife - PE, CEP 50030-017</span>
+                                    <span style="font-weight:700; color:var(--text-dark); margin-top:2px; display:block;" id="ct-endereco">Av. Barbosa Lima, 100 - Bairro do Recife, Recife - PE, CEP 50030-017</span>
                                 </div>
                             </div>
                         </div>
@@ -144,7 +144,7 @@
                                         <span style="font-size:13px; font-weight:700; color:var(--text-dark);">Fretes Totais</span>
                                         <p style="font-size:11px; color:var(--text-muted);">Realizados no último ano</p>
                                     </div>
-                                    <span style="font-size:20px; font-weight:800; color:var(--accent-blue);">45</span>
+                                    <span style="font-size:20px; font-weight:800; color:var(--accent-blue);" id="ct-stat-fretes">45</span>
                                 </div>
 
                                 <!-- Taxa de Entrega no Prazo -->
@@ -153,7 +153,7 @@
                                         <span style="font-size:13px; font-weight:700; color:var(--text-dark);">Entregas no Prazo</span>
                                         <p style="font-size:11px; color:var(--text-muted);">Média de pontualidade</p>
                                     </div>
-                                    <span style="font-size:20px; font-weight:800; color:var(--accent-green);">96.8%</span>
+                                    <span style="font-size:20px; font-weight:800; color:var(--accent-green);" id="ct-stat-pontualidade">96.8%</span>
                                 </div>
 
                                 <!-- Ocorrências Resolvidas -->
@@ -162,7 +162,7 @@
                                         <span style="font-size:13px; font-weight:700; color:var(--text-dark);">Ocorrências</span>
                                         <p style="font-size:11px; color:var(--text-muted);">Todas resolvidas com suporte</p>
                                     </div>
-                                    <span style="font-size:20px; font-weight:800; color:var(--accent-orange);">2</span>
+                                    <span style="font-size:20px; font-weight:800; color:var(--accent-orange);" id="ct-stat-ocorrencias">2</span>
                                 </div>
 
                                 <!-- Pagamento Médio -->
@@ -229,6 +229,7 @@
         </a>
     </nav>
 
+    <script src="../js/api-client.js"></script>
     <script src="js/contratante.js"></script>
 </body>
 </html>

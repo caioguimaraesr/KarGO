@@ -1522,7 +1522,23 @@
     </nav>
 
     <!-- JS de Interações -->
+    <script src="js/api-client.js"></script>
     <script>
+        (async function enforceMotoristaDashboardAccess() {
+            const api = window.KargoApi;
+            if (!api) return;
+
+            const session = await api.hydrateSessionProfile();
+            if (!session || session.type !== 'MOTORISTA' || !session.id) {
+                window.location.href = 'login.html';
+                return;
+            }
+
+            document.querySelectorAll('.user-name').forEach(el => {
+                el.textContent = session.name || 'Motorista';
+            });
+        })();
+
         // --- CONTROLE DO MODAL DE PROPOSTAS (IGUAL AO MARKETPLACE) ---
         const modalBackdrop = document.getElementById('proposal-modal-backdrop');
         const btnCloseModal = document.getElementById('btn-close-modal');

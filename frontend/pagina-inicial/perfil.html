@@ -188,9 +188,9 @@
                                     </div>
                                 </div>
 
-                                <h2 class="mt-8">Dados Bancários para Pix (Recebimentos Escrow)</h2>
+                                <h2 class="mt-8" id="bank-data-title">Dados Bancários para Pix (Recebimentos Escrow)</h2>
                                 
-                                <div class="profile-form-grid">
+                                <div class="profile-form-grid" id="bank-data-grid">
                                     <div class="form-group-kargo">
                                         <label class="form-label-kargo" for="prof-bank">Instituição Bancária</label>
                                         <input type="text" id="prof-bank" class="form-input-kargo" value="Banco do Brasil S.A. (001)" required>
@@ -221,14 +221,14 @@
                         </section>
 
                         <!-- SEÇÃO DE ANEXO DE DOCUMENTOS DO CADASTRO -->
-                        <section class="profile-data-card">
+                        <section class="profile-data-card" id="profile-docs-section">
                             <h2>Documentação Cadastral e Registro ANTT</h2>
                             <p class="text-slate-500 text-xs -mt-3 mb-6">Envie e gerencie seus registros obrigatórios da conta. Formatos aceitos: PDF, JPEG ou PNG.</p>
                             
                             <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
                                 
                                 <!-- Documento 1: CNH -->
-                                <div class="bg-slate-50 border border-slate-200 rounded-xl p-5 flex flex-col justify-between gap-4">
+                                <div class="bg-slate-50 border border-slate-200 rounded-xl p-5 flex flex-col justify-between gap-4" id="doc-card-cnh">
                                     <div class="flex flex-col gap-2">
                                         <div class="flex justify-between items-start">
                                             <div class="text-sky-600 p-2 rounded-lg bg-sky-50 border border-sky-100">
@@ -247,7 +247,7 @@
                                 </div>
                                 
                                 <!-- Documento 2: ANTT -->
-                                <div class="bg-slate-50 border border-slate-200 rounded-xl p-5 flex flex-col justify-between gap-4">
+                                <div class="bg-slate-50 border border-slate-200 rounded-xl p-5 flex flex-col justify-between gap-4" id="doc-card-antt">
                                     <div class="flex flex-col gap-2">
                                         <div class="flex justify-between items-start">
                                             <div class="text-emerald-600 p-2 rounded-lg bg-emerald-50 border border-emerald-100">
@@ -258,7 +258,7 @@
                                         <h4 class="text-slate-800 text-sm font-bold mt-2">Registro ANTT (RNTRC)</h4>
                                         <p class="text-slate-600 text-[11px] leading-relaxed">Cadastro Nacional de Transportadores (ANTT) obrigatório.</p>
                                     </div>
-                                    <button class="bg-slate-100 border border-slate-200 text-slate-700 hover:bg-slate-200 py-2.5 rounded-lg text-xs font-bold w-full cursor-pointer transition flex items-center justify-center gap-1.5" onclick="triggerFileInput('antt')">
+                                    <button class="bg-slate-100 border border-slate-200 text-slate-700 hover:bg-slate-200 py-2.5 rounded-lg text-xs font-bold w-full cursor-pointer transition flex items-center justify-center gap-1.5" onclick="triggerFileInput('antt')" id="btn-upload-antt">
                                         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
                                         Reenviar ANTT
                                     </button>
@@ -320,7 +320,92 @@
         </a>
     </nav>
 
+    <script src="js/api-client.js"></script>
     <script>
+        const api = window.KargoApi;
+        let loadedMotorista = null;
+
+        function formatCpf(cpf) {
+            const digits = String(cpf || '').replace(/\D/g, '');
+            if (digits.length !== 11) return cpf || '';
+            return digits.replace(/(\d{3})(\d{3})(\d{3})(\d{2})/, '$1.$2.$3-$4');
+        }
+
+        function applyProfileFromApi(motorista) {
+            document.querySelectorAll('.user-name, .profile-name').forEach(el => {
+                el.textContent = motorista.nome || 'Motorista';
+            });
+
+            const topUserName = document.querySelector('.user-name');
+            if (topUserName) topUserName.textContent = motorista.nome || 'Motorista';
+
+            const rating = document.querySelector('.profile-rating span');
+            if (rating) {
+                const nota = Number(motorista.avaliacaoMedia || 0).toLocaleString('pt-BR', { minimumFractionDigits: 1, maximumFractionDigits: 1 });
+                rating.textContent = `${nota} (baseado em viagens registradas)`;
+            }
+
+            const profileInfoTitle = document.querySelector('.profile-data-card h2');
+            if (profileInfoTitle) profileInfoTitle.textContent = 'Informações Cadastrais';
+
+            const cpfInput = document.getElementById('prof-cnpj');
+            if (cpfInput) cpfInput.value = formatCpf(motorista.cpf);
+
+            const nameInput = document.getElementById('prof-name');
+            if (nameInput) nameInput.value = motorista.nome || '';
+
+            const phoneInput = document.getElementById('prof-phone');
+            if (phoneInput) phoneInput.value = motorista.telefone || '';
+
+            const emailInput = document.getElementById('prof-email');
+            if (emailInput) emailInput.value = motorista.email || '';
+
+            const cityInput = document.getElementById('prof-city');
+            if (cityInput) cityInput.value = cityInput.value || '';
+
+            const cnhLine = document.querySelector('.w-full.mt-8 .flex.items-center.justify-between.text-xs.py-2.border-b span.text-slate-600');
+            if (cnhLine && motorista.cnh) {
+                cnhLine.textContent = `CNH ${motorista.cnh}`;
+            }
+
+            const cnhStatus = document.querySelector('.w-full.mt-8 .flex.items-center.justify-between.text-xs.py-2.border-b span.text-emerald-600');
+            if (cnhStatus) {
+                cnhStatus.textContent = motorista.dataValidadeCnh ? `Válida até ${motorista.dataValidadeCnh}` : 'Válida';
+            }
+        }
+
+        function hideUnsupportedProfileSections() {
+            const bankTitle = document.getElementById('bank-data-title');
+            const bankGrid = document.getElementById('bank-data-grid');
+            if (bankTitle) bankTitle.style.display = 'none';
+            if (bankGrid) bankGrid.style.display = 'none';
+
+            const anttCard = document.getElementById('doc-card-antt');
+            if (anttCard) anttCard.style.display = 'none';
+
+            const residCard = document.getElementById('card-resid');
+            if (residCard) residCard.style.display = 'none';
+        }
+
+        async function initProfilePage() {
+            if (!api) return;
+
+            const session = api.getSession();
+            if (!session || session.type !== 'MOTORISTA' || !session.id) {
+                window.location.href = 'login.html';
+                return;
+            }
+
+            hideUnsupportedProfileSections();
+
+            try {
+                loadedMotorista = await api.getMotorista(session.id);
+                applyProfileFromApi(loadedMotorista);
+            } catch (error) {
+                showToast('Falha ao carregar perfil', error.message || 'Nao foi possivel consultar seus dados', 'error');
+            }
+        }
+
         function showToast(title, desc, type = 'success') {
             const container = document.getElementById('toast-container');
             
@@ -356,18 +441,40 @@
         }
 
         function saveProfileChanges() {
+            if (!api || !loadedMotorista) {
+                showToast('Perfil indisponível', 'Nao foi possivel carregar os dados do cadastro.', 'error');
+                return;
+            }
+
             const btn = document.getElementById('btn-save-profile');
             const originalText = btn.innerHTML;
             
             btn.disabled = true;
             btn.innerHTML = '<div class="spinner"></div> Salvando...';
-            
-            setTimeout(() => {
+
+            const payload = {
+                nome: document.getElementById('prof-name')?.value?.trim() || loadedMotorista.nome,
+                email: document.getElementById('prof-email')?.value?.trim() || loadedMotorista.email,
+                telefone: document.getElementById('prof-phone')?.value?.trim() || loadedMotorista.telefone,
+                senha: loadedMotorista.senha,
+                cpf: String(loadedMotorista.cpf || '').replace(/\D/g, ''),
+                cnh: loadedMotorista.cnh,
+                dataValidadeCnh: loadedMotorista.dataValidadeCnh,
+                disponivel: loadedMotorista.disponivel,
+                avaliacaoMedia: loadedMotorista.avaliacaoMedia
+            };
+
+            api.updateMotorista(loadedMotorista.id, payload).then((updated) => {
+                loadedMotorista = updated || loadedMotorista;
                 btn.disabled = false;
                 btn.innerHTML = originalText;
                 
                 showToast('Perfil Atualizado!', 'As alterações do seu cadastro foram salvas com sucesso no banco de dados.');
-            }, 1000);
+            }).catch((error) => {
+                btn.disabled = false;
+                btn.innerHTML = originalText;
+                showToast('Falha ao salvar', error.message || 'Nao foi possivel atualizar o perfil.', 'error');
+            });
         }
 
         function triggerFileInput(id) {
@@ -440,6 +547,8 @@
                 input.value = "";
             }, 1500);
         }
+
+        document.addEventListener('DOMContentLoaded', initProfilePage);
     </script>
 </body>
 </html>

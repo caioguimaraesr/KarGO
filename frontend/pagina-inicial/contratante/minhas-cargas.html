@@ -71,7 +71,7 @@
                         <div class="ct-user-profile">
                             <img src="../assets/images/embarcador.png" alt="Maria" class="ct-user-avatar">
                             <div class="ct-user-info">
-                                <span class="ct-user-name">Maria Logística</span>
+                                <span class="ct-user-name" id="ct-user-name">Maria Logística</span>
                             </div>
                         </div>
                     </div>
@@ -85,17 +85,18 @@
 
                 <!-- TABS DE STATUS -->
                 <div class="ct-tabs" style="margin-bottom:24px;">
-                    <button class="ct-tab active" data-tab="tab-todas">Todas (12)</button>
-                    <button class="ct-tab" data-tab="tab-ativas">Ativas (3)</button>
-                    <button class="ct-tab" data-tab="tab-pendentes">Pendentes (5)</button>
-                    <button class="ct-tab" data-tab="tab-concluidas">Concluídas (4)</button>
+                    <button class="ct-tab active" data-tab="tab-todas" id="ct-tab-todas">Todas (0)</button>
+                    <button class="ct-tab" data-tab="tab-ativas" id="ct-tab-ativas">Ativas (0)</button>
+                    <button class="ct-tab" data-tab="tab-pendentes" id="ct-tab-pendentes">Pendentes (0)</button>
+                    <button class="ct-tab" data-tab="tab-concluidas" id="ct-tab-concluidas">Concluídas (0)</button>
                 </div>
 
                 <!-- TAB: TODAS -->
                 <div class="ct-tab-content" id="tab-todas">
+                    <div id="ct-minhas-cargas-list"></div>
 
                     <!-- CARGA ATIVA 1 (EM TRÂNSITO) -->
-                    <div class="ct-cargo-card ct-reveal">
+                    <div class="ct-cargo-card ct-reveal" style="display:none;">
                         <div class="ct-cargo-header">
                             <div>
                                 <span class="ct-badge ct-badge-green"><span class="status-indicator-dot green"></span>Em Trânsito</span>
@@ -396,6 +397,7 @@
             Perfil
         </a>
     </nav>
+    <script src="../js/api-client.js"></script>
     <script src="js/contratante.js"></script>
 </body>
 </html>

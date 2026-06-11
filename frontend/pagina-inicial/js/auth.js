@@ -90,9 +90,45 @@ document.addEventListener('DOMContentLoaded', () => {
     const stepIndicatorDesktop = document.getElementById('step-indicator-desktop');
     const profile = sessionStorage.getItem('kargoProfile') || 'motorista';
 
-    // Determine total steps based on profile
-    const hasVehicleStep = (profile === 'motorista' || profile === 'pme');
+    // Apenas motorista passa pela etapa de veiculo
+    const hasVehicleStep = (profile === 'motorista');
     let totalSteps = hasVehicleStep ? 4 : 3;
+
+    function getPostSignupRedirect() {
+        if (profile === 'motorista') return 'marketplace.html';
+        if (profile === 'pme') return 'dashboard-pme.html';
+        return 'contratante/dashboard.html';
+    }
+
+    function applyCadastroByProfile() {
+        if (hasVehicleStep) return;
+
+        const documentStep = document.getElementById('wizard-step-3');
+        if (!documentStep) return;
+
+        const stepTitle = documentStep.querySelector('.step-title');
+        const stepSubtitle = documentStep.querySelector('.step-subtitle');
+        if (stepTitle) stepTitle.textContent = 'Documentos da Empresa';
+        if (stepSubtitle) stepSubtitle.textContent = 'Somente documentos cadastrais para validacao da conta';
+
+        const cards = documentStep.querySelectorAll('.upload-cards .upload-card');
+        if (cards[0]) {
+            const title = cards[0].querySelector('.upload-card-info h4');
+            const desc = cards[0].querySelector('.upload-card-info p');
+            if (title) title.textContent = 'Documento Fiscal (CPF/CNPJ)';
+            if (desc) desc.textContent = 'Cartao CNPJ ou documento fiscal atualizado';
+        }
+
+        if (cards[1]) {
+            const title = cards[1].querySelector('.upload-card-info h4');
+            const desc = cards[1].querySelector('.upload-card-info p');
+            if (title) title.textContent = 'Comprovante de Endereco Comercial';
+            if (desc) desc.textContent = 'Conta ou contrato recente com endereco da empresa';
+        }
+
+        // Esconde documento relacionado a veiculo para perfis nao motoristas
+        if (cards[2]) cards[2].style.display = 'none';
+    }
 
     function updateWizardUI() {
         wizardSteps.forEach(s => s.classList.remove('active'));
@@ -173,7 +209,15 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Initialize wizard if on cadastro page
     if (wizardSteps.length > 0) {
+        applyCadastroByProfile();
         updateWizardUI();
+
+        const exploreBtn = document.getElementById('wizard-explore-btn');
+        if (exploreBtn) {
+            exploreBtn.addEventListener('click', () => {
+                window.location.href = getPostSignupRedirect();
+            });
+        }
     }
 
     // ========================================
@@ -431,6 +475,15 @@ document.addEventListener('DOMContentLoaded', () => {
 
             try {
                 const data = await api.login(loginValue, senhaValue);
+                let session = await api.hydrateSessionProfile();
+
+                if (data.tipoUsuario === 'EMBARCADOR' && selectedProfile === 'pme') {
+                    session = {
+                        ...(session || api.getSession() || {}),
+                        profileSubtype: 'pme'
+                    };
+                    api.setSession(session);
+                }
 
                 if (data.tipoUsuario === 'MOTORISTA') {
                     window.location.href = 'dashboard.html';
@@ -498,6 +551,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
                     await ensureDefaultVehicle(motorista.id);
                     api.saveSessionFromApi(motorista);
+
+                    const motoristaSession = api.getSession() || {};
+                    api.setSession({ ...motoristaSession, profileSubtype: 'motorista' });
                 } else {
                     if (cpfCnpj.length !== 11 && cpfCnpj.length !== 14) {
                         alert('Para PME/embarcador, informe CPF ou CNPJ com 11 ou 14 digitos.');
@@ -513,6 +569,9 @@ document.addEventListener('DOMContentLoaded', () => {
                     });
 
                     api.saveSessionFromApi(embarcador);
+
+                    const embarcadorSession = api.getSession() || {};
+                    api.setSession({ ...embarcadorSession, profileSubtype: selectedProfile === 'pme' ? 'pme' : 'embarcador' });
                 }
 
                 window.location.href = 'cadastro.html';

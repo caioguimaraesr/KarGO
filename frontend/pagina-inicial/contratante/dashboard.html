@@ -73,7 +73,7 @@
                         <div class="ct-user-profile">
                             <img src="../assets/images/embarcador.png" alt="Maria" class="ct-user-avatar">
                             <div class="ct-user-info">
-                                <span class="ct-user-name">Maria Logística</span>
+                                <span class="ct-user-name" id="ct-user-name">Maria Logística</span>
                             </div>
                         </div>
                     </div>
@@ -81,7 +81,7 @@
 
                 <!-- TÍTULO DA PÁGINA (Fora do header travado) -->
                 <div class="ct-page-title ct-reveal" style="margin-bottom: 24px;">
-                    <h1>Olá, Maria</h1>
+                    <h1 id="ct-page-greeting">Olá, Maria</h1>
                     <p>Gerencie seus fretes e acompanhe suas entregas em tempo real com facilidade.</p>
                 </div>
 
@@ -118,7 +118,7 @@
                     <div class="ct-stat-card blue-grad">
                         <div class="ct-stat-left">
                             <h3>Fretes Ativos</h3>
-                            <div class="ct-stat-value">3</div>
+                            <div class="ct-stat-value" id="ct-stat-ativos">3</div>
                             <div class="ct-stat-trend">
                                 <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/></svg>
                                 +2 esta semana
@@ -131,7 +131,7 @@
                     <div class="ct-stat-card green-grad">
                         <div class="ct-stat-left">
                             <h3>Gastos do Mês</h3>
-                            <div class="ct-stat-value">R$ 12.300</div>
+                            <div class="ct-stat-value" id="ct-stat-gastos">R$ 12.300</div>
                             <div class="ct-stat-trend">
                                 <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="23 18 13.5 8.5 8.5 13.5 1 6"/></svg>
                                 -8% vs mês anterior
@@ -144,7 +144,7 @@
                     <div class="ct-stat-card orange-grad">
                         <div class="ct-stat-left">
                             <h3>Próxima Coleta</h3>
-                            <div class="ct-stat-value">Hoje 14h</div>
+                            <div class="ct-stat-value" id="ct-stat-proxima">Hoje 14h</div>
                             <div class="ct-stat-trend">
                                 Recife, PE → Natal, RN
                             </div>
@@ -160,14 +160,16 @@
                     <!-- COLUNA ESQUERDA -->
                     <div>
                         <!-- CARGAS RECENTES -->
-                        <div class="ct-section-card ct-reveal">
+                        <div class="ct-section-card ct-reveal" id="ct-dashboard-cargas-card">
                             <div class="ct-section-header">
                                 <h2 class="ct-section-title">Anúncios de Carga Ativos</h2>
                                 <a href="minhas-cargas.html" class="ct-section-link">Ver todas as cargas →</a>
                             </div>
 
+                            <div id="ct-dashboard-cargas-list"></div>
+
                             <!-- Carga ativa -->
-                            <div class="ct-cargo-card">
+                            <div class="ct-cargo-card" style="display:none;">
                                 <div class="ct-cargo-header">
                                     <div>
                                         <span class="ct-badge ct-badge-green"><span class="status-indicator-dot green"></span>Em Trânsito</span>
@@ -266,13 +268,15 @@
                         </div>
 
                         <!-- PROPOSTAS RECEBIDAS (Aceitar diretamente no dashboard) -->
-                        <div class="ct-section-card ct-reveal">
+                        <div class="ct-section-card ct-reveal" id="ct-dashboard-propostas-card">
                             <div class="ct-section-header">
                                 <h2 class="ct-section-title">Últimas Propostas para Carga #KG-2026-1235</h2>
                                 <span class="ct-badge ct-badge-blue">4 novas</span>
                             </div>
 
-                            <div class="ct-proposal-card" style="display:flex; justify-content:space-between; align-items:center; padding:16px; border-bottom:1px solid var(--border-light); margin-bottom:8px;">
+                            <div id="ct-dashboard-propostas-list"></div>
+
+                            <div class="ct-proposal-card" style="display:none; justify-content:space-between; align-items:center; padding:16px; border-bottom:1px solid var(--border-light); margin-bottom:8px;">
                                 <div style="display:flex; gap:12px; align-items:center;">
                                     <img src="../assets/images/motorista.png" alt="Carlos" class="ct-proposal-avatar" style="width:40px; height:40px; border-radius:50%;">
                                     <div>
@@ -429,6 +433,7 @@
         </a>
     </nav>
 
+    <script src="../js/api-client.js"></script>
     <script src="js/contratante.js"></script>
 </body>
 </html>
