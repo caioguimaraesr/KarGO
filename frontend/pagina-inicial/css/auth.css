@@ -1214,3 +1214,44 @@
     background: #0D1117;
     color: #fff;
 }
+
+/* === CHIPS SLIDER CONTRAST & NAVIGATOR === */
+.auth-page .step-title {
+    color: #FFFFFF !important;
+}
+.auth-page .step-subtitle {
+    color: #94A3B8 !important;
+}
+
+.chips-slider-container {
+    display: flex;
+    align-items: center;
+    position: relative;
+    gap: 8px;
+    width: 100%;
+}
+.chips-slider-container .chips-container {
+    flex: 1;
+    margin: 0;
+    overflow-x: auto;
+    scroll-behavior: smooth;
+}
+.chips-arrow {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    color: #94A3B8;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    flex-shrink: 0;
+}
+.chips-arrow:hover {
+    background: rgba(255, 255, 255, 0.1);
+    color: #FFFFFF;
+    border-color: rgba(52, 152, 255, 0.3);
+}

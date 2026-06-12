@@ -60,30 +60,9 @@
             min-height: 100vh;
         }
 
-        /* Conteúdo Principal à Direita */
-        .main-content {
-            margin-left: 260px;
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-            min-height: 100vh;
-            padding: 32px;
-            transition: var(--transition-smooth);
-        }
 
-        /* Topbar Header */
-        .topbar {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 32px;
-            background-color: transparent;
-        }
 
-        .topbar-logo-mobile {
-            display: none;
-        }
-
+        /* Page Title */
         .page-title h1 {
             font-size: 28px;
             font-weight: 800;
@@ -94,89 +73,6 @@
             font-size: 14px;
             color: var(--text-secondary);
             margin-top: 4px;
-        }
-
-        .topbar-actions {
-            display: flex;
-            align-items: center;
-            gap: 20px;
-        }
-
-        .notification-btn {
-            background: var(--bg-dark-card);
-            border: 1px solid var(--border-translucent);
-            color: var(--text-secondary);
-            width: 44px;
-            height: 44px;
-            border-radius: 12px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            position: relative;
-            transition: var(--transition-smooth);
-        }
-
-        .notification-btn:hover {
-            color: var(--text-primary);
-            border-color: var(--accent-blue);
-            transform: translateY(-2px);
-        }
-
-        .notification-badge {
-            position: absolute;
-            top: 12px;
-            right: 12px;
-            width: 8px;
-            height: 8px;
-            background-color: var(--accent-red);
-            border-radius: 50%;
-        }
-
-        .user-profile {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            background: var(--bg-dark-card);
-            border: 1px solid var(--border-translucent);
-            padding: 6px 16px 6px 8px;
-            border-radius: 30px;
-            cursor: pointer;
-            transition: var(--transition-smooth);
-        }
-
-        .user-profile:hover {
-            border-color: rgba(0, 136, 255, 0.25);
-            box-shadow: 0 0 15px rgba(0, 136, 255, 0.05);
-        }
-
-        .user-avatar {
-            width: 32px;
-            height: 32px;
-            border-radius: 50%;
-            object-fit: cover;
-            border: 1.5px solid var(--accent-blue);
-        }
-
-        .user-info {
-            display: flex;
-            flex-direction: column;
-        }
-
-        .user-name {
-            font-size: 13px;
-            font-weight: 700;
-            color: var(--text-primary);
-        }
-
-        .user-role {
-            font-size: 10px;
-            color: var(--accent-green);
-            font-weight: 700;
-            display: flex;
-            align-items: center;
-            gap: 4px;
-            text-transform: uppercase;
         }
 
         /* Grid Operacional de Cards */
@@ -936,50 +832,7 @@
                 padding: 16px 16px 88px 16px !important;
             }
 
-            .topbar {
-                background-color: #0b0f19 !important;
-                border-bottom: 1px solid rgba(255, 255, 255, 0.08) !important;
-                margin: -16px -16px 24px -16px;
-                padding: 16px;
-                height: 72px;
-                position: sticky;
-                top: 0;
-                z-index: 200;
-                backdrop-filter: blur(10px);
-                background: #0b0f19 !important;
-                display: flex;
-                align-items: center;
-                justify-content: space-between;
-            }
-            .notification-btn {
-                background: rgba(255, 255, 255, 0.05) !important;
-                border: 1px solid rgba(255, 255, 255, 0.08) !important;
-                color: #ffffff !important;
-            }
-            .user-profile {
-                background: rgba(255, 255, 255, 0.05) !important;
-                border: 1px solid rgba(255, 255, 255, 0.08) !important;
-            }
-            .user-name {
-                color: #ffffff !important;
-            }
-            .user-role {
-                color: #94a3b8 !important;
-            }
 
-            .topbar-logo-mobile {
-                display: block;
-            }
-
-            .topbar-logo-mobile .logo-img-mobile {
-                height: 32px;
-                width: auto;
-                filter: drop-shadow(0 2px 8px rgba(0, 136, 255, 0.2));
-            }
-
-            .page-title {
-                display: none; /* Esconde título principal desktop no header */
-            }
 
             .mp-bottom-nav {
                 display: grid !important;
@@ -1069,31 +922,26 @@
         </aside>
 
         <!-- CONTEÚDO PRINCIPAL -->
-        <main class="main-content">
-            <div class="mp-content-container">
+        <main class="mp-main-content">
             
             <!-- HEADER TOPBAR -->
-            <header class="topbar">
+            <header class="mp-topbar">
                 <!-- Logo Mobile (Oculto no Desktop) -->
-                <div class="topbar-logo-mobile">
+                <div class="mp-topbar-logo-mobile">
                     <a href="index.html">
                         <img src="assets/images/LOGO.png" alt="KarGO" class="logo-img-mobile">
                     </a>
                 </div>
 
-                <div class="page-title">
-                    <h1>Olá, João</h1>
-                    <p>Aqui está o resumo da sua operação de transporte para hoje.</p>
-                </div>
+                <h1 class="mp-page-title">Dashboard</h1>
                 
-                <div class="topbar-actions">
-                    <button class="notification-btn" aria-label="Notificações">
+                <div class="mp-topbar-actions">
+                    <button class="mp-notification-btn" aria-label="Notificações">
                         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="20" height="20"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
                         <span class="notification-badge"></span>
                     </button>
                     
-                    <div class="user-profile">
-                        <img src="assets/images/motorista.png" alt="Avatar João Transportes" class="user-avatar">
+                    <div class="mp-user-profile" onclick="window.location.href='perfil.html'">
                         <div class="user-info">
                             <span class="user-name">João Transportes</span>
                             <span class="user-role">
@@ -1101,9 +949,19 @@
                                 Motorista Verificado
                             </span>
                         </div>
+                        <div class="user-avatar">
+                            <img src="assets/images/motorista.png" alt="Avatar João Transportes">
+                        </div>
                     </div>
                 </div>
             </header>
+
+            <div class="mp-content-wrapper">
+                <!-- Saudação (movida para fora do header para consistência com o header unificado) -->
+                <div class="page-title" style="margin-bottom: 24px;">
+                    <h1>Olá, João</h1>
+                    <p>Aqui está o resumo da sua operação de transporte para hoje.</p>
+                </div>
 
             <!-- ============ FILTROS DE PERÍODO TEMPORAL DO DASHBOARD ============ -->
             <div class="db-filter-bar" style="background: #ffffff; border: 1px solid var(--border-translucent); border-radius: 16px; padding: 20px; box-shadow: 0 4px 15px rgba(0,0,0,0.03); margin-bottom: 24px; display: flex; flex-wrap: wrap; justify-content: space-between; align-items: flex-end; gap: 20px; position: relative; overflow: hidden;">
@@ -1194,10 +1052,10 @@
             <section class="stats-grid">
                 <div class="stat-card fat-card">
                     <div class="stat-card-left">
-                        <h3 id="card-fat-title">Faturamento Semanal</h3>
-                        <div class="value" id="card-fat-val">R$ 14.250</div>
-                        <div class="trend up" id="card-fat-trend">
-                            <span>▲ 12.5%</span> em relação à semana anterior
+                        <h3 id="card-fat-title">Faturamento</h3>
+                        <div class="value" id="card-fat-val">R$ 0,00</div>
+                        <div class="trend" id="card-fat-trend">
+                            Sem faturamento no período
                         </div>
                     </div>
                     <div class="stat-card-right">
@@ -1208,9 +1066,9 @@
                 <div class="stat-card km-card">
                     <div class="stat-card-left">
                         <h3>Quilometragem Rodada</h3>
-                        <div class="value" id="card-km-val">2.450 km</div>
-                        <div class="trend up" id="card-km-trend">
-                            <span>▲ 8.2%</span> maior produtividade
+                        <div class="value" id="card-km-val">0 km</div>
+                        <div class="trend" id="card-km-trend">
+                            Sem viagens no período
                         </div>
                     </div>
                     <div class="stat-card-right">
@@ -1221,9 +1079,9 @@
                 <div class="stat-card load-card">
                     <div class="stat-card-left">
                         <h3>Cargas Realizadas</h3>
-                        <div class="value" id="card-cargas-val">12 Cargas</div>
-                        <div class="trend up" id="card-cargas-trend">
-                            <span>▲ 4.1%</span> em relação ao período anterior
+                        <div class="value" id="card-cargas-val">0 Cargas</div>
+                        <div class="trend" id="card-cargas-trend">
+                            Sem cargas no período
                         </div>
                     </div>
                     <div class="stat-card-right">
@@ -1243,79 +1101,7 @@
                     </div>
 
                     <div class="recommended-grid">
-                        <!-- Carga 1 -->
-                        <article class="load-card-desktop">
-                            <div class="card-header-desktop">
-                                <div class="company-profile">
-                                    <div class="company-logo-desktop">AF</div>
-                                    <div class="company-info-desktop">
-                                        <h4>AgroFrete S/A</h4>
-                                        <p>Pontuação: 4.8 ★ (120 viagens)</p>
-                                    </div>
-                                </div>
-                                <span class="price-desktop">R$ 12.000</span>
-                            </div>
-
-                            <div class="route-visual-desktop">
-                                <div class="route-step">
-                                    <span class="route-step-label">Origem</span>
-                                    <span class="route-step-val">Rondonópolis, MT</span>
-                                </div>
-                                <span class="route-arrow">➔</span>
-                                <div class="route-step">
-                                    <span class="route-step-label">Destino</span>
-                                    <span class="route-step-val">Porto de Santos, SP</span>
-                                </div>
-                            </div>
-
-                            <div class="card-footer-desktop">
-                                <div class="specs-row">
-                                    <span class="spec-item">Soja a Granel</span>
-                                    <span class="spec-item">1.400 km</span>
-                                    <span class="spec-item">37 toneladas</span>
-                                </div>
-                                <button class="btn-apply-desktop js-propose-btn" data-suggested="12.000,00" data-company="AgroFrete S/A" data-product="Soja a Granel" data-route="Rondonópolis, MT → Porto de Santos, SP">
-                                    Candidatar-se
-                                </button>
-                            </div>
-                        </article>
-
-                        <!-- Carga 2 -->
-                        <article class="load-card-desktop">
-                            <div class="card-header-desktop">
-                                <div class="company-profile">
-                                    <div class="company-logo-desktop">TL</div>
-                                    <div class="company-info-desktop">
-                                        <h4>TransLogística Brasil</h4>
-                                        <p>Pontuação: 4.9 ★ (340 viagens)</p>
-                                    </div>
-                                </div>
-                                <span class="price-desktop">R$ 15.500</span>
-                            </div>
-
-                            <div class="route-visual-desktop">
-                                <div class="route-step">
-                                    <span class="route-step-label">Origem</span>
-                                    <span class="route-step-val">Lucas do Rio Verde, MT</span>
-                                </div>
-                                <span class="route-arrow">➔</span>
-                                <div class="route-step">
-                                    <span class="route-step-label">Destino</span>
-                                    <span class="route-step-val">Porto de Paranaguá, PR</span>
-                                </div>
-                            </div>
-
-                            <div class="card-footer-desktop">
-                                <div class="specs-row">
-                                    <span class="spec-item">Milho</span>
-                                    <span class="spec-item">1.850 km</span>
-                                    <span class="spec-item">38 toneladas</span>
-                                </div>
-                                <button class="btn-apply-desktop js-propose-btn" data-suggested="15.500,00" data-company="TransLogística Brasil" data-product="Milho" data-route="Lucas do Rio Verde, MT → Porto de Paranaguá, PR">
-                                    Candidatar-se
-                                </button>
-                            </div>
-                        </article>
+                        <div style="text-align:center;padding:40px;color:var(--text-muted);font-size:14px;width:100%;">Carregando cargas recomendadas...</div>
                     </div>
                 </section>
 
@@ -1327,38 +1113,38 @@
                         <div class="chart-container">
                             <div class="chart-bars">
                                 <div class="chart-bar-wrapper">
-                                    <span class="chart-tooltip">R$ 1.800</span>
-                                    <div class="chart-bar-fill" style="height: 55px;"></div>
+                                    <span class="chart-tooltip">R$ 0</span>
+                                    <div class="chart-bar-fill" style="height: 0px;"></div>
                                     <span class="chart-day">Seg</span>
                                 </div>
                                 <div class="chart-bar-wrapper">
-                                    <span class="chart-tooltip">R$ 2.400</span>
-                                    <div class="chart-bar-fill" style="height: 75px;"></div>
+                                    <span class="chart-tooltip">R$ 0</span>
+                                    <div class="chart-bar-fill" style="height: 0px;"></div>
                                     <span class="chart-day">Ter</span>
                                 </div>
                                 <div class="chart-bar-wrapper">
-                                    <span class="chart-tooltip">R$ 3.200</span>
-                                    <div class="chart-bar-fill" style="height: 98px;"></div>
+                                    <span class="chart-tooltip">R$ 0</span>
+                                    <div class="chart-bar-fill" style="height: 0px;"></div>
                                     <span class="chart-day">Qua</span>
                                 </div>
                                 <div class="chart-bar-wrapper">
-                                    <span class="chart-tooltip">R$ 2.100</span>
-                                    <div class="chart-bar-fill" style="height: 65px;"></div>
+                                    <span class="chart-tooltip">R$ 0</span>
+                                    <div class="chart-bar-fill" style="height: 0px;"></div>
                                     <span class="chart-day">Qui</span>
                                 </div>
                                 <div class="chart-bar-wrapper">
-                                    <span class="chart-tooltip">R$ 2.900</span>
-                                    <div class="chart-bar-fill" style="height: 88px;"></div>
+                                    <span class="chart-tooltip">R$ 0</span>
+                                    <div class="chart-bar-fill" style="height: 0px;"></div>
                                     <span class="chart-day">Sex</span>
                                 </div>
                                 <div class="chart-bar-wrapper">
-                                    <span class="chart-tooltip">R$ 1.200</span>
-                                    <div class="chart-bar-fill" style="height: 38px;"></div>
+                                    <span class="chart-tooltip">R$ 0</span>
+                                    <div class="chart-bar-fill" style="height: 0px;"></div>
                                     <span class="chart-day">Sáb</span>
                                 </div>
                                 <div class="chart-bar-wrapper">
-                                    <span class="chart-tooltip">R$ 600</span>
-                                    <div class="chart-bar-fill" style="height: 20px;"></div>
+                                    <span class="chart-tooltip">R$ 0</span>
+                                    <div class="chart-bar-fill" style="height: 0px;"></div>
                                     <span class="chart-day">Dom</span>
                                 </div>
                             </div>
@@ -1373,27 +1159,7 @@
                         <h4 class="right-card-title">Eventos Recentes</h4>
                         
                         <div class="timeline-desktop">
-                            <div class="timeline-item-desktop">
-                                <span class="timeline-dot-desktop success"></span>
-                                <div class="timeline-info-desktop">
-                                    <h5>Carga entregue em Santos - SP</h5>
-                                    <p>Há 2 horas • Transportadora: AgroFrete S/A</p>
-                                </div>
-                            </div>
-                            <div class="timeline-item-desktop">
-                                <span class="timeline-dot-desktop"></span>
-                                <div class="timeline-info-desktop">
-                                    <h5>Candidatura aceita para Lucas do Rio Verde</h5>
-                                    <p>Há 5 horas • Transportadora: TransLogística</p>
-                                </div>
-                            </div>
-                            <div class="timeline-item-desktop">
-                                <span class="timeline-dot-desktop success"></span>
-                                <div class="timeline-info-desktop">
-                                    <h5>Pagamento de R$ 4.200 liberado</h5>
-                                    <p>Ontem • Saldo disponível para saque imediato</p>
-                                </div>
-                            </div>
+                            <div style="text-align:center;padding:20px;color:var(--text-muted);font-size:13px;">Carregando atividades...</div>
                         </div>
                     </div>
                 </aside>
@@ -1852,6 +1618,132 @@
                 showToast('Painel Atualizado!', 'success');
             }, 600);
         }
+    </script>
+    <script src="js/api-client.js"></script>
+    <script src="js/auth-guard.js"></script>
+    <script>
+        // --- CARREGAMENTO DE DADOS REAIS DO BACKEND ---
+        (async function loadDashboardData() {
+            const api = window.KargoApi;
+            const auth = window.KargoAuth;
+            if (!api || !auth) return;
+
+            const userId = auth.getUserId();
+            if (!userId) return;
+
+            try {
+                // Carregar fretes do motorista para calcular stats
+                const fretes = await api.getFretesByMotorista(userId);
+                const concluidos = (fretes || []).filter(f => f.status === 'CONCLUIDO');
+                const totalFaturamento = concluidos.reduce((sum, f) => sum + (parseFloat(f.valorFrete) || 0), 0);
+                const totalCargas = concluidos.length;
+
+                // Atualizar cards de stats
+                const cardFat = document.getElementById('card-fat-val');
+                const cardCargas = document.getElementById('card-cargas-val');
+                if (cardFat) cardFat.textContent = api.formatCurrency(totalFaturamento);
+                if (cardCargas) cardCargas.textContent = totalCargas + ' Cargas';
+
+                // Carregar cargas ativas para o feed de recomendações
+                const cargas = await api.listCargasAtivas();
+                const grid = document.querySelector('.recommended-grid');
+                if (grid && cargas) {
+                    if (cargas.length === 0) {
+                        grid.innerHTML = '<div style="text-align:center;padding:40px;color:var(--text-muted);font-size:14px;">Nenhuma carga disponível no momento. Volte em breve!</div>';
+                    } else {
+                        grid.innerHTML = cargas.slice(0, 4).map(c => {
+                            const initials = (c.embarcador?.nome || 'EM').split(' ').map(w=>w[0]).join('').slice(0,2).toUpperCase();
+                            return `
+                            <article class="load-card-desktop">
+                                <div class="card-header-desktop">
+                                    <div class="company-profile">
+                                        <div class="company-logo-desktop">${initials}</div>
+                                        <div class="company-info-desktop">
+                                            <h4>${c.embarcador?.nome || 'Embarcador'}</h4>
+                                            <p>Carga #${c.id}</p>
+                                        </div>
+                                    </div>
+                                    <span class="price-desktop">${api.formatCurrency(parseFloat(c.valorSugerido) || 0)}</span>
+                                </div>
+                                <div class="route-visual-desktop">
+                                    <div class="route-step">
+                                        <span class="route-step-label">Origem</span>
+                                        <span class="route-step-val">${c.origem}</span>
+                                    </div>
+                                    <span class="route-arrow">➔</span>
+                                    <div class="route-step">
+                                        <span class="route-step-label">Destino</span>
+                                        <span class="route-step-val">${c.destino}</span>
+                                    </div>
+                                </div>
+                                <div class="card-footer-desktop">
+                                    <div class="specs-row">
+                                        <span class="spec-item">${c.descricao}</span>
+                                        <span class="spec-item">${(c.pesoKg/1000).toFixed(1)} ton</span>
+                                    </div>
+                                    <a href="detalhe-carga.html?id=${c.id}" class="btn-apply-desktop">Ver Detalhes</a>
+                                </div>
+                            </article>`;
+                        }).join('');
+                    }
+                }
+
+                // Carregar veículos do motorista para o modal de proposta
+                const veiculos = await api.listVeiculosByMotorista(userId);
+                const selectVehicle = document.getElementById('driver-vehicle-select');
+                if (selectVehicle && veiculos && veiculos.length > 0) {
+                    selectVehicle.innerHTML = veiculos.map(v =>
+                        `<option value="${v.id}">${v.marca} ${v.modelo} - ${v.tipoVeiculo} (Placa ${v.placa})</option>`
+                    ).join('');
+                    // Atualizar specs do primeiro veículo
+                    const first = veiculos[0];
+                    const specType = document.getElementById('modal-spec-type');
+                    const specCap = document.getElementById('modal-spec-capacity');
+                    const specPlate = document.getElementById('modal-spec-plate');
+                    if (specType) specType.textContent = first.tipoVeiculo;
+                    if (specCap) specCap.textContent = (first.capacidadeKg/1000).toFixed(0) + ' Ton';
+                    if (specPlate) specPlate.textContent = first.placa;
+
+                    // Override updateModalVehicleSpecs
+                    window.updateModalVehicleSpecs = function(vId) {
+                        const v = veiculos.find(x => String(x.id) === String(vId));
+                        if (!v) return;
+                        if (specType) specType.textContent = v.tipoVeiculo;
+                        if (specCap) specCap.textContent = (v.capacidadeKg/1000).toFixed(0) + ' Ton';
+                        if (specPlate) specPlate.textContent = v.placa;
+                    };
+                }
+
+                // Timeline de eventos recentes a partir dos fretes
+                const timelineContainer = document.querySelector('.timeline-desktop');
+                if (timelineContainer && fretes && fretes.length > 0) {
+                    const recentFretes = fretes.slice(0, 3);
+                    timelineContainer.innerHTML = recentFretes.map(f => {
+                        const statusMap = {
+                            'CONCLUIDO': { text: 'Entrega concluída', css: 'success' },
+                            'EM_TRANSITO': { text: 'Em trânsito', css: '' },
+                            'ACEITO': { text: 'Frete aceito', css: 'success' },
+                            'PUBLICADO': { text: 'Frete publicado', css: '' },
+                            'CANCELADO': { text: 'Frete cancelado', css: '' }
+                        };
+                        const info = statusMap[f.status] || { text: f.status, css: '' };
+                        return `
+                        <div class="timeline-item-desktop">
+                            <span class="timeline-dot-desktop ${info.css}"></span>
+                            <div class="timeline-info-desktop">
+                                <h5>${info.text}: ${f.origem} → ${f.destino}</h5>
+                                <p>${f.titulo} • ${api.formatCurrency(parseFloat(f.valorFrete) || 0)}</p>
+                            </div>
+                        </div>`;
+                    }).join('');
+                } else if (timelineContainer) {
+                    timelineContainer.innerHTML = '<div style="text-align:center;padding:20px;color:var(--text-muted);font-size:13px;">Nenhum evento recente</div>';
+                }
+
+            } catch (err) {
+                console.warn('Erro ao carregar dados do dashboard:', err);
+            }
+        })();
     </script>
 </body>
 </html>

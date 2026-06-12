@@ -60,13 +60,21 @@
         /* COLUNA 2: Lista de Conversas / Contatos (320px) */
         .contacts-column {
             width: 320px;
-            margin-left: 260px;
+            margin-left: 0;
             background-color: #f8fafc;
             border-right: 1px solid var(--border-translucent);
             display: flex;
             flex-direction: column;
             flex-shrink: 0;
             transition: var(--transition-smooth);
+        }
+
+        .chat-layout-wrapper {
+            display: flex;
+            flex: 1;
+            height: calc(100vh - 80px);
+            overflow: hidden;
+            width: 100%;
         }
 
         .contacts-header {
@@ -523,7 +531,11 @@
             }
 
             .layout-container {
-                height: calc(100vh - 72px) !important; /* Descontando bottom-nav */
+                height: calc(100vh - 68px) !important; /* Descontando bottom-nav */
+            }
+
+            .chat-layout-wrapper {
+                height: calc(100vh - 70px - 68px) !important; /* Descontando topbar e bottom-nav */
             }
 
             .contacts-column {
@@ -648,139 +660,112 @@
             </nav>
         </aside>
 
-        <!-- COLUNA 2: LISTA DE CONVERSAS (320px) -->
-        <section class="contacts-column" id="contacts-list-container">
-            <div class="contacts-header">
-                <h2>Mensagens</h2>
-                <div class="search-wrapper">
-                    <span class="search-icon-desktop" style="display: flex; align-items: center; justify-content: center;">
-                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="color: var(--text-muted);"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-                    </span>
-                    <input type="text" class="search-input-desktop" placeholder="Pesquisar transportadoras..." id="chat-search-desktop" oninput="filterContactsDesktop()">
-                </div>
-            </div>
-
-            <!-- Listagem -->
-            <div class="contacts-list-scroll">
-                
-                <!-- AgroFrete S/A -->
-                <div class="contact-card-desktop active" id="card-af" onclick="switchActiveChat('AgroFrete S/A', 'AF', 'Soja - Rondonópolis → Santos', 'online')">
-                    <div class="avatar-circle-desktop">
-                        AF
-                        <span class="online-status-dot"></span>
-                    </div>
-                    <div class="contact-main-info">
-                        <div class="contact-meta-row">
-                            <span class="contact-name-desktop">AgroFrete S/A</span>
-                            <span class="contact-time-desktop">19:30</span>
-                        </div>
-                        <div class="contact-preview-row">
-                            <span class="contact-preview-msg" id="preview-af" style="font-weight: 700; color: var(--text-primary);">O carregamento de soja já foi liberado?</span>
-                            <span class="chat-unread-badge-circle" id="badge-af">1</span>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Minas Express -->
-                <div class="contact-card-desktop" id="card-me" onclick="switchActiveChat('Minas Express', 'ME', 'Carga Geral - Uberlândia → BH', 'online')">
-                    <div class="avatar-circle-desktop" style="color: var(--accent-orange); border-color: var(--accent-orange);">
-                        ME
-                        <span class="online-status-dot"></span>
-                    </div>
-                    <div class="contact-main-info">
-                        <div class="contact-meta-row">
-                            <span class="contact-name-desktop">Minas Express</span>
-                            <span class="contact-time-desktop">14:15</span>
-                        </div>
-                        <div class="contact-preview-row">
-                            <span class="contact-preview-msg">Documento fiscal enviado por e-mail.</span>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- TransLogística Brasil -->
-                <div class="contact-card-desktop" id="card-tl" onclick="switchActiveChat('TransLogística Brasil', 'TL', 'Milho - Lucas do Rio Verde → Paranaguá', 'offline')">
-                    <div class="avatar-circle-desktop" style="color: var(--accent-green); border-color: var(--accent-green);">
-                        TL
-                    </div>
-                    <div class="contact-main-info">
-                        <div class="contact-meta-row">
-                            <span class="contact-name-desktop">TransLogística Brasil</span>
-                            <span class="contact-time-desktop">Ontem</span>
-                        </div>
-                        <div class="contact-preview-row">
-                            <span class="contact-preview-msg">Avaliação da viagem concluída! Obrigado.</span>
-                        </div>
-                    </div>
-                </div>
-
-            </div>
-        </section>
-
-        <!-- COLUNA 3: JANELA DE CHAT ATIVA FLEXÍVEL -->
-        <section class="chat-area-column mobile-hidden" id="chat-window-container">
+        <!-- CONTEÚDO PRINCIPAL (DIREITA) -->
+        <div class="mp-main-content">
             
-            <!-- HEADER DO CHAT ATIVO -->
-            <header class="chat-area-header">
-                <div class="header-profile-box">
-                    <!-- Botão Voltar (Aparece apenas no mobile) -->
-                    <button class="btn-back-chat" onclick="goBackToContactsList()">←</button>
-                    
-                    <div class="avatar-circle-desktop" id="active-chat-avatar" style="width: 44px; height: 44px; font-size:14px;">AF</div>
-                    <div>
-                        <h3 class="active-company-name" id="active-chat-name">AgroFrete S/A</h3>
-                        <p class="active-company-status" id="active-chat-status">
-                            <span style="width:8px; height:8px; border-radius:50%; background-color:var(--accent-green); display:inline-block;"></span>
-                            Online
-                        </p>
-                    </div>
+            <!-- TOPBAR HEADER -->
+            <header class="mp-topbar">
+                <div class="mp-topbar-logo-mobile">
+                    <a href="index.html">
+                        <img src="assets/images/LOGO.png" alt="KarGO" class="logo-img-mobile">
+                    </a>
                 </div>
-
-                <!-- Tag de Rota ativa -->
-                <div class="desktop-freight-tag">
-                    <span>Rota Vinculada:</span>
-                    <strong id="active-chat-freight">Soja - Rondonópolis → Santos</strong>
+                <h1 class="mp-page-title">Chat / Mensagens</h1>
+                
+                <div class="mp-topbar-actions">
+                    <!-- Sino de Notificações -->
+                    <button class="mp-notification-btn" aria-label="Notificações">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+                        <span class="notification-badge"></span>
+                    </button>
+                    
+                    <!-- Perfil do Usuário -->
+                    <div class="mp-user-profile" onclick="window.location.href='perfil.html'">
+                        <div class="user-info">
+                            <span class="user-name">João Transportes</span>
+                            <span class="user-role">
+                                <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>
+                                Motorista Verificado
+                            </span>
+                        </div>
+                        <div class="user-avatar">
+                            <img src="assets/images/motorista.png" alt="Avatar João Transportes">
+                        </div>
+                    </div>
                 </div>
             </header>
 
-            <!-- SCROLLER DE BALÕES DE MENSAGENS -->
-            <div class="chat-scroller-desktop" id="messages-scroller-desktop">
-                
-                <!-- Mensagem 1 -->
-                <div class="bubble-row-desktop received">
-                    <div class="bubble-desktop received">
-                        Olá João! Tudo bem? Vi que você aceitou a viagem de soja de Rondonópolis para o Porto de Santos.
-                        <span class="bubble-time-desktop">19:28</span>
+            <!-- CONTAINER DO CHAT (Colunas de Contatos e Mensagens lado a lado) -->
+            <div class="chat-layout-wrapper">
+                <!-- COLUNA 2: LISTA DE CONVERSAS (320px) -->
+                <section class="contacts-column" id="contacts-list-container">
+                    <div class="contacts-header">
+                        <h2>Mensagens</h2>
+                        <div class="search-wrapper">
+                            <span class="search-icon-desktop" style="display: flex; align-items: center; justify-content: center;">
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="color: var(--text-muted);"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+                            </span>
+                            <input type="text" class="search-input-desktop" placeholder="Pesquisar transportadoras..." id="chat-search-desktop" oninput="filterContactsDesktop()">
+                        </div>
                     </div>
-                </div>
 
-                <!-- Mensagem 2 -->
-                <div class="bubble-row-desktop received">
-                    <div class="bubble-desktop received">
-                        O carregamento de soja já foi liberado no pátio da fazenda?
-                        <span class="bubble-time-desktop">19:30</span>
+                    <!-- Listagem -->
+                    <div class="contacts-list-scroll" id="contacts-list-scroll-div">
+                        <!-- Inserido dinamicamente via JS -->
                     </div>
-                </div>
+                </section>
 
+                <!-- COLUNA 3: JANELA DE CHAT ATIVA FLEXÍVEL -->
+                <section class="chat-area-column mobile-hidden" id="chat-window-container">
+                    
+                    <!-- HEADER DO CHAT ATIVO -->
+                    <header class="chat-area-header" id="chat-area-header-container" style="display: none;">
+                        <div class="header-profile-box">
+                            <!-- Botão Voltar (Aparece apenas no mobile) -->
+                            <button class="btn-back-chat" onclick="goBackToContactsList()">←</button>
+                            
+                            <div class="avatar-circle-desktop" id="active-chat-avatar" style="width: 44px; height: 44px; font-size:14px;">AF</div>
+                            <div>
+                                <h3 class="active-company-name" id="active-chat-name">AgroFrete S/A</h3>
+                                <p class="active-company-status" id="active-chat-status">
+                                    <span style="width:8px; height:8px; border-radius:50%; background-color:var(--accent-green); display:inline-block;"></span>
+                                    Online
+                                </p>
+                            </div>
+                        </div>
+
+                        <!-- Tag de Rota ativa -->
+                        <div class="desktop-freight-tag">
+                            <span>Rota Vinculada:</span>
+                            <strong id="active-chat-freight">Soja - Rondonópolis → Santos</strong>
+                        </div>
+                    </header>
+
+                    <!-- SCROLLER DE BALÕES DE MENSAGENS -->
+                    <div class="chat-scroller-desktop" id="messages-scroller-desktop">
+                        <div style="text-align: center; padding: 40px; color: var(--text-muted); font-size: 14px; width: 100%; margin: auto;">
+                            Selecione uma conversa para começar a negociar
+                        </div>
+                    </div>
+
+                    <!-- CHIPS DE RESPOSTAS RÁPIDAS -->
+                    <div class="quick-actions-bar">
+                        <button class="quick-chip-desktop" onclick="sendQuickReplyDesktop('Já estou a caminho da coleta!')">A caminho</button>
+                        <button class="quick-chip-desktop" onclick="sendQuickReplyDesktop('Carregamento concluído com sucesso.')">Carregamento concluído</button>
+                        <button class="quick-chip-desktop" onclick="sendQuickReplyDesktop('Enviei os comprovantes e documentos fiscais.')">Documentos anexados</button>
+                        <button class="quick-chip-desktop" onclick="sendQuickReplyDesktop('Atrasei um pouco devido ao trânsito na BR.')">Atraso na rodovia</button>
+                    </div>
+
+                    <!-- INPUT BAR INFERIOR -->
+                    <div class="input-bar-desktop">
+                        <input type="text" class="input-field-desktop" placeholder="Digite uma mensagem ou utilize uma resposta rápida..." id="chat-input-desktop" onkeydown="handleInputKeyDesktop(event)">
+                        <button class="btn-send-desktop" onclick="sendMessageDesktop()">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+                        </button>
+                    </div>
+                </section>
             </div>
-
-            <!-- CHIPS DE RESPOSTAS RÁPIDAS -->
-            <div class="quick-actions-bar">
-                <button class="quick-chip-desktop" onclick="sendQuickReplyDesktop('Já estou a caminho da coleta!')">A caminho</button>
-                <button class="quick-chip-desktop" onclick="sendQuickReplyDesktop('Carregamento concluído com sucesso.')">Carregamento concluído</button>
-                <button class="quick-chip-desktop" onclick="sendQuickReplyDesktop('Enviei os comprovantes e documentos fiscais.')">Documentos anexados</button>
-                <button class="quick-chip-desktop" onclick="sendQuickReplyDesktop('Atrasei um pouco devido ao trânsito na BR.')">Atraso na rodovia</button>
-            </div>
-
-            <!-- INPUT BAR INFERIOR -->
-            <div class="input-bar-desktop">
-                <input type="text" class="input-field-desktop" placeholder="Digite uma mensagem ou utilize uma resposta rápida..." id="chat-input-desktop" onkeydown="handleInputKeyDesktop(event)">
-                <button class="btn-send-desktop" onclick="sendMessageDesktop()">
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
-                </button>
-            </div>
-
-        </section>
+        </div>
 
     </div>
 
@@ -809,62 +794,84 @@
         </a>
     </nav>
 
+    <script src="js/api-client.js"></script>
+    <script src="js/auth-guard.js"></script>
     <!-- JS de Controle Dinâmico -->
     <script>
-        // Mensagens mockadas por contato para simular troca real de chat
-        const chatsMockData = {
-            'AF': {
-                name: 'AgroFrete S/A',
-                avatar: 'AF',
-                freight: 'Soja - Rondonópolis → Santos',
-                status: 'online',
-                messages: [
-                    { type: 'received', text: 'Olá João! Tudo bem? Vi que você aceitou a viagem de soja de Rondonópolis para o Porto de Santos.', time: '19:28' },
-                    { type: 'received', text: 'O carregamento de soja já foi liberado no pátio da fazenda?', time: '19:30' }
-                ]
-            },
-            'ME': {
-                name: 'Minas Express',
-                avatar: 'ME',
-                freight: 'Carga Geral - Uberlândia → BH',
-                status: 'online',
-                messages: [
-                    { type: 'received', text: 'Bom dia João, tudo certo? Confirmamos o recebimento dos seus dados cadastrais.', time: '14:02' },
-                    { type: 'sent', text: 'Excelente! Consegue me mandar a ordem de coleta para liberar a entrada?', time: '14:10' },
-                    { type: 'received', text: 'Documento fiscal enviado por e-mail.', time: '14:15' }
-                ]
-            },
-            'TL': {
-                name: 'TransLogística Brasil',
-                avatar: 'TL',
-                freight: 'Milho - Lucas do Rio Verde → Paranaguá',
-                status: 'offline',
-                messages: [
-                    { type: 'received', text: 'Parabéns pela excelente entrega no Porto de Paranaguá, João! Tudo nos conformes.', time: 'Ontem' },
-                    { type: 'sent', text: 'Muito obrigado! Espero que possamos fechar mais fretes em breve.', time: 'Ontem' },
-                    { type: 'received', text: 'Avaliação da viagem concluída! Obrigado.', time: 'Ontem' }
-                ]
-            }
-        };
+        // Iniciar chatsMockData dinâmico
+        const chatsMockData = {};
+        let currentActiveContact = null;
 
-        let currentActiveContact = 'AF';
+        function renderContactsList() {
+            const listDiv = document.getElementById('contacts-list-scroll-div');
+            if (!listDiv) return;
+            
+            const keys = Object.keys(chatsMockData);
+            if (keys.length === 0) {
+                listDiv.innerHTML = `
+                    <div style="text-align: center; padding: 24px; color: var(--text-muted); font-size: 13px;">
+                        Nenhuma conversa ativa.
+                    </div>
+                `;
+                return;
+            }
+
+            listDiv.innerHTML = keys.map(key => {
+                const chat = chatsMockData[key];
+                const activeClass = currentActiveContact === key ? 'active' : '';
+                const lastMsg = chat.messages[chat.messages.length - 1];
+                const lastMsgText = lastMsg ? lastMsg.text : 'Sem mensagens';
+                const lastMsgTime = lastMsg ? lastMsg.time : '';
+                
+                // Escolher cor do avatar
+                let colorStyle = 'color: var(--accent-blue); border-color: var(--accent-blue);';
+                if (key === 'ME') colorStyle = 'color: var(--accent-orange); border-color: var(--accent-orange);';
+                else if (key === 'TL') colorStyle = 'color: var(--accent-green); border-color: var(--accent-green);';
+                
+                return `
+                    <div class="contact-card-desktop ${activeClass}" id="card-${key.toLowerCase()}" onclick="switchActiveChat('${chat.name}', '${key}', '${chat.freight}', '${chat.status}')">
+                        <div class="avatar-circle-desktop" style="${colorStyle}">
+                            ${chat.avatar}
+                            ${chat.status === 'online' ? '<span class="online-status-dot"></span>' : ''}
+                        </div>
+                        <div class="contact-main-info">
+                            <div class="contact-meta-row">
+                                <span class="contact-name-desktop">${chat.name}</span>
+                                <span class="contact-time-desktop">${lastMsgTime}</span>
+                            </div>
+                            <div class="contact-preview-row">
+                                <span class="contact-preview-msg" id="preview-${key.toLowerCase()}" style="${chat.unread ? 'font-weight: 700; color: var(--text-primary);' : ''}">${lastMsgText}</span>
+                                ${chat.unread ? `<span class="chat-unread-badge-circle" id="badge-${key.toLowerCase()}">1</span>` : ''}
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
 
         // Lógica de Responsividade (Voltar e Alternar Colunas no Mobile)
         function switchActiveChat(company, avatar, freight, status) {
             currentActiveContact = avatar;
 
+            // Mostrar cabeçalho do chat ativo
+            const headerContainer = document.getElementById('chat-area-header-container');
+            if (headerContainer) headerContainer.style.display = 'flex';
+
             // Remover classe active de todos
             document.querySelectorAll('.contact-card-desktop').forEach(card => card.classList.remove('active'));
             
             // Adicionar active na correspondente
-            if (avatar === 'AF') {
-                document.getElementById('card-af').classList.add('active');
-                document.getElementById('badge-af').style.display = 'none'; // ocultar não lido
-                document.getElementById('preview-af').style.fontWeight = 'normal';
-            } else if (avatar === 'ME') {
-                document.getElementById('card-me').classList.add('active');
-            } else if (avatar === 'TL') {
-                document.getElementById('card-tl').classList.add('active');
+            const activeCard = document.getElementById(`card-${avatar.toLowerCase()}`);
+            if (activeCard) activeCard.classList.add('active');
+
+            const badge = document.getElementById(`badge-${avatar.toLowerCase()}`);
+            if (badge) badge.style.display = 'none';
+
+            const preview = document.getElementById(`preview-${avatar.toLowerCase()}`);
+            if (preview) preview.style.fontWeight = 'normal';
+            
+            if (chatsMockData[avatar]) {
+                chatsMockData[avatar].unread = false;
             }
 
             // Atualizar Janela de Chat Ativo
@@ -911,10 +918,19 @@
         // Renderizar Mensagens
         function renderActiveMessages() {
             const container = document.getElementById('messages-scroller-desktop');
+            if (!container) return;
             container.innerHTML = '';
 
+            if (!currentActiveContact || !chatsMockData[currentActiveContact]) {
+                container.innerHTML = `
+                    <div style="text-align: center; padding: 40px; color: var(--text-muted); font-size: 14px; width: 100%; margin: auto;">
+                        Selecione uma conversa para começar a negociar
+                    </div>
+                `;
+                return;
+            }
+
             const activeChat = chatsMockData[currentActiveContact];
-            if (!activeChat) return;
 
             activeChat.messages.forEach(msg => {
                 const bubbleRow = document.createElement('div');
@@ -934,6 +950,8 @@
 
         // Enviar mensagem ativa
         function sendMessageDesktop() {
+            if (!currentActiveContact || !chatsMockData[currentActiveContact]) return;
+            
             const input = document.getElementById('chat-input-desktop');
             const text = input.value.trim();
             if (!text) return;
@@ -950,6 +968,7 @@
 
             // Re-render
             renderActiveMessages();
+            renderContactsList();
             input.value = '';
 
             // Resposta automática simulada após 1.2 segundos
@@ -965,6 +984,8 @@
         // Resposta Inteligente Logística
         function simulateResponseDesktop(inputText) {
             setTimeout(() => {
+                if (!currentActiveContact || !chatsMockData[currentActiveContact]) return;
+                
                 const now = new Date();
                 const timeStr = `${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}`;
                 
@@ -986,11 +1007,13 @@
 
                 // Re-render
                 renderActiveMessages();
+                renderContactsList();
 
                 // Mock de GPS do SVG se for a caminho
                 if (inputText.includes('caminho')) {
                     setTimeout(() => {
                         const container = document.getElementById('messages-scroller-desktop');
+                        if (!container) return;
                         const mapContainer = document.createElement('div');
                         mapContainer.className = 'map-mock-container';
                         mapContainer.innerHTML = `
@@ -999,8 +1022,8 @@
                                 <path d="M 10 50 Q 150 10 290 80" fill="none" stroke="var(--accent-blue)" stroke-width="2" stroke-dasharray="6,6"/>
                                 <circle cx="40" cy="40" r="6" fill="var(--accent-blue)"/>
                                 <circle cx="250" cy="70" r="6" fill="var(--accent-orange)"/>
-                                <text x="35" y="25" fill="#fff" font-size="8" font-weight="bold">Rondonópolis</text>
-                                <text x="235" y="90" fill="#fff" font-size="8" font-weight="bold">Santos</text>
+                                <text x="35" y="25" fill="#fff" font-size="8" font-weight="bold">Origem</text>
+                                <text x="235" y="90" fill="#fff" font-size="8" font-weight="bold">Destino</text>
                                 <rect x="130" y="24" width="16" height="8" rx="2" fill="var(--accent-green)"/>
                                 <circle cx="134" cy="34" r="2" fill="#fff"/>
                                 <circle cx="142" cy="34" r="2" fill="#fff"/>
@@ -1020,6 +1043,8 @@
             const now = new Date();
             const timeStr = `${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}`;
 
+            if (!currentActiveContact || !chatsMockData[currentActiveContact]) return;
+
             chatsMockData[currentActiveContact].messages.push({
                 type: 'sent',
                 text: replyText,
@@ -1027,6 +1052,7 @@
             });
 
             renderActiveMessages();
+            renderContactsList();
             simulateResponseDesktop(replyText);
         }
 
@@ -1045,8 +1071,32 @@
             });
         }
 
-        // Inicializar mensagens
-        renderActiveMessages();
+        // Inicializar com parâmetros da URL
+        document.addEventListener('DOMContentLoaded', () => {
+            const urlParams = new URLSearchParams(window.location.search);
+            const emb = urlParams.get('embarcador');
+            const rota = urlParams.get('rota');
+
+            if (emb && rota) {
+                const key = emb.split(' ').map(w => w[0]).join('').slice(0, 2).toUpperCase();
+                chatsMockData[key] = {
+                    name: emb,
+                    avatar: key,
+                    freight: rota,
+                    status: 'online',
+                    messages: [
+                        { type: 'received', text: `Olá! Canal seguro estabelecido. Vi que você tem interesse na nossa carga de rota ${rota}. Vamos fechar?`, time: 'Agora' }
+                    ],
+                    unread: true
+                };
+                currentActiveContact = key;
+                renderContactsList();
+                switchActiveChat(emb, key, rota, 'online');
+            } else {
+                renderContactsList();
+                renderActiveMessages();
+            }
+        });
     </script>
 </body>
 </html>

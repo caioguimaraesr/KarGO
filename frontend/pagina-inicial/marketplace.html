@@ -93,7 +93,7 @@
                     </button>
                     
                     <!-- Perfil do Usuário -->
-                    <div class="mp-user-profile">
+                    <div class="mp-user-profile" onclick="window.location.href='perfil.html'">
                         <div class="user-info">
                             <span class="user-name">João Transportes</span>
                             <span class="user-role">
@@ -118,7 +118,7 @@
                             <label class="field-label">Origem</label>
                             <div class="field-input-wrapper">
                                 <svg class="field-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
-                                <input type="text" placeholder="Cidade ou UF" value="São Paulo, SP" id="quick-origin">
+                                <input type="text" placeholder="Cidade ou UF" id="quick-origin">
                             </div>
                         </div>
                         
@@ -308,286 +308,7 @@
 
                         <!-- Carga Cards Container -->
                         <div class="mp-cards-container" id="cards-container">
-                            
-                            <!-- CARD 1: RECOMENDADO -->
-                            <article class="cargo-card featured">
-                                <div class="card-header-row">
-                                    <span class="card-tag recommended">
-                                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-                                        RECOMENDADO
-                                    </span>
-                                    <span class="card-publish-time">Publicada há 5 min</span>
-                                </div>
-                                
-                                <div class="card-main-grid">
-                                    <!-- Rota Horizontal ("Bateu o olho, viu!") -->
-                                    <div class="card-route-horizontal">
-                                        <div class="route-origin">
-                                            <span class="route-label">ORIGEM</span>
-                                            <h4 class="route-city">São Paulo, SP</h4>
-                                            <span class="route-time">Saída: Amanhã, 08h</span>
-                                        </div>
-                                        <div class="route-connector-container">
-                                            <span class="route-distance">420 km</span>
-                                            <div class="route-line-connector">
-                                                <svg class="route-truck-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-                                                    <rect x="1" y="3" width="15" height="13" rx="2" ry="2"/>
-                                                    <polygon points="16 8 20 8 23 11 23 16 16 16 16 8"/>
-                                                    <circle cx="5.5" cy="18.5" r="2.5"/>
-                                                    <circle cx="18.5" cy="18.5" r="2.5"/>
-                                                </svg>
-                                            </div>
-                                        </div>
-                                        <div class="route-destination">
-                                            <span class="route-label">DESTINO</span>
-                                            <h4 class="route-city">Curitiba, PR</h4>
-                                            <span class="route-time">Entrega: 24/05, 17h</span>
-                                        </div>
-                                    </div>
-                                    
-                                    <!-- Especificações no Centro -->
-                                    <div class="card-specs-grid">
-                                        <div class="spec-tile">
-                                            <span class="spec-label">PESO</span>
-                                            <span class="spec-value">14 Ton</span>
-                                        </div>
-                                        <div class="spec-tile">
-                                            <span class="spec-label">CAMINHÃO</span>
-                                            <span class="spec-value">Sider / Baú</span>
-                                        </div>
-                                        <div class="spec-tile">
-                                            <span class="spec-label">PRODUTO</span>
-                                            <span class="spec-value">Eletrônicos</span>
-                                        </div>
-                                        <div class="spec-tile">
-                                            <span class="spec-label">PAGAMENTO</span>
-                                            <span class="spec-value text-highlight">Na Entrega</span>
-                                        </div>
-                                    </div>
-                                    
-                                    <!-- Finanças e Ações na Direita -->
-                                    <div class="card-action-column">
-                                        <div class="price-box">
-                                            <span class="price-label">FRETE MÉDIO SUGERIDO</span>
-                                            <h3 class="price-value">R$ 4.250,00</h3>
-                                        </div>
-                                        <div class="actions-group">
-                                            <a href="detalhe-carga.html" class="card-btn-outline">Ver Detalhes</a>
-                                            <button class="card-btn-primary js-propose-btn" data-suggested="4.250,00" data-origin="São Paulo, SP" data-destination="Curitiba, PR">Enviar Proposta</button>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <!-- Seção do Contratante (Rodapé do Card) -->
-                                <div class="card-contractor-section">
-                                    <div class="contractor-info">
-                                        <img src="assets/images/embarcador_translog.png" alt="Avatar TransLog Nordeste" class="contractor-avatar">
-                                        <div class="contractor-details">
-                                            <div class="contractor-name-row">
-                                                <span class="contractor-name">TransLog Nordeste</span>
-                                                <span class="verified-icon" title="Embarcador Verificado">
-                                                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" class="verified-badge"><polyline points="20 6 9 17 4 12"/></svg>
-                                                </span>
-                                            </div>
-                                            <div class="contractor-rating-row">
-                                                <span class="rating-star">
-                                                    <svg width="10" height="10" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-                                                </span>
-                                                <span class="rating-value">4.8</span>
-                                                <span class="rating-count">• 320 fretes • Membro desde 2023</span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <a href="detalhe-carga.html" class="contractor-more-link">Ver Perfil</a>
-                                </div>
-                            </article>
-
-                            <!-- CARD 2: URGENTE -->
-                            <article class="cargo-card urgent">
-                                <div class="card-header-row">
-                                    <span class="card-tag alert">
-                                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
-                                        URGENTE
-                                    </span>
-                                    <span class="card-publish-time">Publicada há 12 min</span>
-                                </div>
-                                
-                                <div class="card-main-grid">
-                                    <!-- Rota Horizontal ("Bateu o olho, viu!") -->
-                                    <div class="card-route-horizontal">
-                                        <div class="route-origin">
-                                            <span class="route-label">ORIGEM</span>
-                                            <h4 class="route-city">Guarulhos, SP</h4>
-                                            <span class="route-time">Saída: IMEDIATA</span>
-                                        </div>
-                                        <div class="route-connector-container">
-                                            <span class="route-distance">590 km</span>
-                                            <div class="route-line-connector">
-                                                <svg class="route-truck-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-                                                    <rect x="1" y="3" width="15" height="13" rx="2" ry="2"/>
-                                                    <polygon points="16 8 20 8 23 11 23 16 16 16 16 8"/>
-                                                    <circle cx="5.5" cy="18.5" r="2.5"/>
-                                                    <circle cx="18.5" cy="18.5" r="2.5"/>
-                                                </svg>
-                                            </div>
-                                        </div>
-                                        <div class="route-destination">
-                                            <span class="route-label">DESTINO</span>
-                                            <h4 class="route-city">Belo Horizonte, MG</h4>
-                                            <span class="route-time">Prazo: 23/05, 12h</span>
-                                        </div>
-                                    </div>
-                                    
-                                    <!-- Especificações no Centro -->
-                                    <div class="card-specs-grid">
-                                        <div class="spec-tile">
-                                            <span class="spec-label">PESO</span>
-                                            <span class="spec-value">8 Ton</span>
-                                        </div>
-                                        <div class="spec-tile">
-                                            <span class="spec-label">CAMINHÃO</span>
-                                            <span class="spec-value">Truck / Sider</span>
-                                        </div>
-                                        <div class="spec-tile">
-                                            <span class="spec-label">PRODUTO</span>
-                                            <span class="spec-value">Peças Auto</span>
-                                        </div>
-                                        <div class="spec-tile">
-                                            <span class="spec-label">PAGAMENTO</span>
-                                            <span class="spec-value">Na Entrega</span>
-                                        </div>
-                                    </div>
-                                    
-                                    <!-- Finanças e Ações na Direita -->
-                                    <div class="card-action-column">
-                                        <div class="price-box">
-                                            <span class="price-label">FRETE MÉDIO SUGERIDO</span>
-                                            <h3 class="price-value">R$ 2.900,00</h3>
-                                        </div>
-                                        <div class="actions-group">
-                                            <a href="detalhe-carga.html" class="card-btn-outline">Ver Detalhes</a>
-                                            <button class="card-btn-primary bg-danger js-propose-btn" data-suggested="2.900,00" data-origin="Guarulhos, SP" data-destination="Belo Horizonte, MG">Enviar Proposta</button>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <!-- Seção do Contratante (Rodapé do Card) -->
-                                <div class="card-contractor-section">
-                                    <div class="contractor-info">
-                                        <img src="assets/images/embarcador_minas.png" alt="Avatar Minas Express" class="contractor-avatar">
-                                        <div class="contractor-details">
-                                            <div class="contractor-name-row">
-                                                <span class="contractor-name">Minas Express Ltda</span>
-                                                <span class="verified-icon" title="Embarcador Verificado">
-                                                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" class="verified-badge"><polyline points="20 6 9 17 4 12"/></svg>
-                                                </span>
-                                            </div>
-                                            <div class="contractor-rating-row">
-                                                <span class="rating-star">
-                                                    <svg width="10" height="10" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-                                                </span>
-                                                <span class="rating-value">4.9</span>
-                                                <span class="rating-count">• 450 fretes • Membro desde 2021</span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <a href="detalhe-carga.html" class="contractor-more-link">Ver Perfil</a>
-                                </div>
-                            </article>
-
-                            <!-- CARD 3: ROTA DE RETORNO -->
-                            <article class="cargo-card return">
-                                <div class="card-header-row">
-                                    <span class="card-tag info">
-                                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2a10 10 0 1 0 10 10A10 10 0 0 0 12 2zm1 14H11v-4h2zm0-6H11V8h2z"/></svg>
-                                        ROTA DE RETORNO
-                                    </span>
-                                    <span class="card-publish-time">Publicada há 25 min</span>
-                                </div>
-                                
-                                <div class="card-main-grid">
-                                    <!-- Rota Horizontal ("Bateu o olho, viu!") -->
-                                    <div class="card-route-horizontal">
-                                        <div class="route-origin">
-                                            <span class="route-label">ORIGEM</span>
-                                            <h4 class="route-city">Fortaleza, CE</h4>
-                                            <span class="route-time">Saída: 24/05, 07h</span>
-                                        </div>
-                                        <div class="route-connector-container">
-                                            <span class="route-distance">800 km</span>
-                                            <div class="route-line-connector">
-                                                <svg class="route-truck-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-                                                    <rect x="1" y="3" width="15" height="13" rx="2" ry="2"/>
-                                                    <polygon points="16 8 20 8 23 11 23 16 16 16 16 8"/>
-                                                    <circle cx="5.5" cy="18.5" r="2.5"/>
-                                                    <circle cx="18.5" cy="18.5" r="2.5"/>
-                                                </svg>
-                                            </div>
-                                        </div>
-                                        <div class="route-destination">
-                                            <span class="route-label">DESTINO</span>
-                                            <h4 class="route-city">Recife, PE</h4>
-                                            <span class="route-time">Prazo: 25/05, 14h</span>
-                                        </div>
-                                    </div>
-                                    
-                                    <!-- Especificações no Centro -->
-                                    <div class="card-specs-grid">
-                                        <div class="spec-tile">
-                                            <span class="spec-label">PESO</span>
-                                            <span class="spec-value">5 Ton</span>
-                                        </div>
-                                        <div class="spec-tile">
-                                            <span class="spec-label">CAMINHÃO</span>
-                                            <span class="spec-value">Graneleiro</span>
-                                        </div>
-                                        <div class="spec-tile">
-                                            <span class="spec-label">PRODUTO</span>
-                                            <span class="spec-value">Móveis</span>
-                                        </div>
-                                        <div class="spec-tile">
-                                            <span class="spec-label">PAGAMENTO</span>
-                                            <span class="spec-value">Na Entrega</span>
-                                        </div>
-                                    </div>
-                                    
-                                    <!-- Finanças e Ações na Direita -->
-                                    <div class="card-action-column">
-                                        <div class="price-box">
-                                            <span class="price-label">FRETE MÉDIO SUGERIDO</span>
-                                            <h3 class="price-value">R$ 4.200,00</h3>
-                                        </div>
-                                        <div class="actions-group">
-                                            <a href="detalhe-carga.html" class="card-btn-outline">Ver Detalhes</a>
-                                            <button class="card-btn-primary bg-info js-propose-btn" data-suggested="4.200,00" data-origin="Fortaleza, CE" data-destination="Recife, PE">Enviar Proposta</button>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <!-- Seção do Contratante (Rodapé do Card) -->
-                                <div class="card-contractor-section">
-                                    <div class="contractor-info">
-                                        <img src="assets/images/embarcador_agrofrete.png" alt="Avatar AgroFrete Sul" class="contractor-avatar">
-                                        <div class="contractor-details">
-                                            <div class="contractor-name-row">
-                                                <span class="contractor-name">AgroFrete Sul</span>
-                                                <span class="verified-icon" title="Embarcador Verificado">
-                                                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" class="verified-badge"><polyline points="20 6 9 17 4 12"/></svg>
-                                                </span>
-                                            </div>
-                                            <div class="contractor-rating-row">
-                                                <span class="rating-star">
-                                                    <svg width="10" height="10" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-                                                </span>
-                                                <span class="rating-value">4.7</span>
-                                                <span class="rating-count">• 180 fretes • Membro desde 2022</span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <a href="detalhe-carga.html" class="contractor-more-link">Ver Perfil</a>
-                                </div>
-                            </article>
-
+                            <div style="grid-column: 1 / -1; text-align:center; padding:40px; color:var(--text-muted); font-size:14px; width:100%;">Carregando cargas do marketplace...</div>
                         </div>
                     </main>
 
@@ -722,6 +443,7 @@
     </nav>
 
     <script src="js/api-client.js"></script>
+    <script src="js/auth-guard.js"></script>
     <script src="js/marketplace.js"></script>
 </body>
 </html>

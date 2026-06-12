@@ -30,6 +30,11 @@ public class VeiculoController {
         return veiculoService.listar();
     }
 
+    @GetMapping("/motorista/{motoristaId}")
+    public List<Veiculo> listarPorMotorista(@PathVariable Long motoristaId) {
+        return veiculoService.listarPorMotorista(motoristaId);
+    }
+
     @GetMapping("/{id}")
     public Veiculo buscarPorId(@PathVariable Long id) {
         return veiculoService.buscarPorId(id);

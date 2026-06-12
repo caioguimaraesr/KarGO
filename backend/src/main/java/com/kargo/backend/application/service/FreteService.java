@@ -29,6 +29,14 @@ public class FreteService {
         return freteRepository.findAll();
     }
 
+    public List<Frete> listarPorMotorista(Long motoristaId) {
+        return freteRepository.findByMotoristaId(motoristaId);
+    }
+
+    public List<Frete> listarPorEmbarcador(Long embarcadorId) {
+        return freteRepository.findByEmbarcadorId(embarcadorId);
+    }
+
     public Frete buscarPorId(Long id) {
         return freteRepository.findById(id)
             .orElseThrow(() -> new RecursoNaoEncontradoException("Frete nao encontrado: " + id));

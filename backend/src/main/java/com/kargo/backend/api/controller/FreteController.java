@@ -30,6 +30,16 @@ public class FreteController {
         return freteService.listar();
     }
 
+    @GetMapping("/motorista/{motoristaId}")
+    public List<Frete> listarPorMotorista(@PathVariable Long motoristaId) {
+        return freteService.listarPorMotorista(motoristaId);
+    }
+
+    @GetMapping("/embarcador/{embarcadorId}")
+    public List<Frete> listarPorEmbarcador(@PathVariable Long embarcadorId) {
+        return freteService.listarPorEmbarcador(embarcadorId);
+    }
+
     @GetMapping("/{id}")
     public Frete buscarPorId(@PathVariable Long id) {
         return freteService.buscarPorId(id);

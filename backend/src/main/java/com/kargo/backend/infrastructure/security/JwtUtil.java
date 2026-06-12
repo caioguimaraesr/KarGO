@@ -1,5 +1,6 @@
 package com.kargo.backend.infrastructure.security;
 
+import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
 import org.springframework.beans.factory.annotation.Value;
@@ -29,5 +30,21 @@ public class JwtUtil {
                 .expiration(new Date(System.currentTimeMillis() + expirationMs))
                 .signWith(key)
                 .compact();
+    }
+
+    public Claims parseToken(String token) {
+        return Jwts.parser()
+                .verifyWith(key)
+                .build()
+                .parseSignedClaims(token)
+                .getPayload();
+    }
+
+    public Long extractUserId(String token) {
+        return Long.valueOf(parseToken(token).getSubject());
+    }
+
+    public String extractTipoUsuario(String token) {
+        return parseToken(token).get("tipoUsuario", String.class);
     }
 }

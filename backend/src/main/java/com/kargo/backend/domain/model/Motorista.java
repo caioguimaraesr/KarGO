@@ -44,6 +44,12 @@ public class Motorista extends Usuario {
     @DecimalMin(value = "0.0")
     private BigDecimal avaliacaoMedia;
 
+    private String chavePix;
+    private String bancoNome;
+    private String agencia;
+    private String contaNumero;
+    private String contaTipo;
+
     @PrePersist
     @PreUpdate
     void garantirTipoUsuario() {

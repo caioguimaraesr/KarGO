@@ -252,17 +252,17 @@
                 }
 
                 setTimeout(() => {
-                    showToast('Canal seguro estabelecido com TransLog Nordeste!', 'success');
-                    btnChatTrigger.innerHTML = `
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
-                        Chat Aberto
-                    `;
+                    const contractorNameEl = document.querySelector('.contractor-name') || document.querySelector('.dc-contractor-section .contractor-name');
+                    const embarcador = contractorNameEl ? contractorNameEl.textContent.trim() : 'AgroFrete S/A';
                     
-                    setTimeout(() => {
-                        btnChatTrigger.disabled = false;
-                        btnChatTrigger.innerHTML = originalContent;
-                    }, 3000);
-                }, 1500);
+                    const origEl = document.querySelector('.route-origin .route-city');
+                    const destEl = document.querySelector('.route-destination .route-city');
+                    const origem = origEl ? origEl.textContent.trim() : 'Recife, PE';
+                    const destino = destEl ? destEl.textContent.trim() : 'Fortaleza, CE';
+                    const rota = `${origem} → ${destino}`;
+
+                    window.location.href = `chat.html?embarcador=${encodeURIComponent(embarcador)}&rota=${encodeURIComponent(rota)}`;
+                }, 1000);
             });
         }
 

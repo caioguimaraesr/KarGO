@@ -127,6 +127,36 @@ document.addEventListener('DOMContentLoaded', () => {
     // Wire up wizard navigation buttons
     document.querySelectorAll('[data-wizard-next]').forEach(btn => {
         btn.addEventListener('click', () => {
+            // Se estiver na etapa 2 (Veículo) e perfil for motorista ou pme, validar campos antes de prosseguir
+            if (wizardStep === 2 && (profile === 'motorista' || profile === 'pme')) {
+                const chipSelected = document.querySelector('#vehicle-type-chips .chip.selected');
+                const placa = (document.getElementById('wizard-plate')?.value || '').trim();
+                const modelo = (document.getElementById('wizard-model')?.value || '').trim();
+                const ano = document.getElementById('wizard-year')?.value;
+                const capacidade = parseFloat(document.getElementById('wizard-capacity')?.value);
+
+                if (!chipSelected) {
+                    alert('Por favor, selecione o tipo do seu veículo.');
+                    return;
+                }
+                if (!placa || placa.length < 7) {
+                    alert('Por favor, informe uma placa de veículo válida (ex: ABC1D23).');
+                    return;
+                }
+                if (!modelo) {
+                    alert('Por favor, informe a marca e o modelo do seu veículo.');
+                    return;
+                }
+                if (!ano) {
+                    alert('Por favor, selecione o ano de fabricação do seu veículo.');
+                    return;
+                }
+                if (isNaN(capacidade) || capacidade <= 0) {
+                    alert('Por favor, informe uma capacidade de carga máxima válida maior que zero.');
+                    return;
+                }
+            }
+
             if (wizardStep < totalSteps) {
                 wizardStep++;
                 updateWizardUI();
@@ -145,9 +175,89 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
+    function mapearTipoVeiculo(texto) {
+        if (!texto) return 'TRUCK';
+        const t = texto.toLowerCase();
+        if (t.includes('van') || t.includes('utilit') || t.includes('3/4')) return 'VUC';
+        if (t.includes('toco')) return 'TOCO';
+        if (t.includes('truck')) return 'TRUCK';
+        if (t.includes('carreta')) return 'CARRETA';
+        return 'TRUCK';
+    }
+
+    function extrairMarca(modelo) {
+        if (!modelo) return 'Volkswagen';
+        const partes = modelo.trim().split(' ');
+        return partes[0] || 'Volkswagen';
+    }
+
     // Finalize button -> show analysis
     document.querySelectorAll('[data-wizard-finish]').forEach(btn => {
-        btn.addEventListener('click', () => {
+        btn.addEventListener('click', async () => {
+            // Salvar veículo real do motorista no backend
+            if (profile === 'motorista' || profile === 'pme') {
+                const motoristaId = api && api.getSession() ? api.getSession().id : null;
+                if (motoristaId) {
+                    const chipSelected = document.querySelector('#vehicle-type-chips .chip.selected');
+                    const tipoVeiculoTexto = chipSelected ? chipSelected.textContent : 'Caminhão Truck';
+                    const placa = (document.getElementById('wizard-plate')?.value || '').trim().toUpperCase();
+                    const modelo = (document.getElementById('wizard-model')?.value || '').trim();
+                    const ano = parseInt(document.getElementById('wizard-year')?.value) || 2022;
+                    const isVolume = document.querySelector('.capacity-option[data-type="volume"]')?.classList.contains('selected');
+                    const capacidadeValor = parseFloat(document.getElementById('wizard-capacity')?.value) || 10;
+                    const capacidadeKg = isVolume ? capacidadeValor : capacidadeValor * 1000;
+
+                    try {
+                        const veiculos = await api.listVeiculos();
+                        const vAtivo = veiculos.find(v => v.motorista && v.motorista.id === motoristaId);
+                        const payload = {
+                            ativo: true,
+                            capacidadeKg: capacidadeKg,
+                            tipoVeiculo: mapearTipoVeiculo(tipoVeiculoTexto),
+                            ano: ano,
+                            marca: extrairMarca(modelo),
+                            modelo: modelo,
+                            placa: placa,
+                            motorista: { id: motoristaId }
+                        };
+
+                        if (vAtivo) {
+                            await api.updateVeiculo(vAtivo.id, payload);
+                            console.log('Veículo atualizado com sucesso no backend');
+                        } else {
+                            await api.createVeiculo(payload);
+                            console.log('Veículo criado com sucesso no backend');
+                        }
+
+                        // Salvar cidade base no localStorage
+                        const wizardCity = (document.getElementById('wizard-city')?.value || '').trim();
+                        if (wizardCity) {
+                            localStorage.setItem('kargo_city_' + motoristaId, wizardCity);
+                        }
+
+                        // Salvar status CNH no motorista no backend
+                        const cnhCard = document.querySelector('#wizard-step-3 .upload-card'); // Primeiro card da Etapa 3 é a CNH
+                        const isCnhUploaded = cnhCard && cnhCard.classList.contains('uploaded');
+                        
+                        const motoristaDados = await api.getMotorista(motoristaId);
+                        if (motoristaDados) {
+                            const motoristaPayload = {
+                                ...motoristaDados,
+                                cnh: isCnhUploaded ? 'ENVIADA' : 'PENDENTE',
+                                disponivel: true
+                            };
+                            const updatedMotorista = await api.updateMotorista(motoristaId, motoristaPayload);
+                            api.saveSessionFromApi(updatedMotorista);
+                            console.log('Dados do motorista (CNH) atualizados com sucesso no backend');
+                        }
+                    } catch (err) {
+                        console.error('Erro ao salvar informações de cadastro no backend:', err);
+                        alert('Houve um erro ao salvar as informações do seu cadastro no backend: ' + err.message);
+                        return; // Impede que avance para a tela de sucesso
+                    }
+                }
+            }
+
             wizardStep = totalSteps;
             
             // Show analysis screen
@@ -174,6 +284,21 @@ document.addEventListener('DOMContentLoaded', () => {
     // Initialize wizard if on cadastro page
     if (wizardSteps.length > 0) {
         updateWizardUI();
+
+        // Inicializar setas do slider de tipo de veículo se existirem
+        const chipsContainer = document.getElementById('vehicle-type-chips');
+        const btnLeft = document.querySelector('.chips-arrow-left');
+        const btnRight = document.querySelector('.chips-arrow-right');
+        if (btnLeft && btnRight && chipsContainer) {
+            btnLeft.addEventListener('click', (e) => {
+                e.preventDefault();
+                chipsContainer.scrollBy({ left: -150, behavior: 'smooth' });
+            });
+            btnRight.addEventListener('click', (e) => {
+                e.preventDefault();
+                chipsContainer.scrollBy({ left: 150, behavior: 'smooth' });
+            });
+        }
     }
 
     // ========================================

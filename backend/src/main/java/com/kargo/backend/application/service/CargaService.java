@@ -23,6 +23,14 @@ public class CargaService {
         return cargaRepository.findAll();
     }
 
+    public List<Carga> listarPorEmbarcador(Long embarcadorId) {
+        return cargaRepository.findByEmbarcadorId(embarcadorId);
+    }
+
+    public List<Carga> listarAtivas() {
+        return cargaRepository.findByAtivaTrue();
+    }
+
     public Carga buscarPorId(Long id) {
         return cargaRepository.findById(id)
             .orElseThrow(() -> new RecursoNaoEncontradoException("Carga nao encontrada: " + id));
