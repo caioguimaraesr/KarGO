@@ -247,6 +247,8 @@
     position: relative;
     display: flex;
     align-items: center;
+    width: 100%;
+    box-sizing: border-box;
 }
 .input-icon {
     position: absolute;
@@ -268,6 +270,7 @@
     font-size: 15px;
     transition: all 0.2s ease;
     outline: none;
+    box-sizing: border-box;
 }
 .input-wrapper .form-input {
     padding-left: 44px;

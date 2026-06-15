@@ -6,6 +6,11 @@
 document.addEventListener('DOMContentLoaded', () => {
     const api = window.KargoApi;
 
+    // Se estiver na página de login, limpar preventivamente qualquer sessão fantasma residual
+    if (api && document.getElementById('login-form')) {
+        api.clearSession();
+    }
+
     // ========================================
     // TAB SYSTEM (Login Page)
     // ========================================
@@ -122,6 +127,36 @@ document.addEventListener('DOMContentLoaded', () => {
         
         const desktopBackBtn = document.querySelector('.auth-back-btn-desktop');
         if (desktopBackBtn) desktopBackBtn.style.display = '';
+
+        // Se for embarcador, ajustar os cards de documentos dinamicamente
+        if (profile === 'embarcador') {
+            const cards = document.querySelectorAll('#wizard-step-3 .upload-card');
+            if (cards.length >= 3) {
+                // Card 1
+                const h4_1 = cards[0].querySelector('h4');
+                const p_1 = cards[0].querySelector('p');
+                if (h4_1) h4_1.textContent = 'Contrato Social ou Cartão CNPJ';
+                if (p_1) p_1.textContent = 'Documento corporativo em PDF ou imagem';
+                
+                // Card 2
+                const h4_2 = cards[1].querySelector('h4');
+                const p_2 = cards[1].querySelector('p');
+                if (h4_2) h4_2.textContent = 'Inscrição Estadual';
+                if (p_2) p_2.textContent = 'Comprovante de inscrição ativa (opcional)';
+
+                // Card 3
+                const h4_3 = cards[2].querySelector('h4');
+                const p_3 = cards[2].querySelector('p');
+                if (h4_3) h4_3.textContent = 'Comprovante de Endereço';
+                if (p_3) p_3.textContent = 'Conta corporativa (energia, água ou internet)';
+
+                // Trocar ícone do veículo por um de residência/sede
+                const icon_3 = cards[2].querySelector('.upload-card-icon');
+                if (icon_3) {
+                    icon_3.innerHTML = `<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>`;
+                }
+            }
+        }
     }
 
     // Wire up wizard navigation buttons

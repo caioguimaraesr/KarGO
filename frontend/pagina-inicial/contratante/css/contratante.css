@@ -1994,4 +1994,44 @@ button { font-family: var(--font); }
     }
 }
 
+/* === WIZARD STEPS === */
+.ct-wizard-dot {
+    width: 36px !important;
+    height: 36px !important;
+    border-radius: 50% !important;
+    background: #ffffff !important;
+    border: 2px solid var(--border-light) !important;
+    color: var(--text-muted) !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    font-weight: 700 !important;
+    font-size: 14px !important;
+    transition: var(--transition) !important;
+}
+
+.ct-wizard-dot.active {
+    border-color: #60a5fa !important; /* Azul celeste suave */
+    color: #60a5fa !important; /* Mesmo azul celeste suave da borda */
+    background: #eff6ff !important; /* Fundo azul bem clarinho */
+}
+
+.ct-wizard-dot.completed {
+    border-color: var(--accent-green) !important;
+    color: #ffffff !important;
+    background: var(--accent-green) !important;
+}
+
+.ct-wizard-line {
+    flex: 1 !important;
+    height: 3px !important;
+    background: var(--border-light) !important;
+    margin-top: -20px !important;
+    transition: var(--transition) !important;
+}
+
+.ct-wizard-line.completed {
+    background: #93c5fd !important; /* Azul claro para a linha completada */
+}
+
 

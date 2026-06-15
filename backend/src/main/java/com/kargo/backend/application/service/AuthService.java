@@ -54,7 +54,7 @@ public class AuthService {
                     m.getId(), m.getNome(), m.getEmail(), m.getTelefone(),
                     m.getTipoUsuario().name(), m.getDataCadastro(),
                     m.getCpf(), m.getCnh(), m.getDataValidadeCnh(),
-                    m.getDisponivel(), m.getAvaliacaoMedia(),
+                    m.getDisponivel(), m.getAvaliacaoMedia(), m.getQuantidadeAvaliacoes(),
                     null,
                     m.getChavePix(), m.getBancoNome(), m.getAgencia(),
                     m.getContaNumero(), m.getContaTipo()
@@ -63,7 +63,7 @@ public class AuthService {
             return new MeResponse(
                     e.getId(), e.getNome(), e.getEmail(), e.getTelefone(),
                     e.getTipoUsuario().name(), e.getDataCadastro(),
-                    null, null, null, null, null,
+                    null, null, null, null, null, null,
                     e.getCpfCnpj(),
                     null, null, null, null, null
             );
@@ -74,7 +74,7 @@ public class AuthService {
                 usuario.getId(), usuario.getNome(), usuario.getEmail(),
                 usuario.getTelefone(), usuario.getTipoUsuario().name(),
                 usuario.getDataCadastro(),
-                null, null, null, null, null, null,
+                null, null, null, null, null, null, null,
                 null, null, null, null, null
         );
     }

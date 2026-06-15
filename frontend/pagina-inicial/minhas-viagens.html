@@ -936,6 +936,21 @@
             const comment = document.getElementById(`review-comment-desktop-${freteId}`).value.trim();
             const panel = document.getElementById(`desktop-review-panel-${freteId}`);
 
+            // Encontrar o frete correspondente para obter o id do embarcador
+            const frete = loadedFretes.find(f => Number(f.id) === Number(freteId));
+            if (frete && frete.embarcador && frete.embarcador.id) {
+                const embId = frete.embarcador.id;
+                const storageKey = `kargo_embarcador_ratings_${embId}`;
+                const raw = localStorage.getItem(storageKey);
+                const ratings = raw ? JSON.parse(raw) : [];
+                ratings.push({
+                    nota: stars,
+                    comentario: comment,
+                    data: new Date().toISOString()
+                });
+                localStorage.setItem(storageKey, JSON.stringify(ratings));
+            }
+
             panel.innerHTML = `
                 <div style="text-align: center; padding: 20px; color: var(--accent-green); font-weight: 700; font-size: 14px;">
                     ✓ Obrigado! Sua avaliação de ${stars} estrelas foi gravada no sistema.

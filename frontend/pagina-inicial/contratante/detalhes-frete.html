@@ -385,7 +385,11 @@
                     <div style="text-align:left; margin-top:20px;">
                         <label class="ct-form-label" style="text-align:center; display:block;">Avalie o serviço do motorista</label>
                         <div class="ct-star-rating" style="display:flex; justify-content:center; gap:8px; margin-top:8px; font-size:24px; cursor:pointer;">
-                            <span>☆</span><span>☆</span><span>☆</span><span>☆</span><span>☆</span>
+                            <span class="ct-star" data-index="1">☆</span>
+                            <span class="ct-star" data-index="2">☆</span>
+                            <span class="ct-star" data-index="3">☆</span>
+                            <span class="ct-star" data-index="4">☆</span>
+                            <span class="ct-star" data-index="5">☆</span>
                         </div>
                     </div>
                 </div>
@@ -393,11 +397,11 @@
 
             <div class="ct-modal-footer" id="confirm-form-footer">
                 <button class="ct-btn ct-btn-secondary" style="flex:1;" onclick="closeModal('modal-confirmar-entrega')">Cancelar</button>
-                <button class="ct-btn ct-btn-success" style="flex:2;" onclick="showConfirmSuccess(); document.getElementById('confirm-form-footer').style.display='none'; document.getElementById('confirm-success-footer').style.display='flex';">Confirmar Entrega</button>
+                <button class="ct-btn ct-btn-success" style="flex:2;" onclick="confirmarRecebimentoCompleto()">Confirmar Entrega</button>
             </div>
             <div class="ct-modal-footer" id="confirm-success-footer" style="display:none;">
                 <button class="ct-btn ct-btn-secondary" style="flex:1;" onclick="closeModal('modal-confirmar-entrega')">Pular</button>
-                <button class="ct-btn ct-btn-primary" style="flex:2;" onclick="closeModal('modal-confirmar-entrega'); alert('Avaliação enviada com sucesso!')">Enviar Avaliação</button>
+                <button class="ct-btn ct-btn-primary" style="flex:2;" onclick="enviarAvaliacaoFrete()">Enviar Avaliação</button>
             </div>
         </div>
     </div>
@@ -444,7 +448,7 @@
                 <!-- Descrição -->
                 <div class="ct-form-group" style="margin-top:16px;">
                     <label class="ct-form-label">Descreva o Problema Detalhadamente</label>
-                    <textarea class="ct-form-input ct-form-textarea" placeholder="Forneça o máximo de informações possível para o suporte KarGO resolver rápido..." rows="4" style="width:100%; border:1px solid var(--border-light); border-radius:var(--radius-sm); padding:10px; background:var(--bg-body); resize:none; font-family:var(--font);"></textarea>
+                    <textarea id="report-desc" class="ct-form-input ct-form-textarea" placeholder="Forneça o máximo de informações possível para o suporte KarGO resolver rápido..." rows="4" style="width:100%; border:1px solid var(--border-light); border-radius:var(--radius-sm); padding:10px; background:var(--bg-body); resize:none; font-family:var(--font);"></textarea>
                 </div>
 
                 <!-- Evidências -->
@@ -472,7 +476,7 @@
 
             <div class="ct-modal-footer" id="report-form-footer">
                 <button class="ct-btn ct-btn-secondary" style="flex:1;" onclick="closeModal('modal-reportar-problema')">Cancelar</button>
-                <button class="ct-btn ct-btn-danger" style="flex:2;" onclick="showReportSuccess(); document.getElementById('report-form-footer').style.display='none';">Enviar Ocorrência</button>
+                <button class="ct-btn ct-btn-danger" style="flex:2;" onclick="criarOcorrenciaLocal()">Enviar Ocorrência</button>
             </div>
         </div>
     </div>
@@ -489,5 +493,240 @@
     <script src="../js/api-client.js"></script>
     <script src="js/auth-guard-contratante.js"></script>
     <script src="js/contratante.js"></script>
+    <script>
+        let currentFreteId = null;
+
+        async function carregarDadosFrete() {
+            const urlParams = new URLSearchParams(window.location.search);
+            let freteId = urlParams.get('id');
+            
+            const api = window.KargoApi;
+            if (!api) return;
+
+            const session = api.getSession();
+            const userType = session ? session.type : null;
+            
+            // Se não passamos ID de frete e o usuário é contratante, podemos tentar carregar o primeiro frete ativo dele
+            if (!freteId && session && userType === 'EMBARCADOR') {
+                try {
+                    const fretes = await api.getFretesByEmbarcador(session.id);
+                    // Achar um frete em trânsito ou aceito
+                    const freteAtivo = fretes.find(f => f.status === 'EM_TRANSITO' || f.status === 'ACEITO') || fretes[0];
+                    if (freteAtivo) {
+                        freteId = freteAtivo.id;
+                    }
+                } catch (err) {
+                    console.error('Erro ao buscar fretes do embarcador:', err);
+                }
+            }
+
+            if (freteId) {
+                currentFreteId = freteId;
+                try {
+                    const frete = await api.getFrete(freteId);
+                    
+                    // Preencher dados na tela dinamicamente
+                    document.querySelectorAll('.ct-page-title h1').forEach(el => el.textContent = `Frete #KG-2026-${frete.id}`);
+                    document.querySelectorAll('.ct-page-title p').forEach(el => {
+                        const val = api.formatCurrency(frete.valorFrete);
+                        el.textContent = `${frete.origem} → ${frete.destino} · ${val}`;
+                    });
+                    
+                    // Resumo da carga
+                    const resumoDivs = document.querySelectorAll('.ct-grid-2col-responsive div');
+                    if (resumoDivs.length >= 4) {
+                        const tipoEl = resumoDivs[0].querySelector('div:nth-child(2)') || resumoDivs[0];
+                        if (tipoEl) tipoEl.textContent = frete.descricao || 'Carga Seca';
+                        const pesoEl = resumoDivs[1].querySelector('div:nth-child(2)') || resumoDivs[1];
+                        if (pesoEl) pesoEl.textContent = `${(frete.pesoCargaKg / 1000).toFixed(1)} toneladas`;
+                        const valorEl = resumoDivs[3].querySelector('div:nth-child(2)') || resumoDivs[3];
+                        if (valorEl) valorEl.textContent = api.formatCurrency(frete.valorFrete);
+                    }
+                    
+                    // Rota
+                    const routePoints = document.querySelectorAll('.ct-route-point');
+                    if (routePoints.length >= 2) {
+                        const origEl = routePoints[0].querySelector('.ct-route-city');
+                        if (origEl) origEl.textContent = frete.origem;
+                        const destEl = routePoints[1].querySelector('.ct-route-city');
+                        if (destEl) destEl.textContent = frete.destino;
+                    }
+                    
+                    // Motorista
+                    if (frete.motorista) {
+                        document.querySelectorAll('.ct-driver-name').forEach(el => el.textContent = frete.motorista.nome);
+                        const driverRating = document.querySelector('.ct-driver-rating');
+                        if (driverRating) {
+                            const media = frete.motorista.avaliacaoMedia ? parseFloat(frete.motorista.avaliacaoMedia).toFixed(1) : '0.0';
+                            const count = frete.motorista.quantidadeAvaliacoes || 0;
+                            driverRating.innerHTML = `<svg class="star-icon-inline" viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg> ${media} (${count} ${count === 1 ? 'avaliação' : 'avaliações'}) · Verificado`;
+                        }
+                    }
+                    
+                    // Ajustar textos e botões de acordo com o status
+                    const statusBadge = document.querySelector('.ct-topbar-actions .ct-badge');
+                    if (statusBadge) {
+                        statusBadge.innerHTML = `<span class="status-indicator-dot ${frete.status === 'CONCLUIDO' ? 'green' : 'blue'}"></span>${frete.status}`;
+                    }
+                    
+                    // Se o frete já está concluído, desabilitar ações de alteração ou mostrar que já foi recebido
+                    if (frete.status === 'CONCLUIDO') {
+                        const actionCard = document.querySelector('.ct-section-card[style*="linear-gradient"]');
+                        if (actionCard) {
+                            actionCard.innerHTML = `
+                                <h2 class="ct-section-title" style="margin-bottom:16px;">Entrega Concluída</h2>
+                                <div style="padding:14px; background:rgba(34,197,94,0.1); border-radius:10px; color:green; font-weight:700; text-align:center;">
+                                    ✓ Esta carga foi recebida e finalizada com sucesso!
+                                </div>
+                            `;
+                        }
+                    }
+                } catch (err) {
+                    console.error('Erro ao carregar dados reais do frete:', err);
+                }
+            }
+        }
+
+        async function confirmarRecebimentoCompleto() {
+            if (!currentFreteId) {
+                // Caso mockado puro
+                showConfirmSuccess();
+                document.getElementById('confirm-form-footer').style.display='none';
+                document.getElementById('confirm-success-footer').style.display='flex';
+                return;
+            }
+
+            try {
+                // Atualizar frete para concluído no backend
+                const api = window.KargoApi;
+                const frete = await api.getFrete(currentFreteId);
+                frete.status = 'CONCLUIDO';
+                await api.updateFrete(currentFreteId, frete);
+                
+                showConfirmSuccess();
+                document.getElementById('confirm-form-footer').style.display='none';
+                document.getElementById('confirm-success-footer').style.display='flex';
+            } catch (err) {
+                alert('Erro ao confirmar recebimento: ' + err.message);
+            }
+        }
+
+        async function enviarAvaliacaoFrete() {
+            const api = window.KargoApi;
+            if (!api) return;
+            
+            const ratingContainer = document.querySelector('.ct-star-rating');
+            const nota = ratingContainer && ratingContainer.dataset.rating ? parseInt(ratingContainer.dataset.rating) : 0;
+            
+            if (nota === 0) {
+                alert('Selecione uma nota de 1 a 5 estrelas antes de enviar.');
+                return;
+            }
+
+            if (!currentFreteId) {
+                closeModal('modal-confirmar-entrega');
+                alert('Avaliação enviada com sucesso! (Modo Simulação)');
+                return;
+            }
+
+            try {
+                await api.avaliarFrete(currentFreteId, nota, 'Entrega realizada com sucesso!');
+                closeModal('modal-confirmar-entrega');
+                alert('Avaliação enviada com sucesso! A nota do motorista foi atualizada.');
+                window.location.reload(); // Recarregar a página para ver o status atualizado
+            } catch (err) {
+                alert('Erro ao enviar avaliação: ' + err.message);
+            }
+        }
+
+        async function criarOcorrenciaLocal() {
+            const api = window.KargoApi;
+            if (!api) return;
+            
+            const session = api.getSession();
+            if (!session) return;
+            const embarcadorId = session.id;
+
+            // Obter descrição
+            const descInput = document.getElementById('report-desc');
+            const descricao = descInput ? descInput.value.trim() : '';
+
+            if (!descricao) {
+                alert('Por favor, descreva o problema.');
+                return;
+            }
+
+            // Obter tipo de problema
+            let tipoProblema = 'Atraso na Coleta/Entrega';
+            const radios = document.querySelectorAll('input[name="p-type"]');
+            radios.forEach(r => {
+                if (r.checked) {
+                    tipoProblema = r.parentElement.textContent.trim();
+                }
+            });
+
+            // Obter urgência
+            let urgencia = 'Média';
+            const urgencyBtn = document.querySelector('.ct-urgency-selector .ct-urgency-btn.selected');
+            if (urgencyBtn) {
+                urgencia = urgencyBtn.textContent.trim();
+            }
+
+            // Obter informações do frete atual
+            let rotaText = 'Recife → Natal';
+            let motoristaNome = 'João Silva';
+            let fId = currentFreteId || '1234';
+
+            try {
+                if (currentFreteId) {
+                    const frete = await api.getFrete(currentFreteId);
+                    rotaText = `${frete.origem} → ${frete.destino}`;
+                    motoristaNome = frete.motorista ? frete.motorista.nome : 'Não atribuído';
+                }
+            } catch (err) {
+                console.error('Erro ao buscar frete para ocorrencia:', err);
+            }
+
+            // Criar ocorrência
+            const protocolo = '#OC-2026-' + Math.floor(100000 + Math.random() * 900000);
+            const respostaSuporte = tipoProblema.includes('Atraso')
+                ? 'Nossa equipe de suporte entrou em contato com o motorista. O suporte está acompanhando o rastreamento em tempo real.'
+                : 'A ocorrência foi registrada e nossa equipe está analisando as evidências. Retornaremos com uma resolução em breve.';
+
+            const novaOcorrencia = {
+                protocolo: protocolo,
+                freteId: fId,
+                rota: rotaText,
+                motorista: motoristaNome,
+                tipo: tipoProblema,
+                urgencia: urgencia,
+                descricao: descricao,
+                respostaSuporte: respostaSuporte,
+                status: 'EM_ANALISE',
+                dataAbertura: new Date().toISOString()
+            };
+
+            // Salvar no localStorage
+            const storageKey = `kargo_ocorrencias_${embarcadorId}`;
+            const raw = localStorage.getItem(storageKey);
+            const ocorrencias = raw ? JSON.parse(raw) : [];
+            ocorrencias.push(novaOcorrencia);
+            localStorage.setItem(storageKey, JSON.stringify(ocorrencias));
+
+            // Exibir tela de sucesso
+            showReportSuccess();
+            const footer = document.getElementById('report-form-footer');
+            if (footer) footer.style.display = 'none';
+
+            // Redirecionar após 2 segundos
+            setTimeout(() => {
+                window.location.href = 'ocorrencias.html';
+            }, 2000);
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            carregarDadosFrete();
+        });
+    </script>
 </body>
 </html>

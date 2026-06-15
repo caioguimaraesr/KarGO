@@ -17,6 +17,7 @@ public record MeResponse(
         LocalDate dataValidadeCnh,
         Boolean disponivel,
         BigDecimal avaliacaoMedia,
+        Integer quantidadeAvaliacoes,
         // Embarcador-specific
         String cpfCnpj,
         // Dados Bancários

@@ -13,6 +13,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.List;
 
 @Service
@@ -52,17 +54,33 @@ public class FreteService {
     @Transactional
     public Frete atualizar(Long id, Frete freteAtualizado) {
         Frete frete = buscarPorId(id);
-        frete.setTitulo(freteAtualizado.getTitulo());
-        frete.setDescricao(freteAtualizado.getDescricao());
-        frete.setOrigem(freteAtualizado.getOrigem());
-        frete.setDestino(freteAtualizado.getDestino());
-        frete.setPesoCargaKg(freteAtualizado.getPesoCargaKg());
-        frete.setValorFrete(freteAtualizado.getValorFrete());
-        frete.setDataEntrega(freteAtualizado.getDataEntrega());
-        frete.setDataPublicacao(freteAtualizado.getDataPublicacao());
-        frete.setDataAceite(freteAtualizado.getDataAceite());
-        frete.setStatus(freteAtualizado.getStatus());
-        vincularReferencias(frete, freteAtualizado);
+        
+        if (freteAtualizado.getTitulo() != null) frete.setTitulo(freteAtualizado.getTitulo());
+        if (freteAtualizado.getDescricao() != null) frete.setDescricao(freteAtualizado.getDescricao());
+        if (freteAtualizado.getOrigem() != null) frete.setOrigem(freteAtualizado.getOrigem());
+        if (freteAtualizado.getDestino() != null) frete.setDestino(freteAtualizado.getDestino());
+        if (freteAtualizado.getPesoCargaKg() != null) frete.setPesoCargaKg(freteAtualizado.getPesoCargaKg());
+        if (freteAtualizado.getValorFrete() != null) frete.setValorFrete(freteAtualizado.getValorFrete());
+        if (freteAtualizado.getDataEntrega() != null) frete.setDataEntrega(freteAtualizado.getDataEntrega());
+        if (freteAtualizado.getDataPublicacao() != null) frete.setDataPublicacao(freteAtualizado.getDataPublicacao());
+        if (freteAtualizado.getDataAceite() != null) frete.setDataAceite(freteAtualizado.getDataAceite());
+        if (freteAtualizado.getStatus() != null) frete.setStatus(freteAtualizado.getStatus());
+
+        // Vincular referências apenas se forem fornecidas no payload, caso contrário mantém as existentes
+        if (freteAtualizado.getEmbarcador() != null && freteAtualizado.getEmbarcador().getId() != null) {
+            frete.setEmbarcador(buscarEmbarcador(freteAtualizado.getEmbarcador().getId()));
+        }
+        if (freteAtualizado.getMotorista() != null && freteAtualizado.getMotorista().getId() != null) {
+            frete.setMotorista(buscarMotorista(freteAtualizado.getMotorista().getId()));
+        }
+        if (freteAtualizado.getVeiculo() != null && freteAtualizado.getVeiculo().getId() != null) {
+            Veiculo veiculo = buscarVeiculo(freteAtualizado.getVeiculo().getId());
+            if (!veiculo.getMotorista().getId().equals(frete.getMotorista().getId())) {
+                throw new IllegalArgumentException("O veiculo informado nao pertence ao motorista selecionado");
+            }
+            frete.setVeiculo(veiculo);
+        }
+
         return freteRepository.save(frete);
     }
 
@@ -124,6 +142,41 @@ public class FreteService {
             throw new RecursoNaoEncontradoException("Frete precisa informar um id de veiculo valido");
         }
         return frete.getVeiculo().getId();
+    }
+
+    @Transactional
+    public Frete avaliar(Long id, Integer nota, String comentario) {
+        Frete frete = buscarPorId(id);
+        if (nota < 1 || nota > 5) {
+            throw new IllegalArgumentException("A nota deve ser entre 1 e 5 estrelas");
+        }
+        frete.setAvaliacaoMotoristaNota(nota);
+        frete.setAvaliacaoMotoristaComentario(comentario);
+        Frete freteSalvo = freteRepository.save(frete);
+
+        // Recalcular a avaliação média do motorista
+        Motorista motorista = frete.getMotorista();
+        List<Frete> fretesDoMotorista = freteRepository.findByMotoristaId(motorista.getId());
+        List<Frete> fretesComNota = fretesDoMotorista.stream()
+                .filter(f -> f.getAvaliacaoMotoristaNota() != null)
+                .toList();
+
+        if (!fretesComNota.isEmpty()) {
+            double soma = fretesComNota.stream()
+                    .mapToInt(Frete::getAvaliacaoMotoristaNota)
+                    .sum();
+            double media = soma / fretesComNota.size();
+            
+            BigDecimal mediaBd = BigDecimal.valueOf(media).setScale(1, RoundingMode.HALF_UP);
+            motorista.setAvaliacaoMedia(mediaBd);
+            motorista.setQuantidadeAvaliacoes(fretesComNota.size());
+        } else {
+            motorista.setAvaliacaoMedia(BigDecimal.ZERO);
+            motorista.setQuantidadeAvaliacoes(0);
+        }
+
+        motoristaRepository.save(motorista);
+        return freteSalvo;
     }
 }
 

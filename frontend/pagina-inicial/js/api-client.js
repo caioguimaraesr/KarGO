@@ -49,7 +49,7 @@
             ...options
         });
 
-        if (response.status === 401 || response.status === 403) {
+        if ((response.status === 401 || response.status === 403) && !path.includes('/api/auth/login')) {
             // Token expirado ou inválido — limpar e redirecionar
             logout();
             return;
@@ -101,7 +101,6 @@
     function clearSession() {
         localStorage.removeItem('kargoToken');
         localStorage.removeItem('kargoSession');
-        sessionStorage.removeItem('kargoProfile');
     }
 
     function isLoggedIn() {
@@ -110,6 +109,7 @@
 
     function logout() {
         clearSession();
+        sessionStorage.removeItem('kargoProfile');
         // Determinar caminho correto para login
         const path = window.location.pathname;
         if (path.includes('/contratante/')) {
@@ -135,6 +135,7 @@
     // ========================================
 
     async function login(loginValue, senha) {
+        clearSession();
         const data = await request('/api/auth/login', {
             method: 'POST',
             body: JSON.stringify({ login: loginValue, senha: senha })
@@ -167,6 +168,7 @@
     }
 
     async function createMotorista(payload) {
+        clearSession();
         return request('/api/motoristas', {
             method: 'POST',
             body: JSON.stringify(payload)
@@ -197,6 +199,7 @@
     }
 
     async function createEmbarcador(payload) {
+        clearSession();
         return request('/api/embarcadores', {
             method: 'POST',
             body: JSON.stringify(payload)
@@ -324,6 +327,13 @@
         return request('/api/fretes/' + id, { method: 'DELETE' });
     }
 
+    async function avaliarFrete(id, nota, comentario) {
+        return request('/api/fretes/' + id + '/avaliar', {
+            method: 'POST',
+            body: JSON.stringify({ nota: nota, comentario: comentario })
+        });
+    }
+
     // ========================================
     // UTILS
     // ========================================
@@ -401,6 +411,7 @@
         createFrete,
         updateFrete,
         deleteFrete,
+        avaliarFrete,
         // Utils
         formatCurrency,
         formatDate,

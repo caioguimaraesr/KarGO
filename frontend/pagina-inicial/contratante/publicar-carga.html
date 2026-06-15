@@ -92,35 +92,35 @@
                     <div class="ct-wizard-progress" style="display:flex; align-items:center; justify-content:space-between; margin-bottom:40px; position:relative;">
                         <!-- Step 1 -->
                         <div style="display:flex; flex-direction:column; align-items:center; z-index:2; flex:1;">
-                            <div class="ct-wizard-dot active" style="width:36px; height:36px; border-radius:50%; background:#fff; border:2px solid var(--border-light); color:var(--text-muted); display:flex; align-items:center; justify-content:center; font-weight:700; font-size:14px; transition:var(--transition);">1</div>
+                            <div class="ct-wizard-dot active">1</div>
                             <span style="font-size:11px; font-weight:700; color:var(--text-muted); margin-top:8px; text-transform:uppercase;">Tipo Carga</span>
                         </div>
-                        <div class="ct-wizard-line" style="flex:1; height:3px; background:var(--border-light); margin-top:-20px; transition:var(--transition);"></div>
+                        <div class="ct-wizard-line"></div>
 
                         <!-- Step 2 -->
                         <div style="display:flex; flex-direction:column; align-items:center; z-index:2; flex:1;">
-                            <div class="ct-wizard-dot" style="width:36px; height:36px; border-radius:50%; background:#fff; border:2px solid var(--border-light); color:var(--text-muted); display:flex; align-items:center; justify-content:center; font-weight:700; font-size:14px; transition:var(--transition);">2</div>
+                            <div class="ct-wizard-dot">2</div>
                             <span style="font-size:11px; font-weight:700; color:var(--text-muted); margin-top:8px; text-transform:uppercase;">Dimensões</span>
                         </div>
-                        <div class="ct-wizard-line" style="flex:1; height:3px; background:var(--border-light); margin-top:-20px; transition:var(--transition);"></div>
+                        <div class="ct-wizard-line"></div>
 
                         <!-- Step 3 -->
                         <div style="display:flex; flex-direction:column; align-items:center; z-index:2; flex:1;">
-                            <div class="ct-wizard-dot" style="width:36px; height:36px; border-radius:50%; background:#fff; border:2px solid var(--border-light); color:var(--text-muted); display:flex; align-items:center; justify-content:center; font-weight:700; font-size:14px; transition:var(--transition);">3</div>
+                            <div class="ct-wizard-dot">3</div>
                             <span style="font-size:11px; font-weight:700; color:var(--text-muted); margin-top:8px; text-transform:uppercase;">Rota</span>
                         </div>
-                        <div class="ct-wizard-line" style="flex:1; height:3px; background:var(--border-light); margin-top:-20px; transition:var(--transition);"></div>
+                        <div class="ct-wizard-line"></div>
 
                         <!-- Step 4 -->
                         <div style="display:flex; flex-direction:column; align-items:center; z-index:2; flex:1;">
-                            <div class="ct-wizard-dot" style="width:36px; height:36px; border-radius:50%; background:#fff; border:2px solid var(--border-light); color:var(--text-muted); display:flex; align-items:center; justify-content:center; font-weight:700; font-size:14px; transition:var(--transition);">4</div>
+                            <div class="ct-wizard-dot">4</div>
                             <span style="font-size:11px; font-weight:700; color:var(--text-muted); margin-top:8px; text-transform:uppercase;">Veículo</span>
                         </div>
-                        <div class="ct-wizard-line" style="flex:1; height:3px; background:var(--border-light); margin-top:-20px; transition:var(--transition);"></div>
+                        <div class="ct-wizard-line"></div>
 
                         <!-- Step 5 -->
                         <div style="display:flex; flex-direction:column; align-items:center; z-index:2; flex:1;">
-                            <div class="ct-wizard-dot" style="width:36px; height:36px; border-radius:50%; background:#fff; border:2px solid var(--border-light); color:var(--text-muted); display:flex; align-items:center; justify-content:center; font-weight:700; font-size:14px; transition:var(--transition);">5</div>
+                            <div class="ct-wizard-dot">5</div>
                             <span style="font-size:11px; font-weight:700; color:var(--text-muted); margin-top:8px; text-transform:uppercase;">Confirmação</span>
                         </div>
                     </div>
@@ -186,15 +186,15 @@
                         <div class="ct-grid-2col-responsive">
                             <div>
                                 <label style="display:block; font-size:13px; font-weight:600; color:var(--text-body); margin-bottom:6px;">Peso Estimado (em Toneladas)</label>
-                                <input type="number" placeholder="Ex: 8.5" style="width:100%; padding:12px; border:1px solid var(--border-light); border-radius:var(--radius-sm); outline:none; background:var(--bg-body);">
+                                <input type="number" id="cargo-weight" placeholder="Ex: 8.5" style="width:100%; padding:12px; border:1px solid var(--border-light); border-radius:var(--radius-sm); outline:none; background:var(--bg-body);">
                             </div>
                             <div>
                                 <label style="display:block; font-size:13px; font-weight:600; color:var(--text-body); margin-bottom:6px;">Volume Ocupado (m³ - Opcional)</label>
-                                <input type="number" placeholder="Ex: 35" style="width:100%; padding:12px; border:1px solid var(--border-light); border-radius:var(--radius-sm); outline:none; background:var(--bg-body);">
+                                <input type="number" id="cargo-volume" placeholder="Ex: 35" style="width:100%; padding:12px; border:1px solid var(--border-light); border-radius:var(--radius-sm); outline:none; background:var(--bg-body);">
                             </div>
                             <div style="grid-column: span 2;">
                                 <label style="display:block; font-size:13px; font-weight:600; color:var(--text-body); margin-bottom:6px;">Descrição da Carga e Embalagem</label>
-                                <textarea placeholder="Ex: Carga de alimentos em caixas de papelão paletizadas. Requer manuseio cuidadoso." style="width:100%; height:100px; padding:12px; border:1px solid var(--border-light); border-radius:var(--radius-sm); outline:none; background:var(--bg-body); font-family:var(--font); resize:none;"></textarea>
+                                <textarea id="cargo-desc" placeholder="Ex: Carga de alimentos em caixas de papelão paletizadas. Requer manuseio cuidadoso." style="width:100%; height:100px; padding:12px; border:1px solid var(--border-light); border-radius:var(--radius-sm); outline:none; background:var(--bg-body); font-family:var(--font); resize:none;"></textarea>
                             </div>
                         </div>
 
@@ -211,28 +211,76 @@
                         
                         <div class="ct-grid-2col-responsive">
                             <div>
+                                <label style="display:block; font-size:13px; font-weight:600; color:var(--text-body); margin-bottom:6px;">Cidade/UF de Origem</label>
+                                <select id="cargo-city-origin" style="width:100%; padding:12px; border:1px solid var(--border-light); border-radius:var(--radius-sm); outline:none; background:var(--bg-body); color:var(--text-body);">
+                                    <option value="">Selecione a cidade de origem</option>
+                                    <option value="Recife, PE">Recife, PE</option>
+                                    <option value="Caruaru, PE">Caruaru, PE</option>
+                                    <option value="Petrolina, PE">Petrolina, PE</option>
+                                    <option value="Cabo de Santo Agostinho, PE">Cabo de Santo Agostinho, PE</option>
+                                    <option value="Natal, RN">Natal, RN</option>
+                                    <option value="Mossoró, RN">Mossoró, RN</option>
+                                    <option value="João Pessoa, PB">João Pessoa, PB</option>
+                                    <option value="Campina Grande, PB">Campina Grande, PB</option>
+                                    <option value="Maceió, AL">Maceió, AL</option>
+                                    <option value="Salvador, BA">Salvador, BA</option>
+                                    <option value="Fortaleza, CE">Fortaleza, CE</option>
+                                    <option value="São Paulo, SP">São Paulo, SP</option>
+                                    <option value="Rio de Janeiro, RJ">Rio de Janeiro, RJ</option>
+                                    <option value="Belo Horizonte, MG">Belo Horizonte, MG</option>
+                                </select>
+                            </div>
+                            <div>
                                 <label style="display:block; font-size:13px; font-weight:600; color:var(--text-body); margin-bottom:6px;">CEP de Origem</label>
-                                <input type="text" placeholder="Ex: 50000-000" style="width:100%; padding:12px; border:1px solid var(--border-light); border-radius:var(--radius-sm); outline:none; background:var(--bg-body);">
+                                <input type="text" id="cargo-cep-origin" placeholder="Ex: 50030-017" maxlength="9" onkeyup="formatCEP(this)" style="width:100%; padding:12px; border:1px solid var(--border-light); border-radius:var(--radius-sm); outline:none; background:var(--bg-body); color:var(--text-body);">
+                            </div>
+                            
+                            <div>
+                                <label style="display:block; font-size:13px; font-weight:600; color:var(--text-body); margin-bottom:6px;">Cidade/UF de Destino</label>
+                                <select id="cargo-city-dest" style="width:100%; padding:12px; border:1px solid var(--border-light); border-radius:var(--radius-sm); outline:none; background:var(--bg-body); color:var(--text-body);">
+                                    <option value="">Selecione a cidade de destino</option>
+                                    <option value="Recife, PE">Recife, PE</option>
+                                    <option value="Caruaru, PE">Caruaru, PE</option>
+                                    <option value="Petrolina, PE">Petrolina, PE</option>
+                                    <option value="Cabo de Santo Agostinho, PE">Cabo de Santo Agostinho, PE</option>
+                                    <option value="Natal, RN">Natal, RN</option>
+                                    <option value="Mossoró, RN">Mossoró, RN</option>
+                                    <option value="João Pessoa, PB">João Pessoa, PB</option>
+                                    <option value="Campina Grande, PB">Campina Grande, PB</option>
+                                    <option value="Maceió, AL">Maceió, AL</option>
+                                    <option value="Salvador, BA">Salvador, BA</option>
+                                    <option value="Fortaleza, CE">Fortaleza, CE</option>
+                                    <option value="São Paulo, SP">São Paulo, SP</option>
+                                    <option value="Rio de Janeiro, RJ">Rio de Janeiro, RJ</option>
+                                    <option value="Belo Horizonte, MG">Belo Horizonte, MG</option>
+                                </select>
                             </div>
                             <div>
                                 <label style="display:block; font-size:13px; font-weight:600; color:var(--text-body); margin-bottom:6px;">CEP de Destino</label>
-                                <input type="text" placeholder="Ex: 59000-000" style="width:100%; padding:12px; border:1px solid var(--border-light); border-radius:var(--radius-sm); outline:none; background:var(--bg-body);">
+                                <input type="text" id="cargo-cep-dest" placeholder="Ex: 59078-970" maxlength="9" onkeyup="formatCEP(this)" style="width:100%; padding:12px; border:1px solid var(--border-light); border-radius:var(--radius-sm); outline:none; background:var(--bg-body); color:var(--text-body);">
                             </div>
+
                             <div>
                                 <label style="display:block; font-size:13px; font-weight:600; color:var(--text-body); margin-bottom:6px;">Endereço de Coleta (Rua, Número, Bairro)</label>
-                                <input type="text" placeholder="Ex: Av. Barbosa Lima, 100 - Bairro do Recife" style="width:100%; padding:12px; border:1px solid var(--border-light); border-radius:var(--radius-sm); outline:none; background:var(--bg-body);">
+                                <input type="text" id="cargo-addr-origin" placeholder="Ex: Av. Barbosa Lima, 100 - Bairro do Recife" style="width:100%; padding:12px; border:1px solid var(--border-light); border-radius:var(--radius-sm); outline:none; background:var(--bg-body); color:var(--text-body);">
                             </div>
                             <div>
                                 <label style="display:block; font-size:13px; font-weight:600; color:var(--text-body); margin-bottom:6px;">Endereço de Entrega (Rua, Número, Bairro)</label>
-                                <input type="text" placeholder="Ex: Av. Prudente de Morais, 500 - Lagoa Nova" style="width:100%; padding:12px; border:1px solid var(--border-light); border-radius:var(--radius-sm); outline:none; background:var(--bg-body);">
+                                <input type="text" id="cargo-addr-dest" placeholder="Ex: Av. Prudente de Morais, 500 - Lagoa Nova" style="width:100%; padding:12px; border:1px solid var(--border-light); border-radius:var(--radius-sm); outline:none; background:var(--bg-body); color:var(--text-body);">
                             </div>
+
                             <div>
                                 <label style="display:block; font-size:13px; font-weight:600; color:var(--text-body); margin-bottom:6px;">Data de Coleta</label>
-                                <input type="date" style="width:100%; padding:12px; border:1px solid var(--border-light); border-radius:var(--radius-sm); outline:none; background:var(--bg-body); color:var(--text-body);">
+                                <input type="date" id="cargo-date-collect" style="width:100%; padding:12px; border:1px solid var(--border-light); border-radius:var(--radius-sm); outline:none; background:var(--bg-body); color:var(--text-body);">
                             </div>
                             <div>
+                                <label style="display:block; font-size:13px; font-weight:600; color:var(--text-body); margin-bottom:6px;">Horário de Coleta na Origem</label>
+                                <input type="time" id="cargo-time-collect" style="width:100%; padding:12px; border:1px solid var(--border-light); border-radius:var(--radius-sm); outline:none; background:var(--bg-body); color:var(--text-body);">
+                            </div>
+                            
+                            <div style="grid-column: span 2;">
                                 <label style="display:block; font-size:13px; font-weight:600; color:var(--text-body); margin-bottom:6px;">Previsão de Entrega</label>
-                                <input type="date" style="width:100%; padding:12px; border:1px solid var(--border-light); border-radius:var(--radius-sm); outline:none; background:var(--bg-body); color:var(--text-body);">
+                                <input type="date" id="cargo-date-delivery" style="width:100%; padding:12px; border:1px solid var(--border-light); border-radius:var(--radius-sm); outline:none; background:var(--bg-body); color:var(--text-body);">
                             </div>
                         </div>
 
@@ -250,7 +298,7 @@
                         <div class="ct-grid-2col-responsive">
                             <div>
                                 <label style="display:block; font-size:13px; font-weight:600; color:var(--text-body); margin-bottom:6px;">Tipo de Caminhão</label>
-                                <select style="width:100%; padding:12px; border:1px solid var(--border-light); border-radius:var(--radius-sm); outline:none; background:var(--bg-body); color:var(--text-body);">
+                                <select id="cargo-truck-type" style="width:100%; padding:12px; border:1px solid var(--border-light); border-radius:var(--radius-sm); outline:none; background:var(--bg-body); color:var(--text-body);">
                                     <option>Truck (Até 14t)</option>
                                     <option>Carreta (Até 30t)</option>
                                     <option>Toco (Até 6t)</option>
@@ -260,7 +308,7 @@
                             </div>
                             <div>
                                 <label style="display:block; font-size:13px; font-weight:600; color:var(--text-body); margin-bottom:6px;">Tipo de Carroceria</label>
-                                <select style="width:100%; padding:12px; border:1px solid var(--border-light); border-radius:var(--radius-sm); outline:none; background:var(--bg-body); color:var(--text-body);">
+                                <select id="cargo-body-type" style="width:100%; padding:12px; border:1px solid var(--border-light); border-radius:var(--radius-sm); outline:none; background:var(--bg-body); color:var(--text-body);">
                                     <option>Baú Fechado</option>
                                     <option>Sider (Lona)</option>
                                     <option>Grade Baixa (Aberto)</option>
@@ -272,16 +320,16 @@
                                 <label style="display:block; font-size:13px; font-weight:600; color:var(--text-body); margin-bottom:6px;">Exigências Adicionais</label>
                                 <div class="ct-grid-2col-responsive" style="margin-top:6px; gap:12px !important;">
                                     <label style="display:flex; align-items:center; gap:8px; font-size:13px; color:var(--text-body); cursor:pointer;">
-                                        <input type="checkbox"> Motorista com ajudante
+                                        <input type="checkbox" name="cargo-requirement" value="ajudante"> Motorista com ajudante
                                     </label>
                                     <label style="display:flex; align-items:center; gap:8px; font-size:13px; color:var(--text-body); cursor:pointer;">
-                                        <input type="checkbox"> Possuir seguro de carga ativo
+                                        <input type="checkbox" name="cargo-requirement" value="seguro"> Possuir seguro de carga ativo
                                     </label>
                                     <label style="display:flex; align-items:center; gap:8px; font-size:13px; color:var(--text-body); cursor:pointer;">
-                                        <input type="checkbox"> Rastreador instalado no veículo
+                                        <input type="checkbox" name="cargo-requirement" value="rastreador"> Rastreador instalado no veículo
                                     </label>
                                     <label style="display:flex; align-items:center; gap:8px; font-size:13px; color:var(--text-body); cursor:pointer;">
-                                        <input type="checkbox"> Certificação ANTT regularizada
+                                        <input type="checkbox" name="cargo-requirement" value="antt"> Certificação ANTT regularizada
                                     </label>
                                 </div>
                             </div>
@@ -311,11 +359,11 @@
                         <div class="ct-grid-2col-responsive" style="margin-bottom:24px;">
                             <div>
                                 <label style="display:block; font-size:13px; font-weight:600; color:var(--text-body); margin-bottom:6px;">Valor do Frete Proposto (R$)</label>
-                                <input type="text" placeholder="Ex: 2.800,00" onkeyup="formatCurrency(this)" style="width:100%; padding:12px; border:1px solid var(--border-light); border-radius:var(--radius-sm); outline:none; background:var(--bg-body); font-weight:700;">
+                                <input type="text" id="cargo-value" placeholder="Ex: 2.800,00" onkeyup="formatCurrency(this)" style="width:100%; padding:12px; border:1px solid var(--border-light); border-radius:var(--radius-sm); outline:none; background:var(--bg-body); font-weight:700;">
                             </div>
                             <div>
                                 <label style="display:block; font-size:13px; font-weight:600; color:var(--text-body); margin-bottom:6px;">Forma de Pagamento</label>
-                                <select style="width:100%; padding:12px; border:1px solid var(--border-light); border-radius:var(--radius-sm); outline:none; background:var(--bg-body); color:var(--text-body);">
+                                <select id="cargo-payment-method" style="width:100%; padding:12px; border:1px solid var(--border-light); border-radius:var(--radius-sm); outline:none; background:var(--bg-body); color:var(--text-body);">
                                     <option>50% na Coleta + 50% na Entrega</option>
                                     <option>100% na Entrega (Confirmada)</option>
                                     <option>Saldo em 24h após entrega</option>
@@ -327,16 +375,16 @@
                         <div style="border:1px dashed var(--border-light); border-radius:var(--radius-md); padding:20px; background:var(--bg-body);">
                             <h4 style="font-size:14px; font-weight:700; color:var(--text-dark); margin-bottom:12px; text-transform:uppercase; letter-spacing:0.5px;">Resumo da Publicação</h4>
                             <div class="ct-grid-2col-responsive" style="gap:12px !important; font-size:13px;">
-                                <p><strong>Carga:</strong> Alimentos Perecíveis (8.5t)</p>
-                                <p><strong>Veículo:</strong> Truck (Baú Fechado)</p>
-                                <p><strong>Coleta:</strong> Recife, PE</p>
-                                <p><strong>Entrega:</strong> Natal, RN</p>
+                                <p><strong>Carga:</strong> <span id="summary-cargo-type">Alimentos Perecíveis</span> (<span id="summary-cargo-weight">8.5</span>t)</p>
+                                <p><strong>Veículo:</strong> <span id="summary-cargo-truck">Truck</span> (<span id="summary-cargo-body">Baú Fechado</span>)</p>
+                                <p><strong>Coleta:</strong> <span id="summary-cargo-origin">Recife, PE</span></p>
+                                <p><strong>Entrega:</strong> <span id="summary-cargo-dest">Natal, RN</span></p>
                             </div>
                         </div>
 
                         <div style="display:flex; justify-content:space-between; margin-top:30px;">
                             <button class="ct-btn ct-btn-secondary" onclick="wizardPrev()">Voltar</button>
-                            <button class="ct-btn ct-btn-success" onclick="alert('Parabéns! Sua carga foi anunciada com sucesso. Aguarde as propostas na aba de Acompanhar Cargas.'); window.location.href='minhas-cargas.html';">Publicar Anúncio de Carga</button>
+                            <button class="ct-btn ct-btn-success" id="btn-publish-cargo">Publicar Anúncio de Carga</button>
                         </div>
                     </div>
 
@@ -375,5 +423,6 @@
     <script src="../js/api-client.js"></script>
     <script src="js/auth-guard-contratante.js"></script>
     <script src="js/contratante.js"></script>
+    <script src="js/publicar-carga.js"></script>
 </body>
 </html>

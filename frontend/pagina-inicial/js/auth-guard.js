@@ -38,20 +38,42 @@
             el.innerHTML = svgHtml + ' Motorista Verificado';
         });
 
-        // Avatar fallback (iniciais)
+        // Avatar do header (localStorage ou iniciais fallback)
+        const keyAvatar = `kargo_avatar_${user.id}`;
+        const savedAvatar = localStorage.getItem(keyAvatar);
+
         document.querySelectorAll('.user-avatar').forEach(img => {
-            img.onerror = function () {
+            let targetImg = img;
+            if (img.tagName !== 'IMG') {
+                targetImg = img.querySelector('img');
+            }
+            if (!targetImg) return;
+
+            targetImg.onerror = function () {
                 const name = user.name || user.nome || 'U';
                 const initials = name.split(' ').map(w => w[0]).join('').slice(0, 2).toUpperCase();
                 this.style.display = 'none';
+                
+                // Limpar placeholders anteriores
+                const oldPlaceholder = this.parentElement.querySelector('.header-avatar-placeholder');
+                if (oldPlaceholder) oldPlaceholder.remove();
+
                 const placeholder = document.createElement('div');
+                placeholder.className = 'header-avatar-placeholder';
                 placeholder.textContent = initials;
                 placeholder.style.cssText = 'width:32px;height:32px;border-radius:50%;background:linear-gradient(135deg,#0088ff,#00d4ff);color:#fff;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;';
                 this.parentElement.insertBefore(placeholder, this);
             };
-            // Trigger onerror if src is missing or generic
-            if (!img.src || img.src.includes('motorista.png')) {
-                img.onerror();
+
+            if (savedAvatar) {
+                const oldPlaceholder = targetImg.parentElement.querySelector('.header-avatar-placeholder');
+                if (oldPlaceholder) oldPlaceholder.remove();
+                targetImg.src = savedAvatar;
+                targetImg.style.display = '';
+            } else {
+                if (!targetImg.src || targetImg.src.includes('avatar') || targetImg.src.includes('embarcador.png') || targetImg.src.includes('motorista.png')) {
+                    targetImg.onerror();
+                }
             }
         });
 
@@ -66,11 +88,36 @@
         document.querySelectorAll('.driver-mini-name').forEach(el => {
             el.textContent = user.name || user.nome || 'Motorista';
         });
+
+        // Redirecionar ao clicar no perfil do cabeçalho (desktop e mobile)
+        document.querySelectorAll('.mp-user-profile, .js-user-profile').forEach(el => {
+            el.style.cursor = 'pointer';
+            el.title = 'Ver Meu Perfil';
+            el.addEventListener('click', () => {
+                window.location.href = 'perfil.html';
+            });
+        });
     }
 
-    // 4) Preencher imediatamente com dados da sessão
+    // 4) Preencher imediatamente com dados da sessão local
     if (session) {
         fillUserData(session);
+
+        // Validar sessão contra o backend de forma assíncrona
+        api.getMe()
+            .then(userFromServer => {
+                if (!userFromServer) {
+                    console.warn('[KargoGuard] Sessão inválida no servidor. Efetuando logout...');
+                    api.logout();
+                } else {
+                    // Atualizar dados da sessão local com os dados do servidor
+                    api.saveSessionFromApi(userFromServer);
+                }
+            })
+            .catch(err => {
+                console.error('[KargoGuard] Erro ao validar sessão no servidor. Limpando sessão fantasma...', err);
+                api.logout();
+            });
     }
 
     // 5) Exportar guard com funções úteis

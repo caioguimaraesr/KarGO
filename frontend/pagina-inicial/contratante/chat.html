@@ -260,94 +260,58 @@
                         <div class="ct-chat-search">
                             <input type="text" placeholder="Buscar conversa...">
                         </div>
-                        <div class="ct-chat-list">
-                            <!-- Conversa Ativa -->
-                            <div class="ct-chat-item active">
-                                <img src="../assets/images/motorista.png" alt="João Silva" class="ct-chat-item-avatar">
-                                <div class="ct-chat-item-info">
-                                    <div class="ct-chat-item-header">
-                                        <span class="ct-chat-item-name">João Silva</span>
-                                        <span class="ct-chat-item-time">14:30</span>
-                                    </div>
-                                    <p class="ct-chat-item-msg">BR-101, Km 85 — Acabei de passar do posto fiscal.</p>
-                                </div>
-                            </div>
-                            <!-- Conversa 2 -->
-                            <div class="ct-chat-item" onclick="alert('Histórico de conversa antiga...')">
-                                <img src="../assets/images/motorista.png" alt="Carlos Santos" class="ct-chat-item-avatar">
-                                <div class="ct-chat-item-info">
-                                    <div class="ct-chat-item-header">
-                                        <span class="ct-chat-item-name">Carlos Santos</span>
-                                        <span class="ct-chat-item-time">Ontem</span>
-                                    </div>
-                                    <p class="ct-chat-item-msg">Certo, aceito sim os R$ 1.350.</p>
-                                </div>
-                            </div>
-                            <!-- Conversa 3 -->
-                            <div class="ct-chat-item" onclick="alert('Histórico de conversa antiga...')">
-                                <img src="../assets/images/motorista.png" alt="Ana Paula" class="ct-chat-item-avatar">
-                                <div class="ct-chat-item-info">
-                                    <div class="ct-chat-item-header">
-                                        <span class="ct-chat-item-name">Ana Paula</span>
-                                        <span class="ct-chat-item-time">05/06</span>
-                                    </div>
-                                    <p class="ct-chat-item-msg">Carga entregue. Aguardo a confirmação.</p>
-                                </div>
+                        <div class="ct-chat-list" id="chat-list-container">
+                            <div style="text-align:center; padding:30px; color:var(--text-muted); font-size:12px; line-height:1.5;">
+                                Carregando conversas...
                             </div>
                         </div>
                     </div>
 
-                    <!-- Main Chat Area -->
-                    <div class="ct-chat-main">
+                    <!-- Placeholder centralizado de boas vindas ao chat -->
+                    <div class="ct-chat-main" id="chat-welcome-placeholder" style="display:flex; flex:1; align-items:center; justify-content:center; text-align:center; padding:40px; color:var(--text-muted); min-height: 400px;">
+                        <div>
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" width="64" height="64" style="color:var(--accent-blue); margin-bottom:16px; display:inline-block;"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+                            <h3 style="color:var(--text-dark); font-size:16px; font-weight:700; margin-bottom:8px;">Seu Chat de Negociação</h3>
+                            <p style="font-size:13px; max-width:340px; margin:0 auto; line-height:1.5;">Aqui você falará diretamente com os motoristas das suas cargas ativas ou propostas de frete aceitas. Selecione uma conversa ao lado para começar.</p>
+                        </div>
+                    </div>
+
+                    <!-- Main Chat Area (inicialmente oculta) -->
+                    <div class="ct-chat-main" id="chat-active-panel" style="display:none;">
                         <!-- Header do chat -->
                         <div class="ct-chat-header">
                             <div class="ct-chat-user-details">
-                                <img src="../assets/images/motorista.png" alt="João Silva" style="width:40px; height:40px; border-radius:50%; object-fit:cover;">
+                                <div id="active-driver-initials" style="width:40px; height:40px; border-radius:50%; background:linear-gradient(135deg,#3b82f6,#6366f1); color:#fff; display:flex; align-items:center; justify-content:center; font-weight:800; font-size:14px; flex-shrink:0;">M</div>
                                 <div>
-                                    <h4 style="font-size:14px; font-weight:700; color:var(--text-dark);">João Silva</h4>
+                                    <h4 style="font-size:14px; font-weight:700; color:var(--text-dark);" id="active-driver-name">Motorista</h4>
                                     <p style="font-size:11px; color:var(--accent-green); font-weight:600; display:flex; align-items:center; gap:4px;">
-                                        <span class="status-indicator-dot green"></span> Online · Frete #KG-2026-1234
+                                        <span class="status-indicator-dot green"></span> Online · <span id="active-frete-code">Frete #KG-2026</span>
                                     </p>
                                 </div>
                             </div>
                             <div style="display:flex; gap:10px;">
-                                <a href="rastreamento.html" class="ct-btn ct-btn-outline ct-btn-sm">Rastrear Veículo</a>
-                                <a href="detalhes-frete.html" class="ct-btn ct-btn-secondary ct-btn-sm" style="color:var(--accent-red); border-color:var(--accent-red-light);">Reportar Ocorrência</a>
+                                <a href="rastreamento.html" id="chat-tracking-link" class="ct-btn ct-btn-outline ct-btn-sm">Rastrear Veículo</a>
+                                <a href="#" onclick="alert('Funcionalidade de denúncia em desenvolvimento.'); return false;" class="ct-btn ct-btn-secondary ct-btn-sm" style="color:var(--accent-red); border-color:var(--accent-red-light);">Reportar Ocorrência</a>
                             </div>
                         </div>
 
                         <!-- Card de Contexto Automático -->
-                        <div class="ct-chat-context-card" style="margin-top:16px;">
+                        <div class="ct-chat-context-card" style="margin-top:16px;" id="chat-context-card">
                             <div style="display:flex; align-items:center; gap:12px;">
                                 <div style="color:var(--accent-blue);">
                                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="22" height="22"><rect x="1" y="3" width="15" height="13" rx="2" ry="2"/><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>
                                 </div>
                                 <div>
-                                    <span style="font-weight:700; color:var(--text-dark);">Status do Frete: Em Trânsito</span>
-                                    <p style="font-size:11px; color:var(--text-body); margin-top:2px;">João Silva está a caminho de Natal, RN. Previsão de chegada: 18:30.</p>
+                                    <span style="font-weight:700; color:var(--text-dark);" id="context-frete-status">Status do Frete: Coleta Agendada</span>
+                                    <p style="font-size:11px; color:var(--text-body); margin-top:2px;" id="context-frete-desc">Aguardando início de trânsito para a rota.</p>
                                 </div>
                             </div>
-                            <a href="detalhes-frete.html" class="ct-btn ct-btn-primary ct-btn-sm" style="box-shadow:none;">Ver Painel</a>
+                            <a href="detalhes-frete.html" id="chat-panel-link" class="ct-btn ct-btn-primary ct-btn-sm" style="box-shadow:none;">Ver Painel</a>
                         </div>
 
                         <!-- Balões de conversa -->
-                        <div class="ct-chat-messages">
-                            <div class="ct-chat-bubble received">
-                                Olá Maria, bom dia! A carga já foi carregada e devidamente lacrada no veículo.
-                                <div class="ct-chat-bubble-time">08:15</div>
-                            </div>
-                            <div class="ct-chat-bubble sent">
-                                Bom dia, João! Excelente. Por favor, lembre de atualizar o rastreamento e nos manter avisados de qualquer parada.
-                                <div class="ct-chat-bubble-time">08:20 ✓✓</div>
-                            </div>
-                            <div class="ct-chat-bubble received">
-                                Pode deixar, já saí de Recife e estou pegando a BR-101 sentido norte. Tudo sob controle.
-                                <div class="ct-chat-bubble-time">08:32</div>
-                            </div>
-                            <div class="ct-chat-bubble received">
-                                BR-101, Km 85 — Acabei de passar do posto fiscal. Sem filas, seguindo viagem normal.
-                                <div class="ct-chat-bubble-time">14:30</div>
-                            </div>
+                        <div class="ct-chat-messages" id="chat-messages-container">
+                            <!-- Injetado por JS -->
                         </div>
 
                         <!-- Atalhos Rápidos de Texto -->
@@ -362,8 +326,8 @@
                             <button class="ct-btn ct-btn-secondary ct-btn-icon" style="border-radius:50%; display:flex; align-items:center; justify-content:center;" onclick="alert('Simulação de anexo...')">
                                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18"><path d="M21.44 11.05l-9.19 9.19a6 6 0 0 1-8.49-8.49l9.19-9.19a4 4 0 0 1 5.66 5.66l-9.2 9.19a2 2 0 0 1-2.83-2.83l8.49-8.48"/></svg>
                             </button>
-                            <input type="text" id="chat-input" class="ct-chat-input" placeholder="Digite uma mensagem para João Silva..." onkeydown="if(event.key === 'Enter') sendChatMessage()">
-                            <button class="ct-btn ct-btn-primary" style="padding: 12px 20px; border-radius:30px; box-shadow:none;" onclick="sendChatMessage()">Enviar</button>
+                            <input type="text" id="chat-input" class="ct-chat-input" placeholder="Digite uma mensagem..." onkeydown="if(event.key === 'Enter') window.sendKargoChatMessage()">
+                            <button class="ct-btn ct-btn-primary" style="padding: 12px 20px; border-radius:30px; box-shadow:none;" onclick="window.sendKargoChatMessage()">Enviar</button>
                         </div>
                     </div>
 
@@ -402,5 +366,6 @@
     <script src="../js/api-client.js"></script>
     <script src="js/auth-guard-contratante.js"></script>
     <script src="js/contratante.js"></script>
+    <script src="js/chat-contratante.js"></script>
 </body>
 </html>

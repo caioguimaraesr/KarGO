@@ -28,6 +28,7 @@ public class Carga {
     private Long id;
 
     @NotBlank
+    @jakarta.persistence.Column(length = 1000)
     private String descricao;
 
     @NotBlank
