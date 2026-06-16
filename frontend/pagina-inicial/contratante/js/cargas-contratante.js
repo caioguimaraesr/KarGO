@@ -289,6 +289,32 @@
         function renderCardConcluida(carga, frete) {
             const pesoTon = (Number(carga.pesoKg || 0) / 1000).toFixed(1);
             const motoristaNome = escapeHtml(frete.motorista?.nome || 'Motorista');
+            const temAvaliacaoMotorista = frete.avaliacaoMotoristaNota !== null && frete.avaliacaoMotoristaNota !== undefined;
+
+            let avaliacaoBlockHtml = '';
+            if (temAvaliacaoMotorista) {
+                avaliacaoBlockHtml = `
+                    <div class="ct-driver-rating">
+                        <svg class="star-icon-inline" viewBox="0 0 24 24" style="fill:#F59E0B;"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+                        Avaliação Concluída (${frete.avaliacaoMotoristaNota}/5)
+                    </div>
+                `;
+            } else {
+                avaliacaoBlockHtml = `
+                    <div style="background-color: rgba(255, 255, 255, 0.01); border: 1px solid rgba(0, 0, 0, 0.08); border-radius: 12px; padding: 14px; margin-top: 12px;">
+                        <p style="font-size: 12px; font-weight: 700; color: var(--text-secondary); margin-bottom: 10px;">Avalie o serviço do motorista:</p>
+                        <div style="display: flex; gap: 8px; margin-bottom: 12px; font-size: 24px; cursor: pointer;" class="ct-star-rating-container-${frete.id}">
+                            <span class="ct-star-motorista" data-frete-id="${frete.id}" data-index="1">☆</span>
+                            <span class="ct-star-motorista" data-frete-id="${frete.id}" data-index="2">☆</span>
+                            <span class="ct-star-motorista" data-frete-id="${frete.id}" data-index="3">☆</span>
+                            <span class="ct-star-motorista" data-frete-id="${frete.id}" data-index="4">☆</span>
+                            <span class="ct-star-motorista" data-frete-id="${frete.id}" data-index="5">☆</span>
+                        </div>
+                        <textarea class="ct-form-input ct-form-textarea" id="avaliacao-comentario-${frete.id}" placeholder="Descreva sua experiência com o motorista..." style="width:100%; border:1px solid rgba(0,0,0,0.08); border-radius: 8px; padding:10px; background:var(--bg-body); font-size:12px; resize:none; height:60px; margin-bottom:10px; outline:none; font-family:inherit;"></textarea>
+                        <button class="ct-btn ct-btn-primary ct-btn-sm js-submit-avaliacao-motorista" data-frete-id="${frete.id}" style="width: 100%; justify-content: center;">Enviar Avaliação</button>
+                    </div>
+                `;
+            }
 
             return `
                 <div class="ct-cargo-card">
@@ -315,12 +341,9 @@
                         <div style="width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,#10b981,#059669);color:#fff;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;margin-right:10px;flex-shrink:0;">
                             ${motoristaNome.charAt(0).toUpperCase()}
                         </div>
-                        <div>
+                        <div style="width: 100%;">
                             <div class="ct-driver-name">${motoristaNome}</div>
-                            <div class="ct-driver-rating">
-                                <svg class="star-icon-inline" viewBox="0 0 24 24" style="fill:#F59E0B;"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-                                Avaliação Concluída
-                            </div>
+                            ${avaliacaoBlockHtml}
                         </div>
                     </div>
                     <div class="ct-cargo-actions">
@@ -449,7 +472,61 @@
             });
         }
 
-        // Carregar dados no load inicial
+        // Avaliação de motorista - Seleção de estrelas
+        let avaliacaoMotoristaNota = {};
+        document.body.addEventListener('click', (e) => {
+            const star = e.target.closest('.ct-star-motorista');
+            if (star) {
+                const freteId = Number(star.getAttribute('data-frete-id'));
+                const index = Number(star.getAttribute('data-index'));
+                avaliacaoMotoristaNota[freteId] = index;
+
+                const container = document.querySelector(`.ct-star-rating-container-${freteId}`);
+                if (container) {
+                    const stars = container.querySelectorAll('.ct-star-motorista');
+                    stars.forEach((s, idx) => {
+                        s.textContent = idx < index ? '★' : '☆';
+                    });
+                }
+            }
+        });
+
+        // Enviar avaliação de motorista
+        document.body.addEventListener('click', async (e) => {
+            const btn = e.target.closest('.js-submit-avaliacao-motorista');
+            if (btn) {
+                e.preventDefault();
+                const freteId = Number(btn.getAttribute('data-frete-id'));
+                const nota = avaliacaoMotoristaNota[freteId] || 0;
+
+                if (nota === 0) {
+                    alert('Selecione uma nota de 1 a 5 estrelas para avaliar o motorista.');
+                    return;
+                }
+
+                const comentario = document.getElementById(`avaliacao-comentario-${freteId}`)?.value.trim() || '';
+                btn.disabled = true;
+                btn.textContent = 'Enviando...';
+
+                try {
+                    await api.avaliarFrete(freteId, nota, comentario);
+                    alert('Avaliação do motorista enviada com sucesso!');
+                    fetchDados();
+                } catch (error) {
+                    const mensagem = (error && error.message ? error.message : '').toLowerCase();
+                    if (mensagem.includes('ja avaliou')) {
+                        alert('Esse frete já possui avaliação.');
+                        fetchDados();
+                        return;
+                    }
+                    alert(`Erro ao enviar avaliação: ${error.message}`);
+                    btn.disabled = false;
+                    btn.textContent = 'Enviar Avaliação';
+                }
+            }
+        });
+
+         // Carregar dados no load inicial
         fetchDados();
     });
 })();

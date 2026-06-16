@@ -18,6 +18,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
@@ -51,6 +52,7 @@ public class FreteService {
     @Transactional
     public Frete criar(Frete frete) {
         frete.setId(null);
+        preencherCargaIdQuandoNecessario(frete);
         
         // Validar se a carga vinculada está ativa
         if (frete.getCargaId() != null) {
@@ -62,6 +64,7 @@ public class FreteService {
         }
 
         vincularReferencias(frete);
+        ajustarDataAceite(frete, null);
         
         Frete freteSalvo = freteRepository.save(frete);
 
@@ -82,11 +85,12 @@ public class FreteService {
     @Transactional
     public Frete atualizar(Long id, Frete freteAtualizado) {
         Frete frete = buscarPorId(id);
+        Long cargaIdAtualizada = resolverCargaIdAtualizada(frete, freteAtualizado);
         
         // Se a proposta está sendo aceita, validar se a carga ainda está ativa para evitar aceites duplicados
-        if (freteAtualizado.getStatus() == StatusFrete.ACEITO && frete.getCargaId() != null) {
-            Carga carga = cargaRepository.findById(frete.getCargaId())
-                .orElseThrow(() -> new RecursoNaoEncontradoException("Carga nao encontrada: " + frete.getCargaId()));
+        if (freteAtualizado.getStatus() == StatusFrete.ACEITO && cargaIdAtualizada != null) {
+            Carga carga = cargaRepository.findById(cargaIdAtualizada)
+                .orElseThrow(() -> new RecursoNaoEncontradoException("Carga nao encontrada: " + cargaIdAtualizada));
             if (!carga.getAtiva()) {
                 throw new IllegalArgumentException("Esta carga ja possui um contrato firmado e nao pode aceitar novas propostas.");
             }
@@ -105,7 +109,7 @@ public class FreteService {
         if (freteAtualizado.getDataPublicacao() != null) frete.setDataPublicacao(freteAtualizado.getDataPublicacao());
         if (freteAtualizado.getDataAceite() != null) frete.setDataAceite(freteAtualizado.getDataAceite());
         if (freteAtualizado.getStatus() != null) frete.setStatus(freteAtualizado.getStatus());
-        if (freteAtualizado.getCargaId() != null) frete.setCargaId(freteAtualizado.getCargaId());
+        if (cargaIdAtualizada != null) frete.setCargaId(cargaIdAtualizada);
 
         // Vincular referências apenas se forem fornecidas no payload, caso contrário mantém as existentes
         if (freteAtualizado.getEmbarcador() != null && freteAtualizado.getEmbarcador().getId() != null) {
@@ -121,6 +125,8 @@ public class FreteService {
             }
             frete.setVeiculo(veiculo);
         }
+
+        ajustarDataAceite(frete, statusAnterior);
 
         Frete freteAtualizado2 = freteRepository.save(frete);
 
@@ -174,6 +180,34 @@ public class FreteService {
         destino.setVeiculo(veiculo);
     }
 
+    private void preencherCargaIdQuandoNecessario(Frete frete) {
+        if (frete.getCargaId() == null && frete.getCarga() != null && frete.getCarga().getId() != null) {
+            frete.setCargaId(frete.getCarga().getId());
+        }
+    }
+
+    private Long resolverCargaIdAtualizada(Frete freteAtual, Frete freteAtualizado) {
+        if (freteAtualizado.getCargaId() != null) {
+            return freteAtualizado.getCargaId();
+        }
+
+        if (freteAtualizado.getCarga() != null && freteAtualizado.getCarga().getId() != null) {
+            return freteAtualizado.getCarga().getId();
+        }
+
+        return freteAtual.getCargaId();
+    }
+
+    private void ajustarDataAceite(Frete frete, StatusFrete statusAnterior) {
+        if (frete.getStatus() == StatusFrete.ACEITO && frete.getDataAceite() == null) {
+            frete.setDataAceite(LocalDateTime.now());
+        }
+
+        if (frete.getStatus() == StatusFrete.PUBLICADO && statusAnterior == null) {
+            frete.setDataAceite(null);
+        }
+    }
+
     private Embarcador buscarEmbarcador(Long id) {
         return embarcadorRepository.findById(id)
             .orElseThrow(() -> new RecursoNaoEncontradoException("Embarcador nao encontrado: " + id));
@@ -213,6 +247,9 @@ public class FreteService {
     @Transactional
     public Frete avaliar(Long id, Integer nota, String comentario) {
         Frete frete = buscarPorId(id);
+        if (frete.getAvaliacaoMotoristaNota() != null) {
+            throw new IllegalArgumentException("O embarcador ja avaliou este motorista para este frete");
+        }
         if (nota < 1 || nota > 5) {
             throw new IllegalArgumentException("A nota deve ser entre 1 e 5 estrelas");
         }
@@ -248,6 +285,9 @@ public class FreteService {
     @Transactional
     public Frete avaliarEmbarcador(Long id, Integer nota, String comentario) {
         Frete frete = buscarPorId(id);
+        if (frete.getAvaliacaoEmbarcadorNota() != null) {
+            throw new IllegalArgumentException("O motorista ja avaliou este embarcador para este frete");
+        }
         if (nota < 1 || nota > 5) {
             throw new IllegalArgumentException("A nota deve ser entre 1 e 5 estrelas");
         }

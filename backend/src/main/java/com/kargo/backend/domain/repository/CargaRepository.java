@@ -12,9 +12,8 @@ public interface CargaRepository extends JpaRepository<Carga, Long> {
 
     List<Carga> findByAtivaTrue();
 
-    // Retorna cargas ativas que NÃO foram aceitas, não estão em trânsito, não foram concluídas e não foram canceladas
-    @Query("SELECT c FROM Carga c WHERE c.ativa = true AND c.id NOT IN " +
-           "(SELECT DISTINCT f.carga.id FROM Frete f WHERE f.carga IS NOT NULL AND " +
-           "(f.status = 'ACEITO' OR f.status = 'EM_TRANSITO' OR f.status = 'CONCLUIDO' OR f.status = 'CANCELADO'))")
+    // Retorna apenas cargas ativas sem frete aceito (dataAceite preenchida)
+    @Query("SELECT c FROM Carga c WHERE c.ativa = true AND NOT EXISTS " +
+           "(SELECT 1 FROM Frete f WHERE f.cargaId = c.id AND f.dataAceite IS NOT NULL)")
     List<Carga> findNotAcceptedCargas();
 }

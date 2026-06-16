@@ -239,7 +239,7 @@ function initLogout() {
         }
     }
 
-    // 1) Injetar na sidebar (Desktop)
+    // Injetar na sidebar (Desktop)
     const sidebarBottom = document.querySelector('.ct-sidebar-bottom');
     if (sidebarBottom && !document.getElementById('js-sidebar-logout')) {
         const logoutLink = document.createElement('a');
@@ -261,7 +261,8 @@ function initLogout() {
             executarLogout();
         });
         sidebarBottom.appendChild(logoutLink);
-    }}
+    }
+}
 
 /* === CHAT SIMULATION === */
 window.sendChatMessage = function() {

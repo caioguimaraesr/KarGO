@@ -655,6 +655,24 @@
             }
         }
 
+        function inicializarAvaliacaoEstrelas() {
+            const ratingContainer = document.querySelector('.ct-star-rating');
+            if (!ratingContainer) return;
+
+            const stars = ratingContainer.querySelectorAll('.ct-star');
+            stars.forEach(star => {
+                star.addEventListener('click', () => {
+                    const nota = parseInt(star.dataset.index || '0');
+                    ratingContainer.dataset.rating = String(nota);
+
+                    stars.forEach(s => {
+                        const idx = parseInt(s.dataset.index || '0');
+                        s.textContent = idx <= nota ? '★' : '☆';
+                    });
+                });
+            });
+        }
+
         async function criarOcorrenciaLocal() {
             const api = window.KargoApi;
             if (!api) return;
@@ -741,6 +759,7 @@
         }
 
         document.addEventListener('DOMContentLoaded', () => {
+            inicializarAvaliacaoEstrelas();
             carregarDadosFrete();
         });
     </script>

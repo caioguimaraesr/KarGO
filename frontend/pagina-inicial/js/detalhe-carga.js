@@ -610,6 +610,7 @@
 
                     await api.createFrete({
                         titulo: tituloFrete,
+                        cargaId: selectedCargaData.cargaId,
                         descricao: descricaoFrete,
                         origem: selectedCargaData.origem,
                         destino: selectedCargaData.destino,
@@ -620,7 +621,8 @@
                         status: 'PUBLICADO',
                         embarcador: { id: selectedCargaData.embarcadorId },
                         motorista: { id: session.id },
-                        veiculo: { id: Number(selectedVehicleId) }
+                        veiculo: { id: Number(selectedVehicleId) },
+                        carga: { id: selectedCargaData.cargaId }
                     });
 
                     btnSubmitProposal.disabled = false;

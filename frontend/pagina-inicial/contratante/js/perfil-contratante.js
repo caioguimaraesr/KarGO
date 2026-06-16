@@ -128,18 +128,21 @@
                     const media = data.avaliacaoMedia ? Number(data.avaliacaoMedia).toFixed(1) : '0.0';
                     const count = data.quantidadeAvaliacoes || 0;
                     
-                    if (count === 0) {
+                    // Contar fretes concluídos
+                    const fretesConcluidos = todosFretes.filter(f => f.status === 'CONCLUIDO').length;
+
+                    if (fretesConcluidos === 0) {
                         if (pRatingEl) {
                             pRatingEl.innerHTML = `
                                 <svg class="star-icon-inline" viewBox="0 0 24 24" style="width:16px; height:16px; color:var(--text-muted); fill:none; stroke:currentColor; stroke-width:2;"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-                                <strong id="perf-rating">Sem avaliações</strong>
+                                <strong id="perf-rating">Sem avaliações</strong> (0 fretes completos)
                             `;
                         }
                     } else {
                         if (pRatingEl) {
                             pRatingEl.innerHTML = `
                                 <svg class="star-icon-inline" viewBox="0 0 24 24" style="width:16px; height:16px; color:#F59E0B; fill:#F59E0B;"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-                                <strong id="perf-rating" style="margin-left: 4px;">${media} de Avaliação</strong> (Média dada por ${count} ${count === 1 ? 'motorista parceiro' : 'motoristas parceiros'})
+                                <strong id="perf-rating" style="margin-left: 4px;">${media} de Avaliação</strong> (<span id="perf-fretes-count">${fretesConcluidos}</span> ${fretesConcluidos === 1 ? 'frete completo' : 'fretes completos'})
                             `;
                         }
                     }

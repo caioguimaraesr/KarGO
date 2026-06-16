@@ -751,7 +751,7 @@
 
             </div><!-- /.mp-content-wrapper -->
         </main>
-    </div>
+    </di
 
     <!-- Bottom Navigation Bar duplicada removida para evitar conflitos no mobile -->
 
@@ -838,7 +838,15 @@
                 } else if (f.status === 'EM_TRANSITO') {
                     actionBtnHtml = `<button class="btn-action-trip-desktop" onclick="updateTripStatus(${f.id}, 'CONCLUIDO')">Confirmar Entrega (Concluir)</button>`;
                 } else if (f.status === 'CONCLUIDO') {
-                    actionBtnHtml = `
+                    const jaAvaliouEmbarcador = f.avaliacaoEmbarcadorNota !== null && f.avaliacaoEmbarcadorNota !== undefined;
+                    actionBtnHtml = jaAvaliouEmbarcador
+                        ? `
+                    <div class="rating-wrapper-desktop" id="desktop-review-panel-${f.id}">
+                        <p style="font-size: 13px; font-weight: 700; color: var(--text-secondary); margin-bottom: 8px;">Avaliação já enviada para o contratante</p>
+                        <div style="font-size: 14px; color: var(--text-primary); margin-bottom: 8px;">⭐ <strong>${f.avaliacaoEmbarcadorNota}/5</strong></div>
+                        <div style="font-size: 13px; color: var(--text-secondary);">${f.avaliacaoEmbarcadorComentario || 'Sem comentário.'}</div>
+                    </div>`
+                        : `
                     <div class="rating-wrapper-desktop" id="desktop-review-panel-${f.id}">
                         <p style="font-size: 13px; font-weight: 700; color: var(--text-secondary);">Avalie o Suporte do Contratante:</p>
                         <div class="rating-stars-desktop">
@@ -954,6 +962,12 @@
             try {
                 await api.avaliarEmbarcador(freteId, stars, comment || 'Avaliacao do embarcador via motorista.');
 
+                const freteLocal = loadedFretes.find(f => Number(f.id) === Number(freteId));
+                if (freteLocal) {
+                    freteLocal.avaliacaoEmbarcadorNota = stars;
+                    freteLocal.avaliacaoEmbarcadorComentario = comment || 'Avaliacao do embarcador via motorista.';
+                }
+
                 panel.innerHTML = `
                     <div style="text-align: center; padding: 20px; color: var(--accent-green); font-weight: 700; font-size: 14px;">
                         ✓ Obrigado! Sua avaliação de ${stars} estrelas foi gravada no banco.
@@ -961,6 +975,12 @@
                 `;
                 showToastDesktop('Avaliação Recebida!', 'Seu feedback ajuda a manter a confiabilidade dos embarcadores.');
             } catch (err) {
+                const mensagem = (err && err.message ? err.message : '').toLowerCase();
+                if (mensagem.includes('ja avaliou')) {
+                    showToastDesktop('Avaliação já registrada', 'Esse frete já possui avaliação do embarcador.');
+                    loadTrips();
+                    return;
+                }
                 alert(`Erro ao enviar avaliação: ${err.message}`);
             }
         }
