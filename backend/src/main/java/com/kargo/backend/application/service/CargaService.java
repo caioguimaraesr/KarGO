@@ -31,6 +31,10 @@ public class CargaService {
         return cargaRepository.findByAtivaTrue();
     }
 
+    public List<Carga> listarNaoAceitas() {
+        return cargaRepository.findNotAcceptedCargas();
+    }
+
     public Carga buscarPorId(Long id) {
         return cargaRepository.findById(id)
             .orElseThrow(() -> new RecursoNaoEncontradoException("Carga nao encontrada: " + id));

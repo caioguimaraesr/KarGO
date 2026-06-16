@@ -5,6 +5,146 @@
     'use strict';
 
     document.addEventListener('DOMContentLoaded', () => {
+        const api = window.KargoApi;
+        let selectedCargaData = null;
+
+        function formatCurrency(value) {
+            return Number(value || 0).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+        }
+
+        function formatBidValue(value) {
+            return Number(value || 0).toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+        }
+
+        function parseBidValue(value) {
+            const sanitized = String(value || '').replace(/\./g, '').replace(',', '.').replace(/[^0-9.]/g, '');
+            const parsed = Number(sanitized);
+            return Number.isFinite(parsed) ? parsed : 0;
+        }
+
+        function truncateText(value, maxLen) {
+            const text = String(value || '').trim();
+            if (!maxLen || text.length <= maxLen) return text;
+            return text.slice(0, maxLen - 3).trimEnd() + '...';
+        }
+
+        function toLocalDateTimeString(date) {
+            const local = new Date(date.getTime() - date.getTimezoneOffset() * 60000);
+            return local.toISOString().slice(0, 19);
+        }
+
+        function toDateString(date) {
+            const local = new Date(date.getTime() - date.getTimezoneOffset() * 60000);
+            return local.toISOString().slice(0, 10);
+        }
+
+        function setTextById(id, value) {
+            const el = document.getElementById(id);
+            if (el && value !== undefined && value !== null && String(value).trim() !== '') {
+                el.textContent = String(value);
+            }
+        }
+
+        function classifyCargaBadge(descricao) {
+            const d = String(descricao || '').toLowerCase();
+            if (d.includes('refriger')) return 'Carga Refrigerada';
+            if (d.includes('granel') || d.includes('soja') || d.includes('milho')) return 'Carga Granel';
+            if (d.includes('quimic') || d.includes('combust')) return 'Carga Química';
+            return 'Carga Seca';
+        }
+
+        function applyCargaToPage(carga) {
+            if (!carga) return;
+
+            const origem = carga.origem || 'Origem';
+            const destino = carga.destino || 'Destino';
+            const descricao = carga.descricao || 'Carga';
+            const pesoKg = Number(carga.pesoKg || 0);
+            const pesoTon = (pesoKg / 1000);
+            const pesoTonTxt = `${pesoTon.toFixed(1)} Ton`;
+            const pesoSpecTxt = `${pesoKg.toLocaleString('pt-BR')} kg (${pesoTon.toFixed(1)} Ton)`;
+            const valor = Number(carga.valorSugerido || 0);
+            const valorFmt = formatCurrency(valor);
+            const valorBid = formatBidValue(valor);
+            const shipper = (carga.embarcador && carga.embarcador.nome) ? carga.embarcador.nome : 'Embarcador';
+            const cargaId = carga.id ? String(carga.id) : '-';
+            const badgeTipo = classifyCargaBadge(descricao);
+
+            selectedCargaData = {
+                cargaId: Number(carga.id || 0),
+                embarcadorId: Number((carga.embarcador && carga.embarcador.id) || 0),
+                origem: origem,
+                destino: destino,
+                pesoKg: pesoKg || 1000,
+                descricao: descricao
+            };
+
+            setTextById('detail-header-origin', origem);
+            setTextById('detail-header-destination', destino);
+            setTextById('detail-route-origin', origem);
+            setTextById('detail-route-destination', destino);
+            setTextById('detail-origin-address', origem);
+            setTextById('detail-destination-address', destino);
+            setTextById('detail-carga-id', `CRG-${cargaId}`);
+            setTextById('detail-badge-type', badgeTipo);
+            setTextById('detail-carga-descricao', descricao);
+            setTextById('detail-peso-spec', pesoSpecTxt);
+            setTextById('detail-peso-small', pesoTonTxt);
+            setTextById('detail-price-table', valorFmt);
+            setTextById('detail-price-mobile', valorFmt);
+            setTextById('detail-price-main', valorFmt);
+            setTextById('js-modal-suggested-val', valorFmt);
+            setTextById('detail-shipper-name', shipper);
+            setTextById('detail-success-shipper', shipper);
+
+            const btnApply = document.getElementById('btn-apply-trigger');
+            if (btnApply) {
+                btnApply.setAttribute('data-suggested', valorBid);
+                btnApply.setAttribute('data-origin', origem);
+                btnApply.setAttribute('data-destination', destino);
+                btnApply.setAttribute('data-carga-id', String(carga.id || ''));
+                btnApply.setAttribute('data-embarcador-id', String((carga.embarcador && carga.embarcador.id) || ''));
+                btnApply.setAttribute('data-peso-kg', String(pesoKg));
+                btnApply.setAttribute('data-descricao', descricao);
+            }
+
+            const bidInput = document.getElementById('driver-bid-input');
+            if (bidInput) {
+                bidInput.value = valorBid;
+            }
+        }
+
+        async function loadSelectedCarga() {
+            const params = new URLSearchParams(window.location.search);
+            const idFromUrl = Number(params.get('id') || 0);
+            let carga = null;
+
+            if (idFromUrl && api && typeof api.getCarga === 'function') {
+                try {
+                    carga = await api.getCarga(idFromUrl);
+                } catch (error) {
+                    // Fallback para sessionStorage se a API falhar.
+                }
+            }
+
+            if (!carga) {
+                try {
+                    const raw = sessionStorage.getItem('kargoSelectedCarga');
+                    const parsed = raw ? JSON.parse(raw) : null;
+                    if (parsed && (!idFromUrl || Number(parsed.id) === idFromUrl)) {
+                        carga = parsed;
+                    }
+                } catch (error) {
+                    // Ignore parse errors e mantém layout padrão.
+                }
+            }
+
+            if (carga) {
+                applyCargaToPage(carga);
+            }
+        }
+
+        loadSelectedCarga();
 
         // --- 1. TOAST NOTIFICATION SYSTEM ---
         function showToast(message, type = 'success') {
@@ -16,7 +156,7 @@
             const toast = document.createElement('div');
             toast.className = `kargo-toast ${type}`;
             
-            let iconSvg = '';
+            let iconSvg;
             if (type === 'success') {
                 iconSvg = `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>`;
             } else {
@@ -93,9 +233,12 @@
         const btnShareTrigger = document.getElementById('btn-share-trigger');
         if (btnShareTrigger) {
             btnShareTrigger.addEventListener('click', async () => {
+                const origem = document.getElementById('detail-route-origin')?.textContent?.trim() || 'Origem';
+                const destino = document.getElementById('detail-route-destination')?.textContent?.trim() || 'Destino';
+                const valor = document.getElementById('detail-price-main')?.textContent?.trim() || '';
                 const shareData = {
-                    title: 'KarGO — Recife → Fortaleza',
-                    text: 'Confira esta excelente carga disponível: Recife/PE para Fortaleza/CE com frete de R$ 4.500,00',
+                    title: `KarGO — ${origem} -> ${destino}`,
+                    text: `Confira esta carga disponível: ${origem} para ${destino}${valor ? ` com frete sugerido de ${valor}` : ''}`,
                     url: window.location.href
                 };
 
@@ -184,7 +327,7 @@
         }
 
         if (btnSubmitProposal) {
-            btnSubmitProposal.addEventListener('click', () => {
+            btnSubmitProposal.addEventListener('click', async () => {
                 const finalBid = driverBidInput ? driverBidInput.value.trim() : currentSuggestedAmount;
 
                 if (!finalBid) {
@@ -192,24 +335,70 @@
                     return;
                 }
 
+                if (!api) {
+                    showToast('Cliente de API indisponivel.', 'error');
+                    return;
+                }
+
+                const session = api.getSession();
+                if (!session || session.type !== 'MOTORISTA') {
+                    showToast('Faca login como motorista para enviar propostas.', 'error');
+                    return;
+                }
+
+                if (!selectedCargaData || !selectedCargaData.embarcadorId) {
+                    showToast('Nao foi possivel identificar os dados da carga.', 'error');
+                    return;
+                }
+
                 const originalText = btnSubmitProposal.textContent;
                 btnSubmitProposal.disabled = true;
                 btnSubmitProposal.textContent = 'Enviando...';
 
-                setTimeout(() => {
+                try {
+                    const veiculos = await api.listVeiculos();
+                    const veiculoAtivo = veiculos.find(v => v.motorista && v.motorista.id === session.id && v.ativo);
+
+                    if (!veiculoAtivo) {
+                        throw new Error('Nenhum veiculo ativo encontrado para este motorista.');
+                    }
+
+                    const now = new Date();
+                    const entrega = new Date(now.getTime() + 24 * 60 * 60 * 1000);
+                    const tituloFrete = truncateText(`Proposta para carga ${selectedCargaData.cargaId || ''}`.trim(), 120);
+                    const descricaoFrete = truncateText(`Proposta enviada via detalhe da carga para ${selectedCargaData.descricao || 'Carga'}`.trim(), 240);
+
+                    await api.createFrete({
+                        titulo: tituloFrete,
+                        descricao: descricaoFrete,
+                        origem: selectedCargaData.origem,
+                        destino: selectedCargaData.destino,
+                        pesoCargaKg: selectedCargaData.pesoKg || 1000,
+                        valorFrete: parseBidValue(finalBid),
+                        dataEntrega: toDateString(entrega),
+                        dataPublicacao: toLocalDateTimeString(now),
+                        status: 'PUBLICADO',
+                        embarcador: { id: selectedCargaData.embarcadorId },
+                        motorista: { id: session.id },
+                        veiculo: { id: veiculoAtivo.id }
+                    });
+
                     btnSubmitProposal.disabled = false;
                     btnSubmitProposal.textContent = originalText;
-                    
-                    // Obtém veículo selecionado
+
                     const selectVehicle = document.getElementById('driver-vehicle-select');
-                    const vehicleName = selectVehicle ? selectVehicle.options[selectVehicle.selectedIndex].text : 'Scania R450 6x2 - Sider (Placa KRG-2E26)';
+                    const vehicleName = selectVehicle ? selectVehicle.options[selectVehicle.selectedIndex].text : 'Veiculo';
                     const plateMatch = vehicleName.match(/\((.*?)\)/);
-                    const plate = plateMatch ? plateMatch[1] : 'KRG-2E26';
+                    const plate = plateMatch ? plateMatch[1] : '';
                     const modelName = vehicleName.split(' - ')[0];
 
                     showSuccess(finalBid);
-                    showToast(`Sua proposta de R$ ${finalBid} com o veículo ${modelName} (${plate}) foi enviada com sucesso!`);
-                }, 800);
+                    showToast(`Sua proposta de R$ ${finalBid} com o veiculo ${modelName}${plate ? ` (${plate})` : ''} foi enviada com sucesso!`);
+                } catch (error) {
+                    btnSubmitProposal.disabled = false;
+                    btnSubmitProposal.textContent = originalText;
+                    showToast(`Falha ao enviar proposta: ${error.message}`, 'error');
+                }
             });
         }
 
@@ -234,8 +423,7 @@
         const btnChatTrigger = document.getElementById('btn-chat-trigger');
         if (btnChatTrigger) {
             btnChatTrigger.addEventListener('click', () => {
-                const originalContent = btnChatTrigger.innerHTML;
-                
+
                 // Transição de estado de clique
                 btnChatTrigger.disabled = true;
                 btnChatTrigger.innerHTML = `

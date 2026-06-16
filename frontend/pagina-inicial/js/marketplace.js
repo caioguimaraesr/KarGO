@@ -31,6 +31,12 @@
             return Number.isFinite(parsed) ? parsed : 0;
         }
 
+        function truncateText(value, maxLen) {
+            const text = String(value || '').trim();
+            if (!maxLen || text.length <= maxLen) return text;
+            return text.slice(0, maxLen - 3).trimEnd() + '...';
+        }
+
         function toLocalDateTimeString(date) {
             const local = new Date(date.getTime() - date.getTimezoneOffset() * 60000);
             return local.toISOString().slice(0, 19);
@@ -52,32 +58,55 @@
 
         let todasCargas = [];
 
-        function renderCargas(cargas) {
-            const cardsContainer = document.getElementById('cards-container');
-            const resultsCount = document.getElementById('results-count');
-            if (!cardsContainer) return;
+        function getTimeAgoLabel(dateStr) {
+             if (!dateStr) return 'Publicada agora';
 
-            if (cargas.length === 0) {
-                cardsContainer.innerHTML = `<div style="grid-column: 1 / -1; text-align:center; padding:40px; color:var(--text-muted); font-size:14px; width:100%;">Nenhuma carga encontrada para os filtros aplicados.</div>`;
-                if (resultsCount) resultsCount.textContent = '0';
-                return;
-            }
+             try {
+                 const date = new Date(dateStr);
+                 const now = new Date();
+                 const diffMs = now - date;
+                 const diffMins = Math.floor(diffMs / 60000);
+                 const diffHours = Math.floor(diffMs / 3600000);
+                 const diffDays = Math.floor(diffMs / 86400000);
 
-            const html = cargas.map((carga) => {
-                const valor = Number(carga.valorSugerido || 0);
-                const suggested = formatBidValue(valor);
-                const origem = escapeHtml(carga.origem || 'Origem');
-                const destino = escapeHtml(carga.destino || 'Destino');
-                const descricao = escapeHtml(carga.descricao || 'Carga');
-                const pesoTon = (Number(carga.pesoKg || 0) / 1000).toFixed(1);
-                const embarcadorNome = escapeHtml(carga.embarcador && carga.embarcador.nome ? carga.embarcador.nome : 'Embarcador');
-                const embarcadorId = carga.embarcador && carga.embarcador.id ? carga.embarcador.id : '';
-                return `
-                    <article class="cargo-card">
-                        <div class="card-header-row">
-                            <span class="card-tag info">NOVA CARGA</span>
-                            <span class="card-publish-time">Publicada agora</span>
-                        </div>
+                 if (diffMins < 1) return 'Publicada agora';
+                 if (diffMins < 60) return `Publicada há ${diffMins}m`;
+                 if (diffHours < 24) return `Publicada há ${diffHours}h`;
+                 if (diffDays < 7) return `Publicada há ${diffDays}d`;
+
+                 return date.toLocaleDateString('pt-BR');
+             } catch (e) {
+                 return 'Publicada agora';
+             }
+         }
+
+         function renderCargas(cargas) {
+             const cardsContainer = document.getElementById('cards-container');
+             const resultsCount = document.getElementById('results-count');
+             if (!cardsContainer) return;
+
+             if (cargas.length === 0) {
+                 cardsContainer.innerHTML = `<div style="grid-column: 1 / -1; text-align:center; padding:40px; color:var(--text-muted); font-size:14px; width:100%;">Nenhuma carga encontrada para os filtros aplicados.</div>`;
+                 if (resultsCount) resultsCount.textContent = '0';
+                 return;
+             }
+
+             const html = cargas.map((carga) => {
+                 const valor = Number(carga.valorSugerido || 0);
+                 const suggested = formatBidValue(valor);
+                 const origem = escapeHtml(carga.origem || 'Origem');
+                 const destino = escapeHtml(carga.destino || 'Destino');
+                 const descricao = escapeHtml(carga.descricao || 'Carga');
+                 const pesoTon = (Number(carga.pesoKg || 0) / 1000).toFixed(1);
+                 const embarcadorNome = escapeHtml(carga.embarcador && carga.embarcador.nome ? carga.embarcador.nome : 'Embarcador');
+                 const embarcadorId = carga.embarcador && carga.embarcador.id ? carga.embarcador.id : '';
+                 const publishTime = getTimeAgoLabel(carga.dataPublicacao);
+                 return `
+                     <article class="cargo-card">
+                         <div class="card-header-row">
+                             <span class="card-tag info">NOVA CARGA</span>
+                             <span class="card-publish-time">${publishTime}</span>
+                         </div>
                         <div class="card-main-grid">
                             <div class="card-route-horizontal">
                                 <div class="route-origin">
@@ -107,7 +136,7 @@
                                     <h3 class="price-value">${formatCurrency(valor)}</h3>
                                 </div>
                                 <div class="actions-group">
-                                    <a href="detalhe-carga.html" class="card-btn-outline">Ver Detalhes</a>
+                                    <a href="detalhe-carga.html?id=${carga.id}" class="card-btn-outline js-view-details-btn" data-carga-id="${carga.id}">Ver Detalhes</a>
                                     <button class="card-btn-primary js-propose-btn" data-suggested="${suggested}" data-origin="${origem}" data-destination="${destino}" data-carga-id="${carga.id}" data-embarcador-id="${embarcadorId}" data-peso-kg="${Number(carga.pesoKg || 0)}" data-descricao="${descricao}">Enviar Proposta</button>
                                 </div>
                             </div>
@@ -130,74 +159,105 @@
         }
 
         function applyFilters() {
-            const originFilter = (document.getElementById('quick-origin')?.value || '').trim().toLowerCase();
-            const destinationFilter = (document.getElementById('quick-destination')?.value || '').trim().toLowerCase();
-            
-            const truckEl = document.getElementById('quick-truck');
-            const truckFilter = truckEl ? truckEl.value : 'todos';
-            
-            const weightSlider = document.getElementById('weight-slider');
-            const maxWeightTon = weightSlider ? parseFloat(weightSlider.value) : 50;
-            
-            const priceMin = parseFloat(document.getElementById('price-min')?.value || '0') || 0;
-            const priceMax = parseFloat(document.getElementById('price-max')?.value || '9999999') || 9999999;
-            
-            const selectedTypes = Array.from(document.querySelectorAll('input[name="carga-tipo"]:checked')).map(cb => cb.value);
+             const originFilter = (document.getElementById('quick-origin')?.value || '').trim().toLowerCase();
+             const destinationFilter = (document.getElementById('quick-destination')?.value || '').trim().toLowerCase();
 
-            const filtered = todasCargas.filter(carga => {
-                // Origem
-                if (originFilter && !(carga.origem || '').toLowerCase().includes(originFilter)) return false;
-                // Destino
-                if (destinationFilter && !(carga.destino || '').toLowerCase().includes(destinationFilter)) return false;
-                
-                // Tipo de caminhão
-                if (truckFilter !== 'todos') {
-                    const desc = (carga.descricao || '').toLowerCase();
-                    if (truckFilter === 'bau' && !desc.includes('bau') && !desc.includes('baú') && !desc.includes('seco')) return false;
-                    if (truckFilter === 'sider' && !desc.includes('sider')) return false;
-                    if (truckFilter === 'graneleiro' && !desc.includes('granel') && !desc.includes('soja') && !desc.includes('milho') && !desc.includes('adubo')) return false;
-                    if (truckFilter === 'refrigerado' && !desc.includes('refriger') && !desc.includes('frio') && !desc.includes('congelado')) return false;
-                }
-                
-                // Peso (filtro é tonelada máxima, no banco pesoKg é em Kg)
-                const pesoKg = parseFloat(carga.pesoKg || 0);
-                if (pesoKg > maxWeightTon * 1000) return false;
-                
-                // Preço
-                const valor = parseFloat(carga.valorSugerido || 0);
-                if (valor < priceMin || valor > priceMax) return false;
-                
-                // Checkbox Tipo de Carga
-                if (selectedTypes.length > 0) {
-                    const desc = (carga.descricao || '').toLowerCase();
-                    const matchesType = selectedTypes.some(type => {
-                        if (type === 'alimenticia') return desc.includes('aliment') || desc.includes('comida') || desc.includes('grão') || desc.includes('soja') || desc.includes('milho') || desc.includes('graneleiro');
-                        if (type === 'construcao') return desc.includes('construc') || desc.includes('cimento') || desc.includes('tijolo') || desc.includes('ferro') || desc.includes('madeira') || desc.includes('telha');
-                        if (type === 'quimica') return desc.includes('quimic') || desc.includes('combustivel') || desc.includes('oleo') || desc.includes('ácido') || desc.includes('fertilizante');
-                        if (type === 'eletronicos') return desc.includes('eletron') || desc.includes('tv') || desc.includes('computador') || desc.includes('celular') || desc.includes('aparelho');
-                        if (type === 'geral') return true;
-                        return false;
-                    });
-                    if (!matchesType) return false;
-                }
-                
-                return true;
-            });
+             const truckEl = document.getElementById('quick-truck');
+             const truckFilter = truckEl ? truckEl.value : 'todos';
 
-            renderCargas(filtered);
-        }
+             const weightSlider = document.getElementById('weight-slider');
+             const maxWeightTon = weightSlider ? parseFloat(weightSlider.value) : 50;
+
+             const priceMin = parseFloat(document.getElementById('price-min')?.value || '0') || 0;
+             const priceMax = parseFloat(document.getElementById('price-max')?.value || '9999999') || 9999999;
+
+             const selectedTypes = Array.from(document.querySelectorAll('input[name="carga-tipo"]:checked')).map(cb => cb.value);
+
+             const filtered = todasCargas.filter(carga => {
+                 // Filtro principal: Excluir cargas que já foram aceitas, estão em trânsito ou concluídas
+                 const statusExclusion = carga.status === 'ACEITO' || carga.status === 'EM_TRANSITO' || carga.status === 'CONCLUIDO' || carga.status === 'CANCELADO';
+                 if (statusExclusion) return false;
+
+                 // Origem
+                 if (originFilter && !(carga.origem || '').toLowerCase().includes(originFilter)) return false;
+                 // Destino
+                 if (destinationFilter && !(carga.destino || '').toLowerCase().includes(destinationFilter)) return false;
+
+                 // Tipo de caminhão
+                 if (truckFilter !== 'todos') {
+                     const desc = (carga.descricao || '').toLowerCase();
+                     if (truckFilter === 'bau' && !desc.includes('bau') && !desc.includes('baú') && !desc.includes('seco')) return false;
+                     if (truckFilter === 'sider' && !desc.includes('sider')) return false;
+                     if (truckFilter === 'graneleiro' && !desc.includes('granel') && !desc.includes('soja') && !desc.includes('milho') && !desc.includes('adubo')) return false;
+                     if (truckFilter === 'refrigerado' && !desc.includes('refriger') && !desc.includes('frio') && !desc.includes('congelado')) return false;
+                 }
+
+                 // Peso (filtro é tonelada máxima, no banco pesoKg é em Kg)
+                 const pesoKg = parseFloat(carga.pesoKg || 0);
+                 if (pesoKg > maxWeightTon * 1000) return false;
+
+                 // Preço
+                 const valor = parseFloat(carga.valorSugerido || 0);
+                 if (valor < priceMin || valor > priceMax) return false;
+
+                 // Checkbox Tipo de Carga
+                 if (selectedTypes.length > 0) {
+                     const desc = (carga.descricao || '').toLowerCase();
+                     const matchesType = selectedTypes.some(type => {
+                         if (type === 'alimenticia') return desc.includes('aliment') || desc.includes('comida') || desc.includes('grão') || desc.includes('soja') || desc.includes('milho') || desc.includes('graneleiro');
+                         if (type === 'construcao') return desc.includes('construc') || desc.includes('cimento') || desc.includes('tijolo') || desc.includes('ferro') || desc.includes('madeira') || desc.includes('telha');
+                         if (type === 'quimica') return desc.includes('quimic') || desc.includes('combustivel') || desc.includes('oleo') || desc.includes('ácido') || desc.includes('fertilizante');
+                         if (type === 'eletronicos') return desc.includes('eletron') || desc.includes('tv') || desc.includes('computador') || desc.includes('celular') || desc.includes('aparelho');
+                         if (type === 'geral') return true;
+                         return false;
+                     });
+                     if (!matchesType) return false;
+                 }
+
+                 return true;
+             });
+
+             renderCargas(filtered);
+         }
 
         async function loadCargasFromBackend() {
-            if (!api) return;
+              if (!api) return;
 
-            try {
-                const cargas = await api.listCargas();
-                todasCargas = Array.isArray(cargas) ? cargas : [];
-                applyFilters();
-            } catch (error) {
-                showToast(`Falha ao carregar cargas: ${error.message}`, 'error');
-            }
-        }
+              try {
+                  let cargas = [];
+
+                  // Preferir endpoint de cargas que não foram aceitas para evitar exibir cargas ja aceitas.
+                  if (typeof api.listCargasNaoAceitas === 'function') {
+                      try {
+                          cargas = await api.listCargasNaoAceitas();
+                      } catch (e) {
+                          // Fallback para listagem de ativas caso o endpoint de não aceitas falhe.
+                          try {
+                              cargas = await api.listCargasAtivas();
+                          } catch (e2) {
+                              // Fallback final para listagem geral caso tudo falhe.
+                              cargas = await api.listCargas();
+                          }
+                      }
+                  } else {
+                      cargas = await api.listCargas();
+                  }
+
+                  const lista = Array.isArray(cargas) ? cargas : [];
+                  // Filtro robusto: apenas cargas ativas E sem status de conclusão
+                  todasCargas = lista.filter(c => {
+                      if (!c || c.ativa === false) return false;
+                      // Excluir cargas com status que indica que já foram processadas
+                      if (c.status === 'ACEITO' || c.status === 'EM_TRANSITO' || c.status === 'CONCLUIDO' || c.status === 'CANCELADO') {
+                          return false;
+                      }
+                      return true;
+                  });
+                  applyFilters();
+              } catch (error) {
+                  showToast(`Falha ao carregar cargas: ${error.message}`, 'error');
+              }
+          }
 
         // --- 1. SLIDER DE PESO ---
         const weightSlider = document.getElementById('weight-slider');
@@ -440,6 +500,18 @@
 
         // Captura todos os botões de proposta dos cards
         document.body.addEventListener('click', (e) => {
+            const detailsLink = e.target.closest('.js-view-details-btn');
+            if (detailsLink) {
+                const cargaId = Number(detailsLink.getAttribute('data-carga-id') || 0);
+                if (cargaId) {
+                    const cargaSelecionada = todasCargas.find(c => Number(c.id) === cargaId);
+                    if (cargaSelecionada) {
+                        sessionStorage.setItem('kargoSelectedCarga', JSON.stringify(cargaSelecionada));
+                    }
+                }
+                return;
+            }
+
             const btn = e.target.closest('.js-propose-btn');
             if (btn && modalBackdrop) {
                 e.preventDefault();
@@ -536,20 +608,24 @@
                     const now = new Date();
                     const entrega = new Date(now.getTime() + 24 * 60 * 60 * 1000);
 
+                    const tituloFrete = truncateText(`Proposta para carga ${selectedCargaData.cargaId || ''}`.trim(), 120);
+                    const descricaoFrete = truncateText(`Proposta enviada via marketplace para ${selectedCargaData.descricao || 'Carga'}`.trim(), 240);
+
                     await api.createFrete({
-                        titulo: `Proposta para carga ${selectedCargaData.cargaId || ''}`.trim(),
-                        descricao: `Proposta enviada via marketplace para ${selectedCargaData.descricao}`,
-                        origem: selectedCargaData.origem,
-                        destino: selectedCargaData.destino,
-                        pesoCargaKg: selectedCargaData.pesoKg || 1000,
-                        valorFrete: parseBidValue(finalBid),
-                        dataEntrega: toDateString(entrega),
-                        dataPublicacao: toLocalDateTimeString(now),
-                        status: 'PUBLICADO',
-                        embarcador: { id: selectedCargaData.embarcadorId },
-                        motorista: { id: session.id },
-                        veiculo: { id: veiculoAtivo.id }
-                    });
+                         titulo: tituloFrete,
+                         descricao: descricaoFrete,
+                         origem: selectedCargaData.origem,
+                         destino: selectedCargaData.destino,
+                         pesoCargaKg: selectedCargaData.pesoKg || 1000,
+                         valorFrete: parseBidValue(finalBid),
+                         dataEntrega: toDateString(entrega),
+                         dataPublicacao: toLocalDateTimeString(now),
+                         status: 'PUBLICADO',
+                         embarcador: { id: selectedCargaData.embarcadorId },
+                         motorista: { id: session.id },
+                         veiculo: { id: veiculoAtivo.id },
+                         carga: { id: selectedCargaData.cargaId }
+                     });
 
                     btnSubmitProposal.disabled = false;
                     btnSubmitProposal.textContent = originalText;

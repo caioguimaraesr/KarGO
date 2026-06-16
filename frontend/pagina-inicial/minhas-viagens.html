@@ -748,7 +748,8 @@
             <section class="trips-grid-desktop" id="trips-grid">
                 <div style="text-align:center;padding:40px;color:var(--text-muted);font-size:14px;width:100%;">Carregando suas viagens...</div>
             </section>
-            
+
+            </div><!-- /.mp-content-wrapper -->
         </main>
     </div>
 
@@ -878,7 +879,21 @@
 
         async function updateTripStatus(id, newStatus) {
             try {
-                await api.updateFrete(id, { status: newStatus });
+                let freteAtual = loadedFretes.find(f => Number(f.id) === Number(id));
+                if (!freteAtual) {
+                    freteAtual = await api.getFrete(id);
+                }
+
+                if (!freteAtual) {
+                    throw new Error('Frete nao encontrado para atualizacao.');
+                }
+
+                const payloadAtualizado = {
+                    ...freteAtual,
+                    status: newStatus
+                };
+
+                await api.updateFrete(id, payloadAtualizado);
                 showToastDesktop('Status Atualizado!', `A viagem foi atualizada para: ${newStatus}`);
                 loadTrips();
             } catch (err) {
@@ -926,7 +941,7 @@
         }
 
         // Enviar Avaliação
-        function submitReviewDesktop(freteId) {
+        async function submitReviewDesktop(freteId) {
             const stars = selectedStarsMap[freteId] || 0;
             if (stars === 0) {
                 alert('Selecione uma nota de 1 a 5 estrelas para avaliar o contratante.');
@@ -936,27 +951,18 @@
             const comment = document.getElementById(`review-comment-desktop-${freteId}`).value.trim();
             const panel = document.getElementById(`desktop-review-panel-${freteId}`);
 
-            // Encontrar o frete correspondente para obter o id do embarcador
-            const frete = loadedFretes.find(f => Number(f.id) === Number(freteId));
-            if (frete && frete.embarcador && frete.embarcador.id) {
-                const embId = frete.embarcador.id;
-                const storageKey = `kargo_embarcador_ratings_${embId}`;
-                const raw = localStorage.getItem(storageKey);
-                const ratings = raw ? JSON.parse(raw) : [];
-                ratings.push({
-                    nota: stars,
-                    comentario: comment,
-                    data: new Date().toISOString()
-                });
-                localStorage.setItem(storageKey, JSON.stringify(ratings));
-            }
+            try {
+                await api.avaliarEmbarcador(freteId, stars, comment || 'Avaliacao do embarcador via motorista.');
 
-            panel.innerHTML = `
-                <div style="text-align: center; padding: 20px; color: var(--accent-green); font-weight: 700; font-size: 14px;">
-                    ✓ Obrigado! Sua avaliação de ${stars} estrelas foi gravada no sistema.
-                </div>
-            `;
-            showToastDesktop('Avaliação Recebida!', 'Seu feedback ajuda a manter a confiabilidade de contratantes.');
+                panel.innerHTML = `
+                    <div style="text-align: center; padding: 20px; color: var(--accent-green); font-weight: 700; font-size: 14px;">
+                        ✓ Obrigado! Sua avaliação de ${stars} estrelas foi gravada no banco.
+                    </div>
+                `;
+                showToastDesktop('Avaliação Recebida!', 'Seu feedback ajuda a manter a confiabilidade dos embarcadores.');
+            } catch (err) {
+                alert(`Erro ao enviar avaliação: ${err.message}`);
+            }
         }
 
         document.addEventListener('DOMContentLoaded', () => {

@@ -243,7 +243,12 @@
                     btn.textContent = '...';
 
                     try {
-                        await api.updateFrete(freteId, { status: 'ACEITO' });
+                        const freteAtual = await api.getFrete(freteId);
+                        const payloadAtualizado = {
+                            ...freteAtual,
+                            status: 'ACEITO'
+                        };
+                        await api.updateFrete(freteId, payloadAtualizado);
                         alert(`Contrato firmado com sucesso com o motorista ${driverName}.`);
                         fetchDashboardData();
                     } catch (error) {

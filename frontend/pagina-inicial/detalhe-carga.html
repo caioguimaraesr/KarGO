@@ -115,12 +115,12 @@
                 <div class="dc-load-header-card no-hover">
                     <div class="dc-load-title-row">
                         <div class="dc-load-route-title">
-                            <span class="route-city-text">Recife, PE</span>
+                            <span class="route-city-text" id="detail-header-origin">Recife, PE</span>
                             <span class="route-arrow-neon">➔</span>
-                            <span class="route-city-text">Fortaleza, CE</span>
+                            <span class="route-city-text" id="detail-header-destination">Fortaleza, CE</span>
                         </div>
                         <div class="dc-load-badges">
-                            <span class="dc-badge badge-blue">Carga Seca</span>
+                            <span class="dc-badge badge-blue" id="detail-badge-type">Carga Seca</span>
                             <span class="dc-badge badge-green">
                                 <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>
                                 Verificada
@@ -129,7 +129,7 @@
                         </div>
                     </div>
                     <div class="dc-load-sub-row">
-                        <span>ID da Carga: <strong>CRG-849372-PE</strong></span>
+                        <span>ID da Carga: <strong id="detail-carga-id">CRG-849372-PE</strong></span>
                         <span class="divider-dot"></span>
                         <span>Publicado há 5 min</span>
                         <span class="divider-dot"></span>
@@ -157,11 +157,11 @@
                             <div class="card-route-horizontal">
                                 <div class="route-origin">
                                     <span class="route-label">COLETA (ORIGEM)</span>
-                                    <h4 class="route-city">Recife, PE</h4>
+                                    <h4 class="route-city" id="detail-route-origin">Recife, PE</h4>
                                     <span class="route-time">Saída: Amanhã às 08h00</span>
                                 </div>
                                 <div class="route-connector-container">
-                                    <span class="route-distance">750 km</span>
+                                    <span class="route-distance" id="detail-route-distance-top">750 km</span>
                                     <div class="route-line-connector">
                                         <svg class="route-truck-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
                                             <rect x="1" y="3" width="15" height="13" rx="2" ry="2"/>
@@ -173,7 +173,7 @@
                                 </div>
                                 <div class="route-destination">
                                     <span class="route-label">ENTREGA (DESTINO)</span>
-                                    <h4 class="route-city">Fortaleza, CE</h4>
+                                    <h4 class="route-city" id="detail-route-destination">Fortaleza, CE</h4>
                                     <span class="route-time">Prazo: 09/05 até 18h00</span>
                                 </div>
                             </div>
@@ -182,18 +182,18 @@
                             <div class="dc-route-addresses-horizontal">
                                 <div class="route-address-col">
                                     <span class="address-label">Endereço de Coleta:</span>
-                                    <p class="address-text">Av. Boa Viagem, 1234 — Boa Viagem</p>
+                                    <p class="address-text" id="detail-origin-address">Av. Boa Viagem, 1234 — Boa Viagem</p>
                                 </div>
                                 <div class="route-address-col">
                                     <span class="address-label">Endereço de Entrega:</span>
-                                    <p class="address-text">Av. Beira Mar, 5678 — Meireles</p>
+                                    <p class="address-text" id="detail-destination-address">Av. Beira Mar, 5678 — Meireles</p>
                                 </div>
                             </div>
                             
                             <div class="dc-route-footer">
                                 <div class="route-metric">
                                     <span class="metric-label">DISTÂNCIA TOTAL</span>
-                                    <span class="metric-value">750 km</span>
+                                    <span class="metric-value" id="detail-route-distance-metric">750 km</span>
                                 </div>
                                 <div class="route-metric">
                                     <span class="metric-label">TIPO DE VIAGEM</span>
@@ -215,7 +215,7 @@
                                     </div>
                                     <div class="item-text">
                                         <span class="item-label">TIPO DE CARGA</span>
-                                        <span class="item-value">Eletrônicos (Carga Seca)</span>
+                                        <span class="item-value" id="detail-carga-descricao">Eletrônicos (Carga Seca)</span>
                                     </div>
                                 </div>
                                 
@@ -225,7 +225,7 @@
                                     </div>
                                     <div class="item-text">
                                         <span class="item-label">PESO LÍQUIDO</span>
-                                        <span class="item-value">5.000 kg (5 Ton)</span>
+                                        <span class="item-value" id="detail-peso-spec">5.000 kg (5 Ton)</span>
                                     </div>
                                 </div>
                                 
@@ -278,7 +278,7 @@
                                     </tr>
                                     <tr class="total-row">
                                         <td colspan="2">FRETE MÉDIO SUGERIDO PELA PLATAFORMA (BRUTO)</td>
-                                        <td class="text-right font-numeric text-primary-color font-heavy">R$ 4.500,00</td>
+                                        <td class="text-right font-numeric text-primary-color font-heavy" id="detail-price-table">R$ 4.500,00</td>
                                     </tr>
                                 </tbody>
                             </table>
@@ -304,7 +304,7 @@
                                 <div class="dc-finance-card-item total-card">
                                     <div class="card-item-title-row">
                                         <span class="card-item-title">Frete Sugerido (Bruto)</span>
-                                        <span class="card-item-value text-primary font-heavy font-numeric">R$ 4.500,00</span>
+                                        <span class="card-item-value text-primary font-heavy font-numeric" id="detail-price-mobile">R$ 4.500,00</span>
                                     </div>
                                 </div>
                             </div>
@@ -393,18 +393,18 @@
                         <div class="dc-sticky-action-card">
                             <div class="price-header">
                                 <span class="price-lbl">FRETE MÉDIO SUGERIDO</span>
-                                <h2 class="price-val-large">R$ 4.500,00</h2>
+                                <h2 class="price-val-large" id="detail-price-main">R$ 4.500,00</h2>
                                 <span class="price-tag-badge">Na Entrega</span>
                             </div>
                             
                             <div class="quick-specs-small">
                                 <div class="small-spec">
                                     <span class="small-label">DISTÂNCIA</span>
-                                    <span class="small-value">750 km</span>
+                                    <span class="small-value" id="detail-distance-small">750 km</span>
                                 </div>
                                 <div class="small-spec">
                                     <span class="small-label">PESO</span>
-                                    <span class="small-value">5 Ton</span>
+                                    <span class="small-value" id="detail-peso-small">5 Ton</span>
                                 </div>
                                 <div class="small-spec font-colored">
                                     <span class="small-label">PAGAMENTO PADRÃO</span>
@@ -413,7 +413,7 @@
                             </div>
                             
                             <div class="action-buttons-group">
-                                <button class="btn-dc-primary js-propose-btn" id="btn-apply-trigger" data-suggested="4.500,00" data-origin="Recife, PE" data-destination="Fortaleza, CE">
+                                <button class="btn-dc-primary js-propose-btn" id="btn-apply-trigger" data-suggested="4.500,00" data-origin="Recife, PE" data-destination="Fortaleza, CE" data-carga-id="" data-embarcador-id="" data-peso-kg="0" data-descricao="">
                                     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
                                     Enviar Minha Proposta
                                 </button>
@@ -451,7 +451,7 @@
                                 
                                 <div class="shipper-name-info">
                                     <div class="shipper-name-container">
-                                        <h4 class="shipper-comp-name">TransLog Nordeste</h4>
+                                        <h4 class="shipper-comp-name" id="detail-shipper-name">TransLog Nordeste</h4>
                                         <a href="#" class="shipper-small-profile-link">Ver Perfil</a>
                                     </div>
                                     <span class="shipper-verif-text">Empresa Homologada</span>
@@ -571,8 +571,8 @@
                 <svg width="42" height="42" viewBox="0 0 24 24" fill="none" stroke="#10B981" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>
             </div>
             <h2 class="success-title">Proposta Enviada!</h2>
-            <p class="success-text">Sua oferta financeira foi enviada com sucesso. O embarcador <strong>TransLog Nordeste</strong> analisará sua proposta de <strong id="js-success-proposed-val">R$ 4.500,00</strong>, sua classificação de motorista verificado e os detalhes do seu veículo em minutos.</p>
-            
+            <p class="success-text">Sua oferta financeira foi enviada com sucesso. O embarcador <strong id="detail-success-shipper">TransLog Nordeste</strong> analisará sua proposta de <strong id="js-success-proposed-val">R$ 4.500,00</strong>, sua classificação de motorista verificado e os detalhes do seu veículo em minutos.</p>
+
             <div class="success-info-mini">
                 <span>Número da Proposta: <strong>PROP-849372-PE</strong></span>
             </div>

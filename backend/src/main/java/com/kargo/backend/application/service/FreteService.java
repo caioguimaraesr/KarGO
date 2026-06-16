@@ -1,10 +1,13 @@
 package com.kargo.backend.application.service;
 
 import com.kargo.backend.domain.exception.RecursoNaoEncontradoException;
+import com.kargo.backend.domain.model.Carga;
 import com.kargo.backend.domain.model.Embarcador;
 import com.kargo.backend.domain.model.Frete;
 import com.kargo.backend.domain.model.Motorista;
+import com.kargo.backend.domain.model.StatusFrete;
 import com.kargo.backend.domain.model.Veiculo;
+import com.kargo.backend.domain.repository.CargaRepository;
 import com.kargo.backend.domain.repository.EmbarcadorRepository;
 import com.kargo.backend.domain.repository.FreteRepository;
 import com.kargo.backend.domain.repository.MotoristaRepository;
@@ -22,6 +25,7 @@ import java.util.List;
 public class FreteService {
 
     private final FreteRepository freteRepository;
+    private final CargaRepository cargaRepository;
     private final EmbarcadorRepository embarcadorRepository;
     private final MotoristaRepository motoristaRepository;
     private final VeiculoRepository veiculoRepository;
@@ -55,6 +59,9 @@ public class FreteService {
     public Frete atualizar(Long id, Frete freteAtualizado) {
         Frete frete = buscarPorId(id);
         
+        // Armazenar o status anterior para verificar se houve mudança
+        StatusFrete statusAnterior = frete.getStatus();
+
         if (freteAtualizado.getTitulo() != null) frete.setTitulo(freteAtualizado.getTitulo());
         if (freteAtualizado.getDescricao() != null) frete.setDescricao(freteAtualizado.getDescricao());
         if (freteAtualizado.getOrigem() != null) frete.setOrigem(freteAtualizado.getOrigem());
@@ -81,7 +88,19 @@ public class FreteService {
             frete.setVeiculo(veiculo);
         }
 
-        return freteRepository.save(frete);
+        Frete freteAtualizado2 = freteRepository.save(frete);
+
+        // Se o status mudou para ACEITO, EM_TRANSITO ou CONCLUIDO, marcar a carga como inativa
+        if (freteAtualizado2.getCarga() != null &&
+            (freteAtualizado2.getStatus() == StatusFrete.ACEITO ||
+             freteAtualizado2.getStatus() == StatusFrete.EM_TRANSITO ||
+             freteAtualizado2.getStatus() == StatusFrete.CONCLUIDO)) {
+            Carga carga = freteAtualizado2.getCarga();
+            carga.setAtiva(false);
+            cargaRepository.save(carga);
+        }
+
+        return freteAtualizado2;
     }
 
     @Transactional

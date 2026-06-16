@@ -78,9 +78,17 @@ public class Frete {
     @JoinColumn(name = "veiculo_id")
     private Veiculo veiculo;
 
+    @JoinColumn(name = "carga_id")
+    @ManyToOne(optional = true)
+    private Carga carga;
+
     private Integer avaliacaoMotoristaNota;
 
     private String avaliacaoMotoristaComentario;
+
+    private Integer avaliacaoEmbarcadorNota;
+
+    private String avaliacaoEmbarcadorComentario;
 }
 
 

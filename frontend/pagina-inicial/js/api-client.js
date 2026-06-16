@@ -263,6 +263,10 @@
         return request('/api/cargas/ativas', { method: 'GET' });
     }
 
+    async function listCargasNaoAceitas() {
+        return request('/api/cargas/nao-aceitas', { method: 'GET' });
+    }
+
     async function listCargasByEmbarcador(embarcadorId) {
         return request('/api/cargas/embarcador/' + embarcadorId, { method: 'GET' });
     }
@@ -398,6 +402,7 @@
         // Cargas
         listCargas,
         listCargasAtivas,
+        listCargasNaoAceitas,
         listCargasByEmbarcador,
         getCarga,
         createCarga,

@@ -96,7 +96,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const profile = sessionStorage.getItem('kargoProfile') || 'motorista';
 
     // Determine total steps based on profile
-    const hasVehicleStep = (profile === 'motorista' || profile === 'pme');
+    const hasVehicleStep = (profile === 'motorista');
     let totalSteps = hasVehicleStep ? 4 : 3;
 
     function updateWizardUI() {
@@ -129,7 +129,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (desktopBackBtn) desktopBackBtn.style.display = '';
 
         // Se for embarcador, ajustar os cards de documentos dinamicamente
-        if (profile === 'embarcador') {
+        if (profile === 'embarcador' || profile === 'pme') {
             const cards = document.querySelectorAll('#wizard-step-3 .upload-card');
             if (cards.length >= 3) {
                 // Card 1
@@ -162,8 +162,8 @@ document.addEventListener('DOMContentLoaded', () => {
     // Wire up wizard navigation buttons
     document.querySelectorAll('[data-wizard-next]').forEach(btn => {
         btn.addEventListener('click', () => {
-            // Se estiver na etapa 2 (Veículo) e perfil for motorista ou pme, validar campos antes de prosseguir
-            if (wizardStep === 2 && (profile === 'motorista' || profile === 'pme')) {
+            // Na etapa de veiculo, validar campos apenas para motorista.
+            if (wizardStep === 2 && profile === 'motorista') {
                 const chipSelected = document.querySelector('#vehicle-type-chips .chip.selected');
                 const placa = (document.getElementById('wizard-plate')?.value || '').trim();
                 const modelo = (document.getElementById('wizard-model')?.value || '').trim();
@@ -229,8 +229,8 @@ document.addEventListener('DOMContentLoaded', () => {
     // Finalize button -> show analysis
     document.querySelectorAll('[data-wizard-finish]').forEach(btn => {
         btn.addEventListener('click', async () => {
-            // Salvar veículo real do motorista no backend
-            if (profile === 'motorista' || profile === 'pme') {
+            // Salvar veiculo apenas para contas de motorista.
+            if (profile === 'motorista') {
                 const motoristaId = api && api.getSession() ? api.getSession().id : null;
                 if (motoristaId) {
                     const chipSelected = document.querySelector('#vehicle-type-chips .chip.selected');

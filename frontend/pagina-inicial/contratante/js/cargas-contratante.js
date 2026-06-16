@@ -343,8 +343,13 @@
                     btn.textContent = 'Processando...';
 
                     try {
-                        // Atualizar status do frete escolhido para ACEITO
-                        await api.updateFrete(freteId, { status: 'ACEITO' });
+                        // Atualizar status enviando payload completo para passar nas validacoes do backend
+                        const freteAtual = await api.getFrete(freteId);
+                        const payloadAtualizado = {
+                            ...freteAtual,
+                            status: 'ACEITO'
+                        };
+                        await api.updateFrete(freteId, payloadAtualizado);
 
                         // Para simular a limpeza do chat reativa, podemos salvar nos logs
                         alert(`Contrato firmado com sucesso! O motorista ${driverName} foi vinculado à sua carga.`);
