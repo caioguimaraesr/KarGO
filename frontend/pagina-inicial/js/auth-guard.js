@@ -97,6 +97,26 @@
                 window.location.href = 'perfil.html';
             });
         });
+
+        // Injetar botão de logout dinâmico na sidebar
+        const sidebarBottom = document.querySelector('.mp-sidebar-bottom');
+        if (sidebarBottom && !document.getElementById('js-dynamic-logout-mp')) {
+            const logoutLink = document.createElement('a');
+            logoutLink.id = 'js-dynamic-logout-mp';
+            logoutLink.href = '#';
+            logoutLink.className = 'mp-menu-item';
+            logoutLink.style.color = '#ff3b30'; // Vermelho elegante
+            logoutLink.style.marginTop = '10px';
+            logoutLink.innerHTML = `
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color: #ff3b30;"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+                Sair da Conta
+            `;
+            logoutLink.addEventListener('click', (e) => {
+                e.preventDefault();
+                api.logout();
+            });
+            sidebarBottom.appendChild(logoutLink);
+        }
     }
 
     // 4) Preencher imediatamente com dados da sessão local

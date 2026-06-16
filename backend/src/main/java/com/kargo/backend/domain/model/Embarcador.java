@@ -30,8 +30,8 @@ public class Embarcador extends Usuario {
     @Column(unique = true, nullable = false)
     private String cpfCnpj;
 
-    @DecimalMin(value = "0.0")
-    private BigDecimal avaliacaoMedia;
+    @jakarta.validation.constraints.DecimalMin(value = "0.0")
+    private java.math.BigDecimal avaliacaoMedia;
 
     private Integer quantidadeAvaliacoes = 0;
 

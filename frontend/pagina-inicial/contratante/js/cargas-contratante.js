@@ -238,7 +238,9 @@
                                             ${motNome.charAt(0).toUpperCase()}
                                         </div>
                                         <div>
-                                            <span style="font-weight:700; font-size:13px; display:block; color:var(--text-dark);">${motNome}</span>
+                                            <span style="font-size:13px; display:block; margin-bottom: 2px;">
+                                                <a href="#" class="js-view-driver-profile" data-driver-id="${prop.motorista?.id}" data-frete-id="${prop.id}" style="color:var(--accent-blue); text-decoration:none; font-weight:700; cursor:pointer;" title="Ver Perfil do Motorista">${motNome}</a>
+                                            </span>
                                             <span style="font-size:11px; color:var(--text-muted); display:block;">
                                                 <svg class="star-icon-inline" viewBox="0 0 24 24" style="fill:#F59E0B; width:10px; height:10px; display:inline-block;"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
                                                 ${veicDesc}

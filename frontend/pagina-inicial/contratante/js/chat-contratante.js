@@ -52,8 +52,8 @@
                 const fretes = await api.getFretesByEmbarcador(embarcadorId);
                 const todosFretes = Array.isArray(fretes) ? fretes : [];
 
-                // Filtrar apenas fretes ativos (ACEITO ou EM_TRANSITO)
-                fretesAtivos = todosFretes.filter(f => f.status === 'ACEITO' || f.status === 'EM_TRANSITO');
+                // Filtrar apenas fretes ativos (ACEITO, EM_TRANSITO ou PUBLICADO/PROPOSTA)
+                fretesAtivos = todosFretes.filter(f => f.status === 'ACEITO' || f.status === 'EM_TRANSITO' || f.status === 'PUBLICADO');
 
                 renderChatList();
                 
@@ -122,7 +122,41 @@
             });
         }
 
-        function selectChat(frete) {
+        function formatTime(dateStr) {
+            if (!dateStr) return '';
+            try {
+                const date = new Date(dateStr);
+                return String(date.getHours()).padStart(2, '0') + ':' + String(date.getMinutes()).padStart(2, '0');
+            } catch (e) {
+                return '';
+            }
+        }
+
+        async function pollMessages() {
+            if (!selectedFrete) return;
+
+            try {
+                const msgs = await api.listMensagens(selectedFrete.motorista.id, embarcadorId, null);
+                if (Array.isArray(msgs)) {
+                    const formattedMsgs = msgs.map(msg => ({
+                        sender: msg.remetente.toLowerCase() === 'embarcador' ? 'sent' : 'received',
+                        text: msg.texto,
+                        time: formatTime(msg.dataEnvio)
+                    }));
+
+                    const previousLen = (chatHistories[selectedFrete.id] || []).length;
+                    chatHistories[selectedFrete.id] = formattedMsgs;
+
+                    if (formattedMsgs.length !== previousLen) {
+                        renderMessages();
+                    }
+                }
+            } catch (err) {
+                console.warn("Erro no polling das mensagens do contratante:", err);
+            }
+        }
+
+        async function selectChat(frete) {
             selectedFrete = frete;
 
             // Ajustar UI da lista
@@ -147,27 +181,46 @@
 
             // Ajustar card de contexto
             const isEmTransito = frete.status === 'EM_TRANSITO';
+            const isPublicado = frete.status === 'PUBLICADO';
             if (contextStatus) {
-                contextStatus.textContent = `Status do Frete: ${isEmTransito ? 'Em Trânsito' : 'Coleta Agendada'}`;
+                if (isPublicado) {
+                    contextStatus.textContent = 'Status do Frete: Proposta Recebida';
+                } else {
+                    contextStatus.textContent = `Status do Frete: ${isEmTransito ? 'Em Trânsito' : 'Coleta Agendada'}`;
+                }
             }
             if (contextDesc) {
-                contextDesc.textContent = isEmTransito 
-                    ? `${motNome} está a caminho do destino (${escapeHtml(frete.destino)}).`
-                    : `${motNome} está com a coleta agendada de ${escapeHtml(frete.origem)} para ${escapeHtml(frete.destino)}.`;
+                if (isPublicado) {
+                    contextDesc.textContent = `${motNome} enviou uma proposta de frete no valor de ${api.formatCurrency(frete.valorFrete)}.`;
+                } else {
+                    contextDesc.textContent = isEmTransito 
+                        ? `${motNome} está a caminho do destino (${escapeHtml(frete.destino)}).`
+                        : `${motNome} está com a coleta agendada de ${escapeHtml(frete.origem)} para ${escapeHtml(frete.destino)}.`;
+                }
             }
 
-            // Inicializar histórico de conversas se não houver
-            if (!chatHistories[frete.id]) {
-                chatHistories[frete.id] = [
-                    {
-                        sender: 'received',
-                        text: `Olá! Sou o motorista ${motNome}. Minha coleta de ${escapeHtml(frete.origem)} para ${escapeHtml(frete.destino)} está confirmada com o frete de ${api.formatCurrency(frete.valorFrete)}. Tudo pronto para iniciar!`,
-                        time: 'Hoje'
-                    }
-                ];
+            // Buscar mensagens do banco
+            await pollMessages();
+
+            // Envia a de boas-vindas do motorista pro banco se estiver vazio
+            if (!chatHistories[frete.id] || chatHistories[frete.id].length === 0) {
+                try {
+                    const welcomeText = `Olá! Sou o motorista ${motNome}. Minha coleta de ${frete.origem} para ${frete.destino} está confirmada com o frete de ${api.formatCurrency(frete.valorFrete)}. Tudo pronto para iniciar!`;
+                    const payload = {
+                        motoristaId: frete.motorista.id,
+                        embarcadorId: embarcadorId,
+                        remetente: 'MOTORISTA',
+                        texto: welcomeText,
+                        freteId: frete.id,
+                        rota: `${frete.origem} → ${frete.destino}`
+                    };
+                    await api.enviarMensagem(payload);
+                    await pollMessages();
+                } catch(e) {
+                    console.error("Erro ao enviar mensagem de boas-vindas:", e);
+                }
             }
 
-            renderMessages();
             if (chatInput) chatInput.focus();
         }
 
@@ -190,48 +243,30 @@
         }
 
         // Função global de envio de mensagens
-        window.sendKargoChatMessage = function() {
+        window.sendKargoChatMessage = async function() {
             if (!chatInput || !chatInput.value.trim() || !selectedFrete) return;
 
             const text = chatInput.value.trim();
-            const now = new Date();
-            const timeStr = now.getHours().toString().padStart(2, '0') + ':' + now.getMinutes().toString().padStart(2, '0');
 
-            // Salvar no histórico
-            chatHistories[selectedFrete.id].push({
-                sender: 'sent',
-                text: text,
-                time: timeStr
-            });
-
-            chatInput.value = '';
-            renderMessages();
-
-            // Simular resposta do motorista após 2.5 segundos
-            setTimeout(() => {
-                if (!selectedFrete) return;
-                
-                const replies = [
-                    'Entendido, estou ciente!',
-                    'Pode deixar, vou manter o painel de rastreamento atualizado.',
-                    'Sem problemas. Qualquer novidade te aviso por aqui.',
-                    'Perfeito. Já iniciei os preparativos para a rota.',
-                    'Certo, obrigado pelas orientações!'
-                ];
-                
-                const replyText = replies[Math.floor(Math.random() * replies.length)];
-                
-                chatHistories[selectedFrete.id].push({
-                    sender: 'received',
-                    text: replyText,
-                    time: timeStr
-                });
-
-                renderMessages();
-            }, 2500);
+            try {
+                const payload = {
+                    motoristaId: selectedFrete.motorista.id,
+                    embarcadorId: embarcadorId,
+                    remetente: 'EMBARCADOR',
+                    texto: text,
+                    freteId: selectedFrete.id,
+                    rota: `${selectedFrete.origem} → ${selectedFrete.destino}`
+                };
+                await api.enviarMensagem(payload);
+                chatInput.value = '';
+                await pollMessages();
+            } catch (error) {
+                console.error("Erro ao enviar mensagem do contratante:", error);
+            }
         };
 
         // Carregar dados no load inicial
         loadActiveChats();
+        setInterval(pollMessages, 3000);
     });
 })();

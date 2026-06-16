@@ -51,13 +51,46 @@ public class FreteService {
     @Transactional
     public Frete criar(Frete frete) {
         frete.setId(null);
+        
+        // Validar se a carga vinculada está ativa
+        if (frete.getCargaId() != null) {
+            Carga carga = cargaRepository.findById(frete.getCargaId())
+                .orElseThrow(() -> new RecursoNaoEncontradoException("Carga nao encontrada: " + frete.getCargaId()));
+            if (!carga.getAtiva()) {
+                throw new IllegalArgumentException("Esta carga ja foi contratada e nao aceita novas propostas.");
+            }
+        }
+
         vincularReferencias(frete);
-        return freteRepository.save(frete);
+        
+        Frete freteSalvo = freteRepository.save(frete);
+
+        Long cId = freteSalvo.getCargaId();
+        if (cId != null &&
+            (freteSalvo.getStatus() == StatusFrete.ACEITO ||
+             freteSalvo.getStatus() == StatusFrete.EM_TRANSITO ||
+             freteSalvo.getStatus() == StatusFrete.CONCLUIDO)) {
+            cargaRepository.findById(cId).ifPresent(carga -> {
+                carga.setAtiva(false);
+                cargaRepository.save(carga);
+            });
+        }
+
+        return freteSalvo;
     }
 
     @Transactional
     public Frete atualizar(Long id, Frete freteAtualizado) {
         Frete frete = buscarPorId(id);
+        
+        // Se a proposta está sendo aceita, validar se a carga ainda está ativa para evitar aceites duplicados
+        if (freteAtualizado.getStatus() == StatusFrete.ACEITO && frete.getCargaId() != null) {
+            Carga carga = cargaRepository.findById(frete.getCargaId())
+                .orElseThrow(() -> new RecursoNaoEncontradoException("Carga nao encontrada: " + frete.getCargaId()));
+            if (!carga.getAtiva()) {
+                throw new IllegalArgumentException("Esta carga ja possui um contrato firmado e nao pode aceitar novas propostas.");
+            }
+        }
         
         // Armazenar o status anterior para verificar se houve mudança
         StatusFrete statusAnterior = frete.getStatus();
@@ -72,6 +105,7 @@ public class FreteService {
         if (freteAtualizado.getDataPublicacao() != null) frete.setDataPublicacao(freteAtualizado.getDataPublicacao());
         if (freteAtualizado.getDataAceite() != null) frete.setDataAceite(freteAtualizado.getDataAceite());
         if (freteAtualizado.getStatus() != null) frete.setStatus(freteAtualizado.getStatus());
+        if (freteAtualizado.getCargaId() != null) frete.setCargaId(freteAtualizado.getCargaId());
 
         // Vincular referências apenas se forem fornecidas no payload, caso contrário mantém as existentes
         if (freteAtualizado.getEmbarcador() != null && freteAtualizado.getEmbarcador().getId() != null) {
@@ -90,14 +124,27 @@ public class FreteService {
 
         Frete freteAtualizado2 = freteRepository.save(frete);
 
-        // Se o status mudou para ACEITO, EM_TRANSITO ou CONCLUIDO, marcar a carga como inativa
-        if (freteAtualizado2.getCarga() != null &&
+        // Se o status mudou para ACEITO, EM_TRANSITO ou CONCLUIDO, marcar a carga como inativa e cancelar concorrentes
+        Long cId = freteAtualizado2.getCargaId();
+        if (cId != null &&
             (freteAtualizado2.getStatus() == StatusFrete.ACEITO ||
              freteAtualizado2.getStatus() == StatusFrete.EM_TRANSITO ||
              freteAtualizado2.getStatus() == StatusFrete.CONCLUIDO)) {
-            Carga carga = freteAtualizado2.getCarga();
-            carga.setAtiva(false);
-            cargaRepository.save(carga);
+            cargaRepository.findById(cId).ifPresent(carga -> {
+                carga.setAtiva(false);
+                cargaRepository.save(carga);
+            });
+
+            // Cancelar outras propostas concorrentes no status PUBLICADO
+            List<Frete> outrasPropostas = freteRepository.findByCargaId(cId);
+            if (outrasPropostas != null) {
+                for (Frete outra : outrasPropostas) {
+                    if (!outra.getId().equals(freteAtualizado2.getId()) && outra.getStatus() == StatusFrete.PUBLICADO) {
+                        outra.setStatus(StatusFrete.CANCELADO);
+                        freteRepository.save(outra);
+                    }
+                }
+            }
         }
 
         return freteAtualizado2;
@@ -195,6 +242,41 @@ public class FreteService {
         }
 
         motoristaRepository.save(motorista);
+        return freteSalvo;
+    }
+
+    @Transactional
+    public Frete avaliarEmbarcador(Long id, Integer nota, String comentario) {
+        Frete frete = buscarPorId(id);
+        if (nota < 1 || nota > 5) {
+            throw new IllegalArgumentException("A nota deve ser entre 1 e 5 estrelas");
+        }
+        frete.setAvaliacaoEmbarcadorNota(nota);
+        frete.setAvaliacaoEmbarcadorComentario(comentario);
+        Frete freteSalvo = freteRepository.save(frete);
+
+        // Recalcular a avaliação média do embarcador
+        Embarcador embarcador = frete.getEmbarcador();
+        List<Frete> fretesDoEmbarcador = freteRepository.findByEmbarcadorId(embarcador.getId());
+        List<Frete> fretesComNota = fretesDoEmbarcador.stream()
+                .filter(f -> f.getAvaliacaoEmbarcadorNota() != null)
+                .toList();
+
+        if (!fretesComNota.isEmpty()) {
+            double soma = fretesComNota.stream()
+                    .mapToInt(Frete::getAvaliacaoEmbarcadorNota)
+                    .sum();
+            double media = soma / fretesComNota.size();
+            
+            BigDecimal mediaBd = BigDecimal.valueOf(media).setScale(1, RoundingMode.HALF_UP);
+            embarcador.setAvaliacaoMedia(mediaBd);
+            embarcador.setQuantidadeAvaliacoes(fretesComNota.size());
+        } else {
+            embarcador.setAvaliacaoMedia(BigDecimal.ZERO);
+            embarcador.setQuantidadeAvaliacoes(0);
+        }
+
+        embarcadorRepository.save(embarcador);
         return freteSalvo;
     }
 }

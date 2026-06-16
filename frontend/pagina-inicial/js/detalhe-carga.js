@@ -87,7 +87,7 @@
             setTextById('detail-destination-address', destino);
             setTextById('detail-carga-id', `CRG-${cargaId}`);
             setTextById('detail-badge-type', badgeTipo);
-            setTextById('detail-carga-descricao', descricao);
+            setTextById('detail-carga-descricao', descricao.split('[')[0].trim());
             setTextById('detail-peso-spec', pesoSpecTxt);
             setTextById('detail-peso-small', pesoTonTxt);
             setTextById('detail-price-table', valorFmt);
@@ -111,6 +111,168 @@
             const bidInput = document.getElementById('driver-bid-input');
             if (bidInput) {
                 bidInput.value = valorBid;
+            }
+        }
+
+        function formatTempoPlataforma(dataCadastroStr) {
+            if (!dataCadastroStr) return 'Recente';
+            try {
+                const dataCad = new Date(dataCadastroStr);
+                const now = new Date();
+                const diffMs = now - dataCad;
+                const diffDays = Math.floor(diffMs / (1000 * 60 * 60 * 24));
+                const diffMonths = Math.floor(diffDays / 30);
+                const diffYears = Math.floor(diffDays / 365);
+
+                if (diffYears > 0) {
+                    return `${diffYears} ${diffYears === 1 ? 'ano' : 'anos'}`;
+                }
+                if (diffMonths > 0) {
+                    return `${diffMonths} ${diffMonths === 1 ? 'mês' : 'meses'}`;
+                }
+                return `${diffDays} ${diffDays === 1 ? 'dia' : 'dias'}`;
+            } catch (e) {
+                return 'Recente';
+            }
+        }
+
+        function formatCpfCnpj(val) {
+            if (!val) return '—';
+            const clean = String(val).replace(/\D/g, '');
+            if (clean.length === 11) {
+                return clean.replace(/(\d{3})(\d{3})(\d{3})(\d{2})/, "$1.$2.$3-$4");
+            } else if (clean.length === 14) {
+                return clean.replace(/(\d{2})(\d{3})(\d{3})(\d{4})(\d{2})/, "$1.$2.$3/$4-$5");
+            }
+            return val;
+        }
+
+        function formatPhone(val) {
+            if (!val) return '—';
+            const clean = String(val).replace(/\D/g, '');
+            if (clean.length === 11) {
+                return clean.replace(/(\d{2})(\d{5})(\d{4})/, "($1) $2-$3");
+            } else if (clean.length === 10) {
+                return clean.replace(/(\d{2})(\d{4})(\d{4})/, "($1) $2-$3");
+            }
+            return val;
+        }
+
+        async function loadShipperDetails(shipperId, origemCarga) {
+            if (!api) return;
+            try {
+                const emb = await api.getEmbarcador(shipperId);
+                if (!emb) return;
+
+                let totalFretes = 0;
+                try {
+                    const fretes = await api.getFretesByEmbarcador(shipperId);
+                    if (fretes && Array.isArray(fretes)) {
+                        totalFretes = fretes.length;
+                    }
+                } catch(e) {
+                    console.warn("Erro ao obter fretes do embarcador:", e);
+                }
+
+                const initials = (emb.nome || 'EM').split(' ').map(w=>w[0]).join('').slice(0,2).toUpperCase();
+
+                const avatarBox = document.querySelector('.shipper-avatar-box');
+                if (avatarBox) {
+                    avatarBox.innerHTML = `
+                        <div style="width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; background: linear-gradient(135deg, #1e293b, #0f172a); border: 2px solid var(--accent-blue); color: var(--accent-blue); font-weight: 800; border-radius: 50%; font-size: 16px; text-shadow: 0 0 10px rgba(0,136,255,0.3);">
+                            ${initials}
+                        </div>
+                        <div class="shipper-verif-badge">
+                            <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.5"><polyline points="20 6 9 17 4 12"/></svg>
+                        </div>
+                    `;
+                }
+
+                const hasEmbAval = emb.avaliacaoMedia !== null && parseFloat(emb.avaliacaoMedia) > 0;
+                const statsRow = document.querySelector('.shipper-stats-row');
+                if (statsRow) {
+                    statsRow.innerHTML = `
+                        <div class="stat-small">
+                            <span class="stat-val" style="font-size: 11px;">${hasEmbAval ? `⭐ ${parseFloat(emb.avaliacaoMedia).toFixed(1)}` : 'Sem avaliações'}</span>
+                            <span class="stat-lbl">Classificação</span>
+                        </div>
+                        <div class="stat-small">
+                            <span class="stat-val">${totalFretes}</span>
+                            <span class="stat-lbl">Fretes Efetuados</span>
+                        </div>
+                        <div class="stat-small">
+                            <span class="stat-val">${formatTempoPlataforma(emb.dataCadastro)}</span>
+                            <span class="stat-lbl">Na Plataforma</span>
+                        </div>
+                    `;
+                }
+
+                const modalName = document.getElementById('shipper-modal-name');
+                const modalCnpj = document.getElementById('shipper-modal-cnpj');
+                const modalEmail = document.getElementById('shipper-modal-email');
+                const modalPhone = document.getElementById('shipper-modal-phone');
+                const modalAddress = document.getElementById('shipper-modal-address');
+                const modalAvatarBox = document.getElementById('shipper-modal-avatar-box');
+                const modalRating = document.getElementById('shipper-modal-rating');
+
+                if (modalName) modalName.textContent = emb.nome;
+                if (modalCnpj) modalCnpj.textContent = formatCpfCnpj(emb.cpfCnpj);
+                if (modalEmail) modalEmail.textContent = emb.email;
+                if (modalPhone) modalPhone.textContent = formatPhone(emb.telefone);
+                if (modalRating) {
+                    modalRating.innerHTML = hasEmbAval 
+                        ? `⭐ ${parseFloat(emb.avaliacaoMedia).toFixed(1)} <span style="color: #64748b; font-weight: 500; font-size: 11px;">(${emb.quantidadeAvaliacoes || 0} ${emb.quantidadeAvaliacoes === 1 ? 'avaliação' : 'avaliações'})</span>`
+                        : 'Sem avaliações';
+                }
+
+                const localAddress = localStorage.getItem(`kargoShipperAddress_${emb.id}`);
+                if (modalAddress) {
+                    modalAddress.textContent = localAddress || origemCarga || 'Av. Cruz Cabugá, 1234 — Recife, PE';
+                }
+
+                if (modalAvatarBox) {
+                    modalAvatarBox.innerHTML = `
+                        <div style="width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; background: linear-gradient(135deg, #1e293b, #0f172a); border: 3px solid var(--accent-blue); color: var(--accent-blue); font-weight: 800; border-radius: 50%; font-size: 26px; text-shadow: 0 0 15px rgba(0,136,255,0.4);">
+                            ${initials}
+                        </div>
+                        <div class="shipper-verif-badge" style="width: 22px; height: 22px; right: -2px; bottom: -2px; border-width: 3px;">
+                            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.5"><polyline points="20 6 9 17 4 12"/></svg>
+                        </div>
+                    `;
+                }
+
+                const btnViewProfile = document.getElementById('btn-view-shipper-profile');
+                const shipperModal = document.getElementById('shipper-modal-backdrop');
+                const closeBtn1 = document.getElementById('js-close-shipper-modal');
+                const closeBtn2 = document.getElementById('js-close-shipper-modal-btn');
+
+                if (btnViewProfile && shipperModal) {
+                    btnViewProfile.addEventListener('click', (e) => {
+                        e.preventDefault();
+                        shipperModal.classList.add('show');
+                        document.body.style.overflow = 'hidden';
+                    });
+                }
+
+                const closeShipperModal = () => {
+                    if (shipperModal) {
+                        shipperModal.classList.remove('show');
+                        document.body.style.overflow = '';
+                    }
+                };
+
+                if (closeBtn1) closeBtn1.addEventListener('click', closeShipperModal);
+                if (closeBtn2) closeBtn2.addEventListener('click', closeShipperModal);
+                if (shipperModal) {
+                    shipperModal.addEventListener('click', (e) => {
+                        if (e.target === shipperModal) {
+                            closeShipperModal();
+                        }
+                    });
+                }
+
+            } catch (err) {
+                console.error("Erro ao carregar detalhes do embarcador:", err);
             }
         }
 
@@ -141,6 +303,9 @@
 
             if (carga) {
                 applyCargaToPage(carga);
+                if (carga.embarcador && carga.embarcador.id) {
+                    loadShipperDetails(carga.embarcador.id, carga.origem);
+                }
             }
         }
 
@@ -273,7 +438,7 @@
 
         let currentSuggestedAmount = '4.500,00';
 
-        function openModal() {
+        async function openModal() {
             if (btnApplyTrigger && modalBackdrop) {
                 const suggested = btnApplyTrigger.getAttribute('data-suggested') || '4.500,00';
                 currentSuggestedAmount = suggested;
@@ -283,6 +448,81 @@
                 }
                 if (driverBidInput) {
                     driverBidInput.value = suggested;
+                }
+
+                // Carregar dados dinâmicos do motorista logado e seus veículos
+                const session = api.getSession();
+                if (session && session.type === 'MOTORISTA') {
+                    try {
+                        const motorista = await api.getMotorista(session.id);
+                        if (motorista) {
+                            // Atualizar nome
+                            const nameEl = document.querySelector('.driver-mini-name');
+                            if (nameEl) nameEl.textContent = motorista.nome;
+
+                            // Iniciais do avatar
+                            const initials = (motorista.nome || 'MT').split(' ').map(w=>w[0]).join('').slice(0,2).toUpperCase();
+                            const avatarEl = document.getElementById('driver-modal-avatar');
+                            if (avatarEl) avatarEl.textContent = initials;
+
+                            // Reputação
+                            const ratingEl = document.querySelector('.driver-mini-rating');
+                            if (ratingEl) {
+                                const hasMotAval = motorista.avaliacaoMedia !== null && parseFloat(motorista.avaliacaoMedia) > 0;
+                                ratingEl.innerHTML = hasMotAval 
+                                    ? `⭐ ${parseFloat(motorista.avaliacaoMedia).toFixed(1)} <span style="color: #64748b; font-weight: 500; margin-left: 2px;">(${motorista.quantidadeAvaliacoes || 0} ${motorista.quantidadeAvaliacoes === 1 ? 'avaliação' : 'avaliações'})</span>`
+                                    : 'Ainda não possui avaliações';
+                            }
+                        }
+                    } catch (e) {
+                        console.warn("Erro ao carregar dados do motorista logado:", e);
+                    }
+
+                    try {
+                        const veiculos = await api.listVeiculosByMotorista(session.id);
+                        const selectVehicle = document.getElementById('driver-vehicle-select');
+                        
+                        const specType = document.getElementById('modal-spec-type');
+                        const specCap = document.getElementById('modal-spec-capacity');
+                        const specPlate = document.getElementById('modal-spec-plate');
+                        const btnSubmit = document.getElementById('js-submit-proposal');
+
+                        if (selectVehicle) {
+                            if (veiculos && veiculos.length > 0) {
+                                selectVehicle.innerHTML = veiculos.map(v =>
+                                    `<option value="${v.id}">${v.marca} ${v.modelo} - ${v.tipoVeiculo} (Placa ${v.placa})</option>`
+                                ).join('');
+                                
+                                if (btnSubmit) btnSubmit.disabled = false;
+
+                                // Iniciar especificações com o primeiro veículo
+                                const first = veiculos[0];
+                                if (specType) specType.textContent = first.tipoVeiculo;
+                                if (specCap) specCap.textContent = (first.capacidadeKg/1000).toFixed(0) + ' Ton';
+                                if (specPlate) specPlate.textContent = first.placa;
+
+                                // Atualizar ao selecionar
+                                window.updateModalVehicleSpecs = function(vId) {
+                                    const v = veiculos.find(x => String(x.id) === String(vId));
+                                    if (!v) return;
+                                    if (specType) specType.textContent = v.tipoVeiculo;
+                                    if (specCap) specCap.textContent = (v.capacidadeKg/1000).toFixed(0) + ' Ton';
+                                    if (specPlate) specPlate.textContent = v.placa;
+                                };
+                            } else {
+                                selectVehicle.innerHTML = `<option value="">Nenhum veículo cadastrado</option>`;
+                                if (specType) specType.textContent = '—';
+                                if (specCap) specCap.textContent = '—';
+                                if (specPlate) specPlate.textContent = '—';
+                                if (btnSubmit) {
+                                    btnSubmit.disabled = true;
+                                    btnSubmit.title = 'Cadastre um veículo nas configurações para enviar propostas';
+                                }
+                            }
+                        }
+                    } catch (e) {
+                        console.warn("Erro ao carregar veículos do motorista logado:", e);
+                    }
                 }
 
                 modalBackdrop.classList.add('show');
@@ -356,11 +596,11 @@
                 btnSubmitProposal.textContent = 'Enviando...';
 
                 try {
-                    const veiculos = await api.listVeiculos();
-                    const veiculoAtivo = veiculos.find(v => v.motorista && v.motorista.id === session.id && v.ativo);
+                    const selectVehicle = document.getElementById('driver-vehicle-select');
+                    const selectedVehicleId = selectVehicle ? selectVehicle.value : null;
 
-                    if (!veiculoAtivo) {
-                        throw new Error('Nenhum veiculo ativo encontrado para este motorista.');
+                    if (!selectedVehicleId) {
+                        throw new Error('Por favor, selecione um veículo cadastrado.');
                     }
 
                     const now = new Date();
@@ -380,13 +620,12 @@
                         status: 'PUBLICADO',
                         embarcador: { id: selectedCargaData.embarcadorId },
                         motorista: { id: session.id },
-                        veiculo: { id: veiculoAtivo.id }
+                        veiculo: { id: Number(selectedVehicleId) }
                     });
 
                     btnSubmitProposal.disabled = false;
                     btnSubmitProposal.textContent = originalText;
 
-                    const selectVehicle = document.getElementById('driver-vehicle-select');
                     const vehicleName = selectVehicle ? selectVehicle.options[selectVehicle.selectedIndex].text : 'Veiculo';
                     const plateMatch = vehicleName.match(/\((.*?)\)/);
                     const plate = plateMatch ? plateMatch[1] : '';
@@ -401,23 +640,6 @@
                 }
             });
         }
-
-        // Função global de alteração de especificações do veículo no modal
-        window.updateModalVehicleSpecs = function(value) {
-            const specType = document.getElementById('modal-spec-type');
-            const specCapacity = document.getElementById('modal-spec-capacity');
-            const specPlate = document.getElementById('modal-spec-plate');
-
-            if (value === 'scania') {
-                if (specType) specType.textContent = 'Sider / Baú';
-                if (specCapacity) specCapacity.textContent = '14 Ton';
-                if (specPlate) specPlate.textContent = 'KRG-2E26';
-            } else if (value === 'volvo') {
-                if (specType) specType.textContent = 'Carreta Sider';
-                if (specCapacity) specCapacity.textContent = '30 Ton';
-                if (specPlate) specPlate.textContent = 'KRG-3A88';
-            }
-        };
 
         // --- 5. CHAT COM EMBARCADOR ---
         const btnChatTrigger = document.getElementById('btn-chat-trigger');
@@ -440,7 +662,7 @@
                 }
 
                 setTimeout(() => {
-                    const contractorNameEl = document.querySelector('.contractor-name') || document.querySelector('.dc-contractor-section .contractor-name');
+                    const contractorNameEl = document.getElementById('detail-shipper-name') || document.querySelector('.shipper-comp-name');
                     const embarcador = contractorNameEl ? contractorNameEl.textContent.trim() : 'AgroFrete S/A';
                     
                     const origEl = document.querySelector('.route-origin .route-city');
@@ -448,8 +670,9 @@
                     const origem = origEl ? origEl.textContent.trim() : 'Recife, PE';
                     const destino = destEl ? destEl.textContent.trim() : 'Fortaleza, CE';
                     const rota = `${origem} → ${destino}`;
+                    const embId = selectedCargaData ? selectedCargaData.embarcadorId : '';
 
-                    window.location.href = `chat.html?embarcador=${encodeURIComponent(embarcador)}&rota=${encodeURIComponent(rota)}`;
+                    window.location.href = `chat.html?embarcador=${encodeURIComponent(embarcador)}&embarcadorId=${embId}&rota=${encodeURIComponent(rota)}`;
                 }, 1000);
             });
         }

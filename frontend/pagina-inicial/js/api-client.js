@@ -59,7 +59,11 @@
             let message = 'Erro ao comunicar com o backend';
             try {
                 const errorBody = await response.json();
-                message = errorBody.message || errorBody.title || message;
+                if (errorBody.messages && errorBody.messages.length > 0) {
+                    message = errorBody.messages.join(', ');
+                } else {
+                    message = errorBody.message || errorBody.error || errorBody.title || message;
+                }
             } catch (e) {
                 try {
                     const text = await response.text();
@@ -338,6 +342,29 @@
         });
     }
 
+    async function avaliarEmbarcador(id, nota, comentario) {
+        return request('/api/fretes/' + id + '/avaliar-embarcador', {
+            method: 'POST',
+            body: JSON.stringify({ nota: nota, comentario: comentario })
+        });
+    }
+
+    async function listMensagens(motoristaId, embarcadorId, freteId) {
+        let params = [];
+        if (motoristaId) params.push('motoristaId=' + motoristaId);
+        if (embarcadorId) params.push('embarcadorId=' + embarcadorId);
+        if (freteId) params.push('freteId=' + freteId);
+        const query = params.length > 0 ? '?' + params.join('&') : '';
+        return request('/api/mensagens' + query, { method: 'GET' });
+    }
+
+    async function enviarMensagem(payload) {
+        return request('/api/mensagens', {
+            method: 'POST',
+            body: JSON.stringify(payload)
+        });
+    }
+
     // ========================================
     // UTILS
     // ========================================
@@ -417,6 +444,9 @@
         updateFrete,
         deleteFrete,
         avaliarFrete,
+        avaliarEmbarcador,
+        listMensagens,
+        enviarMensagem,
         // Utils
         formatCurrency,
         formatDate,

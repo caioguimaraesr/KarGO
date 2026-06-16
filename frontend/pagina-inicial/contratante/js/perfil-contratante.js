@@ -122,14 +122,13 @@
                     if (statOcorrenciasCount) statOcorrenciasCount.textContent = resolvidas.length;
                 }
 
-                // Média de avaliações (lida do localStorage kargo_embarcador_ratings_{id})
-                const keyRatings = `kargo_embarcador_ratings_${embarcadorId}`;
-                const rawRatings = localStorage.getItem(keyRatings);
-                const ratings = rawRatings ? JSON.parse(rawRatings) : [];
-                
+                // Média de avaliações lida do backend
                 if (labelRating) {
                     const pRatingEl = labelRating.closest('p') || labelRating.parentElement;
-                    if (ratings.length === 0) {
+                    const media = data.avaliacaoMedia ? Number(data.avaliacaoMedia).toFixed(1) : '0.0';
+                    const count = data.quantidadeAvaliacoes || 0;
+                    
+                    if (count === 0) {
                         if (pRatingEl) {
                             pRatingEl.innerHTML = `
                                 <svg class="star-icon-inline" viewBox="0 0 24 24" style="width:16px; height:16px; color:var(--text-muted); fill:none; stroke:currentColor; stroke-width:2;"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
@@ -137,9 +136,6 @@
                             `;
                         }
                     } else {
-                        const soma = ratings.reduce((sum, r) => sum + r.nota, 0);
-                        const media = (soma / ratings.length).toFixed(1);
-                        const count = ratings.length;
                         if (pRatingEl) {
                             pRatingEl.innerHTML = `
                                 <svg class="star-icon-inline" viewBox="0 0 24 24" style="width:16px; height:16px; color:#F59E0B; fill:#F59E0B;"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>

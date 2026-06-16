@@ -65,7 +65,7 @@
 
             // Gastos totais: Soma dos fretes firmados (ACEITO, EM_TRANSITO, CONCLUIDO)
             const totalGasto = fretes
-                .filter(f => f.status !== 'CANCELADO')
+                .filter(f => f.status === 'ACEITO' || f.status === 'EM_TRANSITO' || f.status === 'CONCLUIDO')
                 .reduce((sum, f) => sum + (Number(f.valorFrete) || 0), 0);
 
             if (statActive) statActive.textContent = fretesAtivos.length;
@@ -144,7 +144,9 @@
                                         ${motNome.charAt(0).toUpperCase()}
                                     </div>
                                     <div>
-                                        <div class="ct-proposal-name" style="font-weight:700; font-size:13px; color:var(--text-dark);">${motNome}</div>
+                                        <div class="ct-proposal-name" style="font-size:13px; margin-bottom: 2px;">
+                                            <a href="#" class="js-view-driver-profile" data-driver-id="${prop.motorista?.id}" data-frete-id="${prop.id}" style="color:var(--accent-blue); text-decoration:none; font-weight:700; cursor:pointer;" title="Ver Perfil do Motorista">${motNome}</a>
+                                        </div>
                                         <div style="font-size:11px; color:var(--text-muted);">
                                             Carga #KG-${cargaId}
                                         </div>

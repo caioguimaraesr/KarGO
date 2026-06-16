@@ -10,4 +10,6 @@ public interface FreteRepository extends JpaRepository<Frete, Long> {
     List<Frete> findByMotoristaId(Long motoristaId);
 
     List<Frete> findByEmbarcadorId(Long embarcadorId);
+
+    List<Frete> findByCargaId(Long cargaId);
 }

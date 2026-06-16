@@ -67,6 +67,11 @@ public class FreteController {
     public Frete avaliar(@PathVariable Long id, @Valid @RequestBody AvaliacaoDto avaliacaoDto) {
         return freteService.avaliar(id, avaliacaoDto.nota(), avaliacaoDto.comentario());
     }
+
+    @PostMapping("/{id}/avaliar-embarcador")
+    public Frete avaliarEmbarcador(@PathVariable Long id, @Valid @RequestBody AvaliacaoDto avaliacaoDto) {
+        return freteService.avaliarEmbarcador(id, avaliacaoDto.nota(), avaliacaoDto.comentario());
+    }
 }
 
 

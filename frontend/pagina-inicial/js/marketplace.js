@@ -97,10 +97,15 @@
                  const origem = escapeHtml(carga.origem || 'Origem');
                  const destino = escapeHtml(carga.destino || 'Destino');
                  const descricao = escapeHtml(carga.descricao || 'Carga');
+                 const cleanDescricao = escapeHtml((carga.descricao || '').split('[')[0].trim());
                  const pesoTon = (Number(carga.pesoKg || 0) / 1000).toFixed(1);
                  const embarcadorNome = escapeHtml(carga.embarcador && carga.embarcador.nome ? carga.embarcador.nome : 'Embarcador');
                  const embarcadorId = carga.embarcador && carga.embarcador.id ? carga.embarcador.id : '';
                  const publishTime = getTimeAgoLabel(carga.dataPublicacao);
+                 const initials = (carga.embarcador && carga.embarcador.nome ? carga.embarcador.nome : 'EM').split(' ').map(w=>w[0]).join('').slice(0,2).toUpperCase();
+                 const hasAval = carga.embarcador && carga.embarcador.avaliacaoMedia !== null && parseFloat(carga.embarcador.avaliacaoMedia) > 0;
+                 const avalMedia = hasAval ? parseFloat(carga.embarcador.avaliacaoMedia).toFixed(1) : '';
+                 const qtdAval = carga.embarcador && carga.embarcador.quantidadeAvaliacoes !== undefined ? carga.embarcador.quantidadeAvaliacoes : 0;
                  return `
                      <article class="cargo-card">
                          <div class="card-header-row">
@@ -126,7 +131,7 @@
                             </div>
                             <div class="card-specs-grid">
                                 <div class="spec-tile"><span class="spec-label">PESO</span><span class="spec-value">${pesoTon} Ton</span></div>
-                                <div class="spec-tile"><span class="spec-label">PRODUTO</span><span class="spec-value">${descricao}</span></div>
+                                <div class="spec-tile"><span class="spec-label">PRODUTO</span><span class="spec-value">${cleanDescricao}</span></div>
                                 <div class="spec-tile"><span class="spec-label">PAGAMENTO</span><span class="spec-value">Na Entrega</span></div>
                                 <div class="spec-tile"><span class="spec-label">STATUS</span><span class="spec-value">Disponível</span></div>
                             </div>
@@ -143,9 +148,25 @@
                         </div>
                         <div class="card-contractor-section">
                             <div class="contractor-info">
+                                <div style="width: 36px; height: 36px; border-radius: 50%; background: linear-gradient(135deg, #1e293b, #0f172a); border: 1px solid var(--accent-blue); color: var(--accent-blue); display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 800; text-shadow: 0 0 5px rgba(0,136,255,0.3); flex-shrink: 0; box-shadow: 0 2px 6px rgba(0,0,0,0.15);">
+                                    ${initials}
+                                </div>
                                 <div class="contractor-details">
-                                    <div class="contractor-name-row"><span class="contractor-name">${embarcadorNome}</span></div>
-                                    <div class="contractor-rating-row"><span class="rating-count">Embarcador vinculado à carga</span></div>
+                                    <div class="contractor-name-row">
+                                        <span class="contractor-name">${embarcadorNome}</span>
+                                        <span class="verified-icon" title="Empresa Homologada">
+                                            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" style="color: var(--accent-green);"><polyline points="20 6 9 17 4 12"/></svg>
+                                        </span>
+                                    </div>
+                                    <div class="contractor-rating-row">
+                                        ${hasAval ? `
+                                            <span class="rating-star">★</span>
+                                            <span class="rating-value" style="color: #ffcc00; font-weight: 800;">${avalMedia}</span>
+                                            <span class="rating-count" style="color: var(--text-muted); font-weight: 500;">(${qtdAval} ${qtdAval === 1 ? 'avaliação' : 'avaliações'})</span>
+                                        ` : `
+                                            <span class="rating-count" style="color: var(--text-muted); font-weight: 500;">Sem avaliações</span>
+                                        `}
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -224,35 +245,8 @@
               if (!api) return;
 
               try {
-                  let cargas = [];
-
-                  // Preferir endpoint de cargas que não foram aceitas para evitar exibir cargas ja aceitas.
-                  if (typeof api.listCargasNaoAceitas === 'function') {
-                      try {
-                          cargas = await api.listCargasNaoAceitas();
-                      } catch (e) {
-                          // Fallback para listagem de ativas caso o endpoint de não aceitas falhe.
-                          try {
-                              cargas = await api.listCargasAtivas();
-                          } catch (e2) {
-                              // Fallback final para listagem geral caso tudo falhe.
-                              cargas = await api.listCargas();
-                          }
-                      }
-                  } else {
-                      cargas = await api.listCargas();
-                  }
-
-                  const lista = Array.isArray(cargas) ? cargas : [];
-                  // Filtro robusto: apenas cargas ativas E sem status de conclusão
-                  todasCargas = lista.filter(c => {
-                      if (!c || c.ativa === false) return false;
-                      // Excluir cargas com status que indica que já foram processadas
-                      if (c.status === 'ACEITO' || c.status === 'EM_TRANSITO' || c.status === 'CONCLUIDO' || c.status === 'CANCELADO') {
-                          return false;
-                      }
-                      return true;
-                  });
+                  const cargas = await api.listCargasAtivas();
+                  todasCargas = Array.isArray(cargas) ? cargas : [];
                   applyFilters();
               } catch (error) {
                   showToast(`Falha ao carregar cargas: ${error.message}`, 'error');
@@ -298,8 +292,8 @@
                 // Reset checkboxes
                 const checkboxes = document.querySelectorAll('input[name="carga-tipo"]');
                 checkboxes.forEach(cb => {
-                    // Mantém apenas o de construção marcado por padrão
-                    cb.checked = (cb.value === 'construcao');
+                    // Mantém apenas o geral marcado por padrão
+                    cb.checked = (cb.value === 'geral');
                 });
 
                 // Reset slider
@@ -613,6 +607,7 @@
 
                     await api.createFrete({
                          titulo: tituloFrete,
+                         cargaId: selectedCargaData.cargaId,
                          descricao: descricaoFrete,
                          origem: selectedCargaData.origem,
                          destino: selectedCargaData.destino,

@@ -795,12 +795,121 @@
     </nav>
 
     <script src="js/api-client.js"></script>
-    <script src="js/auth-guard.js"></script>
-    <!-- JS de Controle Dinâmico -->
-    <script>
-        // Iniciar chatsMockData dinâmico
+    <script src="js/auth-guard.js"></scri    <script>
+        const api = window.KargoApi;
         const chatsMockData = {};
         let currentActiveContact = null;
+        let embarcadoresMap = {};
+        let motoristaId = null;
+        let activeEmbarcadorId = null;
+        let activeRota = '';
+
+        function formatTime(dateStr) {
+            if (!dateStr) return '';
+            try {
+                const date = new Date(dateStr);
+                return String(date.getHours()).padStart(2, '0') + ':' + String(date.getMinutes()).padStart(2, '0');
+            } catch (e) {
+                return '';
+            }
+        }
+
+        async function loadChatSystem() {
+            if (!api) return;
+            const session = api.getSession();
+            if (!session || session.type !== 'MOTORISTA') {
+                console.warn("Nenhum motorista logado.");
+                return;
+            }
+            motoristaId = session.id;
+
+            try {
+                // 1. Carregar todos os embarcadores
+                const embarcadores = await api.listEmbarcadores();
+                embarcadoresMap = {};
+                if (Array.isArray(embarcadores)) {
+                    embarcadores.forEach(e => {
+                        embarcadoresMap[e.id] = e;
+                    });
+                }
+
+                // 2. Buscar todas as mensagens do motorista
+                const dbMessages = await api.listMensagens(motoristaId, null, null);
+                
+                // Limpar dados anteriores
+                for (const k in chatsMockData) delete chatsMockData[k];
+
+                // 3. Agrupar por embarcadorId
+                if (Array.isArray(dbMessages)) {
+                    dbMessages.forEach(msg => {
+                        const embId = msg.embarcadorId;
+                        const emb = embarcadoresMap[embId];
+                        const embNome = emb ? emb.nome : 'Embarcador ' + embId;
+                        const key = embNome.split(' ').map(w => w[0]).join('').slice(0, 2).toUpperCase();
+
+                        if (!chatsMockData[key]) {
+                            chatsMockData[key] = {
+                                id: embId,
+                                name: embNome,
+                                avatar: key,
+                                freight: msg.rota || 'Rota não identificada',
+                                status: 'online',
+                                messages: []
+                            };
+                        }
+
+                        chatsMockData[key].messages.push({
+                            type: msg.remetente.toLowerCase() === 'motorista' ? 'sent' : 'received',
+                            text: msg.texto,
+                            time: formatTime(msg.dataEnvio)
+                        });
+                    });
+                }
+
+                // 4. Se houver parâmetros na URL, garantir que essa conversa exista
+                const urlParams = new URLSearchParams(window.location.search);
+                const queryEmb = urlParams.get('embarcador');
+                const queryEmbId = urlParams.get('embarcadorId') ? Number(urlParams.get('embarcadorId')) : null;
+                const queryRota = urlParams.get('rota');
+
+                if (queryEmb && queryEmbId) {
+                    const key = queryEmb.split(' ').map(w => w[0]).join('').slice(0, 2).toUpperCase();
+                    if (!chatsMockData[key]) {
+                        chatsMockData[key] = {
+                            id: queryEmbId,
+                            name: queryEmb,
+                            avatar: key,
+                            freight: queryRota || 'Rota não identificada',
+                            status: 'online',
+                            messages: []
+                        };
+                    }
+                    currentActiveContact = key;
+                    activeEmbarcadorId = queryEmbId;
+                    activeRota = queryRota || '';
+                }
+
+                // 5. Se nenhuma conversa ativa, focar na primeira disponível
+                const keys = Object.keys(chatsMockData);
+                if (!currentActiveContact && keys.length > 0) {
+                    currentActiveContact = keys[0];
+                    activeEmbarcadorId = chatsMockData[currentActiveContact].id;
+                    activeRota = chatsMockData[currentActiveContact].freight;
+                }
+
+                renderContactsList();
+
+                if (currentActiveContact) {
+                    const active = chatsMockData[currentActiveContact];
+                    switchActiveChat(active.name, currentActiveContact, active.freight, active.status);
+                } else {
+                    renderActiveMessages();
+                }
+
+            } catch (err) {
+                console.error("Erro ao inicializar o chat:", err);
+            }
+        }
 
         function renderContactsList() {
             const listDiv = document.getElementById('contacts-list-scroll-div');
@@ -823,7 +932,6 @@
                 const lastMsgText = lastMsg ? lastMsg.text : 'Sem mensagens';
                 const lastMsgTime = lastMsg ? lastMsg.time : '';
                 
-                // Escolher cor do avatar
                 let colorStyle = 'color: var(--accent-blue); border-color: var(--accent-blue);';
                 if (key === 'ME') colorStyle = 'color: var(--accent-orange); border-color: var(--accent-orange);';
                 else if (key === 'TL') colorStyle = 'color: var(--accent-green); border-color: var(--accent-green);';
@@ -840,8 +948,7 @@
                                 <span class="contact-time-desktop">${lastMsgTime}</span>
                             </div>
                             <div class="contact-preview-row">
-                                <span class="contact-preview-msg" id="preview-${key.toLowerCase()}" style="${chat.unread ? 'font-weight: 700; color: var(--text-primary);' : ''}">${lastMsgText}</span>
-                                ${chat.unread ? `<span class="chat-unread-badge-circle" id="badge-${key.toLowerCase()}">1</span>` : ''}
+                                <span class="contact-preview-msg" id="preview-${key.toLowerCase()}">${lastMsgText}</span>
                             </div>
                         </div>
                     </div>
@@ -849,32 +956,22 @@
             }).join('');
         }
 
-        // Lógica de Responsividade (Voltar e Alternar Colunas no Mobile)
         function switchActiveChat(company, avatar, freight, status) {
             currentActiveContact = avatar;
+            const chatObj = chatsMockData[avatar];
+            if (chatObj) {
+                activeEmbarcadorId = chatObj.id;
+                activeRota = chatObj.freight;
+            }
 
-            // Mostrar cabeçalho do chat ativo
             const headerContainer = document.getElementById('chat-area-header-container');
             if (headerContainer) headerContainer.style.display = 'flex';
 
-            // Remover classe active de todos
             document.querySelectorAll('.contact-card-desktop').forEach(card => card.classList.remove('active'));
             
-            // Adicionar active na correspondente
             const activeCard = document.getElementById(`card-${avatar.toLowerCase()}`);
             if (activeCard) activeCard.classList.add('active');
-
-            const badge = document.getElementById(`badge-${avatar.toLowerCase()}`);
-            if (badge) badge.style.display = 'none';
-
-            const preview = document.getElementById(`preview-${avatar.toLowerCase()}`);
-            if (preview) preview.style.fontWeight = 'normal';
             
-            if (chatsMockData[avatar]) {
-                chatsMockData[avatar].unread = false;
-            }
-
-            // Atualizar Janela de Chat Ativo
             document.getElementById('active-chat-name').textContent = company;
             document.getElementById('active-chat-avatar').textContent = avatar;
             document.getElementById('active-chat-freight').textContent = freight;
@@ -886,7 +983,6 @@
                 statusEl.innerHTML = `<span style="width:8px; height:8px; border-radius:50%; background-color:var(--text-muted); display:inline-block;"></span> Offline`;
             }
 
-            // Reset do avatar cor
             const avatarEl = document.getElementById('active-chat-avatar');
             if (avatar === 'ME') {
                 avatarEl.style.color = 'var(--accent-orange)';
@@ -899,23 +995,19 @@
                 avatarEl.style.borderColor = 'var(--accent-blue)';
             }
 
-            // Renderizar Mensagens
             renderActiveMessages();
 
-            // Mobile Lógica: Alternar tela exibida
             if (window.innerWidth <= 991) {
                 document.getElementById('contacts-list-container').classList.add('mobile-hidden');
                 document.getElementById('chat-window-container').classList.remove('mobile-hidden');
             }
         }
 
-        // Voltar para lista de contatos no mobile
         function goBackToContactsList() {
             document.getElementById('chat-window-container').classList.add('mobile-hidden');
             document.getElementById('contacts-list-container').classList.remove('mobile-hidden');
         }
 
-        // Renderizar Mensagens
         function renderActiveMessages() {
             const container = document.getElementById('messages-scroller-desktop');
             if (!container) return;
@@ -944,35 +1036,30 @@
                 container.appendChild(bubbleRow);
             });
 
-            // Auto Scroll
             container.scrollTop = container.scrollHeight;
         }
 
-        // Enviar mensagem ativa
-        function sendMessageDesktop() {
-            if (!currentActiveContact || !chatsMockData[currentActiveContact]) return;
+        async function sendMessageDesktop() {
+            if (!currentActiveContact || !activeEmbarcadorId || !motoristaId) return;
             
             const input = document.getElementById('chat-input-desktop');
             const text = input.value.trim();
             if (!text) return;
 
-            const now = new Date();
-            const timeStr = `${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}`;
-
-            // Adicionar no mock data local
-            chatsMockData[currentActiveContact].messages.push({
-                type: 'sent',
-                text: text,
-                time: timeStr
-            });
-
-            // Re-render
-            renderActiveMessages();
-            renderContactsList();
-            input.value = '';
-
-            // Resposta automática simulada após 1.2 segundos
-            simulateResponseDesktop(text);
+            try {
+                const payload = {
+                    motoristaId: motoristaId,
+                    embarcadorId: activeEmbarcadorId,
+                    remetente: 'MOTORISTA',
+                    texto: text,
+                    rota: activeRota
+                };
+                await api.enviarMensagem(payload);
+                input.value = '';
+                await pollMessages();
+            } catch (e) {
+                console.error("Erro ao enviar mensagem:", e);
+            }
         }
 
         function handleInputKeyDesktop(e) {
@@ -981,82 +1068,23 @@
             }
         }
 
-        // Resposta Inteligente Logística
-        function simulateResponseDesktop(inputText) {
-            setTimeout(() => {
-                if (!currentActiveContact || !chatsMockData[currentActiveContact]) return;
-                
-                const now = new Date();
-                const timeStr = `${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}`;
-                
-                let responseText = 'Entendido, anotado! Viagem em andamento seguro.';
-                
-                if (inputText.includes('caminho')) {
-                    responseText = 'Excelente, João! Status de rastreio atualizado para: Em Trânsito. Siga com segurança!';
-                } else if (inputText.includes('concluído') || inputText.includes('Carregamento')) {
-                    responseText = 'Muito bom! Por favor, anexe o canhoto do CTE / NFe quando finalizar a descarga.';
-                } else if (inputText.includes('documentos') || inputText.includes('Documentos')) {
-                    responseText = 'Documentos fiscais e de seguro recebidos. Rota validada com sucesso.';
-                }
-
-                chatsMockData[currentActiveContact].messages.push({
-                    type: 'received',
-                    text: responseText,
-                    time: timeStr
-                });
-
-                // Re-render
-                renderActiveMessages();
-                renderContactsList();
-
-                // Mock de GPS do SVG se for a caminho
-                if (inputText.includes('caminho')) {
-                    setTimeout(() => {
-                        const container = document.getElementById('messages-scroller-desktop');
-                        if (!container) return;
-                        const mapContainer = document.createElement('div');
-                        mapContainer.className = 'map-mock-container';
-                        mapContainer.innerHTML = `
-                            <svg class="map-mock-svg" viewBox="0 0 300 110">
-                                <path d="M 10 50 Q 150 10 290 80" fill="none" stroke="#2c3e50" stroke-width="4"/>
-                                <path d="M 10 50 Q 150 10 290 80" fill="none" stroke="var(--accent-blue)" stroke-width="2" stroke-dasharray="6,6"/>
-                                <circle cx="40" cy="40" r="6" fill="var(--accent-blue)"/>
-                                <circle cx="250" cy="70" r="6" fill="var(--accent-orange)"/>
-                                <text x="35" y="25" fill="#fff" font-size="8" font-weight="bold">Origem</text>
-                                <text x="235" y="90" fill="#fff" font-size="8" font-weight="bold">Destino</text>
-                                <rect x="130" y="24" width="16" height="8" rx="2" fill="var(--accent-green)"/>
-                                <circle cx="134" cy="34" r="2" fill="#fff"/>
-                                <circle cx="142" cy="34" r="2" fill="#fff"/>
-                            </svg>
-                            <div class="map-pin-badge">GPS Ativo: BR-163 (KM 240)</div>
-                        `;
-                        container.appendChild(mapContainer);
-                        container.scrollTop = container.scrollHeight;
-                    }, 200);
-                }
-
-            }, 1200);
+        async function sendQuickReplyDesktop(replyText) {
+            if (!currentActiveContact || !activeEmbarcadorId || !motoristaId) return;
+            try {
+                const payload = {
+                    motoristaId: motoristaId,
+                    embarcadorId: activeEmbarcadorId,
+                    remetente: 'MOTORISTA',
+                    texto: replyText,
+                    rota: activeRota
+                };
+                await api.enviarMensagem(payload);
+                await pollMessages();
+            } catch (e) {
+                console.error("Erro ao enviar resposta rápida:", e);
+            }
         }
 
-        // Chip de resposta rápida
-        function sendQuickReplyDesktop(replyText) {
-            const now = new Date();
-            const timeStr = `${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}`;
-
-            if (!currentActiveContact || !chatsMockData[currentActiveContact]) return;
-
-            chatsMockData[currentActiveContact].messages.push({
-                type: 'sent',
-                text: replyText,
-                time: timeStr
-            });
-
-            renderActiveMessages();
-            renderContactsList();
-            simulateResponseDesktop(replyText);
-        }
-
-        // Filtro de Busca de contatos
         function filterContactsDesktop() {
             const query = document.getElementById('chat-search-desktop').value.toLowerCase();
             const contactCards = document.querySelectorAll('.contact-card-desktop');
@@ -1071,31 +1099,42 @@
             });
         }
 
-        // Inicializar com parâmetros da URL
-        document.addEventListener('DOMContentLoaded', () => {
-            const urlParams = new URLSearchParams(window.location.search);
-            const emb = urlParams.get('embarcador');
-            const rota = urlParams.get('rota');
+        async function pollMessages() {
+            if (!currentActiveContact || !activeEmbarcadorId || !motoristaId) return;
 
-            if (emb && rota) {
-                const key = emb.split(' ').map(w => w[0]).join('').slice(0, 2).toUpperCase();
-                chatsMockData[key] = {
-                    name: emb,
-                    avatar: key,
-                    freight: rota,
-                    status: 'online',
-                    messages: [
-                        { type: 'received', text: `Olá! Canal seguro estabelecido. Vi que você tem interesse na nossa carga de rota ${rota}. Vamos fechar?`, time: 'Agora' }
-                    ],
-                    unread: true
-                };
-                currentActiveContact = key;
-                renderContactsList();
-                switchActiveChat(emb, key, rota, 'online');
-            } else {
-                renderContactsList();
-                renderActiveMessages();
+            try {
+                const msgs = await api.listMensagens(motoristaId, activeEmbarcadorId, null);
+                if (Array.isArray(msgs)) {
+                    const formattedMsgs = msgs.map(msg => ({
+                        type: msg.remetente.toLowerCase() === 'motorista' ? 'sent' : 'received',
+                        text: msg.texto,
+                        time: formatTime(msg.dataEnvio)
+                    }));
+
+                    const chatObj = chatsMockData[currentActiveContact];
+                    if (chatObj) {
+                        const previousLen = chatObj.messages.length;
+                        chatObj.messages = formattedMsgs;
+
+                        if (formattedMsgs.length !== previousLen) {
+                            renderActiveMessages();
+                            
+                            const lastMsg = formattedMsgs[formattedMsgs.length - 1];
+                            const previewEl = document.getElementById(`preview-${currentActiveContact.toLowerCase()}`);
+                            if (previewEl && lastMsg) {
+                                previewEl.textContent = lastMsg.text;
+                            }
+                        }
+                    }
+                }
+            } catch (err) {
+                console.warn("Erro no polling das mensagens:", err);
             }
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            loadChatSystem();
+            setInterval(pollMessages, 3000);
         });
     </script>
 </body>

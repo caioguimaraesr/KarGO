@@ -452,7 +452,7 @@
                                 <div class="shipper-name-info">
                                     <div class="shipper-name-container">
                                         <h4 class="shipper-comp-name" id="detail-shipper-name">TransLog Nordeste</h4>
-                                        <a href="#" class="shipper-small-profile-link">Ver Perfil</a>
+                                        <a href="#" id="btn-view-shipper-profile" class="shipper-small-profile-link">Ver Perfil</a>
                                     </div>
                                     <span class="shipper-verif-text">Empresa Homologada</span>
                                 </div>
@@ -482,84 +482,177 @@
     </div>
 
     <!-- ============ MODAL DE PROPOSTA DE FRETE (ESTILO FREELANCER) ============ -->
-    <div class="kargo-modal-backdrop" id="proposal-modal-backdrop">
-        <div class="kargo-modal-wrapper">
-            <div class="kargo-modal-header">
-                <h3 class="kargo-modal-title">Enviar Proposta de Frete</h3>
-                <button class="kargo-modal-close-btn" id="js-close-modal" aria-label="Fechar modal">
+    <div class="kargo-modal-backdrop" id="proposal-modal-backdrop" style="background-color: rgba(4, 6, 10, 0.85); backdrop-filter: blur(12px);">
+        <div class="kargo-modal-wrapper" style="max-width: 520px; background-color: #0b0f19; border: 1px solid rgba(255,255,255,0.08); box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5); border-radius: 20px;">
+            <div class="kargo-modal-header" style="border-bottom: 1px solid rgba(255,255,255,0.06); padding: 20px 24px; background-color: #0b0f19;">
+                <h3 class="kargo-modal-title" style="color: #f8fafc; font-size: 16px; font-weight: 800; letter-spacing: -0.01em;">Enviar Proposta de Frete</h3>
+                <button class="kargo-modal-close-btn" id="js-close-modal" style="color: #94a3b8; background: none; border: none; cursor: pointer; display: flex; align-items: center; justify-content: center; padding: 6px; border-radius: 6px; transition: all 0.2s;" onmouseenter="this.style.backgroundColor='rgba(255,255,255,0.05)'; this.style.color='#f8fafc';" onmouseleave="this.style.backgroundColor='transparent'; this.style.color='#94a3b8';">
                     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
                 </button>
             </div>
-            <div class="kargo-modal-body">
-                <!-- Informações Premium do Motorista e Veículo -->
-                <div class="driver-premium-card">
-                    <div class="driver-header-info">
-                        <div class="driver-profile-mini">
-                            <img src="assets/images/motorista.png" alt="Avatar João Transportes" class="driver-mini-avatar">
-                            <div>
-                                <h4 class="driver-mini-name">João Transportes</h4>
-                                <span class="driver-mini-rating">⭐ 4.9 <span style="color: #64748B; font-weight: 500;">(142 avaliações)</span></span>
+            <div class="kargo-modal-body" style="padding: 24px; background-color: #0b0f19; max-height: calc(100vh - 180px); overflow-y: auto;">
+                <!-- Card Premium do Motorista (Dados reais do banco) -->
+                <div class="driver-premium-card" style="background-color: rgba(255, 255, 255, 0.01); border: 1px solid rgba(255, 255, 255, 0.05); border-radius: 12px; padding: 16px 20px; margin-bottom: 20px; text-align: left;">
+                    <div class="driver-header-info" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px;">
+                        <div class="driver-profile-mini" style="display: flex; align-items: center; gap: 12px;">
+                            <div id="driver-modal-avatar" style="width: 38px; height: 38px; border-radius: 50%; border: 1px solid var(--accent-blue); display: flex; align-items: center; justify-content: center; background: linear-gradient(135deg, #1e293b, #0f172a); color: var(--accent-blue); font-size: 12px; font-weight: 800; text-shadow: 0 0 5px rgba(0,136,255,0.3); flex-shrink: 0; box-shadow: 0 2px 6px rgba(0,0,0,0.15);">
+                                MT
+                            </div>
+                            <div style="display: flex; flex-direction: column; gap: 2px;">
+                                <h4 class="driver-mini-name" style="font-size: 14px; font-weight: 700; color: #f8fafc; margin: 0;">Carregando...</h4>
+                                <span class="driver-mini-rating" style="font-size: 11px; font-weight: 600; color: #ffcc00; display: inline-flex; align-items: center; gap: 4px;">—</span>
                             </div>
                         </div>
-                        <span class="driver-badge-verified">
+                        <span class="driver-badge-verified" style="font-size: 10px; font-weight: 700; color: var(--accent-green); background-color: rgba(52, 199, 89, 0.08); border: 1px solid rgba(52, 199, 89, 0.15); padding: 2px 8px; border-radius: 99px; display: inline-flex; align-items: center; gap: 3px;">
                             <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.5"><polyline points="20 6 9 17 4 12"/></svg>
                             Verificado
                         </span>
                     </div>
-                    <div class="proposal-vehicle-select-container" style="margin-top: 15px; margin-bottom: 12px;">
-                        <label for="driver-vehicle-select" style="font-size: 11px; font-weight: 700; color: var(--text-muted); text-transform: uppercase; display: block; margin-bottom: 6px; letter-spacing: 0.5px;">Selecionar Veículo para o Frete</label>
+                    
+                    <!-- Seleção de Veículo Real -->
+                    <div class="proposal-vehicle-select-container" style="margin-top: 14px; margin-bottom: 14px; text-align: left;">
+                        <label for="driver-vehicle-select" style="font-size: 9px; font-weight: 800; color: #64748b; text-transform: uppercase; display: block; margin-bottom: 6px; letter-spacing: 0.05em;">Selecionar Veículo para o Frete</label>
                         <div style="position: relative; width: 100%;">
-                            <select id="driver-vehicle-select" class="pix-select" style="width: 100%; padding: 10px 14px; background: rgba(0, 0, 0, 0.35); border: 1px solid rgba(255, 255, 255, 0.08); color: #fff; border-radius: 10px; font-size: 13px; font-weight: 600; appearance: none; cursor: pointer; transition: border-color 0.2s;" onchange="updateModalVehicleSpecs(this.value)">
-                                <option value="scania">Scania R450 6x2 - Sider (Placa KRG-2E26)</option>
-                                <option value="volvo">Volvo FH 540 - Carreta Sider (Placa KRG-3A88)</option>
+                            <select id="driver-vehicle-select" class="pix-select" style="width: 100%; padding: 10px 14px; background: rgba(0, 0, 0, 0.25); border: 1px solid rgba(255, 255, 255, 0.06); color: #e2e8f0; border-radius: 10px; font-size: 13px; font-weight: 600; appearance: none; cursor: pointer; transition: all 0.2s; outline: none;" onchange="updateModalVehicleSpecs(this.value)">
+                                <!-- Alimentado dinamicamente -->
                             </select>
-                            <svg style="position: absolute; right: 14px; top: 50%; transform: translateY(-50%); color: var(--text-muted); pointer-events: none;" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+                            <svg style="position: absolute; right: 14px; top: 50%; transform: translateY(-50%); color: #64748b; pointer-events: none;" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
                         </div>
                     </div>
 
-                    <div class="vehicle-mini-specs">
-                        <div class="mini-spec-item">
-                            <span class="mini-spec-label">Veículo</span>
-                            <span class="mini-spec-val" id="modal-spec-type">Sider / Baú</span>
+                    <!-- Especificações do Veículo Selecionado -->
+                    <div class="vehicle-mini-specs" style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; border-top: 1px dashed rgba(255, 255, 255, 0.06); padding-top: 12px; text-align: left;">
+                        <div class="mini-spec-item" style="display: flex; flex-direction: column; gap: 2px;">
+                            <span class="mini-spec-label" style="font-size: 9px; font-weight: 700; color: #64748b; text-transform: uppercase; letter-spacing: 0.02em;">Veículo</span>
+                            <span class="mini-spec-val" id="modal-spec-type" style="font-size: 12px; font-weight: 700; color: #e2e8f0;">Sider / Baú</span>
                         </div>
-                        <div class="mini-spec-item">
-                            <span class="mini-spec-label">Capacidade</span>
-                            <span class="mini-spec-val" id="modal-spec-capacity">14 Ton</span>
+                        <div class="mini-spec-item" style="display: flex; flex-direction: column; gap: 2px;">
+                            <span class="mini-spec-label" style="font-size: 9px; font-weight: 700; color: #64748b; text-transform: uppercase; letter-spacing: 0.02em;">Capacidade</span>
+                            <span class="mini-spec-val" id="modal-spec-capacity" style="font-size: 12px; font-weight: 700; color: #e2e8f0;">14 Ton</span>
                         </div>
-                        <div class="mini-spec-item">
-                            <span class="mini-spec-label">Placa</span>
-                            <span class="mini-spec-val" id="modal-spec-plate">KRG-2E26</span>
+                        <div class="mini-spec-item" style="display: flex; flex-direction: column; gap: 2px;">
+                            <span class="mini-spec-label" style="font-size: 9px; font-weight: 700; color: #64748b; text-transform: uppercase; letter-spacing: 0.02em;">Placa</span>
+                            <span class="mini-spec-val" id="modal-spec-plate" style="font-size: 12px; font-weight: 700; color: #e2e8f0;">KRG-2E26</span>
                         </div>
                     </div>
                 </div>
 
-                <div class="proposal-form-section">
-                    <div class="suggested-freight-alert">
-                        <span class="suggested-freight-label">Frete Médio Sugerido</span>
-                        <span class="suggested-freight-value" id="js-modal-suggested-val">R$ 4.500,00</span>
+                <!-- Formulário de Valor -->
+                <div class="proposal-form-section" style="display: flex; flex-direction: column; gap: 16px; text-align: left;">
+                    <div class="suggested-freight-alert" style="background-color: rgba(0, 136, 255, 0.05); border: 1px solid rgba(0, 136, 255, 0.12); border-radius: 12px; padding: 14px 18px; display: flex; flex-direction: column; gap: 3px;">
+                        <span class="suggested-freight-label" style="font-size: 10px; font-weight: 700; color: #64748b; text-transform: uppercase; letter-spacing: 0.05em;">Frete Médio Sugerido</span>
+                        <span class="suggested-freight-value" id="js-modal-suggested-val" style="font-size: 18px; font-weight: 800; color: var(--accent-blue); text-shadow: 0 0 10px var(--accent-blue-glow);">R$ 4.500,00</span>
                     </div>
 
-                    <div class="proposal-input-block">
-                        <label class="proposal-input-label" for="driver-bid-input">Sua Proposta de Frete</label>
-                        <div class="proposal-input-wrapper">
-                            <span class="proposal-input-prefix">R$</span>
-                            <input type="text" class="proposal-input-field" id="driver-bid-input" placeholder="0,00" value="4.500,00">
+                    <div class="proposal-input-block" style="display: flex; flex-direction: column; gap: 6px;">
+                        <label class="proposal-input-label" for="driver-bid-input" style="font-size: 10px; font-weight: 700; color: #64748b; text-transform: uppercase; letter-spacing: 0.05em;">Sua Oferta de Frete</label>
+                        <div class="proposal-input-wrapper" style="position: relative; display: flex; align-items: center;">
+                            <span class="proposal-input-prefix" style="position: absolute; left: 16px; font-size: 16px; font-weight: 800; color: #64748b;">R$</span>
+                            <input type="text" class="proposal-input-field" id="driver-bid-input" placeholder="0,00" value="4.500,00" style="width: 100%; background-color: rgba(255,255,255,0.01); border: 1px solid rgba(255,255,255,0.08); border-radius: 10px; padding: 12px 12px 12px 42px; font-size: 18px; font-weight: 800; color: #f8fafc; outline: none; transition: all 0.2s;" onfocus="this.style.borderColor='var(--accent-blue)'; this.style.boxShadow='0 0 0 3px rgba(0, 136, 255, 0.15)';" onblur="this.style.borderColor='rgba(255,255,255,0.08)'; this.style.boxShadow='none';">
                         </div>
                     </div>
 
-                    <div class="costs-disclaimer-card">
-                        <div class="costs-disclaimer-icon">
-                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
+                    <div class="costs-disclaimer-card" style="background-color: rgba(255, 159, 10, 0.05); border: 1px solid rgba(255, 159, 10, 0.12); border-radius: 12px; padding: 14px 18px; display: flex; gap: 10px; align-items: flex-start; line-height: 1.5;">
+                        <div class="costs-disclaimer-icon" style="color: var(--accent-orange); flex-shrink: 0; margin-top: 1px;">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
                         </div>
-                        <div class="costs-disclaimer-text">
-                            Os custos com <strong>combustível e pedágio</strong> são de responsabilidade do motorista. O método padrão de recebimento será <strong>Na Entrega</strong>, a menos que adiantamentos sejam acertados diretamente.
+                        <div class="costs-disclaimer-text" style="font-size: 11.5px; font-weight: 500; color: #94a3b8;">
+                            Os custos com <strong>combustível e pedágio</strong> são de responsabilidade do motorista. O método padrão de recebimento será <strong>Na Entrega</strong>, a menos que adiantamentos sejam acordados.
                         </div>
                     </div>
                 </div>
             </div>
-            <div class="kargo-modal-footer">
-                <button class="modal-btn-cancel" id="js-cancel-modal">Voltar</button>
-                <button class="modal-btn-submit" id="js-submit-proposal">Enviar Oferta de Frete</button>
+            <div class="kargo-modal-footer" style="border-top: 1px solid rgba(255, 255, 255, 0.06); padding: 16px 24px; display: flex; justify-content: flex-end; gap: 12px; background-color: #0b0f19;">
+                <button class="modal-btn-cancel" id="js-cancel-modal" style="padding: 10px 20px; font-size: 13px; font-weight: 700; background-color: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08); color: #94a3b8; border-radius: 8px; cursor: pointer; transition: all 0.2s;" onmouseenter="this.style.backgroundColor='rgba(255,255,255,0.06)'; this.style.color='#f8fafc';" onmouseleave="this.style.backgroundColor='rgba(255,255,255,0.03)'; this.style.color='#94a3b8';">Voltar</button>
+                <button class="modal-btn-submit" id="js-submit-proposal" style="padding: 10px 20px; font-size: 13px; font-weight: 700; background: linear-gradient(135deg, var(--accent-blue), #0055ff); border: none; color: #fff; border-radius: 8px; cursor: pointer; font-family: inherit; font-weight: 700; box-shadow: 0 4px 12px rgba(0, 136, 255, 0.25); transition: all 0.2s;" onmouseenter="this.style.transform='translateY(-1px)'; this.style.boxShadow='0 6px 16px rgba(0, 136, 255, 0.4)';" onmouseleave="this.style.transform='none'; this.style.boxShadow='0 4px 12px rgba(0, 136, 255, 0.25)';">Enviar Oferta de Frete</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ============ MODAL DO PERFIL DO EMBARCADOR ============ -->
+    <div class="kargo-modal-backdrop" id="shipper-modal-backdrop" style="background-color: rgba(4, 6, 10, 0.85); backdrop-filter: blur(12px);">
+        <div class="kargo-modal-wrapper" style="max-width: 460px; background-color: #0b0f19; border: 1px solid rgba(255,255,255,0.08); box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5); border-radius: 20px;">
+            <div class="kargo-modal-header" style="border-bottom: 1px solid rgba(255,255,255,0.06); padding: 20px 24px; background-color: #0b0f19;">
+                <h3 class="kargo-modal-title" style="color: #f8fafc; font-size: 16px; font-weight: 800; letter-spacing: -0.01em;">Perfil do Embarcador</h3>
+                <button class="kargo-modal-close-btn" id="js-close-shipper-modal" style="color: #94a3b8; background: none; border: none; cursor: pointer; display: flex; align-items: center; justify-content: center; padding: 6px; border-radius: 6px; transition: all 0.2s;" onmouseenter="this.style.backgroundColor='rgba(255,255,255,0.05)'; this.style.color='#f8fafc';" onmouseleave="this.style.backgroundColor='transparent'; this.style.color='#94a3b8';">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+                </button>
+            </div>
+            <div class="kargo-modal-body" style="padding: 24px; background-color: #0b0f19; max-height: calc(100vh - 180px); overflow-y: auto;">
+                <!-- Cabeçalho do Perfil -->
+                <div style="display: flex; flex-direction: column; align-items: center; text-align: center; gap: 14px; margin-bottom: 24px;">
+                    <div id="shipper-modal-avatar-box" style="width: 84px; height: 84px; position: relative;">
+                        <!-- Iniciais ou avatar carregado dinamicamente -->
+                    </div>
+                    <div>
+                        <h4 id="shipper-modal-name" style="font-size: 20px; font-weight: 800; color: #f8fafc; margin-bottom: 6px; letter-spacing: -0.02em;">Carregando...</h4>
+                        <span style="font-size: 11px; font-weight: 700; color: #0088ff; background-color: rgba(0, 136, 255, 0.08); border: 1px solid rgba(0, 136, 255, 0.15); padding: 4px 12px; border-radius: 99px; display: inline-flex; align-items: center; gap: 4px; box-shadow: 0 2px 8px rgba(0, 136, 255, 0.05);">
+                            <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.5"><polyline points="20 6 9 17 4 12"/></svg>
+                            Empresa Homologada
+                        </span>
+                    </div>
+                </div>
+
+                <!-- Detalhes de Contato / Corporativos -->
+                <div style="display: flex; flex-direction: column; gap: 12px;">
+                    <!-- Item Classificação / Reputação -->
+                    <div style="display: flex; align-items: center; gap: 14px; background: rgba(255, 255, 255, 0.01); border: 1px solid rgba(255, 255, 255, 0.04); padding: 14px 16px; border-radius: 12px; text-align: left;">
+                        <div style="width: 38px; height: 38px; border-radius: 8px; background-color: rgba(255, 204, 0, 0.06); border: 1px solid rgba(255, 204, 0, 0.12); color: #ffcc00; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+                        </div>
+                        <div style="display: flex; flex-direction: column; gap: 2px;">
+                            <span style="font-size: 9px; font-weight: 700; color: #64748b; text-transform: uppercase; letter-spacing: 0.05em;">Classificação do Contratante</span>
+                            <span id="shipper-modal-rating" style="font-size: 13.5px; font-weight: 700; color: #e2e8f0;">—</span>
+                        </div>
+                    </div>
+
+                    <!-- Item CNPJ -->
+                    <div style="display: flex; align-items: center; gap: 14px; background: rgba(255, 255, 255, 0.01); border: 1px solid rgba(255, 255, 255, 0.04); padding: 14px 16px; border-radius: 12px; text-align: left;">
+                        <div style="width: 38px; height: 38px; border-radius: 8px; background-color: rgba(0, 136, 255, 0.06); border: 1px solid rgba(0, 136, 255, 0.12); color: #0088ff; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="16" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="4"/><line x1="8" y1="2" x2="8" y2="4"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+                        </div>
+                        <div style="display: flex; flex-direction: column; gap: 2px;">
+                            <span style="font-size: 9px; font-weight: 700; color: #64748b; text-transform: uppercase; letter-spacing: 0.05em;">CNPJ / CPF</span>
+                            <span id="shipper-modal-cnpj" style="font-size: 13.5px; font-weight: 700; color: #e2e8f0; font-variant-numeric: tabular-nums;">—</span>
+                        </div>
+                    </div>
+
+                    <!-- Item E-mail -->
+                    <div style="display: flex; align-items: center; gap: 14px; background: rgba(255, 255, 255, 0.01); border: 1px solid rgba(255, 255, 255, 0.04); padding: 14px 16px; border-radius: 12px; text-align: left;">
+                        <div style="width: 38px; height: 38px; border-radius: 8px; background-color: rgba(0, 136, 255, 0.06); border: 1px solid rgba(0, 136, 255, 0.12); color: #0088ff; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+                        </div>
+                        <div style="display: flex; flex-direction: column; gap: 2px;">
+                            <span style="font-size: 9px; font-weight: 700; color: #64748b; text-transform: uppercase; letter-spacing: 0.05em;">E-mail Corporativo</span>
+                            <span id="shipper-modal-email" style="font-size: 13.5px; font-weight: 700; color: #e2e8f0; word-break: break-all;">—</span>
+                        </div>
+                    </div>
+
+                    <!-- Item Telefone -->
+                    <div style="display: flex; align-items: center; gap: 14px; background: rgba(255, 255, 255, 0.01); border: 1px solid rgba(255, 255, 255, 0.04); padding: 14px 16px; border-radius: 12px; text-align: left;">
+                        <div style="width: 38px; height: 38px; border-radius: 8px; background-color: rgba(0, 136, 255, 0.06); border: 1px solid rgba(0, 136, 255, 0.12); color: #0088ff; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92v3"/></svg>
+                        </div>
+                        <div style="display: flex; flex-direction: column; gap: 2px;">
+                            <span style="font-size: 9px; font-weight: 700; color: #64748b; text-transform: uppercase; letter-spacing: 0.05em;">Telefone</span>
+                            <span id="shipper-modal-phone" style="font-size: 13.5px; font-weight: 700; color: #e2e8f0; font-variant-numeric: tabular-nums;">—</span>
+                        </div>
+                    </div>
+
+                    <!-- Item Endereço -->
+                    <div style="display: flex; align-items: center; gap: 14px; background: rgba(255, 255, 255, 0.01); border: 1px solid rgba(255, 255, 255, 0.04); padding: 14px 16px; border-radius: 12px; text-align: left;">
+                        <div style="width: 38px; height: 38px; border-radius: 8px; background-color: rgba(0, 136, 255, 0.06); border: 1px solid rgba(0, 136, 255, 0.12); color: #0088ff; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+                        </div>
+                        <div style="display: flex; flex-direction: column; gap: 2px;">
+                            <span style="font-size: 9px; font-weight: 700; color: #64748b; text-transform: uppercase; letter-spacing: 0.05em;">Endereço Corporativo</span>
+                            <span id="shipper-modal-address" style="font-size: 13px; font-weight: 700; color: #e2e8f0; line-height: 1.4;">—</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="kargo-modal-footer" style="border-top: 1px solid rgba(255, 255, 255, 0.06); padding: 16px 24px; display: flex; justify-content: flex-end; background-color: #0b0f19;">
+                <button class="modal-btn-cancel" id="js-close-shipper-modal-btn" style="padding: 10px 20px; font-size: 13px; font-weight: 700; background-color: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08); color: #94a3b8; border-radius: 8px; cursor: pointer; transition: all 0.2s;" onmouseenter="this.style.backgroundColor='rgba(255,255,255,0.06)'; this.style.color='#f8fafc';" onmouseleave="this.style.backgroundColor='rgba(255,255,255,0.03)'; this.style.color='#94a3b8';">Fechar Perfil</button>
             </div>
         </div>
     </div>

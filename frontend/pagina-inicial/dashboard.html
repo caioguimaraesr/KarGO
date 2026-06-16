@@ -1678,7 +1678,7 @@
                                 </div>
                                 <div class="card-footer-desktop">
                                     <div class="specs-row">
-                                        <span class="spec-item">${c.descricao}</span>
+                                        <span class="spec-item">${c.descricao.split('[')[0].trim()}</span>
                                         <span class="spec-item">${(c.pesoKg/1000).toFixed(1)} ton</span>
                                     </div>
                                     <a href="detalhe-carga.html?id=${c.id}" class="btn-apply-desktop">Ver Detalhes</a>
