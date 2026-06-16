@@ -241,7 +241,8 @@ function initLogout() {
 
     // Injetar na sidebar (Desktop)
     const sidebarBottom = document.querySelector('.ct-sidebar-bottom');
-    if (sidebarBottom && !document.getElementById('js-sidebar-logout')) {
+    const logoutJaExiste = document.getElementById('js-sidebar-logout') || document.getElementById('js-dynamic-logout-ct');
+    if (sidebarBottom && !logoutJaExiste) {
         const logoutLink = document.createElement('a');
         logoutLink.href = '#';
         logoutLink.id = 'js-sidebar-logout';
