@@ -128,38 +128,38 @@ public class FreteService {
 
         ajustarDataAceite(frete, statusAnterior);
 
-        Frete freteAtualizado2 = freteRepository.save(frete);
+        freteRepository.update(frete);
 
         // Se o status mudou para ACEITO, EM_TRANSITO ou CONCLUIDO, marcar a carga como inativa e cancelar concorrentes
-        Long cId = freteAtualizado2.getCargaId();
+        Long cId = frete.getCargaId();
         if (cId != null &&
-            (freteAtualizado2.getStatus() == StatusFrete.ACEITO ||
-             freteAtualizado2.getStatus() == StatusFrete.EM_TRANSITO ||
-             freteAtualizado2.getStatus() == StatusFrete.CONCLUIDO)) {
+            (frete.getStatus() == StatusFrete.ACEITO ||
+             frete.getStatus() == StatusFrete.EM_TRANSITO ||
+             frete.getStatus() == StatusFrete.CONCLUIDO)) {
             cargaRepository.findById(cId).ifPresent(carga -> {
                 carga.setAtiva(false);
-                cargaRepository.save(carga);
+                cargaRepository.update(carga);
             });
 
             // Cancelar outras propostas concorrentes no status PUBLICADO
             List<Frete> outrasPropostas = freteRepository.findByCargaId(cId);
             if (outrasPropostas != null) {
                 for (Frete outra : outrasPropostas) {
-                    if (!outra.getId().equals(freteAtualizado2.getId()) && outra.getStatus() == StatusFrete.PUBLICADO) {
+                    if (!outra.getId().equals(frete.getId()) && outra.getStatus() == StatusFrete.PUBLICADO) {
                         outra.setStatus(StatusFrete.CANCELADO);
-                        freteRepository.save(outra);
+                        freteRepository.update(outra);
                     }
                 }
             }
         }
 
-        return freteAtualizado2;
+        return frete;
     }
 
     @Transactional
     public void deletar(Long id) {
-        Frete frete = buscarPorId(id);
-        freteRepository.delete(frete);
+        buscarPorId(id);
+        freteRepository.delete(id);
     }
 
     private void vincularReferencias(Frete frete) {
@@ -255,10 +255,11 @@ public class FreteService {
         }
         frete.setAvaliacaoMotoristaNota(nota);
         frete.setAvaliacaoMotoristaComentario(comentario);
-        Frete freteSalvo = freteRepository.save(frete);
+        freteRepository.update(frete);
 
-        // Recalcular a avaliação média do motorista
-        Motorista motorista = frete.getMotorista();
+        // Recalcular a avaliação média do motorista — carregar motorista completo do banco
+        Motorista motorista = motoristaRepository.findById(frete.getMotorista().getId())
+                .orElseThrow(() -> new RecursoNaoEncontradoException("Motorista nao encontrado: " + frete.getMotorista().getId()));
         List<Frete> fretesDoMotorista = freteRepository.findByMotoristaId(motorista.getId());
         List<Frete> fretesComNota = fretesDoMotorista.stream()
                 .filter(f -> f.getAvaliacaoMotoristaNota() != null)
@@ -278,8 +279,8 @@ public class FreteService {
             motorista.setQuantidadeAvaliacoes(0);
         }
 
-        motoristaRepository.save(motorista);
-        return freteSalvo;
+        motoristaRepository.update(motorista);
+        return freteRepository.findById(frete.getId()).orElse(frete);
     }
 
     @Transactional
@@ -293,10 +294,11 @@ public class FreteService {
         }
         frete.setAvaliacaoEmbarcadorNota(nota);
         frete.setAvaliacaoEmbarcadorComentario(comentario);
-        Frete freteSalvo = freteRepository.save(frete);
+        freteRepository.update(frete);
 
-        // Recalcular a avaliação média do embarcador
-        Embarcador embarcador = frete.getEmbarcador();
+        // Recalcular a avaliação média do embarcador — carregar embarcador completo do banco
+        Embarcador embarcador = embarcadorRepository.findById(frete.getEmbarcador().getId())
+                .orElseThrow(() -> new RecursoNaoEncontradoException("Embarcador nao encontrado: " + frete.getEmbarcador().getId()));
         List<Frete> fretesDoEmbarcador = freteRepository.findByEmbarcadorId(embarcador.getId());
         List<Frete> fretesComNota = fretesDoEmbarcador.stream()
                 .filter(f -> f.getAvaliacaoEmbarcadorNota() != null)
@@ -316,8 +318,8 @@ public class FreteService {
             embarcador.setQuantidadeAvaliacoes(0);
         }
 
-        embarcadorRepository.save(embarcador);
-        return freteSalvo;
+        embarcadorRepository.update(embarcador);
+        return freteRepository.findById(frete.getId()).orElse(frete);
     }
 }
 

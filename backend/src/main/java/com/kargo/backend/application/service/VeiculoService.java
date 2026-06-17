@@ -50,13 +50,14 @@ public class VeiculoService {
         veiculo.setPlaca(veiculoAtualizado.getPlaca());
         veiculo.setModelo(veiculoAtualizado.getModelo());
         veiculo.setMotorista(buscarMotorista(exigirIdMotorista(veiculoAtualizado)));
-        return veiculoRepository.save(veiculo);
+        veiculoRepository.update(veiculo);
+        return veiculo;
     }
 
     @Transactional
     public void deletar(Long id) {
-        Veiculo veiculo = buscarPorId(id);
-        veiculoRepository.delete(veiculo);
+        buscarPorId(id);
+        veiculoRepository.delete(id);
     }
 
     private Motorista buscarMotorista(Long id) {

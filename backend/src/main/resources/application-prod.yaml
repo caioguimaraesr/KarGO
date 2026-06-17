@@ -12,6 +12,7 @@ spring:
     driver-class-name: ${SPRING_DATASOURCE_DRIVER_CLASS_NAME:org.postgresql.Driver}
   sql:
     init:
+      # Em produção, desabilitar inicialização automática
+      # Use ferramentas como Flyway ou Liquibase para migrations gerenciadas
       mode: never
-      # O DatabaseInitializer vai cuidar da criação do banco e execução dos scripts
-      # Desabilitar aqui para evitar erros quando o banco ainda não existe
+

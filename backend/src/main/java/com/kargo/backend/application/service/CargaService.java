@@ -57,13 +57,14 @@ public class CargaService {
         carga.setValorSugerido(cargaAtualizada.getValorSugerido());
         carga.setAtiva(cargaAtualizada.getAtiva());
         carga.setEmbarcador(buscarEmbarcador(exigirIdEmbarcador(cargaAtualizada)));
-        return cargaRepository.save(carga);
+        cargaRepository.update(carga);
+        return carga;
     }
 
     @Transactional
     public void deletar(Long id) {
-        Carga carga = buscarPorId(id);
-        cargaRepository.delete(carga);
+        buscarPorId(id);
+        cargaRepository.delete(id);
     }
 
     private Embarcador buscarEmbarcador(Long id) {

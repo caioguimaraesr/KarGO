@@ -44,13 +44,14 @@ public class EmbarcadorService {
         embarcador.setTelefone(embarcadorAtualizado.getTelefone());
         embarcador.setSenha(hashSenhaSeNecessario(embarcadorAtualizado.getSenha()));
         embarcador.setCpfCnpj(normalizarDigitos(embarcadorAtualizado.getCpfCnpj()));
-        return embarcadorRepository.save(embarcador);
+        embarcadorRepository.update(embarcador);
+        return embarcador;
     }
 
     @Transactional
     public void deletar(Long id) {
-        Embarcador embarcador = buscarPorId(id);
-        embarcadorRepository.delete(embarcador);
+        buscarPorId(id);
+        embarcadorRepository.delete(id);
     }
 
     private String normalizarDigitos(String valor) {

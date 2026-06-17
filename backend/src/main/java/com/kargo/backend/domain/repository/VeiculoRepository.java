@@ -1,11 +1,23 @@
 package com.kargo.backend.domain.repository;
 
 import com.kargo.backend.domain.model.Veiculo;
-import org.springframework.data.jpa.repository.JpaRepository;
 
+import java.util.Optional;
 import java.util.List;
 
-public interface VeiculoRepository extends JpaRepository<Veiculo, Long> {
+public interface VeiculoRepository {
+
+    Optional<Veiculo> findById(Long id);
 
     List<Veiculo> findByMotoristaId(Long motoristaId);
+
+    Veiculo save(Veiculo veiculo);
+
+    void update(Veiculo veiculo);
+
+    void delete(Long id);
+
+    List<Veiculo> findAll();
+
+    Optional<Veiculo> findByPlaca(String placa);
 }

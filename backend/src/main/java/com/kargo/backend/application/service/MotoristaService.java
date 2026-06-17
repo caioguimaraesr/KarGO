@@ -55,13 +55,14 @@ public class MotoristaService {
         motorista.setAgencia(motoristaAtualizado.getAgencia());
         motorista.setContaNumero(motoristaAtualizado.getContaNumero());
         motorista.setContaTipo(motoristaAtualizado.getContaTipo());
-        return motoristaRepository.save(motorista);
+        motoristaRepository.update(motorista);
+        return motorista;
     }
 
     @Transactional
     public void deletar(Long id) {
-        Motorista motorista = buscarPorId(id);
-        motoristaRepository.delete(motorista);
+        buscarPorId(id);
+        motoristaRepository.delete(id);
     }
 
     private String normalizarDigitos(String valor) {

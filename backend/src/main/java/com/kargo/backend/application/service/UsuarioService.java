@@ -26,8 +26,9 @@ public class UsuarioService {
 
     @Transactional
     public void deletar(Long id) {
-        Usuario usuario = buscarPorId(id);
-        usuarioRepository.delete(usuario);
+        usuarioRepository.findById(id)
+            .orElseThrow(() -> new RecursoNaoEncontradoException("Usuario nao encontrado: " + id));
+        usuarioRepository.delete(id);
     }
 }
 
