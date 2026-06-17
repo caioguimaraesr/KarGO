@@ -13,6 +13,7 @@ document.addEventListener('DOMContentLoaded', () => {
     initUrgencySelector();
     initRevealAnimations();
     initSidebar();
+    initLogout();
 });
 
 /* === TABS === */
@@ -223,6 +224,47 @@ function initSidebar() {
     });
 }
 
+/* === INJETAR LOGOUT DINAMICAMENTE === */
+function initLogout() {
+    function executarLogout() {
+        if (confirm('Deseja realmente sair da sua conta?')) {
+            const api = window.KargoApi;
+            if (api) {
+                api.logout();
+            } else {
+                localStorage.removeItem('kargoToken');
+                localStorage.removeItem('kargoSession');
+                window.location.href = '../login.html';
+            }
+        }
+    }
+
+    // Injetar na sidebar (Desktop)
+    const sidebarBottom = document.querySelector('.ct-sidebar-bottom');
+    const logoutJaExiste = document.getElementById('js-sidebar-logout') || document.getElementById('js-dynamic-logout-ct');
+    if (sidebarBottom && !logoutJaExiste) {
+        const logoutLink = document.createElement('a');
+        logoutLink.href = '#';
+        logoutLink.id = 'js-sidebar-logout';
+        logoutLink.className = 'ct-menu-item';
+        logoutLink.style.marginTop = '8px';
+        logoutLink.style.color = '#ef4444';
+        logoutLink.innerHTML = `
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="stroke:#ef4444; width:18px; height:18px; margin-right: 8px;">
+                <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/>
+                <polyline points="16 17 21 12 16 7"/>
+                <line x1="21" y1="12" x2="9" y2="12"/>
+            </svg>
+            Sair da Conta
+        `;
+        logoutLink.addEventListener('click', (e) => {
+            e.preventDefault();
+            executarLogout();
+        });
+        sidebarBottom.appendChild(logoutLink);
+    }
+}
+
 /* === CHAT SIMULATION === */
 window.sendChatMessage = function() {
     const input = document.getElementById('chat-input');
@@ -281,5 +323,14 @@ window.formatCurrency = function(input) {
     let value = input.value.replace(/\D/g, '');
     value = (parseInt(value, 10) / 100).toFixed(2);
     value = value.replace('.', ',').replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+    input.value = value;
+};
+
+/* === UTILITY: Format CEP === */
+window.formatCEP = function(input) {
+    let value = input.value.replace(/\D/g, '');
+    if (value.length > 5) {
+        value = value.substring(0, 5) + '-' + value.substring(5, 8);
+    }
     input.value = value;
 };

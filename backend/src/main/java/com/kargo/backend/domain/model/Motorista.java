@@ -21,7 +21,7 @@ import java.time.LocalDate;
 @Entity
 @Table(name = "motoristas")
 @PrimaryKeyJoinColumn(name = "usuario_id")
-@JsonPropertyOrder({"id", "nome", "email", "telefone", "senha", "tipoUsuario", "dataCadastro", "cpf", "cnh", "dataValidadeCnh", "disponivel", "avaliacaoMedia"})
+@JsonPropertyOrder({"id", "nome", "email", "telefone", "senha", "tipoUsuario", "dataCadastro", "cpf", "cnh", "dataValidadeCnh", "disponivel", "avaliacaoMedia", "quantidadeAvaliacoes"})
 @Getter
 @Setter
 @NoArgsConstructor
@@ -43,6 +43,14 @@ public class Motorista extends Usuario {
 
     @DecimalMin(value = "0.0")
     private BigDecimal avaliacaoMedia;
+
+    private Integer quantidadeAvaliacoes = 0;
+
+    private String chavePix;
+    private String bancoNome;
+    private String agencia;
+    private String contaNumero;
+    private String contaTipo;
 
     @PrePersist
     @PreUpdate

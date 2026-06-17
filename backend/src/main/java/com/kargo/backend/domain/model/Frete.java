@@ -31,6 +31,9 @@ public class Frete {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @jakarta.persistence.Column(name = "carga_id")
+    private Long cargaId;
+
     @NotBlank
     private String titulo;
 
@@ -78,7 +81,17 @@ public class Frete {
     @JoinColumn(name = "veiculo_id")
     private Veiculo veiculo;
 
+    @JoinColumn(name = "carga_id", insertable = false, updatable = false)
+    @ManyToOne(optional = true)
+    private Carga carga;
 
+    private Integer avaliacaoMotoristaNota;
+
+    private String avaliacaoMotoristaComentario;
+
+    private Integer avaliacaoEmbarcadorNota;
+
+    private String avaliacaoEmbarcadorComentario;
 }
 
 

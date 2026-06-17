@@ -90,8 +90,8 @@
                     <div class="ct-stat-card">
                         <div class="ct-stat-left">
                             <h3>Total Pago no Mês</h3>
-                            <div class="ct-stat-value" style="color: var(--accent-green);">R$ 12.300</div>
-                            <div class="ct-stat-trend up">7 fretes liquidados</div>
+                            <div class="ct-stat-value" id="pay-total-paid" style="color: var(--accent-green);">R$ 0,00</div>
+                            <div class="ct-stat-trend up" id="pay-liquidated-count">0 fretes liquidados</div>
                         </div>
                         <div class="ct-stat-icon green">
                             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="24" height="24"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
@@ -100,8 +100,8 @@
                     <div class="ct-stat-card">
                         <div class="ct-stat-left">
                             <h3>Valores a Pagar</h3>
-                            <div class="ct-stat-value" style="color: var(--accent-orange);">R$ 2.800</div>
-                            <div class="ct-stat-trend">1 frete em andamento</div>
+                            <div class="ct-stat-value" id="pay-total-pending" style="color: var(--accent-orange);">R$ 0,00</div>
+                            <div class="ct-stat-trend" id="pay-pending-count">0 fretes em andamento</div>
                         </div>
                         <div class="ct-stat-icon orange">
                             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="24" height="24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
@@ -110,7 +110,7 @@
                     <div class="ct-stat-card">
                         <div class="ct-stat-left">
                             <h3>Em Análise/Retidos</h3>
-                            <div class="ct-stat-value" style="color: var(--accent-red);">R$ 0,00</div>
+                            <div class="ct-stat-value" id="pay-total-disputed" style="color: var(--accent-red);">R$ 0,00</div>
                             <div class="ct-stat-trend">Sem disputas ativas</div>
                         </div>
                         <div class="ct-stat-icon red">
@@ -123,7 +123,7 @@
                 <div class="ct-section-card ct-reveal" style="margin-top: 20px;">
                     <div class="ct-section-header">
                         <h2 class="ct-section-title">Histórico de Transações</h2>
-                        <button class="ct-btn ct-btn-outline ct-btn-sm" onclick="alert('Exportando CSV...')">Exportar Planilha</button>
+                        <button class="ct-btn ct-btn-outline ct-btn-sm" onclick="alert('Exportando planilha de extrato financeiro...')">Exportar Planilha</button>
                     </div>
 
                     <!-- Tabela de Transações -->
@@ -134,57 +134,15 @@
                                     <th style="padding:14px 10px;">ID do Frete</th>
                                     <th style="padding:14px 10px;">Motorista</th>
                                     <th style="padding:14px 10px;">Rota</th>
-                                    <th style="padding:14px 10px;">Data Conclusão</th>
+                                    <th style="padding:14px 10px;">Data Entrega</th>
                                     <th style="padding:14px 10px;">Valor</th>
                                     <th style="padding:14px 10px;">Status</th>
                                     <th style="padding:14px 10px; text-align:right;">Ações</th>
                                 </tr>
                             </thead>
-                            <tbody>
-                                <!-- Linha 1 -->
-                                <tr style="border-bottom:1px solid var(--border-light); color:var(--text-body);">
-                                    <td style="padding:16px 10px; font-weight:700; color:var(--text-dark);">#KG-1234</td>
-                                    <td style="padding:16px 10px; display:flex; align-items:center; gap:8px;">
-                                        <img src="../assets/images/motorista.png" alt="João" style="width:28px; height:28px; border-radius:50%; object-fit:cover;">
-                                        João Silva
-                                    </td>
-                                    <td style="padding:16px 10px;">Recife, PE → Natal, RN</td>
-                                    <td style="padding:16px 10px;">Em trânsito</td>
-                                    <td style="padding:16px 10px; font-weight:700;">R$ 2.800,00</td>
-                                    <td style="padding:16px 10px;"><span class="ct-badge ct-badge-orange"><span class="status-indicator-dot orange"></span>Aguardando Entrega</span></td>
-                                    <td style="padding:16px 10px; text-align:right;">
-                                        <button class="ct-btn ct-btn-secondary ct-btn-sm" style="opacity:0.5; cursor:not-allowed;" disabled>NF-e indisponível</button>
-                                    </td>
-                                </tr>
-                                <!-- Linha 2 -->
-                                <tr style="border-bottom:1px solid var(--border-light); color:var(--text-body);">
-                                    <td style="padding:16px 10px; font-weight:700; color:var(--text-dark);">#KG-1230</td>
-                                    <td style="padding:16px 10px; display:flex; align-items:center; gap:8px;">
-                                        <img src="../assets/images/motorista.png" alt="Ana" style="width:28px; height:28px; border-radius:50%; object-fit:cover;">
-                                        Ana Paula
-                                    </td>
-                                    <td style="padding:16px 10px;">Recife, PE → João Pessoa, PB</td>
-                                    <td style="padding:16px 10px;">05/06/2026</td>
-                                    <td style="padding:16px 10px; font-weight:700; color:var(--accent-green);">R$ 1.200,00</td>
-                                    <td style="padding:16px 10px;"><span class="ct-badge ct-badge-green"><span class="status-indicator-dot green"></span>Pago</span></td>
-                                    <td style="padding:16px 10px; text-align:right;">
-                                        <button class="ct-btn ct-btn-outline ct-btn-sm" onclick="alert('Fazendo download do comprovante...')">Comprovante</button>
-                                    </td>
-                                </tr>
-                                <!-- Linha 3 -->
-                                <tr style="border-bottom:1px solid var(--border-light); color:var(--text-body);">
-                                    <td style="padding:16px 10px; font-weight:700; color:var(--text-dark);">#KG-1225</td>
-                                    <td style="padding:16px 10px; display:flex; align-items:center; gap:8px;">
-                                        <img src="../assets/images/motorista.png" alt="Carlos" style="width:28px; height:28px; border-radius:50%; object-fit:cover;">
-                                        Carlos Santos
-                                    </td>
-                                    <td style="padding:16px 10px;">Recife, PE → Caruaru, PE</td>
-                                    <td style="padding:16px 10px;">30/05/2026</td>
-                                    <td style="padding:16px 10px; font-weight:700; color:var(--accent-green);">R$ 1.350,00</td>
-                                    <td style="padding:16px 10px;"><span class="ct-badge ct-badge-green"><span class="status-indicator-dot green"></span>Pago</span></td>
-                                    <td style="padding:16px 10px; text-align:right;">
-                                        <button class="ct-btn ct-btn-outline ct-btn-sm" onclick="alert('Fazendo download do comprovante...')">Comprovante</button>
-                                    </td>
+                            <tbody id="payments-table-body">
+                                <tr>
+                                    <td colspan="7" style="padding: 30px; text-align: center; color: var(--text-muted);">Carregando histórico financeiro...</td>
                                 </tr>
                             </tbody>
                         </table>
@@ -221,6 +179,9 @@
         </a>
     </nav>
 
+    <script src="../js/api-client.js"></script>
+    <script src="js/auth-guard-contratante.js"></script>
     <script src="js/contratante.js"></script>
+    <script src="js/pagamentos-contratante.js"></script>
 </body>
 </html>

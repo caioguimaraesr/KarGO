@@ -116,7 +116,15 @@
                     
                     <!-- COLUNA ESQUERDA: MINI-PANEL DE PERFIL -->
                     <section class="profile-sidebar-card">
-                        <img src="assets/images/motorista.png" alt="João Transportes" class="profile-avatar-large">
+                        <div style="position:relative; width:110px; height:110px; margin:0 auto 20px auto; flex-shrink:0;">
+                            <div id="profile-avatar-container" style="width:100%; height:100%; display:flex; justify-content:center; align-items:center;">
+                                <div class="profile-avatar-large-placeholder" style="width:110px;height:110px;border-radius:50%;background:linear-gradient(135deg,#0088ff,#00d4ff);color:#fff;display:flex;align-items:center;justify-content:center;font-size:36px;font-weight:900;border:3px solid var(--accent-blue);box-shadow:0 0 20px var(--accent-blue-glow);">—</div>
+                            </div>
+                            <button type="button" onclick="triggerAvatarUpload()" style="position:absolute; bottom:0; right:0; width:28px; height:28px; border-radius:50%; background:var(--accent-blue); border:2px solid #fff; display:flex; align-items:center; justify-content:center; cursor:pointer; box-shadow:0 2px 4px rgba(0,0,0,0.1); color:#fff; padding:0; z-index:10;" title="Alterar Foto">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" width="12" height="12"><path d="M12 20h9"/><path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg>
+                            </button>
+                            <input type="file" id="avatar-file-input" style="display:none;" accept="image/*" onchange="handleAvatarSelected(this)">
+                        </div>
                         
                         <h2 class="profile-name">João Transportes</h2>
                         
@@ -144,11 +152,11 @@
                             <span class="text-xs text-slate-500 font-bold block mb-2 uppercase tracking-wider">Documentação</span>
                             <div class="flex items-center justify-between text-xs py-2 border-b border-slate-200">
                                 <span class="text-slate-600">CNH Categoria E</span>
-                                <span class="text-emerald-600 font-bold">Válida</span>
+                                <span class="text-emerald-600 font-bold" id="sidebar-cnh-status">Válida</span>
                             </div>
                             <div class="flex items-center justify-between text-xs py-2">
                                 <span class="text-slate-600">Registro ANTT</span>
-                                <span class="text-emerald-600 font-bold">Ativo</span>
+                                <span class="text-emerald-600 font-bold" id="sidebar-antt-status">Ativo</span>
                             </div>
                         </div>
                     </section>
@@ -198,7 +206,7 @@
 
                                     <div class="form-group-kargo">
                                         <label class="form-label-kargo" for="prof-pix-key">Chave Pix Principal</label>
-                                        <input type="text" id="prof-pix-key" class="form-input-kargo" value="45.987.126/0001-09 (CNPJ)" disabled>
+                                        <input type="text" id="prof-pix-key" class="form-input-kargo" value="" required>
                                     </div>
 
                                     <div class="form-group-kargo">
@@ -234,7 +242,7 @@
                                             <div class="text-sky-600 p-2 rounded-lg bg-sky-50 border border-sky-100">
                                                 <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/><circle cx="8" cy="15" r="2"/><path d="M16 13h2"/><path d="M16 16h2"/></svg>
                                             </div>
-                                            <span class="status-badge disponivel">Verificado</span>
+                                             <span class="status-badge disponivel" id="status-cnh">Verificado</span>
                                         </div>
                                         <h4 class="text-slate-800 text-sm font-bold mt-2">CNH (Frente e Verso)</h4>
                                         <p class="text-slate-600 text-[11px] leading-relaxed">Carteira Nacional de Habilitação ativa (Categoria C, D ou E).</p>
@@ -320,9 +328,347 @@
         </a>
     </nav>
 
+    <script src="js/api-client.js"></script>
+    <script src="js/auth-guard.js"></script>
     <script>
+        const api = window.KargoApi;
+        const auth = window.KargoAuth;
+
+        let motoristaDadosCompletos = null;
+
+        async function loadProfile() {
+            if (!api || !auth) return;
+
+            const motoristaId = auth.getUserId();
+            if (!motoristaId) return;
+
+            try {
+                // Carregar dados completos do motorista
+                const data = await api.getMotorista(motoristaId);
+                motoristaDadosCompletos = data;
+
+                // Preencher formulário
+                document.getElementById('prof-name').value = data.nome || '';
+                document.getElementById('prof-cnpj').value = data.cpf || '';
+                document.getElementById('prof-phone').value = data.telefone || '';
+                document.getElementById('prof-email').value = data.email || '';
+
+                // Nome no sidebar
+                document.querySelectorAll('.profile-name').forEach(el => {
+                    el.textContent = data.nome || 'Motorista';
+                });
+
+                // Carregar viagens para mostrar a contagem real
+                const fretes = await api.getFretesByMotorista(motoristaId);
+                const concluidos = (fretes || []).filter(f => f.status === 'CONCLUIDO');
+                document.querySelectorAll('.p-stat-val')[0].textContent = concluidos.length;
+
+                // Membro desde data real do banco
+                if (data.dataCadastro) {
+                    const dateObj = new Date(data.dataCadastro);
+                    const meses = ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez'];
+                    const mes = meses[dateObj.getMonth()];
+                    const ano = dateObj.getFullYear();
+                    const membroDesdeEl = document.querySelectorAll('.p-stat-val')[1];
+                    if (membroDesdeEl) {
+                        membroDesdeEl.textContent = `${mes} ${ano}`;
+                    }
+                }
+
+                // Preencher banco e pix salvos no backend
+                document.getElementById('prof-bank').value = data.bancoNome || '';
+                document.getElementById('prof-pix-key').value = data.chavePix || '';
+                document.getElementById('prof-agency').value = data.agencia || '';
+                document.getElementById('prof-acc').value = data.contaNumero || '';
+
+                // Avatar grande e iniciais fallback ou imagem Base64 do localStorage
+                const keyAvatar = `kargo_avatar_${motoristaId}`;
+                const savedAvatar = localStorage.getItem(keyAvatar);
+
+                // Atualizar avatar no header se houver
+                const headerAvatar = document.querySelector('.user-avatar img');
+                if (headerAvatar && savedAvatar) {
+                    headerAvatar.src = savedAvatar;
+                }
+
+                const avatarContainer = document.getElementById('profile-avatar-container');
+                if (avatarContainer) {
+                    if (savedAvatar) {
+                        avatarContainer.innerHTML = `
+                            <img src="${savedAvatar}" alt="Foto de Perfil" class="profile-avatar-large" style="width:110px; height:110px; border-radius:50%; border:3px solid var(--accent-blue); object-fit:cover; margin:0;">
+                        `;
+                    } else {
+                        const name = data.nome || 'Motorista';
+                        const initials = name.split(' ').map(w => w[0]).join('').slice(0, 2).toUpperCase();
+                        avatarContainer.innerHTML = `
+                            <div class="profile-avatar-large-placeholder" style="width:110px;height:110px;border-radius:50%;background:linear-gradient(135deg,#0088ff,#00d4ff);color:#fff;display:flex;align-items:center;justify-content:center;font-size:36px;font-weight:900;border:3px solid var(--accent-blue);box-shadow:0 0 20px var(--accent-blue-glow);text-transform:uppercase;">
+                                ${initials}
+                            </div>
+                        `;
+                    }
+                }
+
+                // Avaliação média real e contagem realista do backend
+                const avaliacaoVal = data.avaliacaoMedia ? parseFloat(data.avaliacaoMedia).toFixed(1) : '0.0';
+                const numAvaliacoes = data.quantidadeAvaliacoes !== undefined && data.quantidadeAvaliacoes !== null ? data.quantidadeAvaliacoes : 0;
+                const ratingSpan = document.querySelector('.profile-rating span');
+                if (ratingSpan) {
+                    ratingSpan.textContent = `${avaliacaoVal} (${numAvaliacoes} ${numAvaliacoes === 1 ? 'avaliação' : 'avaliações'})`;
+                }
+
+                // Documentação
+                const statusAntt = document.getElementById('status-antt');
+                if (statusAntt) {
+                    statusAntt.textContent = data.ativo ? 'Ativo' : 'Pendente';
+                }
+
+                // Atualizar status CNH no perfil
+                const statusCnh = document.getElementById('status-cnh');
+                const sidebarCnh = document.getElementById('sidebar-cnh-status');
+                if (statusCnh) {
+                    if (data.cnh === 'PENDENTE' || !data.cnh) {
+                        statusCnh.textContent = 'Pendente';
+                        statusCnh.className = 'status-badge';
+                        statusCnh.style.cssText = 'background-color:rgba(219,68,85,0.1); color:#db4455; border:1px solid rgba(219,68,85,0.2);';
+                        if (sidebarCnh) {
+                            sidebarCnh.textContent = 'Pendente';
+                            sidebarCnh.className = 'text-red-500 font-bold';
+                        }
+                    } else if (data.cnh === 'ENVIADA') {
+                        statusCnh.textContent = 'Em Análise';
+                        statusCnh.className = 'status-badge em-transito';
+                        statusCnh.style.cssText = 'background-color:rgba(14,165,233,0.1); color:rgb(56,189,248); border:1px solid rgba(14,165,233,0.2);';
+                        if (sidebarCnh) {
+                            sidebarCnh.textContent = 'Em Análise';
+                            sidebarCnh.className = 'text-sky-500 font-bold';
+                        }
+                    } else {
+                        statusCnh.textContent = 'Verificado';
+                        statusCnh.className = 'status-badge disponivel';
+                        statusCnh.style.cssText = '';
+                        if (sidebarCnh) {
+                            sidebarCnh.textContent = 'Válida';
+                            sidebarCnh.className = 'text-emerald-600 font-bold';
+                        }
+                    }
+                }
+
+                // Atualizar status ANTT na sidebar
+                const sidebarAntt = document.getElementById('sidebar-antt-status');
+                if (sidebarAntt) {
+                    sidebarAntt.textContent = data.ativo ? 'Ativo' : 'Pendente';
+                    sidebarAntt.className = data.ativo ? 'text-emerald-600 font-bold' : 'text-red-500 font-bold';
+                }
+
+            } catch (err) {
+                console.error('Erro ao carregar perfil:', err);
+            }
+        }
+
+        async function saveProfileChanges() {
+            const btn = document.getElementById('btn-save-profile');
+            const originalText = btn.innerHTML;
+            
+            btn.disabled = true;
+            btn.innerHTML = '<div class="spinner"></div> Salvando...';
+            
+            const name = document.getElementById('prof-name').value.trim();
+            const phone = document.getElementById('prof-phone').value.trim();
+            const email = document.getElementById('prof-email').value.trim();
+            const city = document.getElementById('prof-city').value.trim();
+            const bank = document.getElementById('prof-bank').value.trim();
+            const pix = document.getElementById('prof-pix-key').value.trim();
+            const agency = document.getElementById('prof-agency').value.trim();
+            const acc = document.getElementById('prof-acc').value.trim();
+
+            const motoristaId = auth.getUserId();
+
+            try {
+                if (!motoristaDadosCompletos) {
+                    motoristaDadosCompletos = await api.getMotorista(motoristaId);
+                }
+
+                const payload = {
+                    ...motoristaDadosCompletos,
+                    nome: name,
+                    telefone: phone,
+                    email: email,
+                    bancoNome: bank,
+                    chavePix: pix,
+                    agencia: agency,
+                    contaNumero: acc
+                };
+
+                const updated = await api.updateMotorista(motoristaId, payload);
+                api.saveSessionFromApi(updated);
+                auth.fillUserData(auth.getSession());
+
+                // Salvar dados bancários e de cidade no localStorage por compatibilidade
+                localStorage.setItem('kargo_bank_' + motoristaId, bank);
+                localStorage.setItem('kargo_pix_' + motoristaId, pix);
+                localStorage.setItem('kargo_city_' + motoristaId, city);
+
+                showToast('Perfil Atualizado!', 'As alterações do seu cadastro foram salvas com sucesso.');
+                loadProfile();
+            } catch (err) {
+                showToast('Erro ao salvar', err.message, 'error');
+            } finally {
+                btn.disabled = false;
+                btn.innerHTML = originalText;
+            }
+        }
+
+        function triggerAvatarUpload() {
+            const fileInput = document.getElementById('avatar-file-input');
+            if (fileInput) fileInput.click();
+        }
+
+        function handleAvatarSelected(input) {
+            if (!input.files || input.files.length === 0) return;
+            const file = input.files[0];
+            
+            if (!file.type.startsWith('image/')) {
+                showToast('Tipo inválido', 'Selecione uma imagem válida (PNG, JPG, etc).', 'error');
+                return;
+            }
+            
+            if (file.size > 2 * 1024 * 1024) {
+                showToast('Arquivo muito grande', 'Selecione uma imagem menor que 2MB.', 'error');
+                return;
+            }
+
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const base64Image = e.target.result;
+                const motoristaId = auth.getUserId();
+                localStorage.setItem(`kargo_avatar_${motoristaId}`, base64Image);
+                
+                // Atualizar elementos na tela
+                const avatarContainer = document.getElementById('profile-avatar-container');
+                if (avatarContainer) {
+                    avatarContainer.innerHTML = `
+                        <img src="${base64Image}" alt="Foto de Perfil" class="profile-avatar-large" style="width:110px; height:110px; border-radius:50%; border:3px solid var(--accent-blue); object-fit:cover; margin:0;">
+                    `;
+                }
+                
+                // Atualizar header
+                document.querySelectorAll('.user-avatar').forEach(img => {
+                    let targetImg = img;
+                    if (img.tagName !== 'IMG') {
+                        targetImg = img.querySelector('img');
+                    }
+                    if (!targetImg) return;
+
+                    const oldPlaceholder = targetImg.parentElement.querySelector('.header-avatar-placeholder');
+                    if (oldPlaceholder) oldPlaceholder.remove();
+                    
+                    targetImg.src = base64Image;
+                    targetImg.style.display = '';
+                });
+                
+                showToast('Foto Atualizada!', 'Sua nova foto de perfil foi carregada com sucesso.');
+            };
+            reader.onerror = function() {
+                showToast('Erro ao carregar', 'Não foi possível ler a imagem selecionada.', 'error');
+            };
+            reader.readAsDataURL(file);
+        }
+
+        function triggerFileInput(id) {
+            const input = document.getElementById(`file-${id}`);
+            if (input) {
+                input.click();
+            }
+        }
+
+        function handleFileSelected(id, input) {
+            if (!input.files || input.files.length === 0) return;
+            const file = input.files[0];
+            let btn;
+            let docName = "";
+            let statusBadgeId = "";
+            
+            if (id === 'cnh') {
+                btn = document.querySelector("button[onclick=\"triggerFileInput('cnh')\"]");
+                docName = "CNH";
+            } else if (id === 'antt') {
+                btn = document.querySelector("button[onclick=\"triggerFileInput('antt')\"]");
+                docName = "Registro ANTT";
+                statusBadgeId = "status-antt";
+            } else if (id === 'resid') {
+                btn = document.getElementById('btn-upload-resid');
+                docName = "Comprovante de Residência";
+                statusBadgeId = "status-resid";
+            }
+            
+            if (!btn) return;
+            
+            const originalHTML = btn.innerHTML;
+            btn.disabled = true;
+            btn.innerHTML = '<div class="spinner"></div> Carregando...';
+            
+            setTimeout(async () => {
+                btn.disabled = false;
+                btn.innerHTML = `
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+                    Reenviar ${id === 'antt' ? 'ANTT' : (id === 'resid' ? 'Documento' : 'CNH')}
+                `;
+                
+                if (id === 'resid') {
+                    btn.className = "bg-slate-100 border border-slate-200 text-slate-700 hover:bg-slate-200 py-2.5 rounded-lg text-xs font-bold w-full cursor-pointer transition flex items-center justify-center gap-1.5";
+                }
+                
+                let badge;
+                if (statusBadgeId) {
+                    badge = document.getElementById(statusBadgeId);
+                } else {
+                    badge = btn.closest('.bg-slate-50').querySelector('.status-badge');
+                }
+                
+                if (badge) {
+                    badge.textContent = "Em Análise";
+                    badge.className = "status-badge em-transito";
+                    badge.style.backgroundColor = "rgba(14, 165, 233, 0.1)";
+                    badge.style.color = "rgb(56, 189, 248)";
+                    badge.style.border = "1px solid rgba(14, 165, 233, 0.2)";
+                }
+
+                // Se o ID enviado for CNH, atualiza no backend para 'ENVIADA'
+                if (id === 'cnh') {
+                    try {
+                        const motoristaId = auth.getUserId();
+                        const motoristaDados = await api.getMotorista(motoristaId);
+                        if (motoristaDados) {
+                            const motoristaPayload = {
+                                ...motoristaDados,
+                                cnh: 'ENVIADA'
+                            };
+                            const updated = await api.updateMotorista(motoristaId, motoristaPayload);
+                            api.saveSessionFromApi(updated);
+                            // Atualizar na sidebar do perfil também
+                            const sidebarCnh = document.getElementById('sidebar-cnh-status');
+                            if (sidebarCnh) {
+                                sidebarCnh.textContent = 'Em Análise';
+                                sidebarCnh.className = 'text-sky-500 font-bold';
+                            }
+                        }
+                    } catch (err) {
+                        console.error('Erro ao atualizar CNH no backend:', err);
+                    }
+                }
+                
+                showToast(
+                    'Documento Enviado!', 
+                    `O arquivo "${file.name}" para ${docName} foi carregado e está em análise.`
+                );
+                input.value = "";
+            }, 1500);
+        }
+
+        // Mostra Toast de Sucesso/Info
         function showToast(title, desc, type = 'success') {
             const container = document.getElementById('toast-container');
+            if (!container) return;
             
             const toast = document.createElement('div');
             toast.className = `kargo-toast ${type}`;
@@ -347,99 +693,31 @@
             toast.classList.add('show');
             
             const progress = toast.querySelector('.toast-progress-bar');
-            progress.style.animation = 'progress-deplete 3.5s linear forwards';
+            progress.style.animation = 'progress-deplete 4.5s linear forwards';
             
             setTimeout(() => {
                 toast.classList.remove('show');
                 setTimeout(() => { toast.remove(); }, 400);
-            }, 3500);
+            }, 4500);
         }
 
-        function saveProfileChanges() {
-            const btn = document.getElementById('btn-save-profile');
-            const originalText = btn.innerHTML;
-            
-            btn.disabled = true;
-            btn.innerHTML = '<div class="spinner"></div> Salvando...';
-            
-            setTimeout(() => {
-                btn.disabled = false;
-                btn.innerHTML = originalText;
+        document.addEventListener('DOMContentLoaded', () => {
+            loadProfile();
+            // Preencher cidade base se já houver salva
+            const motoristaId = auth.getUserId();
+            if (motoristaId) {
+                const city = localStorage.getItem('kargo_city_' + motoristaId) || 'Recife, PE';
+                document.getElementById('prof-city').value = city;
                 
-                showToast('Perfil Atualizado!', 'As alterações do seu cadastro foram salvas com sucesso no banco de dados.');
-            }, 1000);
-        }
-
-        function triggerFileInput(id) {
-            const input = document.getElementById(`file-${id}`);
-            if (input) {
-                input.click();
+                // Carregar avatar do topo inicialmente se houver
+                const keyAvatar = `kargo_avatar_${motoristaId}`;
+                const savedAvatar = localStorage.getItem(keyAvatar);
+                const headerAvatar = document.querySelector('.user-avatar img');
+                if (headerAvatar && savedAvatar) {
+                    headerAvatar.src = savedAvatar;
+                }
             }
-        }
-
-        function handleFileSelected(id, input) {
-            if (!input.files || input.files.length === 0) return;
-            
-            const file = input.files[0];
-            
-            let btn;
-            let docName = "";
-            let statusBadgeId = "";
-            
-            if (id === 'cnh') {
-                btn = document.querySelector("button[onclick=\"triggerFileInput('cnh')\"]");
-                docName = "CNH";
-            } else if (id === 'antt') {
-                btn = document.querySelector("button[onclick=\"triggerFileInput('antt')\"]");
-                docName = "Registro ANTT";
-                statusBadgeId = "status-antt";
-            } else if (id === 'resid') {
-                btn = document.getElementById('btn-upload-resid');
-                docName = "Comprovante de Residência";
-                statusBadgeId = "status-resid";
-            }
-            
-            if (!btn) return;
-            
-            const originalHTML = btn.innerHTML;
-            btn.disabled = true;
-            btn.innerHTML = '<div class="spinner"></div> Carregando...';
-            
-            setTimeout(() => {
-                btn.disabled = false;
-                
-                btn.innerHTML = `
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
-                    Reenviar ${id === 'antt' ? 'ANTT' : (id === 'resid' ? 'Documento' : 'CNH')}
-                `;
-                
-                if (id === 'resid') {
-                    btn.className = "bg-slate-100 border border-slate-200 text-slate-700 hover:bg-slate-200 py-2.5 rounded-lg text-xs font-bold w-full cursor-pointer transition flex items-center justify-center gap-1.5";
-                }
-                
-                let badge;
-                if (statusBadgeId) {
-                    badge = document.getElementById(statusBadgeId);
-                } else {
-                    badge = btn.closest('.bg-slate-50').querySelector('.status-badge');
-                }
-                
-                if (badge) {
-                    badge.textContent = "Em Análise";
-                    badge.className = "status-badge em-transito";
-                    badge.style.backgroundColor = "rgba(14, 165, 233, 0.1)";
-                    badge.style.color = "rgb(56, 189, 248)";
-                    badge.style.border = "1px solid rgba(14, 165, 233, 0.2)";
-                }
-                
-                showToast(
-                    'Documento Enviado!', 
-                    `O arquivo "${file.name}" para ${docName} foi carregado e está em análise.`
-                );
-                
-                input.value = "";
-            }, 1500);
-        }
+        });
     </script>
 </body>
 </html>

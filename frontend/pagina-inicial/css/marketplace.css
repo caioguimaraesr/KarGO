@@ -256,6 +256,7 @@ body.mp-body {
     gap: 12px;
     border-left: 1px solid var(--border-translucent);
     padding-left: 24px;
+    cursor: pointer;
 }
 
 .mp-user-profile .user-info {

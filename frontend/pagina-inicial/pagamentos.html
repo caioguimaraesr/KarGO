@@ -127,7 +127,7 @@
                     <div class="finance-card pending">
                         <div class="finance-card-info">
                             <h3>Saldo a Liberar</h3>
-                            <div class="amount">R$ 10.200,00</div>
+                            <div class="amount" id="pending-balance-txt">R$ 0,00</div>
                             <span class="text-xs text-sky-400 font-semibold block mt-2">Garantia Pix retida (Em rota ativa)</span>
                         </div>
                         <div class="finance-card-icon">
@@ -138,7 +138,7 @@
                     <div class="finance-card withdrawn">
                         <div class="finance-card-info">
                             <h3>Total Resgatado</h3>
-                            <div class="amount" id="withdrawn-balance-txt">R$ 24.650,00</div>
+                            <div class="amount" id="withdrawn-balance-txt">R$ 0,00</div>
                             <span class="text-xs text-amber-400 font-semibold block mt-2">Enviado para sua conta bancária</span>
                         </div>
                         <div class="finance-card-icon">
@@ -157,16 +157,23 @@
                             Resgate via PIX
                         </h2>
                         
-                        <form id="pix-withdrawal-form" onsubmit="event.preventDefault(); handlePixWithdrawal();">
+                        <div id="pix-unconfigured-box" style="display:none; padding:16px; background:rgba(255,159,10,0.05); border:1px dashed rgba(255,159,10,0.3); border-radius:12px; margin-bottom:16px;">
+                            <p class="text-sm text-slate-700 leading-relaxed" style="margin-bottom:12px;">
+                                Nenhuma chave Pix configurada. Para solicitar resgates, adicione seus dados bancários nas configurações de perfil. A conta bancária de destino deve obrigatoriamente possuir a mesma titularidade (CPF/CNPJ) do cadastro.
+                            </p>
+                            <a href="perfil.html" class="inline-block bg-sky-600 hover:bg-sky-700 text-white font-bold text-xs py-2 px-4 rounded transition no-underline" style="color:#ffffff !important; border:none; text-align:center;">Configurar Dados Bancários</a>
+                        </div>
+
+                        <form id="pix-withdrawal-form" onsubmit="event.preventDefault(); handlePixWithdrawal();" style="display:none;">
                             <div class="pix-input-group">
                                 <div class="pix-field">
                                     <label class="pix-label" for="pix-type">Tipo de Chave Pix</label>
                                     <div class="pix-select-wrapper">
                                         <select id="pix-type" class="pix-select" required>
-                                            <option value="cnpj">CNPJ (João Transportes LTDA)</option>
+                                            <option value="cpf">CPF</option>
+                                            <option value="cnpj">CNPJ</option>
                                             <option value="celular">Celular</option>
                                             <option value="email">E-mail</option>
-                                            <option value="cpf">CPF</option>
                                             <option value="aleatoria">Chave Aleatória</option>
                                         </select>
                                         <svg class="select-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
@@ -175,7 +182,7 @@
                                 
                                 <div class="pix-field">
                                     <label class="pix-label" for="pix-key">Chave PIX destino</label>
-                                    <input type="text" id="pix-key" class="pix-input" placeholder="12.345.678/0001-90" value="45.987.126/0001-09" required>
+                                    <input type="text" id="pix-key" class="pix-input" placeholder="000.000.000-00" required>
                                 </div>
 
                                 <div class="pix-field">
@@ -193,9 +200,12 @@
                                 <span>O dinheiro será creditado na sua conta vinculada em até 2 minutos via Pix Escrow KarGO.</span>
                             </div>
                             
-                            <button type="submit" class="btn-resgate-submit" id="btn-submit-resgate">
-                                Solicitar Resgate Instantâneo
-                            </button>
+                            <div style="display:flex; justify-content:space-between; align-items:center; gap:8px;">
+                                <button type="submit" class="btn-resgate-submit flex-1" id="btn-submit-resgate">
+                                    Solicitar Resgate Instantâneo
+                                </button>
+                                <a href="perfil.html" class="no-underline text-xs text-sky-600 hover:text-sky-700 font-bold" style="padding-top:12px; white-space:nowrap;">Alterar Chave</a>
+                            </div>
                         </form>
                     </section>
 
@@ -418,161 +428,166 @@
         </div>
     </div>
 
-    <!-- ============ LÓGICA JAVASCRIPT FINANCEIRA ============ -->
+    <script src="js/api-client.js"></script>
+    <script src="js/auth-guard.js"></script>
     <script>
-        let availableBalance = 13175.00;
-        let withdrawnBalance = 24650.00;
+        const api = window.KargoApi;
+        const auth = window.KargoAuth;
 
-        // Array de dados históricos para o Extrato Completo
-        const transacoesHistoricas = [
-            {
-                contratante: "Milho a Granel (TransLogística)",
-                origemDestino: "Goiânia, GO → Uberlândia, MG",
-                data: new Date(2026, 4, 22), // 22 Mai 2026
-                dataStr: "22 Mai 2026",
-                status: "disponivel",
-                bruto: 15500.00,
-                taxa: 2325.00,
-                liquido: 13175.00
-            },
-            {
-                contratante: "Soja em Sacos (AgroFrete S/A)",
-                origemDestino: "Santos, SP → Rio Verde, GO",
-                data: new Date(2026, 4, 18), // 18 Mai 2026
-                dataStr: "Em trânsito",
-                status: "em-transito",
-                bruto: 12000.00,
-                taxa: 1800.00,
-                liquido: 10200.00
-            },
-            {
-                contratante: "Adubo Ensacado (TransLogística)",
-                origemDestino: "Paranaguá, PR → Uberaba, MG",
-                data: new Date(2026, 4, 14), // 14 Mai 2026
-                dataStr: "14 Mai 2026",
-                status: "resgatado",
-                bruto: 18000.00,
-                taxa: 2700.00,
-                liquido: 15300.00
-            },
-            {
-                contratante: "Fertilizante Químico (Minas Express)",
-                origemDestino: "Santos, SP → Uberlândia, MG",
-                data: new Date(2026, 4, 5), // 05 Mai 2026
-                dataStr: "05 Mai 2026",
-                status: "resgatado",
-                bruto: 11000.00,
-                taxa: 1650.00,
-                liquido: 9350.00
-            },
-            {
-                contratante: "Sacarias de Trigo (Minas Express)",
-                origemDestino: "Santos, SP → Pouso Alegre, MG",
-                data: new Date(2026, 3, 28), // 28 Abr 2026
-                dataStr: "28 Abr 2026",
-                status: "resgatado",
-                bruto: 9500.00,
-                taxa: 1425.00,
-                liquido: 8075.00
-            },
-            {
-                contratante: "Farelo de Soja (AgroFrete S/A)",
-                origemDestino: "Rio Verde, GO → Santos, SP",
-                data: new Date(2026, 3, 15), // 15 Abr 2026
-                dataStr: "15 Abr 2026",
-                status: "resgatado",
-                bruto: 14000.00,
-                taxa: 2100.00,
-                liquido: 11900.00
-            },
-            {
-                contratante: "Sementes de Milho (AgroFrete S/A)",
-                origemDestino: "Goiânia, GO → Uberlândia, MG",
-                data: new Date(2026, 2, 20), // 20 Mar 2026
-                dataStr: "20 Mar 2026",
-                status: "resgatado",
-                bruto: 16000.00,
-                taxa: 2400.00,
-                liquido: 13600.00
-            },
-            {
-                contratante: "Fertilizante NPK (TransLogística)",
-                origemDestino: "Paranaguá, PR → Rondonópolis, MT",
-                data: new Date(2026, 2, 5), // 05 Mar 2026
-                dataStr: "05 Mar 2026",
-                status: "resgatado",
-                bruto: 22000.00,
-                taxa: 3300.00,
-                liquido: 18700.00
-            },
-            {
-                contratante: "Carga de Soja (AgroFrete S/A)",
-                origemDestino: "Primavera do Leste, MT → Santos, SP",
-                data: new Date(2026, 1, 18), // 18 Fev 2026
-                dataStr: "18 Fev 2026",
-                status: "resgatado",
-                bruto: 25000.00,
-                taxa: 3750.00,
-                liquido: 21250.00
-            }
-        ];
+        let availableBalance = 0;
+        let withdrawnBalance = 0;
+        let pendingBalance = 0;
 
-        // Controle do Modal de Extrato
-        function openFullStatementModal() {
-            const modal = document.getElementById('extrato-modal-backdrop');
-            if (modal) {
-                modal.style.opacity = '1';
-                modal.style.pointerEvents = 'all';
-                // Reseta visualização padrão para semanal
-                document.getElementById('extrato-filter-type').value = 'semanal';
-                toggleExtratoFilterInputs('semanal');
-                renderExtratoTable(transacoesHistoricas);
+        let loadedFretes = [];
+        let pixResgates = [];
+
+        // Chave do localStorage baseada no ID do motorista
+        function getStorageKey(suffix) {
+            const userId = auth.getUserId();
+            return `kargo_driver_${userId}_${suffix}`;
+        }
+
+        async function loadFinanceData() {
+            if (!api || !auth) return;
+
+            const motoristaId = auth.getUserId();
+            if (!motoristaId) return;
+
+            try {
+                // Carregar fretes do motorista
+                const fretes = await api.getFretesByMotorista(motoristaId);
+                loadedFretes = fretes || [];
+
+                // Carregar resgates salvos no localStorage
+                const rawResgates = localStorage.getItem(getStorageKey('resgates'));
+                pixResgates = rawResgates ? JSON.parse(rawResgates) : [];
+
+                calculateBalances();
+                renderFinanceTable();
+
+                // Verificar chave Pix no backend
+                const motoristaDados = await api.getMotorista(motoristaId);
+                const chavePix = motoristaDados.chavePix;
+                const warningBox = document.getElementById('pix-unconfigured-box');
+                const pixForm = document.getElementById('pix-withdrawal-form');
+
+                if (chavePix && chavePix.trim() !== '') {
+                    if (warningBox) warningBox.style.display = 'none';
+                    if (pixForm) {
+                        pixForm.style.display = 'block';
+                        document.getElementById('pix-key').value = chavePix;
+                        const select = document.getElementById('pix-type');
+                        if (chavePix.includes('@')) {
+                            select.value = 'email';
+                        } else if (chavePix.length === 11) {
+                            select.value = 'cpf';
+                        } else if (chavePix.length === 14) {
+                            select.value = 'cnpj';
+                        } else if (chavePix.includes('(') || chavePix.includes('-')) {
+                            select.value = 'celular';
+                        } else {
+                            select.value = 'aleatoria';
+                        }
+                    }
+                } else {
+                    if (warningBox) warningBox.style.display = 'block';
+                    if (pixForm) pixForm.style.display = 'none';
+                }
+            } catch (err) {
+                console.error('Erro ao carregar dados financeiros:', err);
             }
         }
 
-        function closeFullStatementModal() {
-            const modal = document.getElementById('extrato-modal-backdrop');
-            if (modal) {
-                modal.style.opacity = '0';
-                modal.style.pointerEvents = 'none';
-            }
+        function calculateBalances() {
+            // Fretes concluídos geram saldo
+            const concluidos = loadedFretes.filter(f => f.status === 'CONCLUIDO');
+            const totalFaturamento = concluidos.reduce((sum, f) => sum + (parseFloat(f.valorFrete) || 0), 0);
+
+            // Fretes em andamento geram saldo pendente
+            const emAndamento = loadedFretes.filter(f => f.status === 'EM_TRANSITO' || f.status === 'ACEITO');
+            pendingBalance = emAndamento.reduce((sum, f) => sum + (parseFloat(f.valorFrete) || 0), 0);
+
+            // Resgates realizados
+            withdrawnBalance = pixResgates.reduce((sum, r) => sum + r.liquido, 0);
+
+            // Saldo disponível = faturamento concluído menos saques realizados
+            availableBalance = totalFaturamento - withdrawnBalance;
+            if (availableBalance < 0) availableBalance = 0;
+
+            // Atualizar na tela
+            document.getElementById('available-balance-txt').textContent = formatBRL(availableBalance);
+            document.getElementById('withdrawn-balance-txt').textContent = formatBRL(withdrawnBalance);
+            const pendingEl = document.getElementById('pending-balance-txt');
+            if (pendingEl) pendingEl.textContent = formatBRL(pendingBalance);
         }
 
-        // Alternar inputs de data conforme tipo de filtro
-        function toggleExtratoFilterInputs(value) {
-            const semanalBlock = document.getElementById('extrato-semana-block');
-            const mesBlock = document.getElementById('extrato-mes-block');
-            const personalizadoBlock = document.getElementById('extrato-personalizado-block');
+        function renderFinanceTable() {
+            const tableBody = document.getElementById('finance-table-body');
+            if (!tableBody) return;
 
-            semanalBlock.style.display = value === 'semanal' ? 'flex' : 'none';
-            mesBlock.style.display = value === 'mensal' ? 'flex' : 'none';
-            personalizadoBlock.style.display = value === 'personalizado' ? 'flex' : 'none';
-        }
+            tableBody.innerHTML = '';
 
-        // Renderizar linhas da tabela de extrato
-        function renderExtratoTable(lista) {
-            const tbody = document.getElementById('modal-extrato-table-body');
-            tbody.innerHTML = '';
+            // Agrupar fretes e resgates em uma única lista cronológica
+            let list = [];
 
-            if (lista.length === 0) {
-                tbody.innerHTML = `
+            // Adiciona fretes concluídos e em andamento
+            loadedFretes.forEach(f => {
+                if (f.status === 'CONCLUIDO' || f.status === 'EM_TRANSITO' || f.status === 'ACEITO') {
+                    const statusVal = f.status === 'CONCLUIDO' ? 'disponivel' : 'em-transito';
+                    const dataObj = f.dataPublicacao ? new Date(f.dataPublicacao) : new Date();
+                    
+                    list.push({
+                        type: 'frete',
+                        contratante: f.titulo || 'Frete Operacional',
+                        origemDestino: `${f.origem} → ${f.destino}`,
+                        data: dataObj,
+                        dataStr: api.formatDate(dataObj),
+                        status: statusVal,
+                        bruto: parseFloat(f.valorFrete) || 0,
+                        taxa: (parseFloat(f.valorFrete) || 0) * 0.15,
+                        liquido: (parseFloat(f.valorFrete) || 0) * 0.85
+                    });
+                }
+            });
+
+            // Adiciona resgates
+            pixResgates.forEach(r => {
+                const dataObj = new Date(r.data);
+                list.push({
+                    type: 'resgate',
+                    contratante: 'Resgate Pix Instantâneo',
+                    origemDestino: r.origemDestino,
+                    data: dataObj,
+                    dataStr: api.formatDate(dataObj),
+                    status: 'resgatado',
+                    bruto: r.liquido,
+                    taxa: 0,
+                    liquido: r.liquido
+                });
+            });
+
+            // Ordena por data decrescente
+            list.sort((a, b) => b.data - a.data);
+
+            if (list.length === 0) {
+                tableBody.innerHTML = `
                     <tr>
                         <td colspan="6" style="text-align: center; color: var(--text-muted); padding: 30px;">
-                            Nenhum lançamento encontrado para o período selecionado.
+                            Nenhum lançamento financeiro encontrado.
                         </td>
                     </tr>
                 `;
                 return;
             }
 
-            lista.forEach(t => {
+            list.forEach(t => {
                 const tr = document.createElement('tr');
                 let badgeClass = 'disponivel';
                 let badgeText = 'Disponível';
 
                 if (t.status === 'em-transito') {
                     badgeClass = 'em-transito';
-                    badgeText = 'Em trânsito';
+                    badgeText = 'Em rota';
                 } else if (t.status === 'resgatado') {
                     badgeClass = 'resgatado';
                     badgeText = 'Resgatado';
@@ -589,95 +604,164 @@
                     <td class="td-value val-taxa">${t.taxa > 0 ? '- ' + formatBRL(t.taxa) : 'R$ 0,00'}</td>
                     <td class="td-value val-liquido" style="${t.status === 'resgatado' ? 'color:#ff9f0a' : ''}">${formatBRL(t.liquido)}</td>
                 `;
+                tableBody.appendChild(tr);
+            });
+        }
+
+        // Submissão do Saque via Pix
+        function handlePixWithdrawal() {
+            const amountInput = document.getElementById('pix-amount');
+            const btnSubmit = document.getElementById('btn-submit-resgate');
+            const rawAmount = parseFloat(amountInput.value.replace(/\./g, '').replace(',', '.'));
+
+            if (isNaN(rawAmount) || rawAmount <= 0) {
+                showToast('Erro de Validação', 'Por favor, insira um valor válido para resgate.', 'info');
+                return;
+            }
+
+            if (rawAmount > availableBalance) {
+                showToast('Saldo Insuficiente', 'O valor solicitado é maior do que o seu saldo disponível.', 'info');
+                return;
+            }
+
+            btnSubmit.disabled = true;
+            const originalText = btnSubmit.innerHTML;
+            btnSubmit.innerHTML = '<div class="spinner"></div> Processando resgate...';
+
+            setTimeout(() => {
+                const now = new Date();
+                const selectedKeyText = document.getElementById('pix-type').selectedOptions[0].text.split(' ')[0];
+                
+                // Gravar resgate
+                pixResgates.push({
+                    data: now.toISOString(),
+                    origemDestino: `Destino: Chave ${selectedKeyText}`,
+                    liquido: rawAmount
+                });
+
+                localStorage.setItem(getStorageKey('resgates'), JSON.stringify(pixResgates));
+
+                // Recarregar
+                calculateBalances();
+                renderFinanceTable();
+
+                btnSubmit.disabled = false;
+                btnSubmit.innerHTML = originalText;
+                amountInput.value = '';
+
+                showToast(
+                    'Resgate Pix Concluído!', 
+                    `O valor de ${formatBRL(rawAmount)} foi transferido com sucesso para a conta de destino.`
+                );
+
+            }, 1500);
+        }
+
+        // Controle do Modal de Extrato
+        function openFullStatementModal() {
+            const modal = document.getElementById('extrato-modal-backdrop');
+            if (modal) {
+                modal.style.opacity = '1';
+                modal.style.pointerEvents = 'all';
+                document.getElementById('extrato-filter-type').value = 'todas';
+                toggleExtratoFilterInputs('todas');
+                renderExtratoTable(loadedFretes);
+            }
+        }
+
+        function closeFullStatementModal() {
+            const modal = document.getElementById('extrato-modal-backdrop');
+            if (modal) {
+                modal.style.opacity = '0';
+                modal.style.pointerEvents = 'none';
+            }
+        }
+
+        function toggleExtratoFilterInputs(value) {
+            const semanalBlock = document.getElementById('extrato-semana-block');
+            const mesBlock = document.getElementById('extrato-mes-block');
+            const personalizadoBlock = document.getElementById('extrato-personalizado-block');
+
+            if (semanalBlock) semanalBlock.style.display = value === 'semanal' ? 'flex' : 'none';
+            if (mesBlock) mesBlock.style.display = value === 'mensal' ? 'flex' : 'none';
+            if (personalizadoBlock) personalizadoBlock.style.display = value === 'personalizado' ? 'flex' : 'none';
+        }
+
+        function renderExtratoTable(fretesList) {
+            const tbody = document.getElementById('modal-extrato-table-body');
+            if (!tbody) return;
+            tbody.innerHTML = '';
+
+            let list = [];
+            fretesList.forEach(f => {
+                const dataObj = f.dataPublicacao ? new Date(f.dataPublicacao) : new Date();
+                list.push({
+                    contratante: f.titulo || 'Frete Operacional',
+                    origemDestino: `${f.origem} → ${f.destino}`,
+                    dataStr: api.formatDate(dataObj),
+                    status: f.status === 'CONCLUIDO' ? 'disponivel' : 'em-transito',
+                    bruto: parseFloat(f.valorFrete) || 0,
+                    taxa: (parseFloat(f.valorFrete) || 0) * 0.15,
+                    liquido: (parseFloat(f.valorFrete) || 0) * 0.85
+                });
+            });
+
+            if (list.length === 0) {
+                tbody.innerHTML = `
+                    <tr>
+                        <td colspan="6" style="text-align: center; color: var(--text-muted); padding: 30px;">
+                            Nenhum lançamento encontrado para o período selecionado.
+                        </td>
+                    </tr>
+                `;
+                return;
+            }
+
+            list.forEach(t => {
+                const tr = document.createElement('tr');
+                let badgeClass = t.status === 'disponivel' ? 'disponivel' : 'em-transito';
+                let badgeText = t.status === 'disponivel' ? 'Disponível' : 'Em rota';
+
+                tr.innerHTML = `
+                    <td class="td-route">
+                        <span class="route-desc">${t.contratante}</span>
+                        <span class="route-meta">${t.origemDestino}</span>
+                    </td>
+                    <td>${t.dataStr}</td>
+                    <td><span class="status-badge ${badgeClass}">${badgeText}</span></td>
+                    <td class="td-value val-bruto">${formatBRL(t.bruto)}</td>
+                    <td class="td-value val-taxa">${t.taxa > 0 ? '- ' + formatBRL(t.taxa) : 'R$ 0,00'}</td>
+                    <td class="td-value val-liquido">${formatBRL(t.liquido)}</td>
+                `;
                 tbody.appendChild(tr);
             });
         }
 
-        // Filtrar transações históricas
         function applyExtratoFilters() {
-            const filterType = document.getElementById('extrato-filter-type').value;
-            let resultados = [];
-
-            if (filterType === 'semanal') {
-                const semanaVal = document.getElementById('extrato-filter-semana').value;
-                if (semanaVal === 'atual') {
-                    // Cargas da semana de 18 a 24 Mai 2026
-                    resultados = transacoesHistoricas.filter(t => {
-                        if (t.contratante.includes("Resgate Pix") && t.data && t.data >= new Date(2026, 4, 18)) return true;
-                        if (t.dataStr === "Em trânsito") return true;
-                        return t.data && t.data >= new Date(2026, 4, 18) && t.data <= new Date(2026, 4, 24);
-                    });
-                } else if (semanaVal === 'anterior') {
-                    // Cargas da semana anterior de 11 a 17 Mai 2026
-                    resultados = transacoesHistoricas.filter(t => {
-                        return t.data && t.data >= new Date(2026, 4, 11) && t.data <= new Date(2026, 4, 17);
-                    });
-                } else {
-                    // Duas semanas atrás 04 a 10 Mai 2026
-                    resultados = transacoesHistoricas.filter(t => {
-                        return t.data && t.data >= new Date(2026, 4, 4) && t.data <= new Date(2026, 4, 10);
-                    });
-                }
-            } else if (filterType === 'mensal') {
-                const mesVal = parseInt(document.getElementById('extrato-filter-mes').value);
-                const anoVal = parseInt(document.getElementById('extrato-filter-ano').value);
-
-                resultados = transacoesHistoricas.filter(t => {
-                    if (t.dataStr === "Em trânsito" && mesVal === 5 && anoVal === 2026) return true;
-                    return t.data && t.data.getMonth() === (mesVal - 1) && t.data.getFullYear() === anoVal;
-                });
-            } else if (filterType === 'personalizado') {
-                const deVal = document.getElementById('extrato-filter-de').value;
-                const ateVal = document.getElementById('extrato-filter-ate').value;
-
-                if (!deVal || !ateVal) {
-                    showToast('Filtro Incompleto', 'Por favor, selecione as datas inicial e final para filtrar.', 'info');
-                    return;
-                }
-
-                const dataDe = new Date(deVal + 'T00:00:00');
-                const dataAte = new Date(ateVal + 'T23:59:59');
-
-                resultados = transacoesHistoricas.filter(t => {
-                    if (t.dataStr === "Em trânsito") {
-                        const sojaData = new Date(2026, 4, 18);
-                        return sojaData >= dataDe && sojaData <= dataAte;
-                    }
-                    return t.data && t.data >= dataDe && t.data <= dataAte;
-                });
-            }
-
-            renderExtratoTable(resultados);
+            renderExtratoTable(loadedFretes);
         }
 
-        // Exportar extrato
         function exportStatement(type) {
             const btn = document.getElementById('btn-export-extrato');
             const originalText = btn.innerHTML;
-
             btn.disabled = true;
             btn.innerHTML = '<div class="spinner" style="width:14px; height:14px; border-width:2px;"></div> Exportando...';
-
             setTimeout(() => {
                 btn.disabled = false;
                 btn.innerHTML = originalText;
-
-                showToast('Arquivo Exportado!', `O extrato financeiro foi gerado e salvo em seu dispositivo com sucesso.`);
+                showToast('Arquivo Exportado!', `O extrato financeiro foi gerado e salvo com sucesso.`);
             }, 1200);
         }
 
-        // Formatação de Dinheiro em BRL
         function formatBRL(value) {
             return value.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
         }
 
-        // Preenche valor máximo do saque
         function fillMaxAmount() {
             const input = document.getElementById('pix-amount');
             input.value = availableBalance.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
         }
 
-        // Formata input de valor conforme digita
         document.getElementById('pix-amount').addEventListener('input', function(e) {
             let value = e.target.value.replace(/\D/g, '');
             if (value === '') {
@@ -688,21 +772,18 @@
             e.target.value = parseFloat(value).toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
         });
 
-        // Evento de alteração no select do tipo de Pix
         document.getElementById('pix-type').addEventListener('change', function(e) {
             const pixKeyInput = document.getElementById('pix-key');
-            if (e.target.value === 'cnpj') {
-                pixKeyInput.value = '45.987.126/0001-09';
-                pixKeyInput.placeholder = '00.000.000/0001-00';
+            const session = auth.session;
+            if (e.target.value === 'cnpj' || e.target.value === 'cpf') {
+                pixKeyInput.value = session ? session.id : '123.456.789-00';
+                pixKeyInput.placeholder = '000.000.000-00';
             } else if (e.target.value === 'celular') {
-                pixKeyInput.value = '(81) 98877-6655';
+                pixKeyInput.value = session ? session.phone : '(81) 98877-6655';
                 pixKeyInput.placeholder = '(00) 90000-0000';
             } else if (e.target.value === 'email') {
-                pixKeyInput.value = 'financeiro@joaotransportes.com.br';
+                pixKeyInput.value = session ? session.email : 'financeiro@joaotransportes.com.br';
                 pixKeyInput.placeholder = 'seu-email@dominio.com';
-            } else if (e.target.value === 'cpf') {
-                pixKeyInput.value = '123.456.789-00';
-                pixKeyInput.placeholder = '000.000.000-00';
             } else {
                 pixKeyInput.value = 'd89c56f2-1a4b-4c28-98e3-b3cde458f310';
                 pixKeyInput.placeholder = 'Chave aleatória UUID';
@@ -712,6 +793,7 @@
         // Mostra Toast de Sucesso/Info
         function showToast(title, desc, type = 'success') {
             const container = document.getElementById('toast-container');
+            if (!container) return;
             
             const toast = document.createElement('div');
             toast.className = `kargo-toast ${type}`;
@@ -732,20 +814,15 @@
             `;
             
             container.appendChild(toast);
-            
-            // Trigger reflow
             toast.offsetHeight;
             toast.classList.add('show');
             
-            // Animação da barra
             const progress = toast.querySelector('.toast-progress-bar');
             progress.style.animation = 'progress-deplete 4s linear forwards';
             
             setTimeout(() => {
                 toast.classList.remove('show');
-                setTimeout(() => {
-                    toast.remove();
-                }, 400);
+                setTimeout(() => { toast.remove(); }, 400);
             }, 4000);
         }
 
@@ -765,62 +842,31 @@
                 return;
             }
 
-            // Inicia simulação de loading
             btnSubmit.disabled = true;
             const originalText = btnSubmit.innerHTML;
             btnSubmit.innerHTML = '<div class="spinner"></div> Processando resgate...';
 
             setTimeout(() => {
-                // Atualiza Balanços
-                availableBalance -= rawAmount;
-                withdrawnBalance += rawAmount;
-
-                document.getElementById('available-balance-txt').textContent = formatBRL(availableBalance);
-                document.getElementById('withdrawn-balance-txt').textContent = formatBRL(withdrawnBalance);
-
-                // Insere no Histórico de Lançamentos
-                const tableBody = document.getElementById('finance-table-body');
-                const newRow = document.createElement('tr');
+                const now = new Date();
+                const selectedKeyText = document.getElementById('pix-type').selectedOptions[0].text.split(' ')[0];
                 
-                const dataAtual = new Date();
-                const dia = String(dataAtual.getDate()).padStart(2, '0');
-                const meses = ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez'];
-                const mes = meses[dataAtual.getMonth()];
-                const ano = dataAtual.getFullYear();
-
-                // Insere também no início do array de transações históricas
-                transacoesHistoricas.unshift({
-                    contratante: "Resgate Pix Instantâneo",
-                    origemDestino: `Destino: Chave ${document.getElementById('pix-type').selectedOptions[0].text.split(' ')[0]}`,
-                    data: dataAtual,
-                    dataStr: `${dia} ${mes} ${ano}`,
-                    status: "resgatado",
-                    bruto: rawAmount,
-                    taxa: 0.00,
+                // Gravar resgate
+                pixResgates.push({
+                    data: now.toISOString(),
+                    origemDestino: `Destino: Chave ${selectedKeyText}`,
                     liquido: rawAmount
                 });
 
-                newRow.innerHTML = `
-                    <td class="td-route">
-                        <span class="route-desc">Resgate Pix Instantâneo</span>
-                        <span class="route-meta">Destino: Chave ${document.getElementById('pix-type').selectedOptions[0].text.split(' ')[0]}</span>
-                    </td>
-                    <td>${dia} ${mes} ${ano}</td>
-                    <td><span class="status-badge resgatado">Resgatado</span></td>
-                    <td class="td-value val-bruto">${formatBRL(rawAmount)}</td>
-                    <td class="td-value val-taxa">R$ 0,00</td>
-                    <td class="td-value val-liquido text-amber-500" style="color:#ff9f0a">${formatBRL(rawAmount)}</td>
-                `;
-                
-                // Insere no topo
-                tableBody.insertBefore(newRow, tableBody.firstChild);
+                localStorage.setItem(getStorageKey('resgates'), JSON.stringify(pixResgates));
 
-                // Restaura botão e formulário
+                // Recarregar
+                calculateBalances();
+                renderFinanceTable();
+
                 btnSubmit.disabled = false;
                 btnSubmit.innerHTML = originalText;
                 amountInput.value = '';
 
-                // Dispara Toast
                 showToast(
                     'Resgate Pix Concluído!', 
                     `O valor de ${formatBRL(rawAmount)} foi transferido com sucesso para a conta de destino.`
@@ -828,6 +874,10 @@
 
             }, 1500);
         }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            loadFinanceData();
+        });
     </script>
 </body>
 </html>

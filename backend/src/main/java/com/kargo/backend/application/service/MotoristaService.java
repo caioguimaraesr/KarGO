@@ -42,12 +42,19 @@ public class MotoristaService {
         motorista.setNome(motoristaAtualizado.getNome());
         motorista.setEmail(motoristaAtualizado.getEmail());
         motorista.setTelefone(motoristaAtualizado.getTelefone());
-        motorista.setSenha(hashSenhaSeNecessario(motoristaAtualizado.getSenha()));
+        if (motoristaAtualizado.getSenha() != null && !motoristaAtualizado.getSenha().isBlank()) {
+            motorista.setSenha(hashSenhaSeNecessario(motoristaAtualizado.getSenha()));
+        }
         motorista.setCpf(normalizarDigitos(motoristaAtualizado.getCpf()));
         motorista.setCnh(motoristaAtualizado.getCnh());
         motorista.setDataValidadeCnh(motoristaAtualizado.getDataValidadeCnh());
         motorista.setDisponivel(motoristaAtualizado.getDisponivel());
         motorista.setAvaliacaoMedia(motoristaAtualizado.getAvaliacaoMedia());
+        motorista.setChavePix(motoristaAtualizado.getChavePix());
+        motorista.setBancoNome(motoristaAtualizado.getBancoNome());
+        motorista.setAgencia(motoristaAtualizado.getAgencia());
+        motorista.setContaNumero(motoristaAtualizado.getContaNumero());
+        motorista.setContaTipo(motoristaAtualizado.getContaTipo());
         return motoristaRepository.save(motorista);
     }
 

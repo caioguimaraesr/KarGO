@@ -1,5 +1,6 @@
 package com.kargo.backend.api.controller;
 
+import com.kargo.backend.api.dto.AvaliacaoDto;
 import com.kargo.backend.application.service.FreteService;
 import com.kargo.backend.domain.model.Frete;
 import jakarta.validation.Valid;
@@ -30,6 +31,16 @@ public class FreteController {
         return freteService.listar();
     }
 
+    @GetMapping("/motorista/{motoristaId}")
+    public List<Frete> listarPorMotorista(@PathVariable Long motoristaId) {
+        return freteService.listarPorMotorista(motoristaId);
+    }
+
+    @GetMapping("/embarcador/{embarcadorId}")
+    public List<Frete> listarPorEmbarcador(@PathVariable Long embarcadorId) {
+        return freteService.listarPorEmbarcador(embarcadorId);
+    }
+
     @GetMapping("/{id}")
     public Frete buscarPorId(@PathVariable Long id) {
         return freteService.buscarPorId(id);
@@ -50,6 +61,16 @@ public class FreteController {
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deletar(@PathVariable Long id) {
         freteService.deletar(id);
+    }
+
+    @PostMapping("/{id}/avaliar")
+    public Frete avaliar(@PathVariable Long id, @Valid @RequestBody AvaliacaoDto avaliacaoDto) {
+        return freteService.avaliar(id, avaliacaoDto.nota(), avaliacaoDto.comentario());
+    }
+
+    @PostMapping("/{id}/avaliar-embarcador")
+    public Frete avaliarEmbarcador(@PathVariable Long id, @Valid @RequestBody AvaliacaoDto avaliacaoDto) {
+        return freteService.avaliarEmbarcador(id, avaliacaoDto.nota(), avaliacaoDto.comentario());
     }
 }
 

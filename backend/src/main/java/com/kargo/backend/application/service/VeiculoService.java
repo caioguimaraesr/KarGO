@@ -23,6 +23,10 @@ public class VeiculoService {
         return veiculoRepository.findAll();
     }
 
+    public List<Veiculo> listarPorMotorista(Long motoristaId) {
+        return veiculoRepository.findByMotoristaId(motoristaId);
+    }
+
     public Veiculo buscarPorId(Long id) {
         return veiculoRepository.findById(id)
             .orElseThrow(() -> new RecursoNaoEncontradoException("Veiculo nao encontrado: " + id));

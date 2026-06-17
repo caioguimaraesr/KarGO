@@ -31,6 +31,12 @@
             return Number.isFinite(parsed) ? parsed : 0;
         }
 
+        function truncateText(value, maxLen) {
+            const text = String(value || '').trim();
+            if (!maxLen || text.length <= maxLen) return text;
+            return text.slice(0, maxLen - 3).trimEnd() + '...';
+        }
+
         function toLocalDateTimeString(date) {
             const local = new Date(date.getTime() - date.getTimezoneOffset() * 60000);
             return local.toISOString().slice(0, 19);
@@ -50,87 +56,202 @@
             });
         }
 
-        async function loadCargasFromBackend() {
-            if (!api) return;
+        let todasCargas = [];
 
-            try {
-                const cargas = await api.listCargas();
-                if (!Array.isArray(cargas) || cargas.length === 0) {
-                    return;
-                }
+        function getTimeAgoLabel(dateStr) {
+             if (!dateStr) return 'Publicada agora';
 
-                const cardsContainer = document.getElementById('cards-container');
-                const resultsCount = document.getElementById('results-count');
-                if (!cardsContainer) return;
+             try {
+                 const date = new Date(dateStr);
+                 const now = new Date();
+                 const diffMs = now - date;
+                 const diffMins = Math.floor(diffMs / 60000);
+                 const diffHours = Math.floor(diffMs / 3600000);
+                 const diffDays = Math.floor(diffMs / 86400000);
 
-                const html = cargas.map((carga) => {
-                    const valor = Number(carga.valorSugerido || 0);
-                    const suggested = formatBidValue(valor);
-                    const origem = escapeHtml(carga.origem || 'Origem');
-                    const destino = escapeHtml(carga.destino || 'Destino');
-                    const descricao = escapeHtml(carga.descricao || 'Carga');
-                    const pesoTon = (Number(carga.pesoKg || 0) / 1000).toFixed(1);
-                    const embarcadorNome = escapeHtml(carga.embarcador && carga.embarcador.nome ? carga.embarcador.nome : 'Embarcador');
-                    const embarcadorId = carga.embarcador && carga.embarcador.id ? carga.embarcador.id : '';
-                    return `
-                        <article class="cargo-card">
-                            <div class="card-header-row">
-                                <span class="card-tag info">NOVA CARGA</span>
-                                <span class="card-publish-time">Publicada agora</span>
+                 if (diffMins < 1) return 'Publicada agora';
+                 if (diffMins < 60) return `Publicada há ${diffMins}m`;
+                 if (diffHours < 24) return `Publicada há ${diffHours}h`;
+                 if (diffDays < 7) return `Publicada há ${diffDays}d`;
+
+                 return date.toLocaleDateString('pt-BR');
+             } catch (e) {
+                 return 'Publicada agora';
+             }
+         }
+
+         function renderCargas(cargas) {
+             const cardsContainer = document.getElementById('cards-container');
+             const resultsCount = document.getElementById('results-count');
+             if (!cardsContainer) return;
+
+             if (cargas.length === 0) {
+                 cardsContainer.innerHTML = `<div style="grid-column: 1 / -1; text-align:center; padding:40px; color:var(--text-muted); font-size:14px; width:100%;">Nenhuma carga encontrada para os filtros aplicados.</div>`;
+                 if (resultsCount) resultsCount.textContent = '0';
+                 return;
+             }
+
+             const html = cargas.map((carga) => {
+                 const valor = Number(carga.valorSugerido || 0);
+                 const suggested = formatBidValue(valor);
+                 const origem = escapeHtml(carga.origem || 'Origem');
+                 const destino = escapeHtml(carga.destino || 'Destino');
+                 const descricao = escapeHtml(carga.descricao || 'Carga');
+                 const cleanDescricao = escapeHtml((carga.descricao || '').split('[')[0].trim());
+                 const pesoTon = (Number(carga.pesoKg || 0) / 1000).toFixed(1);
+                 const embarcadorNome = escapeHtml(carga.embarcador && carga.embarcador.nome ? carga.embarcador.nome : 'Embarcador');
+                 const embarcadorId = carga.embarcador && carga.embarcador.id ? carga.embarcador.id : '';
+                 const publishTime = getTimeAgoLabel(carga.dataPublicacao);
+                 const initials = (carga.embarcador && carga.embarcador.nome ? carga.embarcador.nome : 'EM').split(' ').map(w=>w[0]).join('').slice(0,2).toUpperCase();
+                 const hasAval = carga.embarcador && carga.embarcador.avaliacaoMedia !== null && parseFloat(carga.embarcador.avaliacaoMedia) > 0;
+                 const avalMedia = hasAval ? parseFloat(carga.embarcador.avaliacaoMedia).toFixed(1) : '';
+                 const qtdAval = carga.embarcador && carga.embarcador.quantidadeAvaliacoes !== undefined ? carga.embarcador.quantidadeAvaliacoes : 0;
+                 return `
+                     <article class="cargo-card">
+                         <div class="card-header-row">
+                             <span class="card-tag info">NOVA CARGA</span>
+                             <span class="card-publish-time">${publishTime}</span>
+                         </div>
+                        <div class="card-main-grid">
+                            <div class="card-route-horizontal">
+                                <div class="route-origin">
+                                    <span class="route-label">ORIGEM</span>
+                                    <h4 class="route-city">${origem}</h4>
+                                    <span class="route-time">Saída imediata</span>
+                                </div>
+                                <div class="route-connector-container">
+                                    <span class="route-distance">-</span>
+                                    <div class="route-line-connector"></div>
+                                </div>
+                                <div class="route-destination">
+                                    <span class="route-label">DESTINO</span>
+                                    <h4 class="route-city">${destino}</h4>
+                                    <span class="route-time">Consulte prazo</span>
+                                </div>
                             </div>
-                            <div class="card-main-grid">
-                                <div class="card-route-horizontal">
-                                    <div class="route-origin">
-                                        <span class="route-label">ORIGEM</span>
-                                        <h4 class="route-city">${origem}</h4>
-                                        <span class="route-time">Saida imediata</span>
-                                    </div>
-                                    <div class="route-connector-container">
-                                        <span class="route-distance">-</span>
-                                        <div class="route-line-connector"></div>
-                                    </div>
-                                    <div class="route-destination">
-                                        <span class="route-label">DESTINO</span>
-                                        <h4 class="route-city">${destino}</h4>
-                                        <span class="route-time">Consulte prazo</span>
-                                    </div>
+                            <div class="card-specs-grid">
+                                <div class="spec-tile"><span class="spec-label">PESO</span><span class="spec-value">${pesoTon} Ton</span></div>
+                                <div class="spec-tile"><span class="spec-label">PRODUTO</span><span class="spec-value">${cleanDescricao}</span></div>
+                                <div class="spec-tile"><span class="spec-label">PAGAMENTO</span><span class="spec-value">Na Entrega</span></div>
+                                <div class="spec-tile"><span class="spec-label">STATUS</span><span class="spec-value">Disponível</span></div>
+                            </div>
+                            <div class="card-action-column">
+                                <div class="price-box">
+                                    <span class="price-label">FRETE SUGERIDO</span>
+                                    <h3 class="price-value">${formatCurrency(valor)}</h3>
                                 </div>
-                                <div class="card-specs-grid">
-                                    <div class="spec-tile"><span class="spec-label">PESO</span><span class="spec-value">${pesoTon} Ton</span></div>
-                                    <div class="spec-tile"><span class="spec-label">PRODUTO</span><span class="spec-value">${descricao}</span></div>
-                                    <div class="spec-tile"><span class="spec-label">PAGAMENTO</span><span class="spec-value">Na Entrega</span></div>
-                                    <div class="spec-tile"><span class="spec-label">STATUS</span><span class="spec-value">Disponivel</span></div>
+                                <div class="actions-group">
+                                    <a href="detalhe-carga.html?id=${carga.id}" class="card-btn-outline js-view-details-btn" data-carga-id="${carga.id}">Ver Detalhes</a>
+                                    <button class="card-btn-primary js-propose-btn" data-suggested="${suggested}" data-origin="${origem}" data-destination="${destino}" data-carga-id="${carga.id}" data-embarcador-id="${embarcadorId}" data-peso-kg="${Number(carga.pesoKg || 0)}" data-descricao="${descricao}">Enviar Proposta</button>
                                 </div>
-                                <div class="card-action-column">
-                                    <div class="price-box">
-                                        <span class="price-label">FRETE SUGERIDO</span>
-                                        <h3 class="price-value">${formatCurrency(valor)}</h3>
+                            </div>
+                        </div>
+                        <div class="card-contractor-section">
+                            <div class="contractor-info">
+                                <div style="width: 36px; height: 36px; border-radius: 50%; background: linear-gradient(135deg, #1e293b, #0f172a); border: 1px solid var(--accent-blue); color: var(--accent-blue); display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 800; text-shadow: 0 0 5px rgba(0,136,255,0.3); flex-shrink: 0; box-shadow: 0 2px 6px rgba(0,0,0,0.15);">
+                                    ${initials}
+                                </div>
+                                <div class="contractor-details">
+                                    <div class="contractor-name-row">
+                                        <span class="contractor-name">${embarcadorNome}</span>
+                                        <span class="verified-icon" title="Empresa Homologada">
+                                            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" style="color: var(--accent-green);"><polyline points="20 6 9 17 4 12"/></svg>
+                                        </span>
                                     </div>
-                                    <div class="actions-group">
-                                        <a href="detalhe-carga.html" class="card-btn-outline">Ver Detalhes</a>
-                                        <button class="card-btn-primary js-propose-btn" data-suggested="${suggested}" data-origin="${origem}" data-destination="${destino}" data-carga-id="${carga.id}" data-embarcador-id="${embarcadorId}" data-peso-kg="${Number(carga.pesoKg || 0)}" data-descricao="${descricao}">Enviar Proposta</button>
+                                    <div class="contractor-rating-row">
+                                        ${hasAval ? `
+                                            <span class="rating-star">★</span>
+                                            <span class="rating-value" style="color: #ffcc00; font-weight: 800;">${avalMedia}</span>
+                                            <span class="rating-count" style="color: var(--text-muted); font-weight: 500;">(${qtdAval} ${qtdAval === 1 ? 'avaliação' : 'avaliações'})</span>
+                                        ` : `
+                                            <span class="rating-count" style="color: var(--text-muted); font-weight: 500;">Sem avaliações</span>
+                                        `}
                                     </div>
                                 </div>
                             </div>
-                            <div class="card-contractor-section">
-                                <div class="contractor-info">
-                                    <div class="contractor-details">
-                                        <div class="contractor-name-row"><span class="contractor-name">${embarcadorNome}</span></div>
-                                        <div class="contractor-rating-row"><span class="rating-count">Embarcador vinculado a carga</span></div>
-                                    </div>
-                                </div>
-                            </div>
-                        </article>
-                    `;
-                }).join('');
+                        </div>
+                    </article>
+                `;
+            }).join('');
 
-                cardsContainer.innerHTML = html;
-                if (resultsCount) resultsCount.textContent = String(cargas.length);
-                animateCards();
-            } catch (error) {
-                showToast(`Falha ao carregar cargas: ${error.message}`, 'error');
-            }
+            cardsContainer.innerHTML = html;
+            if (resultsCount) resultsCount.textContent = String(cargas.length);
+            animateCards();
         }
+
+        function applyFilters() {
+             const originFilter = (document.getElementById('quick-origin')?.value || '').trim().toLowerCase();
+             const destinationFilter = (document.getElementById('quick-destination')?.value || '').trim().toLowerCase();
+
+             const truckEl = document.getElementById('quick-truck');
+             const truckFilter = truckEl ? truckEl.value : 'todos';
+
+             const weightSlider = document.getElementById('weight-slider');
+             const maxWeightTon = weightSlider ? parseFloat(weightSlider.value) : 50;
+
+             const priceMin = parseFloat(document.getElementById('price-min')?.value || '0') || 0;
+             const priceMax = parseFloat(document.getElementById('price-max')?.value || '9999999') || 9999999;
+
+             const selectedTypes = Array.from(document.querySelectorAll('input[name="carga-tipo"]:checked')).map(cb => cb.value);
+
+             const filtered = todasCargas.filter(carga => {
+                 // Filtro principal: Excluir cargas que já foram aceitas, estão em trânsito ou concluídas
+                 const statusExclusion = carga.status === 'ACEITO' || carga.status === 'EM_TRANSITO' || carga.status === 'CONCLUIDO' || carga.status === 'CANCELADO';
+                 if (statusExclusion) return false;
+
+                 // Origem
+                 if (originFilter && !(carga.origem || '').toLowerCase().includes(originFilter)) return false;
+                 // Destino
+                 if (destinationFilter && !(carga.destino || '').toLowerCase().includes(destinationFilter)) return false;
+
+                 // Tipo de caminhão
+                 if (truckFilter !== 'todos') {
+                     const desc = (carga.descricao || '').toLowerCase();
+                     if (truckFilter === 'bau' && !desc.includes('bau') && !desc.includes('baú') && !desc.includes('seco')) return false;
+                     if (truckFilter === 'sider' && !desc.includes('sider')) return false;
+                     if (truckFilter === 'graneleiro' && !desc.includes('granel') && !desc.includes('soja') && !desc.includes('milho') && !desc.includes('adubo')) return false;
+                     if (truckFilter === 'refrigerado' && !desc.includes('refriger') && !desc.includes('frio') && !desc.includes('congelado')) return false;
+                 }
+
+                 // Peso (filtro é tonelada máxima, no banco pesoKg é em Kg)
+                 const pesoKg = parseFloat(carga.pesoKg || 0);
+                 if (pesoKg > maxWeightTon * 1000) return false;
+
+                 // Preço
+                 const valor = parseFloat(carga.valorSugerido || 0);
+                 if (valor < priceMin || valor > priceMax) return false;
+
+                 // Checkbox Tipo de Carga
+                 if (selectedTypes.length > 0) {
+                     const desc = (carga.descricao || '').toLowerCase();
+                     const matchesType = selectedTypes.some(type => {
+                         if (type === 'alimenticia') return desc.includes('aliment') || desc.includes('comida') || desc.includes('grão') || desc.includes('soja') || desc.includes('milho') || desc.includes('graneleiro');
+                         if (type === 'construcao') return desc.includes('construc') || desc.includes('cimento') || desc.includes('tijolo') || desc.includes('ferro') || desc.includes('madeira') || desc.includes('telha');
+                         if (type === 'quimica') return desc.includes('quimic') || desc.includes('combustivel') || desc.includes('oleo') || desc.includes('ácido') || desc.includes('fertilizante');
+                         if (type === 'eletronicos') return desc.includes('eletron') || desc.includes('tv') || desc.includes('computador') || desc.includes('celular') || desc.includes('aparelho');
+                         if (type === 'geral') return true;
+                         return false;
+                     });
+                     if (!matchesType) return false;
+                 }
+
+                 return true;
+             });
+
+             renderCargas(filtered);
+         }
+
+        async function loadCargasFromBackend() {
+              if (!api) return;
+
+              try {
+                  const cargas = await api.listCargasAtivas();
+                  todasCargas = Array.isArray(cargas) ? cargas : [];
+                  applyFilters();
+              } catch (error) {
+                  showToast(`Falha ao carregar cargas: ${error.message}`, 'error');
+              }
+          }
 
         // --- 1. SLIDER DE PESO ---
         const weightSlider = document.getElementById('weight-slider');
@@ -171,8 +292,8 @@
                 // Reset checkboxes
                 const checkboxes = document.querySelectorAll('input[name="carga-tipo"]');
                 checkboxes.forEach(cb => {
-                    // Mantém apenas o de construção marcado por padrão
-                    cb.checked = (cb.value === 'construcao');
+                    // Mantém apenas o geral marcado por padrão
+                    cb.checked = (cb.value === 'geral');
                 });
 
                 // Reset slider
@@ -262,38 +383,7 @@
 
         // --- 7. SIMULAÇÃO DE FILTRAGEM ---
         function simulateFiltering() {
-            const resultsCount = document.getElementById('results-count');
-            const cards = document.querySelectorAll('.cargo-card');
-            
-            // Efeito visual nos cards
-            cards.forEach(card => {
-                card.style.opacity = '0.3';
-                card.style.transform = 'scale(0.98)';
-            });
-
-            setTimeout(() => {
-                // Simula contagem variando um pouco
-                if (resultsCount) {
-                    const randomCount = Math.floor(Math.random() * 20) + 15;
-                    resultsCount.textContent = randomCount;
-                }
-                
-                // Restaura cards com efeito de entrada suave
-                cards.forEach((card, idx) => {
-                    card.style.opacity = '1';
-                    card.style.transform = 'scale(1)';
-                    card.style.transition = 'all 0.3s cubic-bezier(0.16, 1, 0.3, 1)';
-                    
-                    // Simula esconder o card de Rota de Retorno se o peso for muito alto
-                    if (weightSlider && parseInt(weightSlider.value) > 25 && card.classList.contains('return')) {
-                        card.style.display = 'none';
-                    } else {
-                        card.style.display = 'block';
-                    }
-                });
-
-                animateCards();
-            }, 300);
+            applyFilters();
         }
 
         // --- 8. NOTIFICAÇÕES (SINO DE TOAST) ---
@@ -404,6 +494,18 @@
 
         // Captura todos os botões de proposta dos cards
         document.body.addEventListener('click', (e) => {
+            const detailsLink = e.target.closest('.js-view-details-btn');
+            if (detailsLink) {
+                const cargaId = Number(detailsLink.getAttribute('data-carga-id') || 0);
+                if (cargaId) {
+                    const cargaSelecionada = todasCargas.find(c => Number(c.id) === cargaId);
+                    if (cargaSelecionada) {
+                        sessionStorage.setItem('kargoSelectedCarga', JSON.stringify(cargaSelecionada));
+                    }
+                }
+                return;
+            }
+
             const btn = e.target.closest('.js-propose-btn');
             if (btn && modalBackdrop) {
                 e.preventDefault();
@@ -500,20 +602,25 @@
                     const now = new Date();
                     const entrega = new Date(now.getTime() + 24 * 60 * 60 * 1000);
 
+                    const tituloFrete = truncateText(`Proposta para carga ${selectedCargaData.cargaId || ''}`.trim(), 120);
+                    const descricaoFrete = truncateText(`Proposta enviada via marketplace para ${selectedCargaData.descricao || 'Carga'}`.trim(), 240);
+
                     await api.createFrete({
-                        titulo: `Proposta para carga ${selectedCargaData.cargaId || ''}`.trim(),
-                        descricao: `Proposta enviada via marketplace para ${selectedCargaData.descricao}`,
-                        origem: selectedCargaData.origem,
-                        destino: selectedCargaData.destino,
-                        pesoCargaKg: selectedCargaData.pesoKg || 1000,
-                        valorFrete: parseBidValue(finalBid),
-                        dataEntrega: toDateString(entrega),
-                        dataPublicacao: toLocalDateTimeString(now),
-                        status: 'PUBLICADO',
-                        embarcador: { id: selectedCargaData.embarcadorId },
-                        motorista: { id: session.id },
-                        veiculo: { id: veiculoAtivo.id }
-                    });
+                         titulo: tituloFrete,
+                         cargaId: selectedCargaData.cargaId,
+                         descricao: descricaoFrete,
+                         origem: selectedCargaData.origem,
+                         destino: selectedCargaData.destino,
+                         pesoCargaKg: selectedCargaData.pesoKg || 1000,
+                         valorFrete: parseBidValue(finalBid),
+                         dataEntrega: toDateString(entrega),
+                         dataPublicacao: toLocalDateTimeString(now),
+                         status: 'PUBLICADO',
+                         embarcador: { id: selectedCargaData.embarcadorId },
+                         motorista: { id: session.id },
+                         veiculo: { id: veiculoAtivo.id },
+                         carga: { id: selectedCargaData.cargaId }
+                     });
 
                     btnSubmitProposal.disabled = false;
                     btnSubmitProposal.textContent = originalText;
@@ -566,6 +673,23 @@
             if (btnCloseFiltersDrawer) btnCloseFiltersDrawer.addEventListener('click', closeFilters);
             mpFiltersOverlay.addEventListener('click', closeFilters);
         }
+
+        // Adiciona listeners para inputs de preço e checkboxes para filtrar em tempo real
+        const priceMinInput = document.getElementById('price-min');
+        const priceMaxInput = document.getElementById('price-max');
+        if (priceMinInput) priceMinInput.addEventListener('input', applyFilters);
+        if (priceMaxInput) priceMaxInput.addEventListener('input', applyFilters);
+
+        document.querySelectorAll('input[name="carga-tipo"]').forEach(cb => {
+            cb.addEventListener('change', applyFilters);
+        });
+
+        const qOrigin = document.getElementById('quick-origin');
+        const qDest = document.getElementById('quick-destination');
+        const qTruck = document.getElementById('quick-truck');
+        if (qOrigin) qOrigin.addEventListener('input', applyFilters);
+        if (qDest) qDest.addEventListener('input', applyFilters);
+        if (qTruck) qTruck.addEventListener('change', applyFilters);
 
         // Executa animação inicial nos cards
         setUserNameOnTopbar();

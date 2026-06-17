@@ -61,7 +61,7 @@
             <header class="ct-topbar">
                 <div class="ct-topbar-mobile-logo"><a href="../index.html"><img src="../assets/images/LOGO.png" alt="KarGO" class="logo-img-mobile"></a></div>
                 <div class="ct-topbar-actions">
-                    <span class="ct-badge ct-badge-green" style="padding:8px 16px;font-size:13px;margin-right:12px;">
+                    <span class="ct-badge ct-badge-green" id="frete-top-status" style="padding:8px 16px;font-size:13px;margin-right:12px;">
                         <span class="status-indicator-dot green"></span>
                         Em Trânsito — 65%
                     </span>
@@ -81,8 +81,8 @@
                         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
                     </a>
                     <div>
-                        <h1>Frete #KG-2026-1234</h1>
-                        <p>Recife → Natal · R$ 2.800,00</p>
+                        <h1 id="frete-page-title">Frete #KG-2026-1234</h1>
+                        <p id="frete-page-subtitle">Recife → Natal · R$ 2.800,00</p>
                     </div>
                 </div>
             </div>
@@ -113,19 +113,19 @@
                         <div class="ct-grid-2col-responsive">
                             <div style="background:var(--bg-body);padding:14px;border-radius:var(--radius-md);border:1px solid var(--border-light);">
                                 <div style="font-size:11px;color:var(--text-muted);text-transform:uppercase;font-weight:700;">Tipo</div>
-                                <div style="font-size:15px;font-weight:700;margin-top:4px;">Alimentos Perecíveis</div>
+                                <div id="frete-resumo-tipo" style="font-size:15px;font-weight:700;margin-top:4px;">Alimentos Perecíveis</div>
                             </div>
                             <div style="background:var(--bg-body);padding:14px;border-radius:var(--radius-md);border:1px solid var(--border-light);">
                                 <div style="font-size:11px;color:var(--text-muted);text-transform:uppercase;font-weight:700;">Peso</div>
-                                <div style="font-size:15px;font-weight:700;margin-top:4px;">8 toneladas</div>
+                                <div id="frete-resumo-peso" style="font-size:15px;font-weight:700;margin-top:4px;">8 toneladas</div>
                             </div>
                             <div style="background:var(--bg-body);padding:14px;border-radius:var(--radius-md);border:1px solid var(--border-light);">
                                 <div style="font-size:11px;color:var(--text-muted);text-transform:uppercase;font-weight:700;">Distância</div>
-                                <div style="font-size:15px;font-weight:700;margin-top:4px;">300 km</div>
+                                <div id="frete-resumo-distancia" style="font-size:15px;font-weight:700;margin-top:4px;">300 km</div>
                             </div>
                             <div style="background:var(--bg-body);padding:14px;border-radius:var(--radius-md);border:1px solid var(--border-light);">
                                 <div style="font-size:11px;color:var(--text-muted);text-transform:uppercase;font-weight:700;">Valor do Frete</div>
-                                <div style="font-size:15px;font-weight:700;color:var(--accent-green);margin-top:4px;">R$ 2.800,00</div>
+                                <div id="frete-resumo-valor" style="font-size:15px;font-weight:700;color:var(--accent-green);margin-top:4px;">R$ 2.800,00</div>
                             </div>
                         </div>
                     </div>
@@ -136,8 +136,8 @@
                         <div class="ct-cargo-route">
                             <div class="ct-route-point">
                                 <div class="ct-route-label">Origem (Coleta)</div>
-                                <div class="ct-route-city">Depósito Central Materiais</div>
-                                <div style="font-size:12px;color:var(--text-muted);margin-top:2px;">Av. Cruz Cabugá, 1234 — Recife, PE</div>
+                                <div class="ct-route-city" id="frete-rota-origem">Depósito Central Materiais</div>
+                                <div id="frete-rota-origem-endereco" style="font-size:12px;color:var(--text-muted);margin-top:2px;">Av. Cruz Cabugá, 1234 — Recife, PE</div>
                                 <div style="font-size:12px;color:var(--accent-blue);font-weight:600;margin-top:4px; display:flex; align-items:center; gap:4px;">
                                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" width="12" height="12" style="color:var(--accent-green);"><polyline points="20 6 9 17 4 12"/></svg>
                                     05/06/2026 às 08:00 Concluído
@@ -146,14 +146,14 @@
                             <div class="ct-route-arrow">➔</div>
                             <div class="ct-route-point">
                                 <div class="ct-route-label">Destino (Entrega)</div>
-                                <div class="ct-route-city">Distribuidora Natal Foods</div>
-                                <div style="font-size:12px;color:var(--text-muted);margin-top:2px;">Rua das Flores, 567 — Natal, RN</div>
+                                <div class="ct-route-city" id="frete-rota-destino">Distribuidora Natal Foods</div>
+                                <div id="frete-rota-destino-endereco" style="font-size:12px;color:var(--text-muted);margin-top:2px;">Rua das Flores, 567 — Natal, RN</div>
                                 <div style="font-size:12px;color:var(--accent-orange);font-weight:600;margin-top:4px;">Previsto: 05/06/2026 até 18:00</div>
                             </div>
                         </div>
                         <div style="display:flex;gap:12px;margin-top:8px;">
-                            <span class="ct-meta-chip">Duração: ~3h30 de viagem</span>
-                            <span class="ct-meta-chip">Distância: 300 km</span>
+                            <span class="ct-meta-chip" id="frete-chip-duracao">Duração: ~3h30 de viagem</span>
+                            <span class="ct-meta-chip" id="frete-chip-distancia">Distância: 300 km</span>
                             <span class="ct-meta-chip">Refrigeração: Ativa</span>
                         </div>
                     </div>
@@ -164,12 +164,12 @@
                         <div style="display:flex;align-items:center;gap:16px;padding:16px;background:var(--bg-body);border-radius:var(--radius-md);border:1px solid var(--border-light);">
                             <img src="../assets/images/motorista.png" alt="João Silva" style="width:56px;height:56px;border-radius:50%;object-fit:cover;border:3px solid var(--accent-blue-light);">
                             <div style="flex:1;">
-                                <div style="font-size:16px;font-weight:800;color:var(--text-dark);">João Silva</div>
-                                <div style="font-size:13px;color:var(--accent-orange);font-weight:600;margin-top:2px;">
+                                <div id="frete-driver-name" style="font-size:16px;font-weight:800;color:var(--text-dark);">João Silva</div>
+                                <div id="frete-driver-rating" style="font-size:13px;color:var(--accent-orange);font-weight:600;margin-top:2px;">
                                     <svg class="star-icon-inline" viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
                                     4.9 (152 avaliações)
                                 </div>
-                                <div style="font-size:12px;color:var(--text-muted);margin-top:2px;">Mercedes Atego 1719 · ABC-1234 · Baú Refrigerado</div>
+                                <div id="frete-driver-veiculo" style="font-size:12px;color:var(--text-muted);margin-top:2px;">Mercedes Atego 1719 · ABC-1234 · Baú Refrigerado</div>
                             </div>
                             <span class="ct-badge ct-badge-green">Verificado</span>
                         </div>
@@ -385,7 +385,11 @@
                     <div style="text-align:left; margin-top:20px;">
                         <label class="ct-form-label" style="text-align:center; display:block;">Avalie o serviço do motorista</label>
                         <div class="ct-star-rating" style="display:flex; justify-content:center; gap:8px; margin-top:8px; font-size:24px; cursor:pointer;">
-                            <span>☆</span><span>☆</span><span>☆</span><span>☆</span><span>☆</span>
+                            <span class="ct-star" data-index="1">☆</span>
+                            <span class="ct-star" data-index="2">☆</span>
+                            <span class="ct-star" data-index="3">☆</span>
+                            <span class="ct-star" data-index="4">☆</span>
+                            <span class="ct-star" data-index="5">☆</span>
                         </div>
                     </div>
                 </div>
@@ -393,11 +397,11 @@
 
             <div class="ct-modal-footer" id="confirm-form-footer">
                 <button class="ct-btn ct-btn-secondary" style="flex:1;" onclick="closeModal('modal-confirmar-entrega')">Cancelar</button>
-                <button class="ct-btn ct-btn-success" style="flex:2;" onclick="showConfirmSuccess(); document.getElementById('confirm-form-footer').style.display='none'; document.getElementById('confirm-success-footer').style.display='flex';">Confirmar Entrega</button>
+                <button class="ct-btn ct-btn-success" style="flex:2;" onclick="confirmarRecebimentoCompleto()">Confirmar Entrega</button>
             </div>
             <div class="ct-modal-footer" id="confirm-success-footer" style="display:none;">
                 <button class="ct-btn ct-btn-secondary" style="flex:1;" onclick="closeModal('modal-confirmar-entrega')">Pular</button>
-                <button class="ct-btn ct-btn-primary" style="flex:2;" onclick="closeModal('modal-confirmar-entrega'); alert('Avaliação enviada com sucesso!')">Enviar Avaliação</button>
+                <button class="ct-btn ct-btn-primary" style="flex:2;" onclick="enviarAvaliacaoFrete()">Enviar Avaliação</button>
             </div>
         </div>
     </div>
@@ -444,7 +448,7 @@
                 <!-- Descrição -->
                 <div class="ct-form-group" style="margin-top:16px;">
                     <label class="ct-form-label">Descreva o Problema Detalhadamente</label>
-                    <textarea class="ct-form-input ct-form-textarea" placeholder="Forneça o máximo de informações possível para o suporte KarGO resolver rápido..." rows="4" style="width:100%; border:1px solid var(--border-light); border-radius:var(--radius-sm); padding:10px; background:var(--bg-body); resize:none; font-family:var(--font);"></textarea>
+                    <textarea id="report-desc" class="ct-form-input ct-form-textarea" placeholder="Forneça o máximo de informações possível para o suporte KarGO resolver rápido..." rows="4" style="width:100%; border:1px solid var(--border-light); border-radius:var(--radius-sm); padding:10px; background:var(--bg-body); resize:none; font-family:var(--font);"></textarea>
                 </div>
 
                 <!-- Evidências -->
@@ -472,7 +476,7 @@
 
             <div class="ct-modal-footer" id="report-form-footer">
                 <button class="ct-btn ct-btn-secondary" style="flex:1;" onclick="closeModal('modal-reportar-problema')">Cancelar</button>
-                <button class="ct-btn ct-btn-danger" style="flex:2;" onclick="showReportSuccess(); document.getElementById('report-form-footer').style.display='none';">Enviar Ocorrência</button>
+                <button class="ct-btn ct-btn-danger" style="flex:2;" onclick="criarOcorrenciaLocal()">Enviar Ocorrência</button>
             </div>
         </div>
     </div>
@@ -486,6 +490,278 @@
         <a href="perfil.html" class="ct-bottom-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>Perfil</a>
     </nav>
 
+    <script src="../js/api-client.js"></script>
+    <script src="js/auth-guard-contratante.js"></script>
     <script src="js/contratante.js"></script>
+    <script>
+        let currentFreteId = null;
+        let currentFreteData = null;
+
+        function setText(id, value) {
+            const el = document.getElementById(id);
+            if (el && value !== undefined && value !== null && String(value).trim() !== '') {
+                el.textContent = String(value);
+            }
+        }
+
+        async function carregarDadosFrete() {
+            const urlParams = new URLSearchParams(window.location.search);
+            let freteId = urlParams.get('id');
+            
+            const api = window.KargoApi;
+            if (!api) return;
+
+            const session = api.getSession();
+            const userType = session ? session.type : null;
+            
+            // Se não passamos ID de frete e o usuário é contratante, podemos tentar carregar o primeiro frete ativo dele
+            if (!freteId && session && userType === 'EMBARCADOR') {
+                try {
+                    const fretes = await api.getFretesByEmbarcador(session.id);
+                    // Achar um frete em trânsito ou aceito
+                    const freteAtivo = fretes.find(f => f.status === 'EM_TRANSITO' || f.status === 'ACEITO') || fretes[0];
+                    if (freteAtivo) {
+                        freteId = freteAtivo.id;
+                    }
+                } catch (err) {
+                    console.error('Erro ao buscar fretes do embarcador:', err);
+                }
+            }
+
+            if (freteId) {
+                currentFreteId = freteId;
+                try {
+                    const frete = await api.getFrete(freteId);
+                    
+                    currentFreteData = frete;
+
+                    // Preencher dados principais
+                    const val = api.formatCurrency(frete.valorFrete);
+                    setText('frete-page-title', `Frete #KG-2026-${frete.id}`);
+                    setText('frete-page-subtitle', `${frete.origem} → ${frete.destino} · ${val}`);
+
+                    // Resumo da carga (IDs específicos para evitar colisão com outros grids)
+                    setText('frete-resumo-tipo', frete.descricao || 'Carga Seca');
+                    setText('frete-resumo-peso', `${(Number(frete.pesoCargaKg || 0) / 1000).toFixed(1)} toneladas`);
+                    setText('frete-resumo-valor', val);
+
+                    // Distância e duração não vêm no payload de frete: manter valor padrão visual.
+                    setText('frete-chip-distancia', 'Distância: --');
+                    setText('frete-resumo-distancia', '--');
+                    setText('frete-chip-duracao', 'Duração: --');
+
+                    // Rota
+                    setText('frete-rota-origem', frete.origem);
+                    setText('frete-rota-destino', frete.destino);
+                    setText('frete-rota-origem-endereco', frete.origem);
+                    setText('frete-rota-destino-endereco', frete.destino);
+
+                    // Motorista
+                    if (frete.motorista) {
+                        setText('frete-driver-name', frete.motorista.nome || 'Motorista');
+                        const driverRating = document.getElementById('frete-driver-rating');
+                        if (driverRating) {
+                            const media = frete.motorista.avaliacaoMedia ? parseFloat(frete.motorista.avaliacaoMedia).toFixed(1) : '0.0';
+                            const count = frete.motorista.quantidadeAvaliacoes || 0;
+                            driverRating.innerHTML = `<svg class="star-icon-inline" viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg> ${media} (${count} ${count === 1 ? 'avaliação' : 'avaliações'}) · Verificado`;
+                        }
+                    }
+                    if (frete.veiculo) {
+                        const veiculo = `${frete.veiculo.marca || ''} ${frete.veiculo.modelo || ''} · ${frete.veiculo.placa || ''}`.trim();
+                        setText('frete-driver-veiculo', veiculo || 'Veículo não informado');
+                    }
+
+                    // Ajustar textos e botões de acordo com o status
+                    const statusBadge = document.getElementById('frete-top-status');
+                    if (statusBadge) {
+                        statusBadge.innerHTML = `<span class="status-indicator-dot ${frete.status === 'CONCLUIDO' ? 'green' : 'blue'}"></span>${frete.status}`;
+                    }
+                    
+                    // Se o frete já está concluído, desabilitar ações de alteração ou mostrar que já foi recebido
+                    if (frete.status === 'CONCLUIDO') {
+                        const actionCard = document.querySelector('.ct-section-card[style*="linear-gradient"]');
+                        if (actionCard) {
+                            const jaAvaliado = frete.avaliacaoMotoristaNota !== null && frete.avaliacaoMotoristaNota !== undefined;
+                            const blocoAvaliacao = jaAvaliado
+                                ? `<div style="margin-top:12px; padding:12px; background:rgba(245,158,11,0.08); border:1px solid rgba(245,158,11,0.2); border-radius:10px; font-size:13px; color:var(--text-dark);">
+                                        ⭐ Avaliação enviada: <strong>${frete.avaliacaoMotoristaNota}/5</strong>${frete.avaliacaoMotoristaComentario ? `<br><span style="color:var(--text-muted)">${frete.avaliacaoMotoristaComentario}</span>` : ''}
+                                   </div>`
+                                : `<button onclick="openModal('modal-confirmar-entrega')" class="ct-btn ct-btn-primary" style="width:100%;justify-content:center;margin-top:12px;">Avaliar Motorista</button>`;
+
+                            actionCard.innerHTML = `
+                                <h2 class="ct-section-title" style="margin-bottom:16px;">Entrega Concluída</h2>
+                                <div style="padding:14px; background:rgba(34,197,94,0.1); border-radius:10px; color:green; font-weight:700; text-align:center;">
+                                    ✓ Esta carga foi recebida e finalizada com sucesso!
+                                </div>
+                                ${blocoAvaliacao}
+                            `;
+                        }
+                    }
+                } catch (err) {
+                    console.error('Erro ao carregar dados reais do frete:', err);
+                }
+            }
+        }
+
+        async function confirmarRecebimentoCompleto() {
+            if (!currentFreteId) {
+                // Caso mockado puro
+                showConfirmSuccess();
+                document.getElementById('confirm-form-footer').style.display='none';
+                document.getElementById('confirm-success-footer').style.display='flex';
+                return;
+            }
+
+            try {
+                // Atualizar frete para concluído no backend
+                const api = window.KargoApi;
+                const frete = await api.getFrete(currentFreteId);
+                frete.status = 'CONCLUIDO';
+                await api.updateFrete(currentFreteId, frete);
+                
+                showConfirmSuccess();
+                document.getElementById('confirm-form-footer').style.display='none';
+                document.getElementById('confirm-success-footer').style.display='flex';
+            } catch (err) {
+                alert('Erro ao confirmar recebimento: ' + err.message);
+            }
+        }
+
+        async function enviarAvaliacaoFrete() {
+            const api = window.KargoApi;
+            if (!api) return;
+            
+            const ratingContainer = document.querySelector('.ct-star-rating');
+            const nota = ratingContainer && ratingContainer.dataset.rating ? parseInt(ratingContainer.dataset.rating) : 0;
+            
+            if (nota === 0) {
+                alert('Selecione uma nota de 1 a 5 estrelas antes de enviar.');
+                return;
+            }
+
+            if (!currentFreteId) {
+                closeModal('modal-confirmar-entrega');
+                alert('Avaliação enviada com sucesso! (Modo Simulação)');
+                return;
+            }
+
+            try {
+                await api.avaliarFrete(currentFreteId, nota, 'Entrega realizada com sucesso!');
+                closeModal('modal-confirmar-entrega');
+                alert('Avaliação enviada com sucesso! A nota do motorista foi atualizada.');
+                window.location.reload(); // Recarregar a página para ver o status atualizado
+            } catch (err) {
+                alert('Erro ao enviar avaliação: ' + err.message);
+            }
+        }
+
+        function inicializarAvaliacaoEstrelas() {
+            const ratingContainer = document.querySelector('.ct-star-rating');
+            if (!ratingContainer) return;
+
+            const stars = ratingContainer.querySelectorAll('.ct-star');
+            stars.forEach(star => {
+                star.addEventListener('click', () => {
+                    const nota = parseInt(star.dataset.index || '0');
+                    ratingContainer.dataset.rating = String(nota);
+
+                    stars.forEach(s => {
+                        const idx = parseInt(s.dataset.index || '0');
+                        s.textContent = idx <= nota ? '★' : '☆';
+                    });
+                });
+            });
+        }
+
+        async function criarOcorrenciaLocal() {
+            const api = window.KargoApi;
+            if (!api) return;
+            
+            const session = api.getSession();
+            if (!session) return;
+            const embarcadorId = session.id;
+
+            // Obter descrição
+            const descInput = document.getElementById('report-desc');
+            const descricao = descInput ? descInput.value.trim() : '';
+
+            if (!descricao) {
+                alert('Por favor, descreva o problema.');
+                return;
+            }
+
+            // Obter tipo de problema
+            let tipoProblema = 'Atraso na Coleta/Entrega';
+            const radios = document.querySelectorAll('input[name="p-type"]');
+            radios.forEach(r => {
+                if (r.checked) {
+                    tipoProblema = r.parentElement.textContent.trim();
+                }
+            });
+
+            // Obter urgência
+            let urgencia = 'Média';
+            const urgencyBtn = document.querySelector('.ct-urgency-selector .ct-urgency-btn.selected');
+            if (urgencyBtn) {
+                urgencia = urgencyBtn.textContent.trim();
+            }
+
+            // Obter informações do frete atual
+            let rotaText = 'Recife → Natal';
+            let motoristaNome = 'João Silva';
+            let fId = currentFreteId || '1234';
+
+            try {
+                if (currentFreteId) {
+                    const frete = await api.getFrete(currentFreteId);
+                    rotaText = `${frete.origem} → ${frete.destino}`;
+                    motoristaNome = frete.motorista ? frete.motorista.nome : 'Não atribuído';
+                }
+            } catch (err) {
+                console.error('Erro ao buscar frete para ocorrencia:', err);
+            }
+
+            // Criar ocorrência
+            const protocolo = '#OC-2026-' + Math.floor(100000 + Math.random() * 900000);
+            const respostaSuporte = tipoProblema.includes('Atraso')
+                ? 'Nossa equipe de suporte entrou em contato com o motorista. O suporte está acompanhando o rastreamento em tempo real.'
+                : 'A ocorrência foi registrada e nossa equipe está analisando as evidências. Retornaremos com uma resolução em breve.';
+
+            const novaOcorrencia = {
+                protocolo: protocolo,
+                freteId: fId,
+                rota: rotaText,
+                motorista: motoristaNome,
+                tipo: tipoProblema,
+                urgencia: urgencia,
+                descricao: descricao,
+                respostaSuporte: respostaSuporte,
+                status: 'EM_ANALISE',
+                dataAbertura: new Date().toISOString()
+            };
+
+            // Salvar no localStorage
+            const storageKey = `kargo_ocorrencias_${embarcadorId}`;
+            const raw = localStorage.getItem(storageKey);
+            const ocorrencias = raw ? JSON.parse(raw) : [];
+            ocorrencias.push(novaOcorrencia);
+            localStorage.setItem(storageKey, JSON.stringify(ocorrencias));
+
+            // Exibir tela de sucesso
+            showReportSuccess();
+            const footer = document.getElementById('report-form-footer');
+            if (footer) footer.style.display = 'none';
+
+            // Redirecionar após 2 segundos
+            setTimeout(() => {
+                window.location.href = 'ocorrencias.html';
+            }, 2000);
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            inicializarAvaliacaoEstrelas();
+            carregarDadosFrete();
+        });
+    </script>
 </body>
 </html>

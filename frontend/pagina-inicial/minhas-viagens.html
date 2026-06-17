@@ -58,29 +58,9 @@
             min-height: 100vh;
         }
 
-        /* Conteúdo Principal à Direita */
-        .main-content {
-            margin-left: 260px;
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-            min-height: 100vh;
-            padding: 32px;
-            transition: var(--transition-smooth);
-        }
 
-        /* Topbar Header */
-        .topbar {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 32px;
-        }
 
-        .topbar-logo-mobile {
-            display: none;
-        }
-
+        /* Page Title */
         .page-title h1 {
             font-size: 28px;
             font-weight: 800;
@@ -91,47 +71,6 @@
             font-size: 14px;
             color: var(--text-secondary);
             margin-top: 4px;
-        }
-
-        .topbar-actions {
-            display: flex;
-            align-items: center;
-            gap: 20px;
-        }
-
-        .user-profile {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            background: var(--bg-dark-card);
-            border: 1px solid var(--border-translucent);
-            padding: 6px 16px 6px 8px;
-            border-radius: 30px;
-            cursor: pointer;
-        }
-
-        .user-avatar {
-            width: 32px;
-            height: 32px;
-            border-radius: 50%;
-            object-fit: cover;
-            border: 1.5px solid var(--accent-blue);
-        }
-
-        .user-name {
-            font-size: 13px;
-            font-weight: 700;
-            color: var(--text-primary);
-        }
-
-        .user-role {
-            font-size: 10px;
-            color: var(--accent-green);
-            font-weight: 700;
-            display: flex;
-            align-items: center;
-            gap: 4px;
-            text-transform: uppercase;
         }
 
         /* Controle de Abas Amplas (Tabs) */
@@ -626,50 +565,7 @@
                 padding: 16px 16px 88px 16px !important;
             }
 
-            .topbar {
-                background-color: #0b0f19 !important;
-                border-bottom: 1px solid rgba(255, 255, 255, 0.08) !important;
-                margin: -16px -16px 24px -16px;
-                padding: 16px;
-                height: 72px;
-                position: sticky;
-                top: 0;
-                z-index: 200;
-                backdrop-filter: blur(10px);
-                background: #0b0f19 !important;
-                display: flex;
-                align-items: center;
-                justify-content: space-between;
-            }
-            .notification-btn {
-                background: rgba(255, 255, 255, 0.05) !important;
-                border: 1px solid rgba(255, 255, 255, 0.08) !important;
-                color: #ffffff !important;
-            }
-            .user-profile {
-                background: rgba(255, 255, 255, 0.05) !important;
-                border: 1px solid rgba(255, 255, 255, 0.08) !important;
-            }
-            .user-name {
-                color: #ffffff !important;
-            }
-            .user-role {
-                color: #94a3b8 !important;
-            }
 
-            .topbar-logo-mobile {
-                display: block;
-            }
-
-            .topbar-logo-mobile .logo-img-mobile {
-                height: 32px;
-                width: auto;
-                filter: drop-shadow(0 2px 8px rgba(0, 136, 255, 0.2));
-            }
-
-            .page-title {
-                display: none;
-            }
 
             .mp-bottom-nav {
                 display: grid !important;
@@ -797,26 +693,28 @@
         </aside>
 
         <!-- CONTEÚDO PRINCIPAL -->
-        <main class="main-content">
-            <div class="mp-content-container">
+        <main class="mp-main-content">
             
             <!-- HEADER TOPBAR -->
-            <header class="topbar">
+            <header class="mp-topbar">
                 <!-- Logo Mobile -->
-                <div class="topbar-logo-mobile">
+                <div class="mp-topbar-logo-mobile">
                     <a href="index.html">
                         <img src="assets/images/LOGO.png" alt="KarGO" class="logo-img-mobile">
                     </a>
                 </div>
 
-                <div class="page-title">
-                    <h1>Gerenciamento de Viagens</h1>
-                    <p>Monitore suas rotas em tempo real, propostas enviadas e faça avaliações.</p>
-                </div>
+                <h1 class="mp-page-title">Minhas Viagens</h1>
                 
-                <div class="topbar-actions">
-                    <div class="user-profile">
-                        <img src="assets/images/motorista.png" alt="Avatar João Transportes" class="user-avatar">
+                <div class="mp-topbar-actions">
+                    <!-- Sino de Notificações -->
+                    <button class="mp-notification-btn" aria-label="Notificações">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="20" height="20"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+                        <span class="notification-badge"></span>
+                    </button>
+                    
+                    <!-- Perfil do Usuário -->
+                    <div class="mp-user-profile" onclick="window.location.href='perfil.html'">
                         <div class="user-info">
                             <span class="user-name">João Transportes</span>
                             <span class="user-role">
@@ -824,9 +722,19 @@
                                 Motorista Verificado
                             </span>
                         </div>
+                        <div class="user-avatar">
+                            <img src="assets/images/motorista.png" alt="Avatar João Transportes">
+                        </div>
                     </div>
                 </div>
             </header>
+
+            <div class="mp-content-wrapper">
+                <!-- Introdução (movida para fora do header para consistência com o header unificado) -->
+                <div class="page-title" style="margin-bottom: 24px;">
+                    <h1>Gerenciamento de Viagens</h1>
+                    <p>Monitore suas rotas em tempo real, propostas enviadas e faça avaliações.</p>
+                </div>
 
             <!-- TABS DE FILTRO -->
             <nav class="tabs-wrapper">
@@ -838,148 +746,12 @@
 
             <!-- GRID FLEXÍVEL DE CARD DE VIAGENS -->
             <section class="trips-grid-desktop" id="trips-grid">
-                
-                <!-- CARD 1: EM TRÂNSITO (ATIVO) -->
-                <article class="trip-card-desktop" data-status="andamento">
-                    <div>
-                        <div class="trip-card-top">
-                            <span class="trip-badge-desktop">Frete Operacional</span>
-                            <span class="status-pill-desktop in-transit">Carga Em Rota</span>
-                        </div>
-                        
-                        <div class="trip-body-desktop">
-                            <h3>Soja a Granel (37 toneladas)</h3>
-                            <div class="trip-meta-desktop">
-                                <span>Contratante: <strong>AgroFrete S/A</strong></span>
-                                <span>Faturamento: <strong>R$ 12.000</strong></span>
-                            </div>
-                        </div>
+                <div style="text-align:center;padding:40px;color:var(--text-muted);font-size:14px;width:100%;">Carregando suas viagens...</div>
+            </section>
 
-                        <!-- Stepper de Rota Horizontal -->
-                        <div class="route-stepper-desktop">
-                            <div class="stepper-line-bg"></div>
-                            <div class="stepper-line-fill"></div>
-                            
-                            <div class="step-node-desktop completed">
-                                <div class="step-dot-desktop">✓</div>
-                                <span class="step-label-desktop">Coleta (Rondonópolis)</span>
-                            </div>
-                            <div class="step-node-desktop active">
-                                <div class="step-dot-desktop">2</div>
-                                <span class="step-label-desktop">Em Rota (Pedágio 3)</span>
-                            </div>
-                            <div class="step-node-desktop">
-                                <div class="step-dot-desktop">3</div>
-                                <span class="step-label-desktop">Entrega (Porto Santos)</span>
-                            </div>
-                        </div>
-
-                        <!-- Barra de Progresso em 45% -->
-                        <div class="progress-box-desktop">
-                            <div class="progress-meta-row">
-                                <span>Progresso da Rota</span>
-                                <span>45% Executado</span>
-                            </div>
-                            <div class="progress-track-desktop">
-                                <div class="progress-bar-fill-45"></div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <button class="btn-action-trip-desktop" onclick="triggerStatusUpdate()">
-                        Atualizar Status da Carga
-                    </button>
-                </article>
-
-                <!-- CARD 2: PROPOSTAS ENVIADAS (AGUARDANDO CONFIRMAÇÃO DO EMBARCADOR) -->
-                <article class="trip-card-desktop" data-status="pendente" style="display: none;">
-                    <div>
-                        <div class="trip-card-top">
-                            <span class="trip-badge-desktop">Minhas Ofertas</span>
-                            <span class="status-pill-desktop pending">Aguardando Embarcador</span>
-                        </div>
-                        
-                        <div class="trip-body-desktop" style="margin-bottom: 16px;">
-                            <h3>Propostas de Frete em Análise</h3>
-                            <p style="font-size: 13px; color: var(--text-secondary); margin-top: 4px;">
-                                Acompanhe o status e as respostas das suas propostas para fretes freelancer.
-                            </p>
-                        </div>
-
-                        <div class="proposals-list-wrapper">
-                            <div class="proposals-title">Ofertas Recentes</div>
-                            
-                            <!-- Proposta 1 -->
-                            <div class="proposal-item-card">
-                                <div class="proposal-item-left">
-                                    <div class="proposal-company-circle">ME</div>
-                                    <div class="proposal-details">
-                                        <h5>Fertilizantes NPK (Santos, SP → Uberlândia, MG)</h5>
-                                        <p>Embarcador: Minas Express • Veículo: Sider (KRG-2E26)</p>
-                                    </div>
-                                </div>
-                                <div class="proposal-item-right">
-                                    <span class="proposal-bid-val">R$ 7.500,00</span>
-                                    <span class="proposal-status-msg" style="color: var(--accent-orange);">● Sob Análise Logística</span>
-                                </div>
-                            </div>
-
-                            <!-- Proposta 2 -->
-                            <div class="proposal-item-card">
-                                <div class="proposal-item-left">
-                                    <div class="proposal-company-circle" style="color: var(--accent-blue); border-color: rgba(0, 136, 255, 0.15);">AF</div>
-                                    <div class="proposal-details">
-                                        <h5>Milho a Granel (Sorriso, MT → Miritituba, PA)</h5>
-                                        <p>Embarcador: AgroFrete S/A • Veículo: Graneleiro (KRG-2E26)</p>
-                                    </div>
-                                </div>
-                                <div class="proposal-item-right">
-                                    <span class="proposal-bid-val">R$ 9.800,00</span>
-                                    <span class="proposal-status-msg" style="color: var(--accent-orange);">● Revisando Documentação</span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </article>
-
-                <!-- CARD 3: CONCLUÍDOS -->
-                <article class="trip-card-desktop" data-status="concluido" style="display: none;">
-                    <div>
-                        <div class="trip-card-top">
-                            <span class="trip-badge-desktop">Histórico de Cargas</span>
-                            <span class="status-pill-desktop completed">Viagem Concluída</span>
-                        </div>
-                        
-                        <div class="trip-body-desktop">
-                            <h3>Milho Lucas do Rio Verde → Porto Paranaguá</h3>
-                            <div class="trip-meta-desktop">
-                                <span>Distância: <strong>1.850 km</strong></span>
-                                <span>Frete Recebido: <strong>R$ 15.500</strong></span>
-                            </div>
-                        </div>
-
-                        <!-- Avaliação por 5 estrelas do Contratante -->
-                        <div class="rating-wrapper-desktop" id="desktop-review-panel">
-                            <p style="font-size: 13px; font-weight: 700; color: var(--text-secondary);">Avalie o Suporte do Contratante:</p>
-                            
-                            <div class="rating-stars-desktop">
-                                <span class="star-desktop" onclick="rateStarsDesktop(1)">★</span>
-                                <span class="star-desktop" onclick="rateStarsDesktop(2)">★</span>
-                                <span class="star-desktop" onclick="rateStarsDesktop(3)">★</span>
-                                <span class="star-desktop" onclick="rateStarsDesktop(4)">★</span>
-                                <span class="star-desktop" onclick="rateStarsDesktop(5)">★</span>
-                            </div>
-
-                            <textarea class="comment-field-desktop" placeholder="Escreva aqui a sua opinião sobre o carregamento e pagamento..." id="review-comment-desktop"></textarea>
-                            <button class="btn-submit-review-desktop" onclick="submitReviewDesktop()">Enviar Avaliação</button>
-                        </div>
-                    </div>
-                </article>
-
-            </div>
-            
+            </div><!-- /.mp-content-wrapper -->
         </main>
-    </div>
+    </di
 
     <!-- Bottom Navigation Bar duplicada removida para evitar conflitos no mobile -->
 
@@ -992,28 +764,164 @@
         </div>
     </div>
 
+    <script src="js/api-client.js"></script>
+    <script src="js/auth-guard.js"></script>
     <!-- JS de Controle de Abas e Interações -->
     <script>
-        // Filtro de Abas
+        const api = window.KargoApi;
+        const auth = window.KargoAuth;
+
+        let loadedFretes = [];
+        let currentFilter = 'andamento'; // ou 'pendente', 'concluido', 'todas'
+
+        async function loadTrips() {
+            const grid = document.getElementById('trips-grid');
+            if (!grid || !api || !auth) return;
+
+            const motoristaId = auth.getUserId();
+            if (!motoristaId) return;
+
+            try {
+                const fretes = await api.getFretesByMotorista(motoristaId);
+                loadedFretes = fretes || [];
+                renderTrips();
+            } catch (err) {
+                grid.innerHTML = `<div style="text-align:center;padding:40px;color:var(--accent-red);font-size:14px;width:100%;">Erro ao carregar viagens: ${err.message}</div>`;
+            }
+        }
+
+        function renderTrips() {
+            const grid = document.getElementById('trips-grid');
+            if (!grid) return;
+
+            let filtered = [];
+            if (currentFilter === 'andamento') {
+                filtered = loadedFretes.filter(f => f.status === 'EM_TRANSITO' || f.status === 'ACEITO');
+            } else if (currentFilter === 'pendente') {
+                filtered = loadedFretes.filter(f => f.status === 'PUBLICADO');
+            } else if (currentFilter === 'concluido') {
+                filtered = loadedFretes.filter(f => f.status === 'CONCLUIDO');
+            } else {
+                filtered = loadedFretes;
+            }
+
+            if (filtered.length === 0) {
+                grid.innerHTML = '<div style="text-align:center;padding:40px;color:var(--text-muted);font-size:14px;width:100%;">Nenhuma viagem encontrada para este filtro.</div>';
+                return;
+            }
+
+            grid.innerHTML = filtered.map(f => {
+                let badgeText = 'Frete Operacional';
+                let statusText = 'Em rota';
+                let statusClass = 'in-transit';
+
+                if (f.status === 'PUBLICADO') {
+                    badgeText = 'Proposta de Frete';
+                    statusText = 'Sob Análise';
+                    statusClass = 'pending';
+                } else if (f.status === 'CONCLUIDO') {
+                    badgeText = 'Histórico de Cargas';
+                    statusText = 'Viagem Concluída';
+                    statusClass = 'completed';
+                } else if (f.status === 'ACEITO') {
+                    badgeText = 'Frete Operacional';
+                    statusText = 'Aguardando Coleta';
+                    statusClass = 'accepted';
+                }
+
+                const displayDate = f.dataEntrega ? api.formatDate(f.dataEntrega) : 'A combinar';
+                const capacityTon = ((f.pesoCargaKg || 0) / 1000).toFixed(1);
+                
+                let actionBtnHtml = '';
+                if (f.status === 'ACEITO') {
+                    actionBtnHtml = `<button class="btn-action-trip-desktop" onclick="updateTripStatus(${f.id}, 'EM_TRANSITO')">Iniciar Viagem (Coletado)</button>`;
+                } else if (f.status === 'EM_TRANSITO') {
+                    actionBtnHtml = `<button class="btn-action-trip-desktop" onclick="updateTripStatus(${f.id}, 'CONCLUIDO')">Confirmar Entrega (Concluir)</button>`;
+                } else if (f.status === 'CONCLUIDO') {
+                    const jaAvaliouEmbarcador = f.avaliacaoEmbarcadorNota !== null && f.avaliacaoEmbarcadorNota !== undefined;
+                    actionBtnHtml = jaAvaliouEmbarcador
+                        ? `
+                    <div class="rating-wrapper-desktop" id="desktop-review-panel-${f.id}">
+                        <p style="font-size: 13px; font-weight: 700; color: var(--text-secondary); margin-bottom: 8px;">Avaliação já enviada para o contratante</p>
+                        <div style="font-size: 14px; color: var(--text-primary); margin-bottom: 8px;">⭐ <strong>${f.avaliacaoEmbarcadorNota}/5</strong></div>
+                        <div style="font-size: 13px; color: var(--text-secondary);">${f.avaliacaoEmbarcadorComentario || 'Sem comentário.'}</div>
+                    </div>`
+                        : `
+                    <div class="rating-wrapper-desktop" id="desktop-review-panel-${f.id}">
+                        <p style="font-size: 13px; font-weight: 700; color: var(--text-secondary);">Avalie o Suporte do Contratante:</p>
+                        <div class="rating-stars-desktop">
+                            <span class="star-desktop" onclick="rateStarsDesktop(${f.id}, 1)">★</span>
+                            <span class="star-desktop" onclick="rateStarsDesktop(${f.id}, 2)">★</span>
+                            <span class="star-desktop" onclick="rateStarsDesktop(${f.id}, 3)">★</span>
+                            <span class="star-desktop" onclick="rateStarsDesktop(${f.id}, 4)">★</span>
+                            <span class="star-desktop" onclick="rateStarsDesktop(${f.id}, 5)">★</span>
+                        </div>
+                        <textarea class="comment-field-desktop" placeholder="Escreva aqui a sua opinião sobre o carregamento..." id="review-comment-desktop-${f.id}"></textarea>
+                        <button class="btn-submit-review-desktop" onclick="submitReviewDesktop(${f.id})">Enviar Avaliação</button>
+                    </div>`;
+                }
+
+                return `
+                <article class="trip-card-desktop" data-status="${f.status}">
+                    <div style="width: 100%;">
+                        <div class="trip-card-top">
+                            <span class="trip-badge-desktop">${badgeText}</span>
+                            <span class="status-pill-desktop ${statusClass}">${statusText}</span>
+                        </div>
+                        
+                        <div class="trip-body-desktop">
+                            <h3>${f.origem} → ${f.destino}</h3>
+                            <p style="font-size: 13px; color: var(--text-secondary); margin-bottom: 8px;">${f.descricao || f.titulo}</p>
+                            <div class="trip-meta-desktop">
+                                <span>Entrega: <strong>${displayDate}</strong></span>
+                                <span>Peso: <strong>${capacityTon} Ton</strong></span>
+                                <span>Valor do Frete: <strong>${api.formatCurrency(f.valorFrete)}</strong></span>
+                            </div>
+                        </div>
+                        
+                        ${actionBtnHtml}
+                    </div>
+                </article>`;
+            }).join('');
+        }
+
+        async function updateTripStatus(id, newStatus) {
+            try {
+                let freteAtual = loadedFretes.find(f => Number(f.id) === Number(id));
+                if (!freteAtual) {
+                    freteAtual = await api.getFrete(id);
+                }
+
+                if (!freteAtual) {
+                    throw new Error('Frete nao encontrado para atualizacao.');
+                }
+
+                const payloadAtualizado = {
+                    ...freteAtual,
+                    status: newStatus
+                };
+
+                await api.updateFrete(id, payloadAtualizado);
+                showToastDesktop('Status Atualizado!', `A viagem foi atualizada para: ${newStatus}`);
+                loadTrips();
+            } catch (err) {
+                alert(`Erro ao atualizar viagem: ${err.message}`);
+            }
+        }
+
         function filterTripsDesktop(status) {
             const buttons = document.querySelectorAll('.tab-button-desktop');
             buttons.forEach(btn => btn.classList.remove('active'));
             event.currentTarget.classList.add('active');
 
-            const cards = document.querySelectorAll('.trip-card-desktop');
-            cards.forEach(card => {
-                const cardStatus = card.getAttribute('data-status');
-                if (status === 'todas' || cardStatus === status) {
-                    card.style.display = 'flex';
-                } else {
-                    card.style.display = 'none';
-                }
-            });
+            currentFilter = status;
+            renderTrips();
         }
 
         // Mostrar Toast
         function showToastDesktop(title, desc) {
             const toast = document.getElementById('desktop-toast');
+            if (!toast) return;
             document.getElementById('toast-title-desktop').textContent = title;
             document.getElementById('toast-desc-desktop').textContent = desc;
 
@@ -1023,25 +931,13 @@
             }, 3500);
         }
 
-        // Atualizar Status
-        function triggerStatusUpdate() {
-            const btn = document.querySelector('.btn-action-trip-desktop');
-            btn.disabled = true;
-            btn.textContent = 'Atualizando status no sistema...';
-
-            setTimeout(() => {
-                btn.disabled = false;
-                btn.textContent = 'Status da Carga Atualizado!';
-                showToastDesktop('Status Sincronizado!', 'A AgroFrete S/A foi notificada de que você está em rota.');
-            }, 1000);
-        }
-
         // Avaliação de Estrelas
-        let selectedStars = 0;
-        function rateStarsDesktop(stars) {
-            selectedStars = stars;
-            const starsContainer = document.querySelector('.rating-stars-desktop');
-            const starEls = starsContainer.querySelectorAll('.star-desktop');
+        let selectedStarsMap = {};
+        function rateStarsDesktop(freteId, stars) {
+            selectedStarsMap[freteId] = stars;
+            const container = document.getElementById(`desktop-review-panel-${freteId}`);
+            if (!container) return;
+            const starEls = container.querySelectorAll('.star-desktop');
             
             starEls.forEach((star, idx) => {
                 if (idx < stars) {
@@ -1053,22 +949,45 @@
         }
 
         // Enviar Avaliação
-        function submitReviewDesktop() {
-            if (selectedStars === 0) {
+        async function submitReviewDesktop(freteId) {
+            const stars = selectedStarsMap[freteId] || 0;
+            if (stars === 0) {
                 alert('Selecione uma nota de 1 a 5 estrelas para avaliar o contratante.');
                 return;
             }
 
-            const comment = document.getElementById('review-comment-desktop').value.trim();
-            const panel = document.getElementById('desktop-review-panel');
+            const comment = document.getElementById(`review-comment-desktop-${freteId}`).value.trim();
+            const panel = document.getElementById(`desktop-review-panel-${freteId}`);
 
-            panel.innerHTML = `
-                <div style="text-align: center; padding: 20px; color: var(--accent-green); font-weight: 700; font-size: 14px;">
-                    ✓ Obrigado! Sua avaliação de ${selectedStars} estrelas sobre a TransLogística foi gravada no sistema.
-                </div>
-            `;
-            showToastDesktop('Avaliação Recebida!', 'Seu feedback ajuda a manter a confiabilidade de contratantes.');
+            try {
+                await api.avaliarEmbarcador(freteId, stars, comment || 'Avaliacao do embarcador via motorista.');
+
+                const freteLocal = loadedFretes.find(f => Number(f.id) === Number(freteId));
+                if (freteLocal) {
+                    freteLocal.avaliacaoEmbarcadorNota = stars;
+                    freteLocal.avaliacaoEmbarcadorComentario = comment || 'Avaliacao do embarcador via motorista.';
+                }
+
+                panel.innerHTML = `
+                    <div style="text-align: center; padding: 20px; color: var(--accent-green); font-weight: 700; font-size: 14px;">
+                        ✓ Obrigado! Sua avaliação de ${stars} estrelas foi gravada no banco.
+                    </div>
+                `;
+                showToastDesktop('Avaliação Recebida!', 'Seu feedback ajuda a manter a confiabilidade dos embarcadores.');
+            } catch (err) {
+                const mensagem = (err && err.message ? err.message : '').toLowerCase();
+                if (mensagem.includes('ja avaliou')) {
+                    showToastDesktop('Avaliação já registrada', 'Esse frete já possui avaliação do embarcador.');
+                    loadTrips();
+                    return;
+                }
+                alert(`Erro ao enviar avaliação: ${err.message}`);
+            }
         }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            loadTrips();
+        });
     </script>
     <!-- Bottom Navigation Bar responsiva -->
     <nav class="mp-bottom-nav">

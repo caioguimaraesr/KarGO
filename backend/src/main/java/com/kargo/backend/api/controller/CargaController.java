@@ -30,6 +30,21 @@ public class CargaController {
         return cargaService.listar();
     }
 
+    @GetMapping("/ativas")
+    public List<Carga> listarAtivas() {
+        return cargaService.listarAtivas();
+    }
+
+    @GetMapping("/nao-aceitas")
+    public List<Carga> listarNaoAceitas() {
+        return cargaService.listarNaoAceitas();
+    }
+
+    @GetMapping("/embarcador/{embarcadorId}")
+    public List<Carga> listarPorEmbarcador(@PathVariable Long embarcadorId) {
+        return cargaService.listarPorEmbarcador(embarcadorId);
+    }
+
     @GetMapping("/{id}")
     public Carga buscarPorId(@PathVariable Long id) {
         return cargaService.buscarPorId(id);

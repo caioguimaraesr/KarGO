@@ -92,42 +92,64 @@
                     <div>
                         <!-- Bloco Geral do Perfil -->
                         <div class="ct-section-card" style="display:flex; align-items:center; gap:24px; padding:30px;">
-                            <img src="../assets/images/embarcador.png" alt="Maria" style="width:96px; height:96px; border-radius:50%; border:4px solid var(--accent-blue-light); object-fit:cover;">
+                            <div style="position:relative; width:96px; height:96px; flex-shrink:0;">
+                                <div id="profile-avatar-container" style="width:100%; height:100%;">
+                                    <div style="width:100%; height:100%; border-radius:50%; border:4px solid var(--accent-blue-light); background:#f1f5f9; display:flex; align-items:center; justify-content:center; font-size:32px; font-weight:900; color:var(--accent-blue);">—</div>
+                                </div>
+                                <button type="button" onclick="triggerAvatarUpload()" style="position:absolute; bottom:0; right:0; width:28px; height:28px; border-radius:50%; background:var(--accent-blue); border:2px solid #fff; display:flex; align-items:center; justify-content:center; cursor:pointer; box-shadow:var(--shadow-md); color:#fff; padding:0; z-index:10;" title="Alterar Foto">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" width="12" height="12"><path d="M12 20h9"/><path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg>
+                                </button>
+                                <input type="file" id="avatar-file-input" style="display:none;" accept="image/*" onchange="handleAvatarSelected(this)">
+                            </div>
                             <div>
                                 <span class="ct-badge ct-badge-blue" style="margin-bottom:8px;">Embarcador Premium</span>
-                                <h2 style="font-size:22px; font-weight:800; color:var(--text-dark);">Maria Logística e Alimentos Ltda.</h2>
-                                <p style="font-size:13px; color:var(--text-muted); margin-top:2px;">CNPJ: 12.345.678/0001-90 · Desde Junho de 2024</p>
+                                <h2 id="profile-name-main" style="font-size:22px; font-weight:800; color:var(--text-dark);">Carregando nome...</h2>
+                                <p id="profile-cnpj-meta" style="font-size:13px; color:var(--text-muted); margin-top:2px;">CNPJ: — · Desde —</p>
                                 <p style="font-size:14px; color:var(--text-body); margin-top:10px; display:flex; align-items:center; gap:6px;">
                                     <svg class="star-icon-inline" viewBox="0 0 24 24" style="width:16px; height:16px;"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-                                    <strong>4.9 de Avaliação</strong> (Média dada por 32 motoristas parceiros)
+                                    <strong id="perf-rating">4.9 de Avaliação</strong> (<span id="perf-fretes-count">0</span> fretes completos)
                                 </p>
                             </div>
                         </div>
 
                         <!-- Detalhes Cadastrais -->
                         <div class="ct-section-card">
-                            <h3 class="ct-section-title" style="margin-bottom:16px;">Dados da Empresa</h3>
-                            <div class="ct-grid-2col-responsive" style="font-size:13px; color:var(--text-body);">
+                            <h3 class="ct-section-title" style="margin-bottom:20px;">Dados da Empresa</h3>
+                            <div style="display:flex; flex-direction:column; gap:16px; font-size:13px;">
                                 <div>
                                     <span style="font-weight:600; color:var(--text-muted); display:block;">Razão Social</span>
-                                    <span style="font-weight:700; color:var(--text-dark); margin-top:2px; display:block;">Maria Alimentos e Distribuição Ltda</span>
+                                    <span id="profile-company-name-text" style="font-weight:700; color:var(--text-dark); margin-top:2px; display:block;">—</span>
                                 </div>
-                                <div>
-                                    <span style="font-weight:600; color:var(--text-muted); display:block;">Inscrição Estadual</span>
-                                    <span style="font-weight:700; color:var(--text-dark); margin-top:2px; display:block;">182.748.291.011</span>
+                                <div style="display:grid; grid-template-columns: 1fr 1fr; gap:16px;">
+                                    <div>
+                                        <span style="font-weight:600; color:var(--text-muted); display:block;">CNPJ / CPF</span>
+                                        <span id="profile-cnpj-text" style="font-weight:700; color:var(--text-dark); margin-top:2px; display:block;">—</span>
+                                    </div>
+                                    <div>
+                                        <span style="font-weight:600; color:var(--text-muted); display:block;">Telefone Corporativo</span>
+                                        <span id="profile-phone-text" style="font-weight:700; color:var(--text-dark); margin-top:2px; display:block;">—</span>
+                                    </div>
                                 </div>
-                                <div>
-                                    <span style="font-weight:600; color:var(--text-muted); display:block;">Telefone Corporativo</span>
-                                    <span style="font-weight:700; color:var(--text-dark); margin-top:2px; display:block;">(81) 3444-9000</span>
-                                </div>
-                                <div>
-                                    <span style="font-weight:600; color:var(--text-muted); display:block;">E-mail para Faturamento</span>
-                                    <span style="font-weight:700; color:var(--text-dark); margin-top:2px; display:block;">financeiro@mariaalimentos.com</span>
-                                </div>
-                                <div style="grid-column: span 2;">
-                                    <span style="font-weight:600; color:var(--text-muted); display:block;">Endereço Sede</span>
-                                    <span style="font-weight:700; color:var(--text-dark); margin-top:2px; display:block;">Av. Barbosa Lima, 100 - Bairro do Recife, Recife - PE, CEP 50030-017</span>
-                                </div>
+                                <hr style="border:0; border-top:1px solid var(--border-light); margin:8px 0;">
+                                <form id="profile-edit-form" onsubmit="event.preventDefault(); saveProfileChanges();" style="display:flex; flex-direction:column; gap:16px;">
+                                    <div class="ct-form-group">
+                                        <label class="ct-form-label" style="font-weight:600; color:var(--text-muted); margin-bottom:6px; display:flex; align-items:center; gap:6px;">
+                                            E-mail de Faturamento
+                                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" width="13" height="13" style="color:var(--accent-blue);"><path d="M12 20h9"/><path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg>
+                                        </label>
+                                        <input type="email" id="prof-email" class="ct-form-input" style="width:100%; border:1px solid var(--border-light); border-radius:var(--radius-sm); padding:10px; background:var(--bg-body); font-family:var(--font); box-sizing:border-box;" required>
+                                    </div>
+                                    <div class="ct-form-group">
+                                        <label class="ct-form-label" style="font-weight:600; color:var(--text-muted); margin-bottom:6px; display:flex; align-items:center; gap:6px;">
+                                            Endereço Sede
+                                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" width="13" height="13" style="color:var(--accent-blue);"><path d="M12 20h9"/><path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg>
+                                        </label>
+                                        <input type="text" id="prof-address" class="ct-form-input" style="width:100%; border:1px solid var(--border-light); border-radius:var(--radius-sm); padding:10px; background:var(--bg-body); font-family:var(--font); box-sizing:border-box;" required>
+                                    </div>
+                                    <div style="display: flex; justify-content: flex-end; margin-top:8px;">
+                                        <button type="submit" class="ct-btn ct-btn-primary" id="btn-save-profile" style="padding: 10px 24px; font-weight:700;">Salvar Alterações</button>
+                                    </div>
+                                </form>
                             </div>
                         </div>
                     </div>
@@ -136,15 +158,14 @@
                     <div>
                         <div class="ct-section-card">
                             <h3 class="ct-section-title" style="margin-bottom:20px;">Estatísticas Operacionais</h3>
-                            
-                            <div style="display:flex; flex-direction:column; gap:16px;">
-                                <!-- Fretes Concluídos -->
+                            <div id="profile-stats-container" style="display:flex; flex-direction:column; gap:16px;">
+                                <!-- Fretes Totais -->
                                 <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid var(--border-light); padding-bottom:12px;">
                                     <div>
                                         <span style="font-size:13px; font-weight:700; color:var(--text-dark);">Fretes Totais</span>
                                         <p style="font-size:11px; color:var(--text-muted);">Realizados no último ano</p>
                                     </div>
-                                    <span style="font-size:20px; font-weight:800; color:var(--accent-blue);">45</span>
+                                    <span id="perf-total-fretes" style="font-size:20px; font-weight:800; color:var(--accent-blue);">0</span>
                                 </div>
 
                                 <!-- Taxa de Entrega no Prazo -->
@@ -153,46 +174,17 @@
                                         <span style="font-size:13px; font-weight:700; color:var(--text-dark);">Entregas no Prazo</span>
                                         <p style="font-size:11px; color:var(--text-muted);">Média de pontualidade</p>
                                     </div>
-                                    <span style="font-size:20px; font-weight:800; color:var(--accent-green);">96.8%</span>
+                                    <span style="font-size:20px; font-weight:800; color:var(--accent-green);">100%</span>
                                 </div>
 
                                 <!-- Ocorrências Resolvidas -->
-                                <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid var(--border-light); padding-bottom:12px;">
+                                <div style="display:flex; justify-content:space-between; align-items:center;">
                                     <div>
                                         <span style="font-size:13px; font-weight:700; color:var(--text-dark);">Ocorrências</span>
                                         <p style="font-size:11px; color:var(--text-muted);">Todas resolvidas com suporte</p>
                                     </div>
-                                    <span style="font-size:20px; font-weight:800; color:var(--accent-orange);">2</span>
+                                    <span id="perf-ocorrencias-count" style="font-size:20px; font-weight:800; color:var(--accent-orange);">0</span>
                                 </div>
-
-                                <!-- Pagamento Médio -->
-                                <div style="display:flex; justify-content:space-between; align-items:center;">
-                                    <div>
-                                        <span style="font-size:13px; font-weight:700; color:var(--text-dark);">Repasse Médio</span>
-                                        <p style="font-size:11px; color:var(--text-muted);">Após confirmação de recebimento</p>
-                                    </div>
-                                    <span style="font-size:16px; font-weight:800; color:var(--text-dark);">~4h úteis</span>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Avaliação Recente do Motorista -->
-                        <div class="ct-section-card">
-                            <h3 class="ct-section-title" style="margin-bottom:16px;">Comentário de Motorista</h3>
-                            <div style="padding:14px; background:var(--bg-body); border-radius:var(--radius-sm); border:1px solid var(--border-light); font-size:12px;">
-                                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
-                                    <span style="font-weight:700;">Ana Paula (Motorista Toco)</span>
-                                    <span style="color:var(--accent-orange);">
-                                        <svg class="star-icon-inline" viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-                                        <svg class="star-icon-inline" viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-                                        <svg class="star-icon-inline" viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-                                        <svg class="star-icon-inline" viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-                                        <svg class="star-icon-inline" viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-                                    </span>
-                                </div>
-                                <p style="color:var(--text-body); font-style:italic;">
-                                    "A Maria Logística é uma excelente parceira. Carga estava pronta na hora marcada e a liberação do pagamento na entrega foi quase imediata. Recomendo muito!"
-                                </p>
                             </div>
                         </div>
                     </div>
@@ -229,6 +221,9 @@
         </a>
     </nav>
 
+    <script src="../js/api-client.js"></script>
+    <script src="js/auth-guard-contratante.js"></script>
     <script src="js/contratante.js"></script>
+    <script src="js/perfil-contratante.js"></script>
 </body>
 </html>
