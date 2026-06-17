@@ -57,7 +57,8 @@ public class CargaService {
         carga.setValorSugerido(cargaAtualizada.getValorSugerido());
         carga.setAtiva(cargaAtualizada.getAtiva());
         carga.setEmbarcador(buscarEmbarcador(exigirIdEmbarcador(cargaAtualizada)));
-        return cargaRepository.save(carga);
+        cargaRepository.update(carga);
+        return carga;
     }
 
     @Transactional

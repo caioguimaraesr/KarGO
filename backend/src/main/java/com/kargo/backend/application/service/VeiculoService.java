@@ -50,7 +50,8 @@ public class VeiculoService {
         veiculo.setPlaca(veiculoAtualizado.getPlaca());
         veiculo.setModelo(veiculoAtualizado.getModelo());
         veiculo.setMotorista(buscarMotorista(exigirIdMotorista(veiculoAtualizado)));
-        return veiculoRepository.save(veiculo);
+        veiculoRepository.update(veiculo);
+        return veiculo;
     }
 
     @Transactional
