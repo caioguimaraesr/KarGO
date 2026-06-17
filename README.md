@@ -49,7 +49,13 @@
 * [ ] Validação da necessidade real do mercado.
 * [ ] Feedback positivo de motoristas e PMEs sobre a utilidade.
 * [ ] Adesão ao protótipo e demonstração de interesse no uso diário.
+      
+### Modelos
+* **Modelo Conceitual**
+  <img width="1445" height="1088" alt="image" src="https://github.com/user-attachments/assets/2419aa7c-8b5c-421f-a802-f69f079958c5" />
 
+* **Modelo Físico**
+  <img width="1536" height="1024" alt="image" src="https://github.com/user-attachments/assets/16a1debc-5106-4269-ad24-cc8ab986ec42" />
 ---
 <div align="center">
   <sub>Projeto desenvolvido para a disciplina de Projetos 4 - CESAR School</sub>
