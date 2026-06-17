@@ -62,8 +62,8 @@ public class CargaService {
 
     @Transactional
     public void deletar(Long id) {
-        Carga carga = buscarPorId(id);
-        cargaRepository.delete(carga);
+        buscarPorId(id);
+        cargaRepository.delete(id);
     }
 
     private Embarcador buscarEmbarcador(Long id) {

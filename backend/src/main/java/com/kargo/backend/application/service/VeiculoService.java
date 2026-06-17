@@ -55,8 +55,8 @@ public class VeiculoService {
 
     @Transactional
     public void deletar(Long id) {
-        Veiculo veiculo = buscarPorId(id);
-        veiculoRepository.delete(veiculo);
+        buscarPorId(id);
+        veiculoRepository.delete(id);
     }
 
     private Motorista buscarMotorista(Long id) {

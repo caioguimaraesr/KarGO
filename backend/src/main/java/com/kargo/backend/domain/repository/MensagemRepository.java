@@ -1,11 +1,13 @@
 package com.kargo.backend.domain.repository;
 
 import com.kargo.backend.domain.model.Mensagem;
-import org.springframework.data.jpa.repository.JpaRepository;
 
+import java.util.Optional;
 import java.util.List;
 
-public interface MensagemRepository extends JpaRepository<Mensagem, Long> {
+public interface MensagemRepository {
+
+    Optional<Mensagem> findById(Long id);
 
     List<Mensagem> findByMotoristaIdAndEmbarcadorIdOrderByDataEnvioAsc(Long motoristaId, Long embarcadorId);
 
@@ -14,4 +16,10 @@ public interface MensagemRepository extends JpaRepository<Mensagem, Long> {
     List<Mensagem> findByMotoristaIdOrderByDataEnvioAsc(Long motoristaId);
 
     List<Mensagem> findByEmbarcadorIdOrderByDataEnvioAsc(Long embarcadorId);
+
+    Mensagem save(Mensagem mensagem);
+
+    void delete(Long id);
+
+    List<Mensagem> findAll();
 }

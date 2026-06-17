@@ -23,19 +23,42 @@ Backend inicial da KarGO em Spring Boot para validar o dominio principal do mark
 
 ## Executar localmente
 
-> Requer Java 21 e PostgreSQL disponivel em `localhost:5432/kargo`.
+> Requer Java 21 e PostgreSQL rodando em `localhost:5432`.
 
-Variaveis de ambiente:
+### ✅ Banco de Dados Criado Automaticamente!
 
-- `POSTGRES_USERNAME`
-- `POSTGRES_PASSWORD`
+A aplicação cria o banco de dados `kargo` e as tabelas automaticamente na primeira execução. Você não precisa criar nada manualmente!
 
-Rodar:
+**Variaveis de ambiente (opcionais, com valores padrão):**
+- `POSTGRES_USERNAME` (padrão: `postgres`)
+- `POSTGRES_PASSWORD` (padrão: `postgres`)
+- `SPRING_DATASOURCE_URL` (padrão: `jdbc:postgresql://localhost:5432/kargo`)
+
+**Rodar a aplicação:**
 
 ```bash
 cd backend
+
+# Opção 1: Maven Wrapper (recomendado)
 mvnw.cmd spring-boot:run
+
+# Opção 2: Maven instalado globalmente
+mvn spring-boot:run
+
+# Opção 3: Executar o JAR compilado
+mvn clean package -DskipTests
+java -jar target/backend-0.0.1-SNAPSHOT.jar
 ```
+
+**Para produção (sem inicialização automática):**
+```bash
+java -jar target/backend-0.0.1-SNAPSHOT.jar --spring.profiles.active=prod
+```
+
+📚 **Documentação sobre a inicialização automática:**
+- [`SOLUCAO_SIMPLES.md`](./SOLUCAO_SIMPLES.md) - Guia rápido em português
+- [`DATABASE_INITIALIZATION.md`](./DATABASE_INITIALIZATION.md) - Documentação técnica
+- [`TESTE_INICIALIZACAO.md`](./TESTE_INICIALIZACAO.md) - Guia de testes
 
 ## Testes
 
